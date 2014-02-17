@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.controller;
+package com.atomrockets.marketanalyzer.spring.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;

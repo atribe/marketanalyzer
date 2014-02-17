@@ -9,15 +9,15 @@
 
 <%@page isELIgnored="false" %>
 
-<!--<jsp:include page="mpHead.jsp" />-->
+
 
 <body>
 	<div id="container">
 	<% System.out.println("Start of Body Tag"); %>
-<!--	<jsp:include page="mpHeader.jsp" />-->
+
 
 <p>test</p>	
-<!-- <jsp:include page="mpFooter.jsp" />
+
 	</div> <!-- close div container -->
 </body>
 </html>
