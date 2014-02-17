@@ -14,13 +14,13 @@ public class AccountController {
 	/* Get actual class name to be printed on */
 	static Logger log = Logger.getLogger(AccountController.class.getName());
 
-    @RequestMapping(value = "/account", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public ModelAndView findAllAccounts() throws Exception {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("account");
         mav.addObject("someText", "Listing all accounts!");
         
-        log.info("----------------findAllAccounts Test----------------");
+        log.info("----------------account/ findAllAccounts Test----------------");
         return mav;
     }
     
