@@ -16,7 +16,7 @@
 		<% System.out.println("Start of Body Tag"); %>
 		<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 	
-	<p>test. Hi Merrit!</p>	
+	<p>test. Hi Merritt!</p>	
 	
 	<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 		</div> <!-- close div container -->

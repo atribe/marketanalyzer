@@ -20,7 +20,6 @@ public class AccountController {
         mav.setViewName("account");
         mav.addObject("someText", "Listing all accounts!");
         
-        log.info("----------------account/ findAllAccounts Test----------------");
         return mav;
     }
     
