@@ -13,6 +13,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
+import com.atomrockets.marketanalyzer.analyzer.MarketIndicesAnalyzer;
+import com.atomrockets.marketanalyzer.beans.MyAsyncBean;
 import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
 
@@ -37,8 +40,8 @@ public class AppInitializer implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(MAPPING_URL);
         
-        log.info("Startup index analysis begining");
-        
+        //not running asynchronosly...
+        MyAsyncBean.startMarketIndiceAnalyzer();
     }
 
     private AnnotationConfigWebApplicationContext getContext() {
