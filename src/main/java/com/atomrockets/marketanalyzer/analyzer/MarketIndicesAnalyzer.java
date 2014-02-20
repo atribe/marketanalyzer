@@ -17,13 +17,13 @@ import org.springframework.scheduling.annotation.Async;
  * @author Allan
  *
  */
-public class MarketIndicesAnalyzer {
+public class MarketIndicesAnalyzer{
 
 	//							  		  Nasdaq  S&P500
-	private static String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
-	private static String[] indexParametersDBNameList;
+	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
+	static private String[] indexParametersDBNameList;
 
-	public static void main() {
+	static public void main() {
 
 		//Get a database connection
 		Connection connection = GenericDBSuperclass.getConnection();
@@ -71,7 +71,7 @@ public class MarketIndicesAnalyzer {
 	 * This method allows for the dynamic creation of the indexParameterList
 	 * The indexParameterList is simply the indexList with 'var' appended to the end
 	 */
-	private static void setIndexParameterList() {
+	static private void setIndexParameterList() {
 		indexParametersDBNameList = new String[indexList.length];
 
 		for(int i = 0;i<indexList.length;i++) {
@@ -79,11 +79,11 @@ public class MarketIndicesAnalyzer {
 		}
 	}
 	
-	private static String[] getIndexList() {
+	static private String[] getIndexList() {
 		return indexList;
 	}
 
-	private static String[] getIndexParameterList() {
+	static private String[] getIndexParameterList() {
 		return indexParametersDBNameList;
 	}
 }

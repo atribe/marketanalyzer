@@ -4,13 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.atomrockets.marketanalyzer.beans.MyAsyncBean;
+import com.atomrockets.marketanalyzer.beans.MarketAnalyzerBean;
 
 @Configuration
 @ComponentScan(basePackages = "com.atomrockets.marketanalyzer")
-@EnableScheduling
 @EnableAsync
 public class AppConfig {
 	/*
@@ -18,7 +16,8 @@ public class AppConfig {
 	 * on where to look for its components through @ComponentScan annotation.
 	 */
 	@Bean
-    public MyAsyncBean asyncBean() {
-        return new MyAsyncBean();
-    }
+	public MarketAnalyzerBean maBean() {
+		MarketAnalyzerBean maBean = new MarketAnalyzerBean();
+		return maBean;
+	}
 }

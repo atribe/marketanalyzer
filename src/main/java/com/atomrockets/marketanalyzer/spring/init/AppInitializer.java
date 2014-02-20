@@ -13,11 +13,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
-import com.atomrockets.marketanalyzer.analyzer.MarketIndicesAnalyzer;
-import com.atomrockets.marketanalyzer.beans.MyAsyncBean;
 import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
+import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */
@@ -36,12 +34,11 @@ public class AppInitializer implements WebApplicationInitializer {
     	
     	WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));
+        servletContext.addListener(new marketAnalyzerListener());
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(MAPPING_URL);
         
-        //not running asynchronosly...
-        MyAsyncBean.startMarketIndiceAnalyzer();
     }
 
     private AnnotationConfigWebApplicationContext getContext() {
