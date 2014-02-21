@@ -16,7 +16,9 @@
 		<% System.out.println("Start of Body Tag"); %>
 		<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 	
-	<p>test. Hi Merritt!</p>	
+	<p>test. Hi Merritt!</p>
+	
+	<img src="<c:url value="charts/piechart" />" />
 	
 	<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 		</div> <!-- close div container -->

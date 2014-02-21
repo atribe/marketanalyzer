@@ -8,8 +8,6 @@ import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
 
 import java.sql.Connection;
 
-import org.springframework.scheduling.annotation.Async;
-
 /**
  * This class is the highest level class that deals with all things market index.
  * Initializes and updates databases
