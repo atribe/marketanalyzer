@@ -7,10 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 import com.atomrockets.marketanalyzer.spring.controller.AccountController;
+import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
 
 /**
  * This class is the Parent class to all database classes
@@ -19,37 +21,40 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
  */
 public class GenericDBSuperclass {
 
-	static Logger log = Logger.getLogger(AccountController.class.getName());
+	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
+	
+	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
 	/**
 	 * Establishes a connection to the database
 	 * @return connection
 	 */
 	public static Connection getConnection() {
+	
+		Properties prop = propertiesLoader.loadActivePropertiesFile();
+		
 		Connection connection = null;
 		String host, port, dbURL, username, password, DBName;
 		try {
 			//Loading the JDBC MySQL drivers that are used by java.sql.Connection
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(prop.getProperty("db.driver"));//loads the mysql driver from the property file
 
 			// ************For Open Shift Account************	  
 			//if(LoadProperties.environment.trim().equalsIgnoreCase("production")){
 			if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
-				DBName = "marketpred";
 				host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable
 				port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");//$OPENSHIFT_MYSQL_DB_PORT is also an OpenShift variable
-				dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
-				username = "adminKBTpatt";
-				password = "1ykuE62i5IFI";
 			}else{
 				// ************For Local Account************
-				DBName = "marketpred";
-				host = "localhost";
-				port="3306";
-				dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
-				username = "root";
-				password = "";
+				host = prop.getProperty("db.host");
+				port = prop.getProperty("db.port");
 			}
-
+			
+			DBName = prop.getProperty("db.dbname");
+			dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
+			
+			username = prop.getProperty("db.username");
+			password = prop.getProperty("db.password");
+			
 			connection = DriverManager.getConnection(dbURL, username, password);
 
 			log.info("Connection established to " + DBName);

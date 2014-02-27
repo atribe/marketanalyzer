@@ -30,7 +30,7 @@ public class MarketIndicesAnalyzer{
 		 * Dabase initialization Section
 		 */
 		//Initialize the price/volume databases for each index 
-		MarketIndexDB.priceVolumeDBInitialization(connection, indexList);
+		MarketIndexDB.yahooDataDBInitialization(connection, indexList);
 
 		/*
 		 * setting the indexParameterList to be equal to the indexList+"_var"

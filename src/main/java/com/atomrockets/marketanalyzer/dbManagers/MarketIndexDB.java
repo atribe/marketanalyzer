@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.beans.IndexAnalysisRow;
@@ -17,52 +19,57 @@ import com.atomrockets.marketanalyzer.beans.YahooDOHLCVARow;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
 
 public class MarketIndexDB extends GenericDBSuperclass {
+	
+	static Logger log = Logger.getLogger(MarketIndexDB.class.getName());
+	static String yDTname = "yahooDataTable";
 
-	public static synchronized void priceVolumeDBInitialization(Connection connection, String[] indexList) {		
-		System.out.println("");
-		System.out.println("--------------------------------------------------------------------");
-		System.out.println("Starting Market Index Database Initialization");
+	public static synchronized void yahooDataDBInitialization(Connection connection, String[] indexList) {		
+		log.info("--------------------------------------------------------------------");
+		log.info("Starting Market Index Database Initialization");
 
+		/*
+		 * Checking to see if a table with the index name exists
+		 * If it does, print to the command prompt
+		 * if not create the table
+		 */
+		log.info("     -Checking if table " + yDTname + "exists.");
+		if(!tableExists(yDTname, connection)) {
+			// Table does not exist, so create it
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + yDTname + "` (" +
+					" yd_id INT not NULL AUTO_INCREMENT," +
+					" index CHAR(25)," +
+					" date DATE not NULL," +
+					" open FLOAT(20)," +
+					" high FLOAT(20)," +
+					" low FLOAT(20)," +
+					" close FLOAT(20)," +
+					" volume BIGINT(50)," +
+					" PRIMARY KEY (yd_id))";
+			createTable(createTableSQL, connection, yDTname);
+		}
+		
+		/*
+		 * Checking to see if the table is empty
+		 * If they are populate them from Yahoo
+		 * If not, check if they are up to date
+		 * 		If not, update them
+		 */
+		log.info("     -Checking if table " + yDTname + " is empty.");
+		if(tableEmpty(yDTname, connection)){
+			//if table is empty
+			//populate it
+			populateFreshDB(connection, indexList);
+		}
+		
 		//Iteration tracking variable for System.out.printing and debugging
 		int interationCounter = 0;
-
+				
+				
 		//Loop for each Price Volume DBs for each index
 		for(String index:indexList) {
 			interationCounter++;
-			System.out.println("Loop Iteration " + interationCounter + ":");
-			/*
-			 * Checking to see if a table with the index name exists
-			 * If it does, print to the command prompt
-			 * if not create the table
-			 */
-			System.out.println("     -Checking if table " + index + " exists.");
-			if(!tableExists(index, connection)) {
-				// Table does not exist, so create it
-				String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + index + "` (" +
-						" id INT not NULL AUTO_INCREMENT," +
-						" Date DATE not NULL," +
-						" Open FLOAT(20)," +
-						" High FLOAT(20)," +
-						" Low FLOAT(20)," +
-						" Close FLOAT(20)," +
-						" Volume BIGINT(50)," +
-						" PRIMARY KEY (id))";
-				createTable(createTableSQL, connection, index);
-			}
-
-			/*
-			 * Checking to see if the tables are empty
-			 * If they are populate them from Yahoo
-			 * If not, check if they are up to date
-			 * 		If not, update them
-			 */
-			System.out.println("     -Checking if table " + index + " is empty.");
-			if(tableEmpty(index, connection)){
-				//if table is empty
-				//populate it
-				populateFreshDB(connection, index);
-			}
-
+			log.info("Loop Iteration " + interationCounter + ":");
+			
 			System.out.println("     -Checking to see if table " + index +" is up to date.");
 			int indexDaysBehind = getIndexDaysBehind(connection, index);
 			if(indexDaysBehind>0)
@@ -131,38 +138,30 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		return DBDaysTilNow;//DBDaysTilNow;
 	}
 
-	public static void populateFreshDB(Connection connection, String index) {
-		System.out.println("     -Populating Table " + index);
+	public static void populateFreshDB(Connection connection, String[] indexList) {
 		
-		//Container to hold the downloaded data
-		List<YahooDOHLCVARow> rowsFromYahoo = null;
-		//This date represents the beginning of time as far as any of the indexes go
-		LocalDate beginningDate = new LocalDate("2012-01-01");
-
-		//calculates the number of days from today back to beginning date
-		int numDays = MarketRetriever.getNumberOfDaysFromNow(beginningDate);
-
-		//Creates a yahoo URL given the index symbol from now back a given number of days
-		String URL = MarketRetriever.getYahooURL(index, numDays);
-
-		rowsFromYahoo = MarketRetriever.PVDParser(URL);
-		/*
-		try {
-			//priceVolumeData = MarketRetriever.dataParser(URL);
-			
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}// extract price and volume data for URL, # of yahoo days
-		*/
-		initialAddRecordsFromData(connection, index, rowsFromYahoo);
-		 
+		Properties prop = propertiesLoader.loadActivePropertiesFile();
+		
+		for(String index : indexList)
+		{
+			log.info("     -Populating Table " + index);		
+		
+			//Container to hold the downloaded data
+			List<YahooDOHLCVARow> rowsFromYahoo = null;
+			//This date represents the beginning of time as far as any of the indexes go
+			LocalDate beginningDate = new LocalDate(prop.getProperty("yahoo.startdate"));
+	
+			//calculates the number of days from today back to beginning date
+			int numDays = MarketRetriever.getNumberOfDaysFromNow(beginningDate);
+	
+			//Creates a yahoo URL given the index symbol from now back a given number of days
+			String URL = MarketRetriever.getYahooURL(index, numDays);
+	
+			//TODO start here tomorrow, change the yahoodata object to have the index and pass the index to the parser function
+			rowsFromYahoo = MarketRetriever.PVDParser(URL);
+	
+			initialAddRecordsFromData(connection, index, rowsFromYahoo);
+		}
 	}
 
 	public static void updateIndexDB(Connection connection, String index,int indexDaysBehind) {

@@ -65,4 +65,27 @@ public class PropertiesLoader {
             return null;
         }
     }
+
+    public Properties loadActivePropertiesFile() {
+    	Properties propSpring = new Properties();
+    	Properties prop = new Properties();
+        InputStream im = null;
+        try {
+            im = findFile("spring.properties"); //loads the spring.properties file, this is where the active profile is set
+            propSpring.load(im);
+            
+            im = findFile(propSpring.getProperty("spring.profiles.active") + ".properties"); //gets the name of the active profile from the previously loaded property file
+            
+            prop.load(im);
+        } catch (IOException ignore) {
+        } finally {
+            if (im != null) {
+                try {
+                    im.close();
+                } catch (IOException ignore) {
+                }
+            }
+        }
+        return prop;
+    }
 }
