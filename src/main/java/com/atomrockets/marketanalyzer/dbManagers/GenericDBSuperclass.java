@@ -11,7 +11,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
 
 /**
@@ -83,7 +82,7 @@ public class GenericDBSuperclass {
 
 			if (tables.next()) {
 				// Table exists
-				System.out.println(
+				log.info(
 						"          " + tables.getString("TABLE_TYPE") 
 						+ " " + tables.getString("TABLE_NAME")
 						+ " already exists.");
@@ -91,13 +90,13 @@ public class GenericDBSuperclass {
 			}
 			else {
 				tableExists = false;
-				System.out.println("          Table " + tableName + "does not yet exist, let me try and create that for you.");
+				log.info("          Table " + tableName + "does not yet exist, let me try and create that for you.");
 			}
 		} catch (SQLException ex){
 			// handle any errors
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			log.info("SQLException: " + ex.getMessage());
+			log.info("SQLState: " + ex.getSQLState());
+			log.info("VendorError: " + ex.getErrorCode());
 		} finally {
 			// it is a good idea to release
 			// resources in a finally{} block
@@ -124,9 +123,9 @@ public class GenericDBSuperclass {
 			status = createStatement.executeUpdate(createTableSQL);
 		} catch (SQLException ex){
 			// handle any errors
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			log.info("SQLException: " + ex.getMessage());
+			log.info("SQLState: " + ex.getSQLState());
+			log.info("VendorError: " + ex.getErrorCode());
 		}
 		finally {
 			// it is a good idea to release
@@ -144,12 +143,12 @@ public class GenericDBSuperclass {
 		}
 		if (status>0)
 		{
-			System.out.println("          Table '" + tableName + "' wasn't created");
+			log.info("          Table '" + tableName + "' wasn't created");
 			return true;
 		}
 		else
 		{
-			System.out.println("          Table '" + tableName + "' has been created");
+			log.info("          Table '" + tableName + "' has been created");
 			return false;
 		}
 	}
@@ -174,9 +173,9 @@ public class GenericDBSuperclass {
 			}
 		} catch (SQLException ex){
 			// handle any errors
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			log.info("SQLException: " + ex.getMessage());
+			log.info("SQLState: " + ex.getSQLState());
+			log.info("VendorError: " + ex.getErrorCode());
 		}
 		finally {
 			// it is a good idea to release
@@ -199,9 +198,9 @@ public class GenericDBSuperclass {
 			}
 		}
 		if(empty) {
-			System.out.println("          Table '" + tableName +"' is empty.");
+			log.info("          Table '" + tableName +"' is empty.");
 		} else {
-			System.out.println("          Table '" + tableName +"' has some stuff in it.");
+			log.info("          Table '" + tableName +"' has some stuff in it.");
 		}
 		return empty;
 	}

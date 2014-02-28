@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
@@ -20,31 +21,33 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
-import com.atomrockets.marketanalyzer.beans.YahooDOHLCVARow;
+import com.atomrockets.marketanalyzer.beans.YahooDataObject;
+import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 
 /**
  * @author Aaron
  */
 public class MarketRetriever {
+	
+	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<YahooDOHLCVARow> PVDParser(String url) {
-		List<YahooDOHLCVARow> rowsFromYahooURL = null;
+	public static List<YahooDataObject> yahooDataParser(String url, String index) {
+		List<YahooDataObject> rowsFromYahooURL = null;
 		
 		try {
 			URL ur = new URL(url);
 			HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(HUC.getInputStream()));
 			
-			//System.out.println(reader.readLine());//reads the first line, it's just headers
 			reader.readLine();//reads the first line, it's just headers
 			
 			//OpenCSV parser
 			CSVReader csvReader = new CSVReader(reader, ',', '\"');
-			ColumnPositionMappingStrategy<YahooDOHLCVARow> strategy = new ColumnPositionMappingStrategy<YahooDOHLCVARow>();
-		    strategy.setType(YahooDOHLCVARow.class);
-		    strategy.setColumnMapping(new String[]{"date","Open","High","Low","Close","Volume","AdjClose"});
+			ColumnPositionMappingStrategy<YahooDataObject> strategy = new ColumnPositionMappingStrategy<YahooDataObject>();
+		    strategy.setType(YahooDataObject.class);
+		    strategy.setColumnMapping(new String[]{"date","open","high","low","close","volume","adjClose"});
 
-		    CsvToBean<YahooDOHLCVARow> csv = new CsvToBean<YahooDOHLCVARow>();
+		    CsvToBean<YahooDataObject> csv = new CsvToBean<YahooDataObject>();
 		    rowsFromYahooURL = csv.parse(strategy, csvReader);
 		    
 		} catch (MalformedURLException e) {
@@ -54,6 +57,12 @@ public class MarketRetriever {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		/*
+		 * Because the symbol is not downloaded in the CSV I add it, in the following
+		 * method, to the row data.
+		 */
+		rowsFromYahooURL = addSymbolstoYahooDataObjectList(rowsFromYahooURL, index);
 		
 		return rowsFromYahooURL;
 	}
@@ -75,19 +84,25 @@ public class MarketRetriever {
 		a_startMonth = startDate.getMonthOfYear()-1;//Yahoo uses zero based month numbering, this gets the beginning dates month
 		b_startDay = startDate.getDayOfMonth();//this gets beginning dates day
 		c_startYear = startDate.getYear();//this gets beginning dates year
+		
+		log.debug("Start Month (variable A): " + a_startMonth);
+		log.debug("Start Day (variable B): " + b_startDay);
+		log.debug("Start Year (variable C): " + c_startYear);
 
 		GregorianCalendar calendarEnd = new GregorianCalendar();
 		d_endMonth = endDate.getMonthOfYear()-1;//Yahoo uses zero based month numbering,this gets todays month
 		e_endDay = endDate.getDayOfMonth();//this gets todays day of month
 		f_endYear = endDate.getYear();//this gets todays year
-
-		//System.out.println("month="+a_startMonth+" day="+b_startDay+" year="+c_startYear);
+		
+		log.debug("End Month (variable D): " + d_endMonth);
+		log.debug("End Day (variable E): " + e_endDay);
+		log.debug("End Year (variable f): " + f_endYear);
 
 		String str = "http://ichart.finance.yahoo.com/table.csv?s="
 				+ symbol.toUpperCase() + "&a=" + a_startMonth + "&b=" + b_startDay + "&c=" + c_startYear + "&g=d&d=" + d_endMonth + "&e=" + e_endDay
 				+ "&f=" + f_endYear + "&ignore=.csv";
-		System.out.println("          Using the following Yahoo URL:");
-		System.out.println("          " + str);
+		log.info("          Using the following Yahoo URL:");
+		log.info("          " + str);
 		return str;
 	}
 
@@ -99,5 +114,15 @@ public class MarketRetriever {
 			today = today.minusDays(1);
 		}
 		return Days.daysBetween(date, today).getDays();
+	}
+	
+	private static List<YahooDataObject> addSymbolstoYahooDataObjectList(
+			List<YahooDataObject> rowsFromYahooURL, String index) {
+		
+		for(YahooDataObject rowFromYahooURL:rowsFromYahooURL) {
+			rowFromYahooURL.setSymbol(index);
+		}
+		
+		return rowsFromYahooURL;
 	}
 }

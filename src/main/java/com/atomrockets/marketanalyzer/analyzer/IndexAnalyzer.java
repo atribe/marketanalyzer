@@ -4,7 +4,7 @@ import com.atomrockets.marketanalyzer.dbManagers.MarketIndexAnalysisDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexParametersDB;
 import com.atomrockets.marketanalyzer.beans.IndexAnalysisRow;
-import com.atomrockets.marketanalyzer.beans.YahooDOHLCVARow;
+import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

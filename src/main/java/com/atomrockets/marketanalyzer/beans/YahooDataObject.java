@@ -5,6 +5,12 @@ package com.atomrockets.marketanalyzer.beans;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.joda.time.LocalDate;
 
 /**
@@ -12,24 +18,69 @@ import org.joda.time.LocalDate;
  * This stands for each column heading in the download for each index
  * Date, Open, High, Low, Close, Volume, Adjusted Close
  */
-public class YahooDOHLCVARow {
+@Entity
+@Table(name = "yahooDataTable" )
+public class YahooDataObject {
 
-	private int id;
-	private String date;
-	private float Open;
-	private float High;
-	private float Low;
-	private float Close;
-	private long Volume;
-	private float AdjClose;
+	//Annotations on these variables are for use with Hibernate
+	@Id
+	@GeneratedValue
+	@Column(name = "yd_id")
+	private int yd_id;
 	
+	@Column(name = "date")
+	private String date;
+	
+	@Column(name = "open")
+	private float open;
+	
+	@Column(name = "high")
+	private float high;
+	
+	@Column(name = "low")
+	private float low;
+	
+	@Column(name = "close")
+	private float close;
+	
+	@Column(name = "volume")
+	private long volume;
+	
+	private float adjClose;
+	
+	@Column(name = "symbol")
+	private String symbol;
 	private LocalDate convertedDate;
 	
-	public void YahooDOHLCVArow() {	}
+	//Empty constructed required to be a Java Bean
+	public YahooDataObject() {	}
+	
+	public YahooDataObject(String symbol, String date, float open, float high, float low, float close, long volume, float adjClose) {
+		this.symbol = symbol;
+		this.date = date;
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.volume = volume;
+		this.adjClose = adjClose;
+	}
+	
+	public YahooDataObject(String symbol, LocalDate date, float open, float high, float low, float close, long volume, float adjClose) {
+		this.symbol = symbol;
+		this.convertedDate = date;
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.volume = volume;
+		this.adjClose = adjClose;
+	}
 	
 	@Override
     public String toString() {
-		return "id: " + getId()
+		return "id: " + getYd_id()
+				+ "\nSymbol: " + getSymbol()
 				+ "\nDate: " + getDate() + " or " + getConvertedDate().toString() 
 				+ "\nOpen: " + getOpen() 
 				+ "\nHigh: " + getHigh()
@@ -38,19 +89,23 @@ public class YahooDOHLCVARow {
 				+ "\nVolume: " + getVolume();
 	}
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
 	
+	public int getYd_id() {
+		return yd_id;
+	}
+
+	public void setYd_id(int yd_id) {
+		this.yd_id = yd_id;
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
 	/**
 	 * @return the date
 	 */
@@ -69,81 +124,81 @@ public class YahooDOHLCVARow {
 	 * @return the open
 	 */
 	public float getOpen() {
-		return Open;
+		return open;
 	}
 	/**
 	 * @param open the open to set
 	 */
 	public void setOpen(float open) {
-		Open = open;
+		this.open = open;
 	}
 	
 	/**
 	 * @return the high
 	 */
 	public float getHigh() {
-		return High;
+		return high;
 	}
 	/**
 	 * @param high the high to set
 	 */
 	public void setHigh(float high) {
-		High = high;
+		this.high = high;
 	}
 	
 	/**
 	 * @return the low
 	 */
 	public float getLow() {
-		return Low;
+		return low;
 	}
 	/**
 	 * @param low the low to set
 	 */
 	public void setLow(float low) {
-		Low = low;
+		this.low = low;
 	}
 	
 	/**
 	 * @return the close
 	 */
 	public float getClose() {
-		return Close;
+		return close;
 	}
 	/**
 	 * @param close the close to set
 	 */
 	public void setClose(float close) {
-		Close = close;
+		this.close = close;
 	}
 	
 	/**
 	 * @return the volume
 	 */
 	public long getVolume() {
-		return Volume;
+		return volume;
 	}
 	/**
 	 * @param volume the volume to set
 	 */
 	public void setVolume(long volume) {
-		Volume = volume;
+		this.volume = volume;
 	}
 	public void setVolume(float volume) {
-		Volume = Math.round(volume);
+		volume = Math.round(volume);
 	}
 	
 	/**
 	 * @return the adjClose
 	 */
 	public float getAdjClose() {
-		return AdjClose;
+		return adjClose;
 	}
 	/**
 	 * @param adjClose the adjClose to set
 	 */
 	public void setAdjClose(float adjClose) {
-		AdjClose = adjClose;
+		this.adjClose = adjClose;
 	}
 	/**
 	 * @return the convertedDate
@@ -156,13 +211,14 @@ public class YahooDOHLCVARow {
 	 */
 	public void setConvertedDate(LocalDate convertedDate) {
 		this.convertedDate = convertedDate;
+		this.date = convertedDate.toString();
 	}
 	public void setConvertedDate(java.sql.Date convertedDate) {
 		this.convertedDate = new LocalDate(convertedDate);
+		this.date = this.convertedDate.toString();
 	}
 	public void setConvertedDate(String date) {
 		this.convertedDate = new LocalDate(date);
+		this.date = date;
 	}
-
-	
 }
