@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.controller;
+package com.atomrockets.marketanalyzer.spring.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,6 @@ public class AccountController {
         mav.setViewName("account");
         mav.addObject("someText", "Listing all accounts!");
         
-        log.info("----------------account/ findAllAccounts Test----------------");
         return mav;
     }
     

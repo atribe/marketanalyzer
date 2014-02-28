@@ -1,0 +1,54 @@
+#container {
+	width:900px;
+	margin: 0 auto;
+	font-family: Verdana, Geneva, sans-serif;
+}
+.clear {
+	clear:both;
+}
+#header {
+	height:90px;
+	border-bottom:solid black 1px;
+}
+	#banner{
+		float:left;
+		height:90px;
+	}
+		#banner h1{
+			font-size:40px;
+			line-height:90px;
+			margin-top:0;
+			margin-bottom:0;
+			margin-left:20px;
+		}
+	nav {
+		float: right;
+	}
+		nav ul {
+			list-style-type:none;
+			height:40px;
+		}
+		nav ul li {
+			display: inline;
+			padding: 20px 20px;
+			width:60px;
+		}
+		nav ul li a{
+			color:black;
+			font-size: 20px;
+			line-height:60px;
+			text-decoration:none;
+		}
+		nav .currentPage {
+			color:#7CBEC6;
+		}
+	#headerDate{
+		clear:right;
+		float:right;
+		font-size:10px;
+		margin-right:21px;
+		margin-top:-10px;
+	}
+#footer{
+	text-align:center;
+}
