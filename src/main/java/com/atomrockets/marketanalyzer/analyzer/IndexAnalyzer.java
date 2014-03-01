@@ -3,7 +3,7 @@ package com.atomrockets.marketanalyzer.analyzer;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexAnalysisDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexParametersDB;
-import com.atomrockets.marketanalyzer.beans.IndexAnalysisRow;
+import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
 import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 
 import java.sql.Connection;
@@ -35,7 +35,7 @@ public class IndexAnalyzer {
 	static private int m_loopEndId;
 	
 	//member variable for holding all the information for analysis
-	static private List<IndexAnalysisRow> m_analysisRows;
+	static private List<MarketIndexAnalysisObject> m_analysisRows;
 
 	public static void runIndexAnalysis(Connection connection, String index, String indexParametersDBName) {
 		/*
@@ -202,7 +202,7 @@ public class IndexAnalyzer {
 	private static void distributionDayAnalysis(){
 		System.out.println("     Starting D-Day Counting and recording");
 		
-		String tableName = MarketIndexAnalysisDB.getTableName(m_index);
+		String tableName = MarketIndexAnalysisDB.getTableName();
 		
 		try {
 			/* 

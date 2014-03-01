@@ -1,37 +1,90 @@
 package com.atomrockets.marketanalyzer.beans;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTables;
+import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-public class IndexAnalysisRow {
+@Entity
+@Table(name="marketIndexAnalysis")
+
+@SecondaryTables({
+	@SecondaryTable(name="yahooDataTable", pkJoinColumns={
+			@PrimaryKeyJoinColumn(name="yd_id", referencedColumnName="id")
+	})
+})
+public class MarketIndexAnalysisObject implements Serializable {
+	
+	@Id
+	@Column(name="id")
 	private int id;
-	private int PVD_id;
-	private LocalDate date;
-	private float Open;
-	private float High;
-	private float Low;
-	private float Close;
-	private long Volume;
+	
+	//Data from the yahooDataTable
+	@Column(name="date", table="yahooDataTable" )
+	private String date;
+	private LocalDate convertedDate;
+	
+	@Column(name="open", table="yahooDataTable" )
+	private float open;
+	
+	@Column(name="high", table="yahooDataTable" )
+	private float high;
+	
+	@Column(name="low", table="yahooDataTable" )
+	private float low;
+	
+	@Column(name="close", table="yahooDataTable" )
+	private float close;
+	
+	@Column(name="volume", table="yahooDataTable" )
+	private long volume;
 	
 	//Statistic variables
+	@Column(name="closeAvg50")
 	private float closeAvg50;
+	
+	@Column(name="closeAvg100")
 	private float closeAvg100;
+	
+	@Column(name="closeAvg200")
 	private float closeAvg200;
+	
+	@Column(name="volumeAvg50")
 	private long volumeAvg50;
+	
+	@Column(name="priceTrend35")
 	private float priceTrend35;
 	
 	//Analysis variables
+	@Column(name="isDDay")
 	private boolean isDDay;
+	
+	@Column(name="isChurnDay")
 	private boolean isChurnDay;
+	
+	@Column(name="dDayCounter")
 	private int dDayCounter;
 	//add more stuff as needed here
 
-	public IndexAnalysisRow() {
+	public MarketIndexAnalysisObject() {
 		dDayCounter=0;
 	}
 
 	@Override
+	public String toString() {
+		   return ToStringBuilder.reflectionToString(this);
+		 }
+	/*
     public String toString() {
-		return "\nid: " + getPVD_id()
+		return "\nid: " + getId()
 				+ "\nDate: " + getDate().toString()
 				+ "\nOpen: " + getOpen()
 				+ "\nHigh: " + getHigh()
@@ -41,6 +94,7 @@ public class IndexAnalysisRow {
 				+ "\nIs Churn Day: " + isChurnDay()
 				+ "\nD-Day Count: " + getdDayCounter() + "\n";
 	}
+	*/
 	public int getId() {
 		return id;
 	}
@@ -49,105 +103,86 @@ public class IndexAnalysisRow {
 	}
 	
 	/**
-	 * @return the PVD_id
-	 */
-	public int getPVD_id() {
-		return PVD_id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setPVD_id(int PVD_id) {
-		this.PVD_id = PVD_id;
-	}
-	
-	/**
 	 * @return the date
 	 */
-	public LocalDate getDate() {
+	
+	
+	public String getDate() {
 		return date;
 	}
+
+	public void setDate(String date) {
+		this.date = date;
+		setConvertedDate(date);
+	}
+
 	/**
 	 * @param date the date to set
 	 */
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public LocalDate getConvertedDate() {
+		return convertedDate;
 	}
-	public void setDate(java.sql.Date date) {
-		this.date = new LocalDate(date);
+	public void setConvertedDate(LocalDate date) {
+		this.convertedDate = date;
+		this.date=convertedDate.toString();
+	}
+	public void setConvertedDate(java.sql.Date date) {
+		this.convertedDate = new LocalDate(date);
+		this.date = this.convertedDate.toString();
+	}
+	public void setConvertedDate(String date) {
+		this.convertedDate = new LocalDate(date);
+		this.date=date;
 	}
 
-
-	public void setDate(String date) {
-		this.date = new LocalDate(date);
-	}
-
-	/**
-	 *  @return the open
-	 */
+	
+	
 	public float getOpen() {
-		return Open;
+		return open;
 	}
-	/**
-	 * @param open the open to set
-	 */
+
 	public void setOpen(float open) {
-		Open = open;
+		this.open = open;
 	}
-	
-	/**
-	 * @return the high
-	 */
+
 	public float getHigh() {
-		return High;
+		return high;
 	}
-	/**
-	 * @param high the high to set
-	 */
+
 	public void setHigh(float high) {
-		High = high;
+		this.high = high;
 	}
-	
-	/**
-	 * @return the low
-	 */
+
 	public float getLow() {
-		return Low;
+		return low;
 	}
-	/**
-	 * @param low the low to set
-	 */
+
 	public void setLow(float low) {
-		Low = low;
+		this.low = low;
 	}
-	
-	/**
-	 * @return the close
-	 */
+
 	public float getClose() {
-		return Close;
+		return close;
 	}
-	/**
-	 * @param close the close to set
-	 */
+
 	public void setClose(float close) {
-		Close = close;
+		this.close = close;
 	}
-	
+
 	/**
 	 * @return the volume
 	 */
 	public long getVolume() {
-		return Volume;
+		return volume;
 	}
 	/**
 	 * @param volume the volume to set
 	 */
 	public void setVolume(long volume) {
-		Volume = volume;
+		this.volume = volume;
 	}
 	public void setVolume(float volume) {
-		Volume = Math.round(volume);
+		this.volume = Math.round(volume);
 	}
 			
 	/**

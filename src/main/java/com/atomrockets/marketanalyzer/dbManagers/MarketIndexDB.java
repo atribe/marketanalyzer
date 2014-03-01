@@ -11,14 +11,14 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
-import com.atomrockets.marketanalyzer.beans.IndexAnalysisRow;
+import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
 import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
 
 public class MarketIndexDB extends GenericDBSuperclass {
 	
 	static Logger log = Logger.getLogger(MarketIndexDB.class.getName());
-	static String yDTname = "yahooDataTable";
+	private static final String yDTname = "yahooDataTable";
 
 	public static synchronized void yahooDataDBInitialization(Connection connection, String[] indexList) {		
 		log.info("--------------------------------------------------------------------");
@@ -34,7 +34,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 			// Table does not exist, so create it
 			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + yDTname + "` (" +
 					" yd_id INT not NULL AUTO_INCREMENT," +
-					" symbol CHAR(10)," +
+					" symbol VARCHAR(10)," +
 					" date DATE not NULL," +
 					" open FLOAT(20)," +
 					" high FLOAT(20)," +
@@ -342,8 +342,8 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		}
 	}
 	
-	public static List<IndexAnalysisRow> getDataBetweenIds(Connection connection, String symbol, int beginId, int endId) {
-		List<IndexAnalysisRow> rowsFromDB = new ArrayList<IndexAnalysisRow>();
+	public static List<MarketIndexAnalysisObject> getDataBetweenIds(Connection connection, String symbol, int beginId, int endId) {
+		List<MarketIndexAnalysisObject> rowsFromDB = new ArrayList<MarketIndexAnalysisObject>();
 		
 		
 		String query = "SELECT * FROM `" + yDTname + "`"
@@ -357,9 +357,9 @@ public class MarketIndexDB extends GenericDBSuperclass {
 			ResultSet rs = selectStatement.executeQuery();
 
 			while (rs.next()) {
-				IndexAnalysisRow singleRow = new IndexAnalysisRow();
-				singleRow.setPVD_id(rs.getInt("id"));
-				singleRow.setDate(rs.getDate("Date"));
+				MarketIndexAnalysisObject singleRow = new MarketIndexAnalysisObject();
+				singleRow.setId(rs.getInt("id"));
+				singleRow.setConvertedDate(rs.getDate("Date"));
 				singleRow.setOpen(rs.getFloat("Open"));
 				singleRow.setHigh(rs.getFloat("High"));
 				singleRow.setLow(rs.getFloat("Low"));

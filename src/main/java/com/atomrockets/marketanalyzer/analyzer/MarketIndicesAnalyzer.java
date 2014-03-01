@@ -57,24 +57,8 @@ public class MarketIndicesAnalyzer{
 		
 		
 	}
-
-	/**
-	 * This method allows for the dynamic creation of the indexParameterList
-	 * The indexParameterList is simply the indexList with 'var' appended to the end
-	 */
-	static private void setIndexParameterList() {
-		indexParametersDBNameList = new String[indexList.length];
-
-		for(int i = 0;i<indexList.length;i++) {
-			indexParametersDBNameList[i]=indexList[i] +"vars";
-		}
-	}
 	
 	static private String[] getIndexList() {
 		return indexList;
-	}
-
-	static private String[] getIndexParameterList() {
-		return indexParametersDBNameList;
 	}
 }

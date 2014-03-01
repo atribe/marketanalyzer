@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 /**
@@ -78,6 +79,10 @@ public class YahooDataObject {
 	}
 	
 	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+	/*
     public String toString() {
 		return "id: " + getYd_id()
 				+ "\nSymbol: " + getSymbol()
@@ -88,6 +93,7 @@ public class YahooDataObject {
 				+ "\nClose: " + getClose()
 				+ "\nVolume: " + getVolume();
 	}
+	*/
 
 	
 	public int getYd_id() {
