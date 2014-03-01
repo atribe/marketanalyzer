@@ -1,9 +1,9 @@
 package com.atomrockets.marketanalyzer.analyzer;
 
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
-import com.atomrockets.marketanalyzer.dbManagers.MarketIndexAnalysisDB;
-import com.atomrockets.marketanalyzer.dbManagers.MarketIndexDB;
-import com.atomrockets.marketanalyzer.dbManagers.MarketIndexParametersDB;
+import com.atomrockets.marketanalyzer.dbManagers.IndexAnalysisTableManager;
+import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
+import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
 
 import java.sql.Connection;
@@ -15,10 +15,16 @@ import java.sql.Connection;
  * @author Allan
  *
  */
-public class MarketIndicesAnalyzer{
+public class MarketAnalyzerMain{
 
 	//							  		  Nasdaq  S&P500
 	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
+	
+	//Database Table Managers
+	static private IndexYahooDataTableManager m_indexYahooTable;
+	static private IndexParameterTableManager m_indexParamTable;
+	static private IndexAnalysisTableManager m_indexAnalysisTable;
+	
 
 	static public void main() {
 
@@ -28,19 +34,16 @@ public class MarketIndicesAnalyzer{
 		/*
 		 * Dabase initialization Section
 		 */
-		//Initialize the price/volume databases for each index 
-		MarketIndexDB.yahooDataDBInitialization(connection, indexList);
+		//Creating the table manager
+		m_indexYahooTable = new IndexYahooDataTableManager(connection);
+		//Initialize the price/volume databases for each index
+		m_indexYahooTable.tableInitialization(indexList);
 
-		//TODO start here tomoroow
-		//Initialize the model variables
-		MarketIndexParametersDB.indexModelParametersInitialization(connection, indexList);		
+		
+		//Initialize the parameter table
+		m_indexParamTable = new IndexParameterTableManager(connection);
+		m_indexParamTable.tableInitialization(indexList);
 
-
-		//Market Index Models
-		/*
-		 * Models runs are not looped because you may want to run or optimize them one at a time
-		 * I'll figure out this code after I figure out the above
-		 */
 		
 		/*
 		 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
@@ -49,8 +52,15 @@ public class MarketIndicesAnalyzer{
 		 * 
 		 * IndexAnalysisDBInitialization checks if the table already
 		 */
-		MarketIndexAnalysisDB.IndexAnalysisTableInitialization(connection, indexList);
+		m_indexAnalysisTable = new IndexAnalysisTableManager(connection);
+		m_indexAnalysisTable.tableInitialization(indexList);
+
 		
+		//Market Index Models
+		/*
+		 * Models runs are not looped because you may want to run or optimize them one at a time
+		 * I'll figure out this code after I figure out the above
+		 */
 		IndexAnalyzer.runIndexAnalysis(connection, "^IXIC");
 		//Run model for Nasdaq
 		//Run model for SP500

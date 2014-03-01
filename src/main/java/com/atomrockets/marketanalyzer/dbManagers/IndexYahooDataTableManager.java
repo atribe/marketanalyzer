@@ -15,13 +15,27 @@ import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
 import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
 
-public class MarketIndexDB extends GenericDBSuperclass {
+public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	
-	static Logger log = Logger.getLogger(MarketIndexDB.class.getName());
-	private static final String yDTname = "yahooDataTable";
+	/*
+	 * Important Stuff inherited from GenericDBSuperclass
+	 * 
+	 * m_connection
+	 * log
+	 * 
+	 */
+	
+	//Name of the table that contains all the data from Yahoo
+	private static final String m_yDTname = "yahooDataTable";
+	
+	public IndexYahooDataTableManager(Connection connection) {
+		log.debug("------------------------------Yahoo Table Manager Created--------------------------");
+		
+		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
+		m_connection = connection;
+	}
 
-	public static synchronized void yahooDataDBInitialization(Connection connection, String[] indexList) {		
-		log.info("--------------------------------------------------------------------");
+	public synchronized void tableInitialization(String[] indexList) {		
 		log.info("Starting Market Index Database Initialization");
 
 		/*
@@ -29,10 +43,10 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + yDTname + " exists.");
-		if(!tableExists(yDTname, connection)) {
+		log.info("     -Checking if table " + m_yDTname + " exists.");
+		if(!tableExists(m_yDTname)) {
 			// Table does not exist, so create it
-			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + yDTname + "` (" +
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + m_yDTname + "` (" +
 					" yd_id INT not NULL AUTO_INCREMENT," +
 					" symbol VARCHAR(10)," +
 					" date DATE not NULL," +
@@ -42,7 +56,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 					" close FLOAT(20)," +
 					" volume BIGINT(50)," +
 					" PRIMARY KEY (yd_id))";
-			createTable(createTableSQL, connection, yDTname);
+			createTable(createTableSQL, m_yDTname);
 		}
 		
 		/*
@@ -51,39 +65,38 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.info("     -Checking if table " + yDTname + " is empty.");
-		if(tableEmpty(yDTname, connection)){
+		log.info("     -Checking if table " + m_yDTname + " is empty.");
+		if(tableEmpty(m_yDTname)){
 			//if table is empty
 			//populate it
-			populateFreshDB(connection, indexList);
+			populateFreshDB(indexList);
 		}
 		
 		//Iteration tracking variable for System.out.printing and debugging
 		int interationCounter = 0;
-				
-				
+		
 		//Loop for each Price Volume DBs for each index
 		for(String index:indexList) {
 			interationCounter++;
 			log.info("Loop Iteration " + interationCounter + ":");
 			
 			log.info("     -Checking to see if table " + index +" is up to date.");
-			int indexDaysBehind = getIndexDaysBehind(connection, index);
+			int indexDaysBehind = getIndexDaysBehind(index);
 			if(indexDaysBehind>0)
 			{
-				updateIndexDB(connection, index, indexDaysBehind);
+				updateIndexDB(index, indexDaysBehind);
 			}
 		}
 		log.info("--------------------------------------------------------------------");
 	}
 
-	private static int getIndexDaysBehind(Connection connection, String index) {
+	private int getIndexDaysBehind(String index) {
 
 		//initializing variables
 		//java.sql.Date newestDateInDB=null;
 		LocalDate newestDate=null;
 
-		String getNewestDateInDBQuery = "SELECT Date FROM `" + yDTname + "` "
+		String getNewestDateInDBQuery = "SELECT Date FROM `" + m_yDTname + "` "
 				+ "WHERE `symbol` = '" + index + "' "
 				+ "ORDER BY date "
 				+ "DESC LIMIT 1";
@@ -92,7 +105,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 
 		try {
 			// Querying the database for the newest date
-			ps = connection.prepareStatement(getNewestDateInDBQuery);
+			ps = m_connection.prepareStatement(getNewestDateInDBQuery);
 			rs = ps.executeQuery();
 
 			if (!rs.next() ) {
@@ -137,7 +150,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		return DBDaysTilNow;//DBDaysTilNow;
 	}
 
-	public static void populateFreshDB(Connection connection, String[] indexList) {
+	public void populateFreshDB(String[] indexList) {
 		
 		Properties prop = propertiesLoader.loadActivePropertiesFile();
 		
@@ -158,11 +171,11 @@ public class MarketIndexDB extends GenericDBSuperclass {
 	
 			rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
 	
-			initialAddRecordsFromData(connection, rowsFromYahoo);
+			initialAddRecordsFromData(rowsFromYahoo);
 		}
 	}
 
-	public static void updateIndexDB(Connection connection, String index,int indexDaysBehind) {
+	public void updateIndexDB(String index,int indexDaysBehind) {
 		//Container to hold the downloaded data
 		List<YahooDataObject> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
@@ -172,7 +185,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
 
 		// extract price and volume data for URL, # of yahoo days
-		addRecordsFromData(connection, rowsFromYahoo);
+		addRecordsFromData(rowsFromYahoo);
 	}
 
 	/**
@@ -182,13 +195,13 @@ public class MarketIndexDB extends GenericDBSuperclass {
 	 * @param isStartDate determines whether you look for alternative days before or after the supplied date
 	 * @return
 	 */
-	public static int getIdByDate(Connection connection, String tableName, LocalDate Date, boolean isStartDate){
+	public int getIdByDate(String tableName, LocalDate Date, boolean isStartDate){
 		int value = 0;
 		String query = "SELECT id FROM `" + tableName + "`"
 				+ " WHERE Date=?";
 
 		try {
-			PreparedStatement selectStatement = connection.prepareStatement(query);
+			PreparedStatement selectStatement = m_connection.prepareStatement(query);
 			selectStatement.setString(1, Date.toString());
 			ResultSet rs = selectStatement.executeQuery();
 			if(rs.next()) {
@@ -228,7 +241,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 					else if(i==6)
 					{
 						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
-						value= getLastRowId(connection, tableName);
+						value= getLastRowId(tableName);
 					}
 				}
 			}
@@ -242,15 +255,15 @@ public class MarketIndexDB extends GenericDBSuperclass {
 	}
 
 	
-	public static void initialAddRecordsFromData(Connection connection, List<YahooDataObject> rowsFromYahoo) {
+	public void initialAddRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + yDTname + "` "
+		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		PreparedStatement ps=null;
 		int batchSize = 500;
 		try {
-			ps = connection.prepareStatement(insertQuery);
+			ps = m_connection.prepareStatement(insertQuery);
 
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
 			for (int i = rowsFromYahoo.size()-1; i > 0 ; i--) {
@@ -287,10 +300,10 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		}
 	}
 	
-	public static void addRecordsFromData(Connection connection, List<YahooDataObject> rowsFromYahoo) {
+	public void addRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
 
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + yDTname + "` "
+		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		PreparedStatement ps = null;
@@ -298,13 +311,13 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		
 		try {
 			//prepare the statement
-			ps = connection.prepareStatement(insertQuery);
+			ps = m_connection.prepareStatement(insertQuery);
 
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
 			for (int i = rowsFromYahoo.size()-1; i >= 0 ; i--) {
 				
 				//Check if the row is already in the DB
-				if( !isAlreadyInDB(connection, rowsFromYahoo.get(i)) ) {
+				if( !isAlreadyInDB(rowsFromYahoo.get(i)) ) {
 					//if the row is not in the DB prepare it for insertion
 					ps.setString(1, rowsFromYahoo.get(i).getSymbol());
 					ps.setString(2, rowsFromYahoo.get(i).getDate());
@@ -342,16 +355,16 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		}
 	}
 	
-	public static List<MarketIndexAnalysisObject> getDataBetweenIds(Connection connection, String symbol, int beginId, int endId) {
+	public List<MarketIndexAnalysisObject> getDataBetweenIds(String symbol, int beginId, int endId) {
 		List<MarketIndexAnalysisObject> rowsFromDB = new ArrayList<MarketIndexAnalysisObject>();
 		
 		
-		String query = "SELECT * FROM `" + yDTname + "`"
+		String query = "SELECT * FROM `" + m_yDTname + "`"
 		+ " WHERE `id` BETWEEN ? AND ?"
 		+ " ORDER BY `id` ASC";
 		
 		try {
-			PreparedStatement selectStatement = connection.prepareStatement(query);
+			PreparedStatement selectStatement = m_connection.prepareStatement(query);
 			selectStatement.setInt(1, beginId);
 			selectStatement.setInt(2, endId);
 			ResultSet rs = selectStatement.executeQuery();
@@ -378,17 +391,17 @@ public class MarketIndexDB extends GenericDBSuperclass {
 		return rowsFromDB;
 	}
 	
-	public static boolean isAlreadyInDB(Connection connection, YahooDataObject row) throws SQLException {
+	public boolean isAlreadyInDB(YahooDataObject row) throws SQLException {
 		
 		boolean alreadyExists = false;
 		int j=0;
-		String checkQuery = "SELECT `yd_id` FROM `" + yDTname + "`"
+		String checkQuery = "SELECT `yd_id` FROM `" + m_yDTname + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
 		PreparedStatement ps_check = null;
 		
-		ps_check = connection.prepareStatement(checkQuery);
+		ps_check = m_connection.prepareStatement(checkQuery);
 
 		ps_check.setString(1, row.getDate());
 		ps_check.setString(2, row.getSymbol());
@@ -396,7 +409,7 @@ public class MarketIndexDB extends GenericDBSuperclass {
 			
 		while(rs.next())
 		{
-			log.debug("Just tried to insert a duplicate row into table " + yDTname + ". The yd_id of the entry already in the table is " + rs.getInt("yd_id"));
+			log.debug("Just tried to insert a duplicate row into table " + m_yDTname + ". The yd_id of the entry already in the table is " + rs.getInt("yd_id"));
 			alreadyExists = true;
 		}
 		return alreadyExists;

@@ -1,6 +1,6 @@
 package com.atomrockets.marketanalyzer.threads;
 
-import com.atomrockets.marketanalyzer.analyzer.MarketIndicesAnalyzer;
+import com.atomrockets.marketanalyzer.analyzer.MarketAnalyzerMain;
 
 public class marketPredRunnable implements Runnable {
 	public static boolean m_continueRunning = true;
@@ -36,7 +36,7 @@ public class marketPredRunnable implements Runnable {
 				 * the market indices are in a long or short condition
 				 * This includes getting data, calculating d-days etc, and optimization
 				 */
-				MarketIndicesAnalyzer.main();
+				MarketAnalyzerMain.main();
 			}
 		}
 		catch (Exception e)

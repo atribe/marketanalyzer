@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 /**
@@ -15,46 +16,62 @@ import org.joda.time.LocalDate;
  * @author Allan
  *
  */
-public class MarketIndexParametersDB extends GenericDBSuperclass{
-
-	private static final String m_parameterTableName = "indexparameters";
+public class IndexParameterTableManager extends GenericDBSuperclass{
+	
+	/*
+	 * Important Stuff inherited from GenericDBSuperclass
+	 * 
+	 * m_connection
+	 * log
+	 * 
+	 */
+	
+	//table name
+	private static final String m_parameterTableName = "indexParameterTable";
+	
+	//Constructor
+	public IndexParameterTableManager(Connection connection) {
+		log.debug("------------------------------Index Parameter Table Manager Created--------------------------");
+		
+		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
+		m_connection = connection;
+	}
+	
 	/**
 	 * @param indexList
 	 */
-	public static void indexModelParametersInitialization(Connection connection, String[] indexList) {
-		log.info("");
-		log.info("--------------------------------------------------------------------");
+	public void tableInitialization(String[] indexList) {
 		log.info("Starting Market Index Parameters Database Initialization");
+	
+		/*
+		 * Checking to see if a table with the indexParams name exists
+		 * If it does, print to the command prompt
+		 * if not create the table
+		 */
+		log.info("     -Checking if table " + m_parameterTableName + " exists.");
+		if(!tableExists(m_parameterTableName)) {
+			// Table does not exist, so create it
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + m_parameterTableName + "` (" +
+					" id INT not NULL AUTO_INCREMENT," +
+					" symbol VARCHAR(10)," +
+					" var_name VARCHAR(100)," +
+					" var_value VARCHAR(50)," +
+					" PRIMARY KEY (id))";
+			createTable(createTableSQL, m_parameterTableName);
+		}
 
-			/*
-			 * Checking to see if a table with the indexParams name exists
-			 * If it does, print to the command prompt
-			 * if not create the table
-			 */
-			log.info("     -Checking if table " + m_parameterTableName + " exists.");
-			if(!tableExists(m_parameterTableName, connection)) {
-				// Table does not exist, so create it
-				String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + m_parameterTableName + "` (" +
-						" id INT not NULL AUTO_INCREMENT," +
-						" symbol VARCHAR(10)," +
-						" var_name VARCHAR(100)," +
-						" var_value VARCHAR(50)," +
-						" PRIMARY KEY (id))";
-				createTable(createTableSQL, connection, m_parameterTableName);
-			}
-
-			/*
-			 * Checking to see if the tables are empty
-			 * If they are populate them from Yahoo
-			 * If not, check if they are up to date
-			 * 		If not, update them
-			 */
-			log.info("     -Checking if table " + m_parameterTableName + " is empty.");
-			if(tableEmpty(m_parameterTableName, connection)){
-				//if table is empty
-				//populate it
-				populateFreshParamDB(connection, indexList);
-			}
+		/*
+		 * Checking to see if the tables are empty
+		 * If they are populate them from Yahoo
+		 * If not, check if they are up to date
+		 * 		If not, update them
+		 */
+		log.info("     -Checking if table " + m_parameterTableName + " is empty.");
+		if(tableEmpty(m_parameterTableName)){
+			//if table is empty
+			//populate it
+			populateFreshParamDB(indexList);
+		}
 		log.info("-------------------------End of Index Parameters Table Setup------------------------------");
 	}
 
@@ -65,7 +82,7 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 	 * @param indexParams
 	 * 
 	 */
-	private static void populateFreshParamDB(Connection connection, String[] indexList){
+	private void populateFreshParamDB(String[] indexList){
 		
 		//Creating a HashMap to store the parameters so they can be put in the DB
 		HashMap<String, String> parametersMap = new HashMap<String, String>();
@@ -228,7 +245,7 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 			while(itr.hasNext()) {
 				String key = (String)itr.next();
 				String value = parametersMap.get(key);
-				addVarPairRecord(connection, index, key, value);
+				addVarPairRecord(index, key, value);
 			}
 			
 			parametersMap.clear();
@@ -242,7 +259,7 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 	 * @param key
 	 * @param value
 	 */
-	private static void addVarPairRecord(Connection connection, String index, String key, String value) {
+	private void addVarPairRecord(String index, String key, String value) {
 		String insertQuery = "INSERT INTO `" + m_parameterTableName + "` "
 				+ "(symbol, var_name, var_value)"
 				+ "VALUES"
@@ -250,7 +267,7 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 				+ " ON DUPLICATE KEY UPDATE var_value=?";
 		PreparedStatement ps=null;
 		try {
-			ps = connection.prepareStatement(insertQuery);
+			ps = m_connection.prepareStatement(insertQuery);
 			ps.setString(1, index);
 			ps.setString(2, key);
 			ps.setString(3, value);
@@ -272,14 +289,14 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 		}
 	}
 
-	public static String getStringValue(Connection connection, String key){
+	public String getStringValue(String key){
 
 		String value;
 		String query = "SELECT var_value FROM `" + m_parameterTableName + "`"
 				+ " WHERE var_name=?";
 
 		try {
-			PreparedStatement selectStatement = connection.prepareStatement(query);
+			PreparedStatement selectStatement = m_connection.prepareStatement(query);
 			selectStatement.setString(1, key);
 			ResultSet rs = selectStatement.executeQuery();
 			if(rs.next()) {
@@ -297,26 +314,26 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 		return value;
 	}
 	
-	public static boolean getBooleanValue(Connection connection, String key){
-		String stringValue = getStringValue(connection,key);
+	public boolean getBooleanValue(String key){
+		String stringValue = getStringValue(key);
 		boolean boolValue = Boolean.parseBoolean(stringValue);
 		return boolValue;
 	}
 
-	public static LocalDate getDateValue(Connection connection, String key){
-		String stringValue = getStringValue(connection,key);
+	public LocalDate getDateValue(String key){
+		String stringValue = getStringValue(key);
 		LocalDate dateValue = new LocalDate(stringValue);
 		return dateValue;
 	}
 
-	public static int getIntValue(Connection connection, String key) {
-		String stringValue = getStringValue(connection,key);
+	public int getIntValue(String key) {
+		String stringValue = getStringValue(key);
 		int intValue = Integer.parseInt(stringValue);
 		return intValue;
 	}
 	
-	public static float getFloatValue(Connection connection, String key) {
-		String stringValue = getStringValue(connection,key);
+	public float getFloatValue(String key) {
+		String stringValue = getStringValue(key);
 		float floatValue = Float.parseFloat(stringValue);
 		return floatValue;
 	}

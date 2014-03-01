@@ -20,7 +20,13 @@ import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
  */
 public class GenericDBSuperclass {
 
-	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
+	static Logger staticLog = Logger.getLogger(GenericDBSuperclass.class.getName());
+	//Setting the logger for the class
+	Logger log = Logger.getLogger(this.getClass().getName());
+	
+	//Member variable of the connection, so I don't have to keep passing it between methods
+	//This variable only needs to be set once in the classes that inherit this class.
+	protected static Connection m_connection;
 	
 	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
 	/**
@@ -31,7 +37,7 @@ public class GenericDBSuperclass {
 	
 		Properties prop = propertiesLoader.loadActivePropertiesFile();
 		
-		Connection connection = null;
+		m_connection = null;
 		String host, port, dbURL, username, password, DBName;
 		try {
 			//Loading the JDBC MySQL drivers that are used by java.sql.Connection
@@ -54,30 +60,30 @@ public class GenericDBSuperclass {
 			username = prop.getProperty("db.username");
 			password = prop.getProperty("db.password");
 			
-			connection = DriverManager.getConnection(dbURL, username, password);
+			m_connection = DriverManager.getConnection(dbURL, username, password);
 
-			log.info("Connection established to " + DBName);
+			staticLog.info("Connection established to " + DBName);
 		} catch (ClassNotFoundException e) { //Handle errors for Class.forName
-			log.info("Database Driver not found in MarketDB.java with teedixindices "+e);
+			staticLog.info("Database Driver not found in MarketDB.java with teedixindices "+e);
 		} catch (SQLException ex){
 			// handle any errors
-			log.info("Exception loading Database Driver in MarketDB.java with teedixindices");
-			log.info("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.info("SQLException: " + ex.getMessage());
-			log.info("SQLState: " + ex.getSQLState());
-			log.info("VendorError: " + ex.getErrorCode());
+			staticLog.info("Exception loading Database Driver in MarketDB.java with teedixindices");
+			staticLog.info("Did you forget to turn on Apache and MySQLL again? From Exception:");
+			staticLog.info("SQLException: " + ex.getMessage());
+			staticLog.info("SQLState: " + ex.getSQLState());
+			staticLog.info("VendorError: " + ex.getErrorCode());
 		}
-		return connection;
+		return m_connection;
 	}
 
-	protected static boolean tableExists(String tableName, Connection connection){
+	protected boolean tableExists(String tableName){
 		boolean tableExists = false;
 
 		DatabaseMetaData metadata = null;
 		ResultSet tables = null;
 
 		try {
-			metadata = connection.getMetaData();
+			metadata = m_connection.getMetaData();
 			tables = metadata.getTables(null, null, tableName, null);
 
 			if (tables.next()) {
@@ -114,12 +120,12 @@ public class GenericDBSuperclass {
 		return tableExists;
 	}
 
-	protected static synchronized boolean createTable(String createTableSQL, Connection connection, String tableName){
+	protected synchronized boolean createTable(String createTableSQL, String tableName){
 		int status=0;
 		Statement createStatement = null;
 
 		try {
-			createStatement = connection.createStatement();
+			createStatement = m_connection.createStatement();
 			status = createStatement.executeUpdate(createTableSQL);
 		} catch (SQLException ex){
 			// handle any errors
@@ -153,7 +159,7 @@ public class GenericDBSuperclass {
 		}
 	}
 
-	protected static boolean tableEmpty(String tableName, Connection connection){
+	protected boolean tableEmpty(String tableName) {
 		boolean empty = true;
 		Statement queryStatement = null;
 		ResultSet rs = null;
@@ -161,7 +167,7 @@ public class GenericDBSuperclass {
 		int i = 0;
 
 		try {
-			queryStatement = connection.createStatement();
+			queryStatement = m_connection.createStatement();
 			rs = queryStatement.executeQuery("SELECT * FROM `" + tableName + "`");
 			while (rs.next())
 			{
@@ -205,23 +211,23 @@ public class GenericDBSuperclass {
 		return empty;
 	}
 
-	public static void resetTable(Connection connection, String tableName) throws SQLException {
+	public void resetTable(String tableName) throws SQLException {
 		String truncQuery = "TRUNCATE TABLE `" + tableName + "`"; 
-		Statement s = connection.createStatement();
+		Statement s = m_connection.createStatement();
 		s.execute(truncQuery);
 	}
 	
-	public static boolean dropTable(Connection connection, String tableName) throws SQLException {
+	public boolean dropTable(String tableName) throws SQLException {
 		String dropQuery = "DROP TABLE IF EXISTS `" + tableName + "`";
-		PreparedStatement ps = connection.prepareStatement(dropQuery);
+		PreparedStatement ps = m_connection.prepareStatement(dropQuery);
 		return ps.execute();
 	}
 	
-	protected static int getLastRowId(Connection connection, String tableName) throws SQLException {
+	protected int getLastRowId(String tableName) throws SQLException {
 		Statement queryStatement = null;
 		ResultSet rs = null;
 		
-		queryStatement = connection.createStatement();
+		queryStatement = m_connection.createStatement();
 		rs = queryStatement.executeQuery("select max(`id`) as last_id from `" + tableName + "`");
 		int lastId = 0;
 		if(rs.next())
