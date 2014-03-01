@@ -90,7 +90,7 @@ public class GenericDBSuperclass {
 			}
 			else {
 				tableExists = false;
-				log.info("          Table " + tableName + "does not yet exist, let me try and create that for you.");
+				log.info("          Table " + tableName + " does not yet exist, let me try and create that for you.");
 			}
 		} catch (SQLException ex){
 			// handle any errors

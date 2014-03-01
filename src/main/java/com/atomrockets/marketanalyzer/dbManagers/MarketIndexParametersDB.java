@@ -272,10 +272,10 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 		}
 	}
 
-	public static String getStringValue(Connection connection, String tableName, String key){
+	public static String getStringValue(Connection connection, String key){
 
 		String value;
-		String query = "SELECT var_value FROM `" + tableName + "`"
+		String query = "SELECT var_value FROM `" + m_parameterTableName + "`"
 				+ " WHERE var_name=?";
 
 		try {
@@ -297,26 +297,26 @@ public class MarketIndexParametersDB extends GenericDBSuperclass{
 		return value;
 	}
 	
-	public static boolean getBooleanValue(Connection connection, String tableName, String key){
-		String stringValue = getStringValue(connection,tableName,key);
+	public static boolean getBooleanValue(Connection connection, String key){
+		String stringValue = getStringValue(connection,key);
 		boolean boolValue = Boolean.parseBoolean(stringValue);
 		return boolValue;
 	}
 
-	public static LocalDate getDateValue(Connection connection, String tableName, String key){
-		String stringValue = getStringValue(connection,tableName,key);
+	public static LocalDate getDateValue(Connection connection, String key){
+		String stringValue = getStringValue(connection,key);
 		LocalDate dateValue = new LocalDate(stringValue);
 		return dateValue;
 	}
 
-	public static int getIntValue(Connection connection, String tableName, String key) {
-		String stringValue = getStringValue(connection,tableName,key);
+	public static int getIntValue(Connection connection, String key) {
+		String stringValue = getStringValue(connection,key);
 		int intValue = Integer.parseInt(stringValue);
 		return intValue;
 	}
 	
-	public static float getFloatValue(Connection connection, String tableName, String key) {
-		String stringValue = getStringValue(connection,tableName,key);
+	public static float getFloatValue(Connection connection, String key) {
+		String stringValue = getStringValue(connection,key);
 		float floatValue = Float.parseFloat(stringValue);
 		return floatValue;
 	}

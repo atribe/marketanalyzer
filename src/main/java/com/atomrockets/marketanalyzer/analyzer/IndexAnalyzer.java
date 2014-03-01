@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.analyzer;
 
+import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexAnalysisDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexDB;
 import com.atomrockets.marketanalyzer.dbManagers.MarketIndexParametersDB;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 public class IndexAnalyzer {
@@ -24,10 +26,11 @@ public class IndexAnalyzer {
 	//TODO make a get method for each variable, then if it is called and the variable is null then throw an error so I can quickly catch it
 	//Database Connection
 	static Connection m_con;
+	
+	static Logger log = Logger.getLogger(IndexAnalyzer.class.getName());
 
 	//Database names
 	static String m_index;
-	static String m_indexParametersDBName;
 
 	//member variables related to dates or number of days
 	static private int m_bufferDays;
@@ -37,7 +40,7 @@ public class IndexAnalyzer {
 	//member variable for holding all the information for analysis
 	static private List<MarketIndexAnalysisObject> m_analysisRows;
 
-	public static void runIndexAnalysis(Connection connection, String index, String indexParametersDBName) {
+	public static void runIndexAnalysis(Connection connection, String index) {
 		/*
 		 * Future Index Analysis
 		 * 
@@ -58,11 +61,10 @@ public class IndexAnalyzer {
 		 */
 		m_con = connection;
 		m_index = index;
-		m_indexParametersDBName = indexParametersDBName;
 		
-		System.out.println("");
-		System.out.println("--------------------------------------------------------------------");
-		System.out.println("Starting Index Analyzer for " + m_index);
+		log.info("");
+		log.info("--------------------------------------------------------------------");
+		log.info("Starting Index Analyzer for " + m_index);
 
 		//1. Setting the number of buffer days needed to calc averages and such
 		setBufferDays();
@@ -91,9 +93,9 @@ public class IndexAnalyzer {
 		 */
 		String bufferConditionCheck1 = "churnAVG50On";
 		String bufferConditionCheck2 = "pivotTrend35On";
-		if(MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, bufferConditionCheck1)) {
+		if(MarketIndexParametersDB.getBooleanValue(m_con, bufferConditionCheck1)) {
 			m_bufferDays=50;
-		} else if(MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, bufferConditionCheck2)) {
+		} else if(MarketIndexParametersDB.getBooleanValue(m_con, bufferConditionCheck2)) {
 			m_bufferDays=35;
 		} else {
 			m_bufferDays=0;
@@ -110,14 +112,14 @@ public class IndexAnalyzer {
 	 */
 	private static void setLoopEndId() {
 		String keyOriginalEndDate = "endDate";
-		LocalDate endDate = MarketIndexParametersDB.getDateValue(m_con, m_indexParametersDBName, keyOriginalEndDate);
+		LocalDate endDate = MarketIndexParametersDB.getDateValue(m_con, keyOriginalEndDate);
 
 		m_loopEndId = MarketIndexDB.getIdByDate(m_con, m_index, endDate, false);
 	}
 
 	private static void setLoopBeginId() {
 		String keyStartDate = "startDate";
-		LocalDate startDate = MarketIndexParametersDB.getDateValue(m_con, m_indexParametersDBName, keyStartDate);
+		LocalDate startDate = MarketIndexParametersDB.getDateValue(m_con, keyStartDate);
 
 		int beginId = MarketIndexDB.getIdByDate(m_con, m_index, startDate, true);
 		if(beginId-m_bufferDays<1) {
@@ -200,7 +202,7 @@ public class IndexAnalyzer {
 	}
 	
 	private static void distributionDayAnalysis(){
-		System.out.println("     Starting D-Day Counting and recording");
+		log.info("     Starting D-Day Counting and recording");
 		
 		String tableName = MarketIndexAnalysisDB.getTableName();
 		
@@ -224,7 +226,7 @@ public class IndexAnalyzer {
 			
 			//Getting window length from parameter database
 			String keydDayWindow = "dDayWindow";
-			int dDayWindow = MarketIndexParametersDB.getIntValue(m_con, m_indexParametersDBName, keydDayWindow);
+			int dDayWindow = MarketIndexParametersDB.getIntValue(m_con, keydDayWindow);
 		
 			//Counting up d-day that have fallen in a given window is handled in the following function
 			countDDaysInWindow(dDayWindow);
@@ -235,7 +237,7 @@ public class IndexAnalyzer {
 	}
 
 	public static void checkForDDays() throws SQLException {
-		System.out.println("          Checking to see if each day is a D-Day");
+		log.info("          Checking to see if each day is a D-Day");
 		
 		int rowCount = m_analysisRows.size();
 		int ddayCount=0;
@@ -274,24 +276,24 @@ public class IndexAnalyzer {
 	}
 	
 	private static void checkForChurningDays() {
-		System.out.println("          Checking to see if each day is a Churning Day");
+		log.info("          Checking to see if each day is a Churning Day");
 		
 		int rowCount = m_analysisRows.size();
 		int churningDayCount=0;
 		
 		// {{ Getting variables from the parameter database
 		String keychurnVolRange = "churnVolRange";
-		float churnVolRange = MarketIndexParametersDB.getFloatValue(m_con, m_indexParametersDBName, keychurnVolRange);
+		float churnVolRange = MarketIndexParametersDB.getFloatValue(m_con, keychurnVolRange);
 		String keychurnPriceRange = "churnPriceRange";
-		float churnPriceRange = MarketIndexParametersDB.getFloatValue(m_con, m_indexParametersDBName, keychurnPriceRange);
+		float churnPriceRange = MarketIndexParametersDB.getFloatValue(m_con, keychurnPriceRange);
 		String keychurnPriceCloseHigherOn = "churnPriceCloseHigherOn";
-		boolean churnPriceCloseHigherOn = MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, keychurnPriceCloseHigherOn);
+		boolean churnPriceCloseHigherOn = MarketIndexParametersDB.getBooleanValue(m_con, keychurnPriceCloseHigherOn);
 		String keychurnAVG50On = "churnAVG50On";
-		boolean churnAVG50On = MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, keychurnAVG50On);
+		boolean churnAVG50On = MarketIndexParametersDB.getBooleanValue(m_con, keychurnAVG50On);
 		String keychurnPriceTrend35On = "churnPriceTrend35On";
-		boolean churnPriceTrend35On = MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, keychurnPriceTrend35On);
+		boolean churnPriceTrend35On = MarketIndexParametersDB.getBooleanValue(m_con, keychurnPriceTrend35On);
 		String keychurnPriceTrend35 = "churnPriceTrend35";
-		float churnPriceTrend35 = MarketIndexParametersDB.getFloatValue(m_con, m_indexParametersDBName, keychurnPriceTrend35);
+		float churnPriceTrend35 = MarketIndexParametersDB.getFloatValue(m_con, keychurnPriceTrend35);
 		// }}
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{
@@ -364,7 +366,7 @@ public class IndexAnalyzer {
 	}
 	
 	public static void countDDaysInWindow(int dDayWindow) {
-		System.out.println("          Looking at each day to see how many D-Dates at in the current window (" + dDayWindow + " days).");
+		log.info("          Looking at each day to see how many D-Dates at in the current window (" + dDayWindow + " days).");
 		
 		/* 
 		 * 		2. For each loop of all the data
@@ -385,18 +387,18 @@ public class IndexAnalyzer {
 	}
 
 	private static void followThruAnalysis() {
-		System.out.println("          Checking to see if each day is a Follow Through Day");
+		log.info("          Checking to see if each day is a Follow Through Day");
 		
 		int rowCount = m_analysisRows.size();
 		int followThroughDayCount=0;
 		
 		// {{ Getting variables from the parameter database
 		String keyrDaysMax = "rDaysMax";
-		int rDaysMax = MarketIndexParametersDB.getIntValue(m_con, m_indexParametersDBName, keyrDaysMax);
+		int rDaysMax = MarketIndexParametersDB.getIntValue(m_con, keyrDaysMax);
 		String keypivotTrend35On = "pivotTrend35On";
-		boolean churnpivotTrend35On = MarketIndexParametersDB.getBooleanValue(m_con, m_indexParametersDBName, keypivotTrend35On);
+		boolean churnpivotTrend35On = MarketIndexParametersDB.getBooleanValue(m_con, keypivotTrend35On);
 		String keypivotTrend35 = "pivotTrend35";
-		float pivotTrend35 = MarketIndexParametersDB.getFloatValue(m_con, m_indexParametersDBName, keypivotTrend35);
+		float pivotTrend35 = MarketIndexParametersDB.getFloatValue(m_con,  keypivotTrend35);
 		// }}
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 

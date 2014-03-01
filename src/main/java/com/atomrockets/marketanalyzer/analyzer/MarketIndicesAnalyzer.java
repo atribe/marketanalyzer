@@ -51,7 +51,7 @@ public class MarketIndicesAnalyzer{
 		 */
 		MarketIndexAnalysisDB.IndexAnalysisTableInitialization(connection, indexList);
 		
-		IndexAnalyzer.runIndexAnalysis(connection, "^IXIC", "^IXICvars");
+		IndexAnalyzer.runIndexAnalysis(connection, "^IXIC");
 		//Run model for Nasdaq
 		//Run model for SP500
 		
