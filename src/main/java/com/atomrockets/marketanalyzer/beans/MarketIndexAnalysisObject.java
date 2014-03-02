@@ -28,6 +28,9 @@ public class MarketIndexAnalysisObject implements Serializable {
 	private int id;
 	
 	//Data from the yahooDataTable
+	@Column(name="symbol", table="yahooDataTable")
+	private String symbol;
+	
 	@Column(name="date", table="yahooDataTable" )
 	private String date;
 	private LocalDate convertedDate;
@@ -102,6 +105,14 @@ public class MarketIndexAnalysisObject implements Serializable {
 		this.id = id;
 	}
 	
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
 	/**
 	 * @return the date
 	 */

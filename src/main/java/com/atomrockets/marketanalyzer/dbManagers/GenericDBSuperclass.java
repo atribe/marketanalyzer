@@ -228,7 +228,7 @@ public class GenericDBSuperclass {
 		ResultSet rs = null;
 		
 		queryStatement = m_connection.createStatement();
-		rs = queryStatement.executeQuery("select max(`id`) as last_id from `" + tableName + "`");
+		rs = queryStatement.executeQuery("select max(`yd_id`) as last_id from `" + tableName + "`");
 		int lastId = 0;
 		if(rs.next())
 			lastId = rs.getInt("last_id");

@@ -61,7 +61,7 @@ public class MarketAnalyzerMain{
 		 * Models runs are not looped because you may want to run or optimize them one at a time
 		 * I'll figure out this code after I figure out the above
 		 */
-		IndexAnalyzer.runIndexAnalysis(connection, "^IXIC");
+		IndexAnalyzer.runIndexAnalysis(m_indexYahooTable, m_indexParamTable, m_indexAnalysisTable, "^IXIC");
 		//Run model for Nasdaq
 		//Run model for SP500
 		

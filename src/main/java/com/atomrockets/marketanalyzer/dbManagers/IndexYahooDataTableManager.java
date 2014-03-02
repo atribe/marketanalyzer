@@ -195,27 +195,31 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 * @param isStartDate determines whether you look for alternative days before or after the supplied date
 	 * @return
 	 */
-	public int getIdByDate(String tableName, LocalDate Date, boolean isStartDate){
+	public int getIdByDate(String index, LocalDate Date, boolean isStartDate){
 		int value = 0;
-		String query = "SELECT id FROM `" + tableName + "`"
-				+ " WHERE Date=?";
+		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
+				+ " WHERE `date` = ?"
+				+ " AND `symbol` = ?";
+		
 
 		try {
 			PreparedStatement selectStatement = m_connection.prepareStatement(query);
 			selectStatement.setString(1, Date.toString());
+			selectStatement.setString(2, index);
 			ResultSet rs = selectStatement.executeQuery();
 			if(rs.next()) {
-				value = rs.getInt("id");
+				value = rs.getInt("yd_id");
 			} else if (isStartDate) {
 				log.info("     The date of " + Date.toString() + " not found in the database.");
 				log.info("          Let me check the preceeding couple of days in case you chose a weekend or holiday.");
 				for(int i = 1;i<7;i++)
 				{
 					selectStatement.setString(1, Date.minusDays(i).toString());
+					selectStatement.setString(2, index);
 					rs = selectStatement.executeQuery();
 					if(rs.next())
 					{
-						value = rs.getInt("id");
+						value = rs.getInt("yd_id");
 						log.info("          Looks like I found one...and you got all worried for nothing.");
 						break;
 					}
@@ -231,17 +235,18 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 				for(int i = 1;i<7;i++)
 				{
 					selectStatement.setString(1, Date.plusDays(i).toString());
+					selectStatement.setString(2, index);
 					rs = selectStatement.executeQuery();
 					if(rs.next())
 					{
-						value = rs.getInt("id");
+						value = rs.getInt("yd_id");
 						log.info("          Looks like I found one...and you got all worried for nothing.");
 						break;
 					}
 					else if(i==6)
 					{
 						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
-						value= getLastRowId(tableName);
+						value= getLastRowId(m_yDTname);
 					}
 				}
 			}
@@ -360,24 +365,27 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 		
 		String query = "SELECT * FROM `" + m_yDTname + "`"
-		+ " WHERE `id` BETWEEN ? AND ?"
-		+ " ORDER BY `id` ASC";
+		+ " WHERE `yd_id` BETWEEN ? AND ?"
+		+ " AND `symbol` = ?"
+		+ " ORDER BY `yd_id` ASC";
 		
 		try {
 			PreparedStatement selectStatement = m_connection.prepareStatement(query);
 			selectStatement.setInt(1, beginId);
 			selectStatement.setInt(2, endId);
+			selectStatement.setString(3, symbol);
 			ResultSet rs = selectStatement.executeQuery();
 
 			while (rs.next()) {
 				MarketIndexAnalysisObject singleRow = new MarketIndexAnalysisObject();
-				singleRow.setId(rs.getInt("id"));
-				singleRow.setConvertedDate(rs.getDate("Date"));
-				singleRow.setOpen(rs.getFloat("Open"));
-				singleRow.setHigh(rs.getFloat("High"));
-				singleRow.setLow(rs.getFloat("Low"));
-				singleRow.setClose(rs.getFloat("Close"));
-				singleRow.setVolume(rs.getLong("Volume"));
+				singleRow.setId(rs.getInt("yd_id"));
+				singleRow.setSymbol(rs.getString("symbol"));
+				singleRow.setConvertedDate(rs.getDate("date"));
+				singleRow.setOpen(rs.getFloat("open"));
+				singleRow.setHigh(rs.getFloat("high"));
+				singleRow.setLow(rs.getFloat("low"));
+				singleRow.setClose(rs.getFloat("close"));
+				singleRow.setVolume(rs.getLong("volume"));
 				
 				rowsFromDB.add(singleRow);
 			}
