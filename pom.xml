@@ -97,7 +97,23 @@
 		    <groupId>jfree</groupId>
 		    <artifactId>jfreechart</artifactId>
 		    <version>1.0.13</version>
-		</dependency>            
+		</dependency>
+		
+			<!-- Plotting with Google Charts using the charts4j api -->
+			<!-- only provided static images -->
+		<dependency>
+			<groupId>com.googlecode.charts4j</groupId>
+			<artifactId>charts4j</artifactId>
+			<version>1.3</version>
+		</dependency>
+			<!-- Google's server side plotting tools -->
+			<!-- This should allow us to have interactive charts -->
+		<dependency>
+			<groupId>com.google.visualization</groupId>
+			<artifactId>visualization-datasource</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+                   
     </dependencies>
   
     <build>

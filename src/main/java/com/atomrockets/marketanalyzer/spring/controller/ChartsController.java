@@ -22,7 +22,7 @@ import com.atomrockets.marketanalyzer.plotting.indexTimeSeriesPlot;
 @RequestMapping("/charts")
 public class ChartsController {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(AccountController.class.getName());
+	static Logger log = Logger.getLogger(ChartsController.class.getName());
 
     @RequestMapping(value = "/piechart", method = RequestMethod.GET)
     public void drawPieChart(HttpServletResponse response) {

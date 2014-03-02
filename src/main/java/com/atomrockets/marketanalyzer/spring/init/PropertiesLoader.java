@@ -20,7 +20,7 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
  * 4. If failed to found one, panicks and returns empty Properties object
  */
 public class PropertiesLoader {
-	static Logger log = Logger.getLogger(AccountController.class.getName());
+	static Logger log = Logger.getLogger(PropertiesLoader.class.getName());
 
     public Properties load(String fileName) {
         Properties prop = new Properties();

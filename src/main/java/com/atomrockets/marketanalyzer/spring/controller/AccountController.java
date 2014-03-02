@@ -17,6 +17,7 @@ public class AccountController {
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public ModelAndView findAllAccounts() throws Exception {
         ModelAndView mav = new ModelAndView();
+        //the view name is the name of the jsp
         mav.setViewName("account");
         mav.addObject("someText", "Listing all accounts!");
         
