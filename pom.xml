@@ -24,18 +24,6 @@
             <version>${spring.version}</version>
         </dependency>
         
-        	<!-- spring-jdbc and spring-orm are for hibernate -->
-        <dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-        
         <!-- JavaEE APIs -->
 
 		<dependency>
@@ -134,21 +122,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
         </plugins>
     </build>
 </project>
