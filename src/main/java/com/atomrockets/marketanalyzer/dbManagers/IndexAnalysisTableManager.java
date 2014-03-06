@@ -39,9 +39,10 @@ public class IndexAnalysisTableManager extends GenericDBSuperclass{
 			put("closeAvg200", "FLOAT");
 			put("volumeAvg50", "BIGINT(50)");
 			put("priceTrend35", "FLOAT");
-			put("isDDay", "TINYINT(1)");
-			put("isChurnDay", "TINYINT(1)");
-			put("DDayCounter", "INT");		
+			put("isDDay", "TINYINT(1)");//1 == true, 0 == false
+			put("isChurnDay", "TINYINT(1)");//1 == true, 0 == false
+			put("DDayCounter", "INT");
+			put("dayAction", "VARCHAR(4)");//buy, or sell, or hold
 		}
 	};
 			

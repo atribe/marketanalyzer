@@ -8,6 +8,8 @@ import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
 
 import java.sql.Connection;
 
+import org.joda.time.LocalDate;
+
 /**
  * This class is the highest level class that deals with all things market index.
  * Initializes and updates databases
@@ -66,8 +68,18 @@ public class MarketAnalyzerMain{
 		//Run model for SP500
 		
 		
+		//Calculate Returns
+		buyAndHoldReturn("^IXIC");
+		
 	}
 	
+	private static void buyAndHoldReturn(String index) {
+		LocalDate startDate = m_indexParamTable.getDateValue("startDate");
+		LocalDate endDate = m_indexParamTable.getDateValue("endDate");
+		
+		m_indexYahooTable.getRowByIndexAndDate(index,startDate, true);
+	}
+
 	static private String[] getIndexList() {
 		return indexList;
 	}

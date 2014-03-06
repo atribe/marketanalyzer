@@ -423,4 +423,70 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return alreadyExists;
 	}
 
+	public int getRowByIndexAndDate(String index, LocalDate date, boolean isStartDate) {
+		int value = 0;
+		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
+				+ " WHERE `date` = ?"
+				+ " AND `symbol` = ?";
+		
+
+		try {
+			PreparedStatement selectStatement = m_connection.prepareStatement(query);
+			selectStatement.setString(1, date.toString());
+			selectStatement.setString(2, index);
+			ResultSet rs = selectStatement.executeQuery();
+			if(rs.next()) {
+				value = rs.getInt("yd_id");
+			} else if (isStartDate) {
+				log.info("     The date of " + date.toString() + " not found in the database.");
+				log.info("          Let me check the preceeding couple of days in case you chose a weekend or holiday.");
+				for(int i = 1;i<7;i++)
+				{
+					selectStatement.setString(1, date.minusDays(i).toString());
+					selectStatement.setString(2, index);
+					rs = selectStatement.executeQuery();
+					if(rs.next())
+					{
+						value = rs.getInt("yd_id");
+						log.info("          Looks like I found one...and you got all worried for nothing.");
+						break;
+					}
+					else if(i==6)
+					{
+						log.info("          I didn't find an earlier date, so I'll just choose the first date in the data set");
+						value=1;
+					}
+				}
+			} else {
+				log.info("     The date of " + date.toString() + " not found in the database.");
+				log.info("          Let me check the next couple days in case you chose a weekend or holiday.");
+				for(int i = 1;i<7;i++)
+				{
+					selectStatement.setString(1, date.plusDays(i).toString());
+					selectStatement.setString(2, index);
+					rs = selectStatement.executeQuery();
+					if(rs.next())
+					{
+						value = rs.getInt("yd_id");
+						log.info("          Looks like I found one...and you got all worried for nothing.");
+						break;
+					}
+					else if(i==6)
+					{
+						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
+						value= getLastRowId(m_yDTname);
+					}
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			log.info("There was an error in the getIdByDate method. And that error is: ");
+			log.info(e.toString());
+			e.printStackTrace();
+		}
+		return value;
+		
+	}
+
 }

@@ -95,8 +95,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				 * Parameters with comments have been used. The rest are not yet used.
 				 */
 				parametersMap.put("fileName", "ResultsNasdaq.txt");
-				parametersMap.put("startDate", "1980-01-01");//Analysis Start Date
-				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
+				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "9");//10 d days in a window = sell
 				parametersMap.put("churnVolRange", "0.03");
@@ -122,8 +122,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				break;
 			case "^GSPC":
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "1980-01-01");//Analysis Start Date
-				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
+				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
 				parametersMap.put("churnVolRange", "0.03");
@@ -150,8 +150,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			case "^SML":
 				//set the same as S&P because I don't have anything saying differently
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "1980-01-01");//Analysis Start Date
-				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
+				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
 				parametersMap.put("churnVolRange", "0.03");
@@ -178,8 +178,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			case "^MID":
 				//set the same as S&P because I don't have anything saying differently
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "1980-01-01");//Analysis Start Date
-				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
+				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
 				parametersMap.put("churnVolRange", "0.03");
