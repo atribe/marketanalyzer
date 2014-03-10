@@ -63,6 +63,7 @@ public class PersistenceConfig {
 	public HibernateTransactionManager transactionManager() {
 		HibernateTransactionManager txManager = new HibernateTransactionManager();
 		txManager.setSessionFactory(sessionFactory().getObject());
+		
 		return txManager;
 	}
 		
