@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.atomrockets.marketanalyzer.beans;
+package com.atomrockets.marketanalyzer.models;
 
 import java.util.Date;
 

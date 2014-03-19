@@ -21,8 +21,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
-import com.atomrockets.marketanalyzer.beans.YahooDataObject;
-import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
+import com.atomrockets.marketanalyzer.dao.GenericDBSuperclass;
+import com.atomrockets.marketanalyzer.models.YahooDataObject;
 
 /**
  * @author Aaron

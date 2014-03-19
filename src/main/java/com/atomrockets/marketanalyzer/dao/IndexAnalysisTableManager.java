@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.dbManagers;
+package com.atomrockets.marketanalyzer.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
+import com.atomrockets.marketanalyzer.models.MarketIndexAnalysisObject;
 
 public class IndexAnalysisTableManager extends GenericDBSuperclass{
 

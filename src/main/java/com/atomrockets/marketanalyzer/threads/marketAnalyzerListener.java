@@ -7,8 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.atomrockets.marketanalyzer.beans.MarketAnalyzerBean;
-
+/**
+ * 
+ * @author Allan
+ * This class waits until the context has been initialized (aka the tomcat server has been started,
+ * or at least some part of it anyway) and then spawns threads as needed.
+ * 
+ * Threads spawned:
+ *   MarketAnalyzerBean, which handles the database initialization.
+ */
 @Component
 public class marketAnalyzerListener implements ServletContextListener{
 
@@ -23,16 +30,13 @@ public class marketAnalyzerListener implements ServletContextListener{
 			.getRequiredWebApplicationContext(sce.getServletContext())
 			.getAutowireCapableBeanFactory()
 			.autowireBean(this);
-		t = new Thread(maBean, "marketAnalyzerListenerThread");
+		t = new Thread(maBean, "MA_Database_Init_Thread");
 		
 		t.start();
 	}
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
-
-
 }

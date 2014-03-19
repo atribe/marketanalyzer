@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.dbManagers;
+package com.atomrockets.marketanalyzer.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,9 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
-import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
-import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
+import com.atomrockets.marketanalyzer.models.MarketIndexAnalysisObject;
+import com.atomrockets.marketanalyzer.models.YahooDataObject;
 
 public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	

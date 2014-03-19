@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.dbManagers;
+package com.atomrockets.marketanalyzer.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

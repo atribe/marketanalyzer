@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.atomrockets.marketanalyzer.beans.MarketAnalyzerBean;
+import com.atomrockets.marketanalyzer.threads.MarketAnalyzerBean;
 
 @Configuration
 @ComponentScan(basePackages = "com.atomrockets.marketanalyzer")

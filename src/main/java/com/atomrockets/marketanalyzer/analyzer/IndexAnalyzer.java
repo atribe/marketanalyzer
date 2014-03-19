@@ -1,11 +1,11 @@
 package com.atomrockets.marketanalyzer.analyzer;
 
-import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
-import com.atomrockets.marketanalyzer.dbManagers.IndexAnalysisTableManager;
-import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
-import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
-import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
-import com.atomrockets.marketanalyzer.beans.YahooDataObject;
+import com.atomrockets.marketanalyzer.dao.GenericDBSuperclass;
+import com.atomrockets.marketanalyzer.dao.IndexAnalysisTableManager;
+import com.atomrockets.marketanalyzer.dao.IndexParameterTableManager;
+import com.atomrockets.marketanalyzer.dao.IndexYahooDataTableManager;
+import com.atomrockets.marketanalyzer.models.MarketIndexAnalysisObject;
+import com.atomrockets.marketanalyzer.models.YahooDataObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

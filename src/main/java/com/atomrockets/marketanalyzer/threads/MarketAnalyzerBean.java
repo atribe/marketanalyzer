@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.beans;
+package com.atomrockets.marketanalyzer.threads;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
@@ -13,7 +13,7 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 public class MarketAnalyzerBean implements Runnable {
 
 	String name="MarketAnalyzerBean";
-	static Logger log = Logger.getLogger(MarketAnalyzerBean.class.getName());
+	Logger log = Logger.getLogger(this.getClass().getName());
 	
 	public void setName(String name) {
 		this.name = name;
