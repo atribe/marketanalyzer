@@ -1,7 +1,10 @@
 package com.atomrockets.marketanalyzer.threads;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.atomrockets.marketanalyzer.dbManagers.DatabaseInitialization;
@@ -26,5 +29,10 @@ public class MarketsDBInitRunnable implements Runnable {
 		log.info(name + " had ended");
 	}
 	
-
+	@Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedRate = 5000)
+    public void demoServiceMethod()
+    {
+        System.out.println("Method executed at every 5 seconds. Current time is :: "+ new Date());
+    }
 }
