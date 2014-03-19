@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.dao;
+package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

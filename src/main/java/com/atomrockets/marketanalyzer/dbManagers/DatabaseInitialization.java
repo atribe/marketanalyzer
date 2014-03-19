@@ -1,9 +1,5 @@
-package com.atomrockets.marketanalyzer.analyzer;
+package com.atomrockets.marketanalyzer.dbManagers;
 
-import com.atomrockets.marketanalyzer.dao.GenericDBSuperclass;
-import com.atomrockets.marketanalyzer.dao.IndexAnalysisTableManager;
-import com.atomrockets.marketanalyzer.dao.IndexParameterTableManager;
-import com.atomrockets.marketanalyzer.dao.IndexYahooDataTableManager;
 import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
 
 import java.sql.Connection;
@@ -17,7 +13,7 @@ import org.joda.time.LocalDate;
  * @author Allan
  *
  */
-public class MarketAnalyzerMain{
+public class DatabaseInitialization{
 
 	//							  		  Nasdaq  S&P500
 	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
@@ -28,7 +24,7 @@ public class MarketAnalyzerMain{
 	static private IndexAnalysisTableManager m_indexAnalysisTable;
 	
 
-	static public void main() {
+	static public void marketsDBInitialization() {
 
 		//Get a database connection
 		Connection connection = GenericDBSuperclass.getConnection();
@@ -56,30 +52,9 @@ public class MarketAnalyzerMain{
 		 */
 		m_indexAnalysisTable = new IndexAnalysisTableManager(connection);
 		m_indexAnalysisTable.tableInitialization(indexList);
-
-		
-		//Market Index Models
-		/*
-		 * Models runs are not looped because you may want to run or optimize them one at a time
-		 * I'll figure out this code after I figure out the above
-		 */
-		IndexAnalyzer.runIndexAnalysis(m_indexYahooTable, m_indexParamTable, m_indexAnalysisTable, "^IXIC");
-		//Run model for Nasdaq
-		//Run model for SP500
-		
-		
-		//Calculate Returns
-		buyAndHoldReturn("^IXIC");
-		
-	}
-	
-	private static void buyAndHoldReturn(String index) {
-		LocalDate startDate = m_indexParamTable.getDateValue("startDate");
-		LocalDate endDate = m_indexParamTable.getDateValue("endDate");
-		
-		m_indexYahooTable.getRowByIndexAndDate(index,startDate, true);
 	}
 
+	//getters
 	static private String[] getIndexList() {
 		return indexList;
 	}

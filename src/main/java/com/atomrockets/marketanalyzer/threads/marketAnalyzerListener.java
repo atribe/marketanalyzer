@@ -20,7 +20,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class marketAnalyzerListener implements ServletContextListener{
 
 	@Autowired
-	private MarketAnalyzerBean maBean;
+	private MarketsDBInitRunnable maBean;
 	
 	private Thread t;
 	

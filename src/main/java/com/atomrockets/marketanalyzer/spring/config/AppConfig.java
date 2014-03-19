@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.atomrockets.marketanalyzer.threads.MarketAnalyzerBean;
+import com.atomrockets.marketanalyzer.threads.MarketsDBInitRunnable;
 
 @Configuration
 @ComponentScan(basePackages = "com.atomrockets.marketanalyzer")
@@ -16,8 +16,8 @@ public class AppConfig {
 	 * on where to look for its components through @ComponentScan annotation.
 	 */
 	@Bean
-	public MarketAnalyzerBean maBean() {
-		MarketAnalyzerBean maBean = new MarketAnalyzerBean();
+	public MarketsDBInitRunnable maBean() {
+		MarketsDBInitRunnable maBean = new MarketsDBInitRunnable();
 		return maBean;
 	}
 }

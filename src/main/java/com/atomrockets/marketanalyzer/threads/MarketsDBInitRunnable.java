@@ -2,17 +2,15 @@ package com.atomrockets.marketanalyzer.threads;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import com.atomrockets.marketanalyzer.analyzer.MarketAnalyzerMain;
-import com.atomrockets.marketanalyzer.spring.controller.AccountController;
+import com.atomrockets.marketanalyzer.dbManagers.DatabaseInitialization;
 
 @Component
 @Scope("prototype")
-public class MarketAnalyzerBean implements Runnable {
+public class MarketsDBInitRunnable implements Runnable {
 
-	String name="MarketAnalyzerBean";
+	String name="MarketsDBInitRunnable";
 	Logger log = Logger.getLogger(this.getClass().getName());
 	
 	public void setName(String name) {
@@ -23,8 +21,10 @@ public class MarketAnalyzerBean implements Runnable {
 	public void run() { 
 		log.info(name + " is running");
 		
-		MarketAnalyzerMain.main();
+		DatabaseInitialization.marketsDBInitialization();
 		
 		log.info(name + " had ended");
 	}
+	
+
 }
