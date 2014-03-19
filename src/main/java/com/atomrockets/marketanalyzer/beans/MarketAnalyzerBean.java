@@ -13,7 +13,6 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 public class MarketAnalyzerBean implements Runnable {
 
 	String name="MarketAnalyzerBean";
-	
 	static Logger log = Logger.getLogger(MarketAnalyzerBean.class.getName());
 	
 	public void setName(String name) {

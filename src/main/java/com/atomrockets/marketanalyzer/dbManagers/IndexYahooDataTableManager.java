@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.atomrockets.marketanalyzer.beans.MarketIndexAnalysisObject;
+import com.atomrockets.marketanalyzer.beans.YahooDataObject;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
-import com.atomrockets.marketanalyzer.persistence.model.YahooIndexData;
-import com.atomrockets.marketanalyzer.persistence.service.impl.YahooIndexDataService;
 
 public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	
@@ -25,8 +24,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 * log
 	 * 
 	 */
-	@Autowired
-	private YahooIndexDataService yahooIndexDataService;
 	
 	//Name of the table that contains all the data from Yahoo
 	private static final String m_yDTname = "yahooDataTable";
@@ -162,7 +159,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			log.info("     -Populating Table " + index);		
 		
 			//Container to hold the downloaded data
-			List<YahooIndexData> rowsFromYahoo = null;
+			List<YahooDataObject> rowsFromYahoo = null;
 			//This date represents the beginning of time as far as any of the indexes go
 			LocalDate beginningDate = new LocalDate(prop.getProperty("yahoo.startdate"));
 	
@@ -180,7 +177,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 
 	public void updateIndexDB(String index,int indexDaysBehind) {
 		//Container to hold the downloaded data
-		List<YahooIndexData> rowsFromYahoo = null;
+		List<YahooDataObject> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = MarketRetriever.getYahooURL(index, indexDaysBehind);
 
@@ -262,19 +259,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return value;
 	}
 
-	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
-		/*
-		 * This new section attempts to use Hibernate
-		 */
-		for (int i = rowsFromYahoo.size()-1; i > 0 ; i--) {
-			yahooIndexDataService.create(rowsFromYahoo.get(i));
-		}
-		
-		
-		
-		/*
-		 * This is the old stuff
-		 */
+	
+	public void initialAddRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
 		//This query ignores duplicate dates
 		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
@@ -319,7 +305,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 	
-	public void addRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
+	public void addRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
 
 		//This query ignores duplicate dates
 		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
@@ -413,7 +399,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return rowsFromDB;
 	}
 	
-	public boolean isAlreadyInDB(YahooIndexData row) throws SQLException {
+	public boolean isAlreadyInDB(YahooDataObject row) throws SQLException {
 		
 		boolean alreadyExists = false;
 		int j=0;

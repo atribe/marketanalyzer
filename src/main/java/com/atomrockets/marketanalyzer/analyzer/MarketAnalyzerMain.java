@@ -4,15 +4,11 @@ import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexAnalysisTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
-import com.atomrockets.marketanalyzer.persistence.model.YahooIndexData;
-import com.atomrockets.marketanalyzer.persistence.service.impl.YahooIndexDataService;
 import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
 
 import java.sql.Connection;
 
 import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * This class is the highest level class that deals with all things market index.
@@ -21,16 +17,17 @@ import org.springframework.stereotype.Component;
  * @author Allan
  *
  */
-@Component
 public class MarketAnalyzerMain{
 
-	private static final String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
+	//							  		  Nasdaq  S&P500
+	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
 	
 	//Database Table Managers
 	static private IndexYahooDataTableManager m_indexYahooTable;
 	static private IndexParameterTableManager m_indexParamTable;
 	static private IndexAnalysisTableManager m_indexAnalysisTable;
 	
+
 	static public void main() {
 
 		//Get a database connection
