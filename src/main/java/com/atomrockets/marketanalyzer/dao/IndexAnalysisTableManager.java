@@ -134,7 +134,7 @@ public class IndexAnalysisTableManager extends GenericDBSuperclass{
 				+ " WHERE id=?";
 		PreparedStatement ps = m_connection.prepareStatement(updateQuery);
 		ps.setInt(1, analysisRow.getdDayCounter());
-		ps.setInt(2, analysisRow.getId());
+		ps.setLong(2, analysisRow.getId());
 		int rowsUpdated = ps.executeUpdate();
 		rowsUpdated = rowsUpdated;//just something to stop the debugging
 	}
@@ -173,7 +173,7 @@ public class IndexAnalysisTableManager extends GenericDBSuperclass{
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
 			for (int i = 0; i < analysisRows.size() ; i++) {
 				//if the row is not in the DB prepare it for insertion
-				ps.setInt(1, analysisRows.get(i).getId());
+				ps.setLong(1, analysisRows.get(i).getId());
 				ps.setDouble(2,  analysisRows.get(i).getCloseAvg50());
 				ps.setDouble(3,  analysisRows.get(i).getCloseAvg100());
 				ps.setDouble(4,  analysisRows.get(i).getCloseAvg200());

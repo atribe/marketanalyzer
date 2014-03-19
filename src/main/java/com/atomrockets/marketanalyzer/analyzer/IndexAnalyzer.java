@@ -36,8 +36,8 @@ public class IndexAnalyzer {
 
 	//member variables related to dates or number of days
 	static private int m_bufferDays;
-	static private int m_loopBeginId;
-	static private int m_loopEndId;
+	static private long m_loopBeginId;
+	static private long m_loopEndId;
 	
 	//member variable for holding all the information for analysis
 	static private List<MarketIndexAnalysisObject> m_analysisRows;
@@ -129,7 +129,7 @@ public class IndexAnalyzer {
 		String keyStartDate = "startDate";
 		LocalDate startDate = m_indexParamTable.getDateValue(keyStartDate);
 
-		int beginId = m_indexYahooTable.getIdByDate(m_index, startDate, true);
+		long beginId = m_indexYahooTable.getIdByDate(m_index, startDate, true);
 		if(beginId-m_bufferDays<1) {
 			m_loopBeginId = 1;
 		} else {

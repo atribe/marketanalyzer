@@ -188,15 +188,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		addRecordsFromData(rowsFromYahoo);
 	}
 
-	/**
-	 * @param connection
-	 * @param tableName
-	 * @param Date
-	 * @param isStartDate determines whether you look for alternative days before or after the supplied date
-	 * @return
-	 */
-	public int getIdByDate(String index, LocalDate Date, boolean isStartDate){
-		int value = 0;
+	public long getIdByDate(String index, LocalDate Date, boolean isStartDate){
+		long value = 0;
 		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
@@ -259,7 +252,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return value;
 	}
 
-	
 	public void initialAddRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
 		//This query ignores duplicate dates
 		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
@@ -360,7 +352,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 	
-	public List<MarketIndexAnalysisObject> getDataBetweenIds(String symbol, int beginId, int endId) {
+	public List<MarketIndexAnalysisObject> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
 		List<MarketIndexAnalysisObject> rowsFromDB = new ArrayList<MarketIndexAnalysisObject>();
 		
 		
@@ -371,8 +363,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 		try {
 			PreparedStatement selectStatement = m_connection.prepareStatement(query);
-			selectStatement.setInt(1, beginId);
-			selectStatement.setInt(2, endId);
+			selectStatement.setLong(1, m_loopBeginId);
+			selectStatement.setLong(2, m_loopEndId);
 			selectStatement.setString(3, symbol);
 			ResultSet rs = selectStatement.executeQuery();
 
@@ -423,8 +415,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return alreadyExists;
 	}
 
-	public int getRowByIndexAndDate(String index, LocalDate date, boolean isStartDate) {
-		int value = 0;
+	public long getRowByIndexAndDate(String index, LocalDate date, boolean isStartDate) {
+		long value = 0;
 		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";

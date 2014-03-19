@@ -13,67 +13,30 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-@Entity
-@Table(name="marketIndexAnalysis")
-
-@SecondaryTables({
-	@SecondaryTable(name="yahooDataTable", pkJoinColumns={
-			@PrimaryKeyJoinColumn(name="yd_id", referencedColumnName="id")
-	})
-})
 public class MarketIndexAnalysisObject implements Serializable {
 	
-	@Id
-	@Column(name="id")
-	private int id;
+	private long id;
 	
 	//Data from the yahooDataTable
-	@Column(name="symbol", table="yahooDataTable")
 	private String symbol;
-	
-	@Column(name="date", table="yahooDataTable" )
 	private String date;
 	private LocalDate convertedDate;
-	
-	@Column(name="open", table="yahooDataTable" )
 	private float open;
-	
-	@Column(name="high", table="yahooDataTable" )
 	private float high;
-	
-	@Column(name="low", table="yahooDataTable" )
 	private float low;
-	
-	@Column(name="close", table="yahooDataTable" )
 	private float close;
-	
-	@Column(name="volume", table="yahooDataTable" )
 	private long volume;
 	
 	//Statistic variables
-	@Column(name="closeAvg50")
 	private float closeAvg50;
-	
-	@Column(name="closeAvg100")
 	private float closeAvg100;
-	
-	@Column(name="closeAvg200")
 	private float closeAvg200;
-	
-	@Column(name="volumeAvg50")
 	private long volumeAvg50;
-	
-	@Column(name="priceTrend35")
 	private float priceTrend35;
 	
 	//Analysis variables
-	@Column(name="isDDay")
 	private boolean isDDay;
-	
-	@Column(name="isChurnDay")
 	private boolean isChurnDay;
-	
-	@Column(name="dDayCounter")
 	private int dDayCounter;
 	//add more stuff as needed here
 
@@ -85,20 +48,8 @@ public class MarketIndexAnalysisObject implements Serializable {
 	public String toString() {
 		   return ToStringBuilder.reflectionToString(this);
 		 }
-	/*
-    public String toString() {
-		return "\nid: " + getId()
-				+ "\nDate: " + getDate().toString()
-				+ "\nOpen: " + getOpen()
-				+ "\nHigh: " + getHigh()
-				+ "\nLow: " + getLow()
-				+ "\nClose: " + getClose()
-				+ "\nIs D-Day: " + isDDay()
-				+ "\nIs Churn Day: " + isChurnDay()
-				+ "\nD-Day Count: " + getdDayCounter() + "\n";
-	}
-	*/
-	public int getId() {
+	
+	public long getId() {
 		return id;
 	}
 	public void setId(int id) {

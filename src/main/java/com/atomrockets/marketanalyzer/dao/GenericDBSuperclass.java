@@ -223,15 +223,15 @@ public class GenericDBSuperclass {
 		return ps.execute();
 	}
 	
-	protected int getLastRowId(String tableName) throws SQLException {
+	protected long getLastRowId(String tableName) throws SQLException {
 		Statement queryStatement = null;
 		ResultSet rs = null;
 		
 		queryStatement = m_connection.createStatement();
 		rs = queryStatement.executeQuery("select max(`yd_id`) as last_id from `" + tableName + "`");
-		int lastId = 0;
+		long lastId = 0;
 		if(rs.next())
-			lastId = rs.getInt("last_id");
+			lastId = rs.getLong("last_id");
 		return lastId;
 	}
 }

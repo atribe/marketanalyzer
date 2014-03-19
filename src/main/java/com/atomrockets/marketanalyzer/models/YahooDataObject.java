@@ -19,37 +19,17 @@ import org.joda.time.LocalDate;
  * This stands for each column heading in the download for each index
  * Date, Open, High, Low, Close, Volume, Adjusted Close
  */
-@Entity
-@Table(name = "yahooDataTable" )
 public class YahooDataObject {
 
-	//Annotations on these variables are for use with Hibernate
-	@Id
-	@GeneratedValue
-	@Column(name = "yd_id")
-	private int yd_id;
+	private long yd_id;
 	
-	@Column(name = "date")
 	private String date;
-	
-	@Column(name = "open")
 	private float open;
-	
-	@Column(name = "high")
 	private float high;
-	
-	@Column(name = "low")
 	private float low;
-	
-	@Column(name = "close")
 	private float close;
-	
-	@Column(name = "volume")
 	private long volume;
-	
 	private float adjClose;
-	
-	@Column(name = "symbol")
 	private String symbol;
 	private LocalDate convertedDate;
 	
@@ -82,21 +62,8 @@ public class YahooDataObject {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	/*
-    public String toString() {
-		return "id: " + getYd_id()
-				+ "\nSymbol: " + getSymbol()
-				+ "\nDate: " + getDate() + " or " + getConvertedDate().toString() 
-				+ "\nOpen: " + getOpen() 
-				+ "\nHigh: " + getHigh()
-				+ "\nLow: " + getLow()
-				+ "\nClose: " + getClose()
-				+ "\nVolume: " + getVolume();
-	}
-	*/
-
 	
-	public int getYd_id() {
+	public long getYd_id() {
 		return yd_id;
 	}
 
