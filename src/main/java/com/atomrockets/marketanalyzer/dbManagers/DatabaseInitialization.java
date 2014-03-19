@@ -1,10 +1,14 @@
 package com.atomrockets.marketanalyzer.dbManagers;
 
-import com.atomrockets.marketanalyzer.analyzer.IndexAnalyzer;
-
 import java.sql.Connection;
+import java.util.Date;
+import java.util.Enumeration;
 
-import org.joda.time.LocalDate;
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * This class is the highest level class that deals with all things market index.
@@ -13,8 +17,12 @@ import org.joda.time.LocalDate;
  * @author Allan
  *
  */
+@Component
 public class DatabaseInitialization{
 
+	/* Get actual class name to be printed on */
+	static Logger log = Logger.getLogger(DatabaseInitialization.class.getName());
+	
 	//							  		  Nasdaq  S&P500
 	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
 	
@@ -53,6 +61,25 @@ public class DatabaseInitialization{
 		m_indexAnalysisTable = new IndexAnalysisTableManager(connection);
 		m_indexAnalysisTable.tableInitialization(indexList);
 	}
+	
+	//uncomment to get the scheduling back
+	//@Scheduled(fixedDelay = 5000)
+    public void demoServiceMethod()
+    {
+        log.debug("Method executed at every 15 seconds. Current time is :: "+ new Date());
+        
+        /*
+         * Useful code that tells you where the log file is being written to for log4j
+         *
+        Enumeration e = Logger.getRootLogger().getAllAppenders();
+        while ( e.hasMoreElements() )
+        {
+        	Appender app = (Appender)e.nextElement();
+        	if ( app instanceof FileAppender ){
+        		System.out.println("File: " + ((FileAppender)app).getFile());
+        	}
+        }*/
+    }
 
 	//getters
 	static private String[] getIndexList() {

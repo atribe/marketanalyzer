@@ -28,11 +28,4 @@ public class MarketsDBInitRunnable implements Runnable {
 		
 		log.info(name + " had ended");
 	}
-	
-	@Scheduled(fixedDelay = 5000)
-    //@Scheduled(fixedRate = 5000)
-    public void demoServiceMethod()
-    {
-        System.out.println("Method executed at every 5 seconds. Current time is :: "+ new Date());
-    }
 }

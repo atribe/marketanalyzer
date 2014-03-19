@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class RootController {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(AccountController.class.getName());
+	static Logger log = Logger.getLogger(RootController.class.getName());
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView findAllAccounts() throws Exception {

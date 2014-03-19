@@ -72,13 +72,15 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			populateFreshDB(indexList);
 		}
 		
-		//Iteration tracking variable for System.out.printing and debugging
-		int interationCounter = 0;
+		updateIndexes(indexList);
 		
+		log.info("--------------------------------------------------------------------");
+	}
+	
+	public void updateIndexes(String[] indexList) {
 		//Loop for each Price Volume DBs for each index
 		for(String index:indexList) {
-			interationCounter++;
-			log.info("Loop Iteration " + interationCounter + ":");
+			log.info("Loop Iteration " + index + ":");
 			
 			log.info("     -Checking to see if table " + index +" is up to date.");
 			int indexDaysBehind = getIndexDaysBehind(index);
@@ -87,7 +89,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 				updateIndexDB(index, indexDaysBehind);
 			}
 		}
-		log.info("--------------------------------------------------------------------");
 	}
 
 	private int getIndexDaysBehind(String index) {
