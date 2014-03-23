@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.atomrockets.marketanalyzer.services.IndexCalcsService;
+
 /**
  * This class is the highest level class that deals with all things market index.
  * Initializes and updates databases
@@ -29,7 +31,7 @@ public class DatabaseInitialization{
 	//Database Table Managers
 	static private IndexYahooDataTableManager m_indexYahooTable;
 	static private IndexParameterTableManager m_indexParamTable;
-	static private IndexAnalysisTableManager m_indexAnalysisTable;
+	static private IndexCalcsService m_indexAnalysisService;
 	
 
 	static public void marketsDBInitialization() {
@@ -58,8 +60,8 @@ public class DatabaseInitialization{
 		 * 
 		 * IndexAnalysisDBInitialization checks if the table already
 		 */
-		m_indexAnalysisTable = new IndexAnalysisTableManager(connection);
-		m_indexAnalysisTable.tableInitialization(indexList);
+		m_indexAnalysisService = new IndexCalcsService(connection);
+		m_indexAnalysisService.init(indexList);
 	}
 	
 	//uncomment to get the scheduling back

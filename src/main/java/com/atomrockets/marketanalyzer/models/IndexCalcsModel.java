@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-public class MarketIndexAnalysisObject implements Serializable {
+public class IndexCalcsModel implements Serializable {
 	
 	private long id;
 	
@@ -38,9 +38,13 @@ public class MarketIndexAnalysisObject implements Serializable {
 	private boolean isDDay;
 	private boolean isChurnDay;
 	private int dDayCounter;
+	private boolean isFollowThruDay;
+	
+	//Buy, sell, hold
+	private String dayAction;
 	//add more stuff as needed here
 
-	public MarketIndexAnalysisObject() {
+	public IndexCalcsModel() {
 		dDayCounter=0;
 	}
 
@@ -252,5 +256,21 @@ public class MarketIndexAnalysisObject implements Serializable {
 	}
 	public void addDDayCounter() {
 		dDayCounter++;
+	}
+
+	public boolean isFollowThruDay() {
+		return isFollowThruDay;
+	}
+
+	public void setFollowThruDay(boolean isFollowThruDay) {
+		this.isFollowThruDay = isFollowThruDay;
+	}
+
+	public String getDayAction() {
+		return dayAction;
+	}
+
+	public void setDayAction(String dayAction) {
+		this.dayAction = dayAction;
 	}
 }

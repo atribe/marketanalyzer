@@ -22,7 +22,7 @@ public class GenericDBSuperclass {
 
 	static Logger staticLog = Logger.getLogger(GenericDBSuperclass.class.getName());
 	//Setting the logger for the class
-	Logger log = Logger.getLogger(this.getClass().getName());
+	protected Logger log = Logger.getLogger(this.getClass().getName());
 	
 	//Member variable of the connection, so I don't have to keep passing it between methods
 	//This variable only needs to be set once in the classes that inherit this class.

@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
-import com.atomrockets.marketanalyzer.models.MarketIndexAnalysisObject;
+import com.atomrockets.marketanalyzer.models.IndexCalcsModel;
 import com.atomrockets.marketanalyzer.models.YahooDataObject;
 
 public class IndexYahooDataTableManager extends GenericDBSuperclass {
@@ -353,8 +353,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 	
-	public List<MarketIndexAnalysisObject> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
-		List<MarketIndexAnalysisObject> rowsFromDB = new ArrayList<MarketIndexAnalysisObject>();
+	public List<IndexCalcsModel> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
+		List<IndexCalcsModel> rowsFromDB = new ArrayList<IndexCalcsModel>();
 		
 		
 		String query = "SELECT * FROM `" + m_yDTname + "`"
@@ -370,7 +370,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			ResultSet rs = selectStatement.executeQuery();
 
 			while (rs.next()) {
-				MarketIndexAnalysisObject singleRow = new MarketIndexAnalysisObject();
+				IndexCalcsModel singleRow = new IndexCalcsModel();
 				singleRow.setId(rs.getInt("yd_id"));
 				singleRow.setSymbol(rs.getString("symbol"));
 				singleRow.setConvertedDate(rs.getDate("date"));
