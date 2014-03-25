@@ -5,12 +5,6 @@ package com.atomrockets.marketanalyzer.models;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
@@ -19,9 +13,9 @@ import org.joda.time.LocalDate;
  * This stands for each column heading in the download for each index
  * Date, Open, High, Low, Close, Volume, Adjusted Close
  */
-public class YahooDataObject {
+public class YahooIndexData {
 
-	private long yd_id;
+	private long id;
 	
 	private String date;
 	private float open;
@@ -34,9 +28,9 @@ public class YahooDataObject {
 	private LocalDate convertedDate;
 	
 	//Empty constructed required to be a Java Bean
-	public YahooDataObject() {	}
+	public YahooIndexData() {	}
 	
-	public YahooDataObject(String symbol, String date, float open, float high, float low, float close, long volume, float adjClose) {
+	public YahooIndexData(String symbol, String date, float open, float high, float low, float close, long volume, float adjClose) {
 		this.symbol = symbol;
 		this.date = date;
 		this.open = open;
@@ -47,7 +41,7 @@ public class YahooDataObject {
 		this.adjClose = adjClose;
 	}
 	
-	public YahooDataObject(String symbol, LocalDate date, float open, float high, float low, float close, long volume, float adjClose) {
+	public YahooIndexData(String symbol, LocalDate date, float open, float high, float low, float close, long volume, float adjClose) {
 		this.symbol = symbol;
 		this.convertedDate = date;
 		this.open = open;
@@ -63,12 +57,12 @@ public class YahooDataObject {
 		return ToStringBuilder.reflectionToString(this);
 	}
 	
-	public long getYd_id() {
-		return yd_id;
+	public long getId() {
+		return id;
 	}
 
-	public void setYd_id(int yd_id) {
-		this.yd_id = yd_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getSymbol() {

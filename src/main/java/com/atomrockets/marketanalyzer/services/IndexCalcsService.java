@@ -4,15 +4,18 @@ import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
-import com.atomrockets.marketanalyzer.models.IndexCalcsModel;
-import com.atomrockets.marketanalyzer.models.YahooDataObject;
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
@@ -26,15 +29,19 @@ public class IndexCalcsService {
 	//Connection to the database
 	private Connection m_connection;
 	
+	//properties
+	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
+	private Properties m_prop = propertiesLoader.loadActivePropertiesFile();
+	//logger
+	private Logger log = Logger.getLogger(this.getClass().getName());
+	
 	//Database Table Managers
 	private IndexYahooDataTableManager m_indexYahooTable;
 	private IndexParameterTableManager m_indexParamTable;
 	private IndexCalcsDAO m_indexCalcsDAO;
-	
-	private Logger log = Logger.getLogger(this.getClass().getName());
 
 	//Index names
-	private String m_index;
+	private String m_symbol;
 
 	//member variables related to dates or number of days
 	private int m_bufferDays;
@@ -42,7 +49,7 @@ public class IndexCalcsService {
 	private long m_loopEndId;
 	
 	//member variable for holding all the information for analysis
-	private List<IndexCalcsModel> m_IndexCalcList;
+	private List<IndexCalcs> m_IndexCalcList;
 
 	public IndexCalcsService() {
 		m_connection = GenericDBSuperclass.getConnection();
@@ -62,7 +69,7 @@ public class IndexCalcsService {
 		
 		m_indexCalcsDAO.tableInitialization(indexList);
 		
-		runIndexAnalysis(indexList[1]);//1 is the S&P500
+		runIndexAnalysis(indexList[0]);//1 is the S&P500
 	}
 	
 	public void runIndexAnalysis(String index) {
@@ -79,11 +86,11 @@ public class IndexCalcsService {
 		 * 7.Saves needed data to DB so that it maybe displayed on the website.
 		 */
 		
-		m_index = index;
+		m_symbol= index;
 		
 		log.info("");
 		log.info("--------------------------------------------------------------------");
-		log.info("Starting Index Analyzer for " + m_index);
+		log.info("Starting Index Analyzer for " + m_symbol);
 
 		//1. Setting the number of buffer days needed to calc averages and such
 		setBufferDays();
@@ -92,7 +99,7 @@ public class IndexCalcsService {
 		setLoopBeginId();
 		setLoopEndId();
 		
-		m_IndexCalcList = m_indexYahooTable.getDataBetweenIds(m_index, m_loopBeginId, m_loopEndId);
+		m_IndexCalcList = m_indexYahooTable.getDataBetweenIds(m_symbol, m_loopBeginId, m_loopEndId);
 
 		calcIndexStatistics();
 		
@@ -101,7 +108,7 @@ public class IndexCalcsService {
 		
 		//followThruAnalysis();
 		
-		m_indexCalcsDAO.addAllRowsToDB(m_index, m_IndexCalcList);
+		m_indexCalcsDAO.addAllRowsToDB(m_symbol, m_IndexCalcList);
 	}
 
 	private void setBufferDays(){
@@ -129,17 +136,17 @@ public class IndexCalcsService {
 	 * 
 	 */
 	private void setLoopEndId() {
-		String keyOriginalEndDate = "endDate";
-		LocalDate endDate = m_indexParamTable.getDateValue(keyOriginalEndDate);
+		//LocalDate endDate = m_indexParamTable.getDateValue("endDate");
+		LocalDate endDate = new LocalDate();
 
-		m_loopEndId = m_indexYahooTable.getIdByDate(m_index, endDate, false);
+		m_loopEndId = m_indexYahooTable.getIdByDate(m_symbol, endDate, false);
 	}
 
 	private void setLoopBeginId() {
-		String keyStartDate = "startDate";
-		LocalDate startDate = m_indexParamTable.getDateValue(keyStartDate);
+		//LocalDate startDate = m_indexParamTable.getDateValue("startDate");
+		LocalDate startDate = new LocalDate(m_prop.getProperty("indexcalcs.startdate.startdate"));
 
-		long beginId = m_indexYahooTable.getIdByDate(m_index, startDate, true);
+		long beginId = m_indexYahooTable.getIdByDate(m_symbol, startDate, true);
 		if(beginId-m_bufferDays<1) {
 			m_loopBeginId = 1;
 		} else {
@@ -426,12 +433,106 @@ public class IndexCalcsService {
 		}
 	}
 
-	public List<IndexCalcsModel> getLatestDDays() {
-		List<IndexCalcsModel> dDayList = new ArrayList<IndexCalcsModel>();
+	public List<IndexCalcs> getLatestDDays() {
+		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
 		
+		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName()))
+		/*
+		 * 1. get the id for the begin date = 20 days previous
+		 * 2. get the id for the end date = today
+		 * 3. get the ids for the symbol between the two ids
+		 * 4. get all those ids from both databases
+		 */
+		m_symbol = "^IXIC";
+		
+		LocalDate startDate = new LocalDate().minusDays(20);
+		LocalDate today = new LocalDate();
+
+		dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);
 		
 		return dDayList;
 	}
 
-	
+	public List<IndexCalcs> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
+		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
+		
+		String YahooTableName = m_indexCalcsDAO.getG_YahooIndexTableName();
+		String IndexCalcTableName = m_indexCalcsDAO.getG_indexCalsTableName();
+		
+		String query = "SELECT *"
+				+ " FROM `" + YahooTableName + "` Y"
+				+ " INNER JOIN `" + IndexCalcTableName + "` C"
+				+ " ON C.id = Y.id"
+				+ " WHERE Y.date BETWEEN ? and ?"
+				+ " AND Y.symbol = ?"
+				+ " ORDER BY Y.date";
+
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<List<IndexCalcs>> h = new BeanListHandler<IndexCalcs>(IndexCalcs.class);
+		
+		try{
+			dDayList = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		startDate.toString(),
+		    		endDate.toString(),
+		    		symbol);
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		/*
+		 * commenting this code out while I try Apache Commons DbUtils
+		PreparedStatement ps = null;
+		
+		try {
+			ps = m_connection.prepareStatement(query);
+			ps.setString(1, startDate.toString());
+			ps.setString(2, endDate.toString());
+			ps.setString(3, symbol);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				IndexCalcs singleRow = new IndexCalcs();
+				singleRow.setId(rs.getInt("id"));
+				singleRow.setSymbol(rs.getString("symbol"));
+				singleRow.setConvertedDate(rs.getDate("date"));
+				singleRow.setOpen(rs.getFloat("open"));
+				singleRow.setHigh(rs.getFloat("high"));
+				singleRow.setLow(rs.getFloat("low"));
+				singleRow.setClose(rs.getFloat("close"));
+				singleRow.setVolume(rs.getLong("volume"));
+				singleRow.
+				
+				dDayList.add(singleRow);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			log.info("There was an error in the getRowsBetweenDatesBySymbol method. And that error is: ");
+			log.info(e.toString());
+			e.printStackTrace();
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				ps = null;
+			}
+		}
+		*/
+		return dDayList;
+		
+	}
+
 }

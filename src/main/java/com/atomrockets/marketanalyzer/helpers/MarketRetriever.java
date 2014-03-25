@@ -22,7 +22,7 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
-import com.atomrockets.marketanalyzer.models.YahooDataObject;
+import com.atomrockets.marketanalyzer.models.YahooIndexData;
 
 /**
  * @author Aaron
@@ -31,8 +31,8 @@ public class MarketRetriever {
 	
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<YahooDataObject> yahooDataParser(String url, String index) {
-		List<YahooDataObject> rowsFromYahooURL = null;
+	public static List<YahooIndexData> yahooDataParser(String url, String index) {
+		List<YahooIndexData> rowsFromYahooURL = null;
 		
 		try {
 			URL ur = new URL(url);
@@ -43,11 +43,11 @@ public class MarketRetriever {
 			
 			//OpenCSV parser
 			CSVReader csvReader = new CSVReader(reader, ',', '\"');
-			ColumnPositionMappingStrategy<YahooDataObject> strategy = new ColumnPositionMappingStrategy<YahooDataObject>();
-		    strategy.setType(YahooDataObject.class);
+			ColumnPositionMappingStrategy<YahooIndexData> strategy = new ColumnPositionMappingStrategy<YahooIndexData>();
+		    strategy.setType(YahooIndexData.class);
 		    strategy.setColumnMapping(new String[]{"date","open","high","low","close","volume","adjClose"});
 
-		    CsvToBean<YahooDataObject> csv = new CsvToBean<YahooDataObject>();
+		    CsvToBean<YahooIndexData> csv = new CsvToBean<YahooIndexData>();
 		    rowsFromYahooURL = csv.parse(strategy, csvReader);
 		    
 		} catch (MalformedURLException e) {
@@ -116,10 +116,10 @@ public class MarketRetriever {
 		return Days.daysBetween(date, today).getDays();
 	}
 	
-	private static List<YahooDataObject> addSymbolstoYahooDataObjectList(
-			List<YahooDataObject> rowsFromYahooURL, String index) {
+	private static List<YahooIndexData> addSymbolstoYahooDataObjectList(
+			List<YahooIndexData> rowsFromYahooURL, String index) {
 		
-		for(YahooDataObject rowFromYahooURL:rowsFromYahooURL) {
+		for(YahooIndexData rowFromYahooURL:rowsFromYahooURL) {
 			rowFromYahooURL.setSymbol(index);
 		}
 		

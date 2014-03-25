@@ -24,11 +24,32 @@ public class GenericDBSuperclass {
 	//Setting the logger for the class
 	protected Logger log = Logger.getLogger(this.getClass().getName());
 	
+	//properties
+	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
+	protected Properties m_prop = propertiesLoader.loadActivePropertiesFile();
+	
 	//Member variable of the connection, so I don't have to keep passing it between methods
 	//This variable only needs to be set once in the classes that inherit this class.
 	protected static Connection m_connection;
 	
-	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
+	/*
+	 * table names, so they are available to all subclasses
+	 */
+	protected final String g_YahooIndexTableName = "YahooIndex";
+	protected final String g_indexCalsTableName = "IndexCalcs";
+	protected final String g_parameterTableName = "indexParameters";
+	
+	public String getG_YahooIndexTableName() {
+		return g_YahooIndexTableName;
+	}
+	public String getG_indexCalsTableName() {
+		return g_indexCalsTableName;
+	}
+	public String getG_parameterTableName() {
+		return g_parameterTableName;
+	}
+
+	
 	/**
 	 * Establishes a connection to the database
 	 * @return connection
@@ -76,7 +97,7 @@ public class GenericDBSuperclass {
 		return m_connection;
 	}
 
-	protected boolean tableExists(String tableName){
+	public boolean tableExists(String tableName){
 		boolean tableExists = false;
 
 		DatabaseMetaData metadata = null;
@@ -132,6 +153,8 @@ public class GenericDBSuperclass {
 			log.info("SQLException: " + ex.getMessage());
 			log.info("SQLState: " + ex.getSQLState());
 			log.info("VendorError: " + ex.getErrorCode());
+			
+			status = 1;
 		}
 		finally {
 			// it is a good idea to release
@@ -150,12 +173,12 @@ public class GenericDBSuperclass {
 		if (status>0)
 		{
 			log.info("          Table '" + tableName + "' wasn't created");
-			return true;
+			return false;
 		}
 		else
 		{
 			log.info("          Table '" + tableName + "' has been created");
-			return false;
+			return true;
 		}
 	}
 
@@ -228,7 +251,7 @@ public class GenericDBSuperclass {
 		ResultSet rs = null;
 		
 		queryStatement = m_connection.createStatement();
-		rs = queryStatement.executeQuery("select max(`yd_id`) as last_id from `" + tableName + "`");
+		rs = queryStatement.executeQuery("select max(`id`) as last_id from `" + tableName + "`");
 		long lastId = 0;
 		if(rs.next())
 			lastId = rs.getLong("last_id");

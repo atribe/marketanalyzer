@@ -2,18 +2,10 @@ package com.atomrockets.marketanalyzer.models;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTables;
-import javax.persistence.SecondaryTable;
-import javax.persistence.Table;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-public class IndexCalcsModel implements Serializable {
+public class IndexCalcs implements Serializable {
 	
 	private long id;
 	
@@ -44,7 +36,7 @@ public class IndexCalcsModel implements Serializable {
 	private String dayAction;
 	//add more stuff as needed here
 
-	public IndexCalcsModel() {
+	public IndexCalcs() {
 		dDayCounter=0;
 	}
 

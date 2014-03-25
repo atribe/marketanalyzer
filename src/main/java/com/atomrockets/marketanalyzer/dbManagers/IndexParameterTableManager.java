@@ -25,9 +25,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	 * log
 	 * 
 	 */
-	
-	//table name
-	private static final String m_parameterTableName = "indexParameterTable";
+
 	
 	//Constructor
 	public IndexParameterTableManager(Connection connection) {
@@ -48,16 +46,16 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + m_parameterTableName + " exists.");
-		if(!tableExists(m_parameterTableName)) {
+		log.info("     -Checking if table " + g_parameterTableName + " exists.");
+		if(!tableExists(g_parameterTableName)) {
 			// Table does not exist, so create it
-			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + m_parameterTableName + "` (" +
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + g_parameterTableName + "` (" +
 					" id INT not NULL AUTO_INCREMENT," +
 					" symbol VARCHAR(10)," +
 					" var_name VARCHAR(100)," +
 					" var_value VARCHAR(50)," +
 					" PRIMARY KEY (id))";
-			createTable(createTableSQL, m_parameterTableName);
+			createTable(createTableSQL, g_parameterTableName);
 		}
 
 		/*
@@ -66,8 +64,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.info("     -Checking if table " + m_parameterTableName + " is empty.");
-		if(tableEmpty(m_parameterTableName)){
+		log.info("     -Checking if table " + g_parameterTableName + " is empty.");
+		if(tableEmpty(g_parameterTableName)){
 			//if table is empty
 			//populate it
 			populateFreshParamDB(indexList);
@@ -95,7 +93,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				 * Parameters with comments have been used. The rest are not yet used.
 				 */
 				parametersMap.put("fileName", "ResultsNasdaq.txt");
-				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "9");//10 d days in a window = sell
@@ -122,7 +120,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				break;
 			case "^GSPC":
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
@@ -150,7 +148,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			case "^SML":
 				//set the same as S&P because I don't have anything saying differently
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
@@ -178,7 +176,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			case "^MID":
 				//set the same as S&P because I don't have anything saying differently
 				parametersMap.put("fileName", "ResultsSP500.txt");
-				parametersMap.put("startDate", "2012-10-01");//Analysis Start Date
+				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
@@ -206,7 +204,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				break;
 			case "^DJI":
 				parametersMap.put("fileName", "ResultsDow.txt");
-				parametersMap.put("startDate", "1980-01-01");//Analysis Start Date
+				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
 				parametersMap.put("dDayWindow", "20");//Track all the d days in the past 20 days (4 weeks)
 				parametersMap.put("dDayParam", "10");//10 d days in a window = sell
@@ -239,7 +237,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			//Get an iterator
 			Iterator<String> itr = keys.iterator();
 	
-			log.info("Populating variable database for " + m_parameterTableName);
+			log.info("Populating variable database for " + g_parameterTableName);
 	
 			//Add each entry to the DB
 			while(itr.hasNext()) {
@@ -260,7 +258,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	 * @param value
 	 */
 	private void addVarPairRecord(String index, String key, String value) {
-		String insertQuery = "INSERT INTO `" + m_parameterTableName + "` "
+		String insertQuery = "INSERT INTO `" + g_parameterTableName + "` "
 				+ "(symbol, var_name, var_value)"
 				+ "VALUES"
 				+ "(?,?,?)"
@@ -292,7 +290,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	public String getStringValue(String key){
 
 		String value;
-		String query = "SELECT var_value FROM `" + m_parameterTableName + "`"
+		String query = "SELECT var_value FROM `" + g_parameterTableName + "`"
 				+ " WHERE var_name=?";
 
 		try {

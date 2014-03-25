@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcsModel;
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 
 @Controller
@@ -18,13 +18,13 @@ public class RootController {
 	static Logger log = Logger.getLogger(RootController.class.getName());
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView findAllAccounts() throws Exception {
+    public ModelAndView rootView() throws Exception {
         ModelAndView mav = new ModelAndView();
         //the view name is the name of the jsp
         
         //Getting the d-dates from the database
         IndexCalcsService  indexCalcsService = new IndexCalcsService ();
-        List<IndexCalcsModel> dDayList = indexCalcsService .getLatestDDays();
+        List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
         mav.addObject("dDayList", dDayList);
         
         mav.addObject("someText", "Listing all accounts!");

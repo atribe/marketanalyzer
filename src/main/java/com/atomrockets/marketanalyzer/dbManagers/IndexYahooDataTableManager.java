@@ -6,14 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
-import com.atomrockets.marketanalyzer.models.IndexCalcsModel;
-import com.atomrockets.marketanalyzer.models.YahooDataObject;
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.models.YahooIndexData;
 
 public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	
@@ -24,9 +22,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 * log
 	 * 
 	 */
-	
-	//Name of the table that contains all the data from Yahoo
-	private static final String m_yDTname = "yahooDataTable";
 	
 	public IndexYahooDataTableManager(Connection connection) {
 		log.debug("------------------------------Yahoo Table Manager Created--------------------------");
@@ -43,11 +38,11 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + m_yDTname + " exists.");
-		if(!tableExists(m_yDTname)) {
+		log.info("     -Checking if table " + g_YahooIndexTableName + " exists.");
+		if(!tableExists(g_YahooIndexTableName)) {
 			// Table does not exist, so create it
-			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + m_yDTname + "` (" +
-					" yd_id INT not NULL AUTO_INCREMENT," +
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + g_YahooIndexTableName + "` (" +
+					" id INT not NULL AUTO_INCREMENT," +
 					" symbol VARCHAR(10)," +
 					" date DATE not NULL," +
 					" open FLOAT(20)," +
@@ -55,8 +50,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 					" low FLOAT(20)," +
 					" close FLOAT(20)," +
 					" volume BIGINT(50)," +
-					" PRIMARY KEY (yd_id))";
-			createTable(createTableSQL, m_yDTname);
+					" PRIMARY KEY (id))";
+			createTable(createTableSQL, g_YahooIndexTableName);
 		}
 		
 		/*
@@ -65,8 +60,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.info("     -Checking if table " + m_yDTname + " is empty.");
-		if(tableEmpty(m_yDTname)){
+		log.info("     -Checking if table " + g_YahooIndexTableName + " is empty.");
+		if(tableEmpty(g_YahooIndexTableName)){
 			//if table is empty
 			//populate it
 			populateFreshDB(indexList);
@@ -97,7 +92,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		//java.sql.Date newestDateInDB=null;
 		LocalDate newestDate=null;
 
-		String getNewestDateInDBQuery = "SELECT Date FROM `" + m_yDTname + "` "
+		String getNewestDateInDBQuery = "SELECT Date FROM `" + g_YahooIndexTableName + "` "
 				+ "WHERE `symbol` = '" + index + "' "
 				+ "ORDER BY date "
 				+ "DESC LIMIT 1";
@@ -153,16 +148,14 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 
 	public void populateFreshDB(String[] indexList) {
 		
-		Properties prop = propertiesLoader.loadActivePropertiesFile();
-		
 		for(String index : indexList)
 		{
 			log.info("     -Populating Table " + index);		
 		
 			//Container to hold the downloaded data
-			List<YahooDataObject> rowsFromYahoo = null;
+			List<YahooIndexData> rowsFromYahoo = null;
 			//This date represents the beginning of time as far as any of the indexes go
-			LocalDate beginningDate = new LocalDate(prop.getProperty("yahoo.startdate"));
+			LocalDate beginningDate = new LocalDate(m_prop.getProperty("yahoo.startdate"));
 	
 			//calculates the number of days from today back to beginning date
 			int numDays = MarketRetriever.getNumberOfDaysFromNow(beginningDate);
@@ -178,7 +171,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 
 	public void updateIndexDB(String index,int indexDaysBehind) {
 		//Container to hold the downloaded data
-		List<YahooDataObject> rowsFromYahoo = null;
+		List<YahooIndexData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = MarketRetriever.getYahooURL(index, indexDaysBehind);
 
@@ -191,7 +184,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 
 	public long getIdByDate(String index, LocalDate Date, boolean isStartDate){
 		long value = 0;
-		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
+		String query = "SELECT id FROM `" + g_YahooIndexTableName + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
@@ -202,7 +195,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			selectStatement.setString(2, index);
 			ResultSet rs = selectStatement.executeQuery();
 			if(rs.next()) {
-				value = rs.getInt("yd_id");
+				value = rs.getInt("id");
 			} else if (isStartDate) {
 				log.info("     The date of " + Date.toString() + " not found in the database.");
 				log.info("          Let me check the preceeding couple of days in case you chose a weekend or holiday.");
@@ -213,7 +206,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 					rs = selectStatement.executeQuery();
 					if(rs.next())
 					{
-						value = rs.getInt("yd_id");
+						value = rs.getInt("id");
 						log.info("          Looks like I found one...and you got all worried for nothing.");
 						break;
 					}
@@ -233,14 +226,14 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 					rs = selectStatement.executeQuery();
 					if(rs.next())
 					{
-						value = rs.getInt("yd_id");
+						value = rs.getInt("id");
 						log.info("          Looks like I found one...and you got all worried for nothing.");
 						break;
 					}
 					else if(i==6)
 					{
 						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
-						value= getLastRowId(m_yDTname);
+						value= getLastRowId(g_YahooIndexTableName);
 					}
 				}
 			}
@@ -253,9 +246,9 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return value;
 	}
 
-	public void initialAddRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
+	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
+		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		PreparedStatement ps=null;
@@ -298,10 +291,10 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 	
-	public void addRecordsFromData(List<YahooDataObject> rowsFromYahoo) {
+	public void addRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
 
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + m_yDTname + "` "
+		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		PreparedStatement ps = null;
@@ -352,15 +345,39 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			}
 		}
 	}
-	
-	public List<IndexCalcsModel> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
-		List<IndexCalcsModel> rowsFromDB = new ArrayList<IndexCalcsModel>();
+		
+	public boolean isAlreadyInDB(YahooIndexData row) throws SQLException {
+		
+		boolean alreadyExists = false;
+		int j=0;
+		String checkQuery = "SELECT `id` FROM `" + g_YahooIndexTableName + "`"
+				+ " WHERE `date` = ?"
+				+ " AND `symbol` = ?";
+		
+		PreparedStatement ps_check = null;
+		
+		ps_check = m_connection.prepareStatement(checkQuery);
+
+		ps_check.setString(1, row.getDate());
+		ps_check.setString(2, row.getSymbol());
+		ResultSet rs = ps_check.executeQuery();
+			
+		while(rs.next())
+		{
+			log.debug("Just tried to insert a duplicate row into table " + g_YahooIndexTableName + ". The id of the entry already in the table is " + rs.getInt("id"));
+			alreadyExists = true;
+		}
+		return alreadyExists;
+	}
+
+	public List<IndexCalcs> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
+		List<IndexCalcs> rowsFromDB = new ArrayList<IndexCalcs>();
 		
 		
-		String query = "SELECT * FROM `" + m_yDTname + "`"
-		+ " WHERE `yd_id` BETWEEN ? AND ?"
+		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+		+ " WHERE `id` BETWEEN ? AND ?"
 		+ " AND `symbol` = ?"
-		+ " ORDER BY `yd_id` ASC";
+		+ " ORDER BY `id` ASC";
 		
 		try {
 			PreparedStatement selectStatement = m_connection.prepareStatement(query);
@@ -370,8 +387,8 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			ResultSet rs = selectStatement.executeQuery();
 
 			while (rs.next()) {
-				IndexCalcsModel singleRow = new IndexCalcsModel();
-				singleRow.setId(rs.getInt("yd_id"));
+				IndexCalcs singleRow = new IndexCalcs();
+				singleRow.setId(rs.getInt("id"));
 				singleRow.setSymbol(rs.getString("symbol"));
 				singleRow.setConvertedDate(rs.getDate("date"));
 				singleRow.setOpen(rs.getFloat("open"));
@@ -391,95 +408,4 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 		return rowsFromDB;
 	}
-	
-	public boolean isAlreadyInDB(YahooDataObject row) throws SQLException {
-		
-		boolean alreadyExists = false;
-		int j=0;
-		String checkQuery = "SELECT `yd_id` FROM `" + m_yDTname + "`"
-				+ " WHERE `date` = ?"
-				+ " AND `symbol` = ?";
-		
-		PreparedStatement ps_check = null;
-		
-		ps_check = m_connection.prepareStatement(checkQuery);
-
-		ps_check.setString(1, row.getDate());
-		ps_check.setString(2, row.getSymbol());
-		ResultSet rs = ps_check.executeQuery();
-			
-		while(rs.next())
-		{
-			log.debug("Just tried to insert a duplicate row into table " + m_yDTname + ". The yd_id of the entry already in the table is " + rs.getInt("yd_id"));
-			alreadyExists = true;
-		}
-		return alreadyExists;
-	}
-
-	public long getRowByIndexAndDate(String index, LocalDate date, boolean isStartDate) {
-		long value = 0;
-		String query = "SELECT yd_id FROM `" + m_yDTname + "`"
-				+ " WHERE `date` = ?"
-				+ " AND `symbol` = ?";
-		
-
-		try {
-			PreparedStatement selectStatement = m_connection.prepareStatement(query);
-			selectStatement.setString(1, date.toString());
-			selectStatement.setString(2, index);
-			ResultSet rs = selectStatement.executeQuery();
-			if(rs.next()) {
-				value = rs.getInt("yd_id");
-			} else if (isStartDate) {
-				log.info("     The date of " + date.toString() + " not found in the database.");
-				log.info("          Let me check the preceeding couple of days in case you chose a weekend or holiday.");
-				for(int i = 1;i<7;i++)
-				{
-					selectStatement.setString(1, date.minusDays(i).toString());
-					selectStatement.setString(2, index);
-					rs = selectStatement.executeQuery();
-					if(rs.next())
-					{
-						value = rs.getInt("yd_id");
-						log.info("          Looks like I found one...and you got all worried for nothing.");
-						break;
-					}
-					else if(i==6)
-					{
-						log.info("          I didn't find an earlier date, so I'll just choose the first date in the data set");
-						value=1;
-					}
-				}
-			} else {
-				log.info("     The date of " + date.toString() + " not found in the database.");
-				log.info("          Let me check the next couple days in case you chose a weekend or holiday.");
-				for(int i = 1;i<7;i++)
-				{
-					selectStatement.setString(1, date.plusDays(i).toString());
-					selectStatement.setString(2, index);
-					rs = selectStatement.executeQuery();
-					if(rs.next())
-					{
-						value = rs.getInt("yd_id");
-						log.info("          Looks like I found one...and you got all worried for nothing.");
-						break;
-					}
-					else if(i==6)
-					{
-						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
-						value= getLastRowId(m_yDTname);
-					}
-				}
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			log.info("There was an error in the getIdByDate method. And that error is: ");
-			log.info(e.toString());
-			e.printStackTrace();
-		}
-		return value;
-		
-	}
-
 }

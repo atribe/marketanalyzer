@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcsModel;
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
 
 public class IndexCalcsDAO extends GenericDBSuperclass{
 
@@ -18,12 +18,9 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	 * 
 	 * m_connection
 	 * log
+	 * table names
 	 * 
 	 */
-	
-	//table names
-	private final String m_marketIndexAnalysisTableName = "marketIndexAnalysis";
-	private final String yDTname = "yahooDataTable";
 	
 	/*
 	 * The columns for this class are defined in the LinkedHashMap below
@@ -32,7 +29,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	private final LinkedHashMap<String, String> m_mySQLColumnList = new LinkedHashMap<String, String>() {
 		private final long serialVersionUID = 1L;
 		{
-			put("symbol", "VARCHAR(10)");
+			put("id", "INT");
 			put("closeAvg50", "FLOAT");
 			put("closeAvg100", "FLOAT");
 			put("closeAvg200", "FLOAT");
@@ -65,17 +62,17 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + m_marketIndexAnalysisTableName + " exists.");
-		if(!tableExists(m_marketIndexAnalysisTableName)) {
+		log.info("     -Checking if table " + g_indexCalsTableName + " exists.");
+		if(!tableExists(g_indexCalsTableName)) {
 			// Table does not exist, so create it
 			String createTableSQL = tableCreationString();
-			createTable(createTableSQL, m_marketIndexAnalysisTableName);
+			createTable(createTableSQL, g_indexCalsTableName);
 		}
 		
 	}
 
 	public String tableCreationString() {
-		 String creationString = "CREATE TABLE IF NOT EXISTS `" + m_marketIndexAnalysisTableName + "` (" +
+		 String creationString = "CREATE TABLE IF NOT EXISTS `" + g_indexCalsTableName + "` (" +
 				" id INT not NULL AUTO_INCREMENT, ";
 		 /*
 		  * Using a LinkedHashMap in the creation and elsewhere allows for a centralized
@@ -85,11 +82,14 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		  * changes to be applied.
 		  */
 		 for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			 creationString += entry.getKey() + " " + entry.getValue() + ", ";
+			 if(entry.getKey() != "id")
+			 {
+				 creationString += entry.getKey() + " " + entry.getValue() + ", ";
+			 }
 		 }
 
 		 creationString += "PRIMARY KEY (id)," +
-				" FOREIGN KEY (id) REFERENCES `" + yDTname + "`(yd_id))";
+				" FOREIGN KEY (id) REFERENCES `" + g_YahooIndexTableName + "`(id))";
 		 return creationString;
 	}
 	
@@ -102,20 +102,20 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		ps.execute();
 	}
 
-	public List<IndexCalcsModel> getAllDDayData() throws SQLException {
+	public List<IndexCalcs> getAllDDayData() throws SQLException {
 		
 		String query = "SELECT A.PVD_id, I.Date, A.IsDDay" 
-				+ " FROM `" + m_marketIndexAnalysisTableName + "` I"
-				+ " INNER JOIN `" + yDTname + "` A ON I.id = A.PVD_id"
+				+ " FROM `" + g_indexCalsTableName + "` I"
+				+ " INNER JOIN `" + g_YahooIndexTableName + "` A ON I.id = A.PVD_id"
 				+ " ORDER BY I.Date DESC";
 		PreparedStatement ps = null;
 		ps = m_connection.prepareStatement(query);
 		ResultSet rs = ps.executeQuery();
 		
-		List<IndexCalcsModel> AnalysisRows = new ArrayList<IndexCalcsModel>();
+		List<IndexCalcs> AnalysisRows = new ArrayList<IndexCalcs>();
 		
 		while (rs.next()) {
-			IndexCalcsModel singleResult = new IndexCalcsModel();
+			IndexCalcs singleResult = new IndexCalcs();
 			singleResult.setId(rs.getInt("PVD_id"));
 			singleResult.setConvertedDate(rs.getDate("Date"));
 			boolean isDDay;
@@ -131,9 +131,9 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		return AnalysisRows;
 	}
 
-	public void updateRow(String indexTableName, IndexCalcsModel analysisRow) throws SQLException {
+	public void updateRow(String indexTableName, IndexCalcs analysisRow) throws SQLException {
 		
-		String updateQuery = "UPDATE `" + m_marketIndexAnalysisTableName + "`"
+		String updateQuery = "UPDATE `" + g_indexCalsTableName + "`"
 				+ " SET DDayCounter=?"
 				+ " WHERE id=?";
 		PreparedStatement ps = m_connection.prepareStatement(updateQuery);
@@ -143,7 +143,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		rowsUpdated = rowsUpdated;//just something to stop the debugging
 	}
 	
-	public void addAllRowsToDB(String indexTableName, List<IndexCalcsModel> analysisRows) {
+	public void addAllRowsToDB(String indexTableName, List<IndexCalcs> analysisRows) {
 		
 		String insertQuery = addOrUpdatePreparedString();
 		
@@ -201,7 +201,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 
 	private String addOrUpdatePreparedString() {
 		//******Start add string builder******
-		String insertQuery = "INSERT INTO `" + m_marketIndexAnalysisTableName + "` "
+		String insertQuery = "INSERT INTO `" + g_indexCalsTableName + "` "
 				+ "(";
 		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
 			insertQuery += entry.getKey() + ",";
@@ -233,6 +233,6 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		return insertQuery;
 	}
 	public String getTableName() {
-		return m_marketIndexAnalysisTableName;
+		return g_indexCalsTableName;
 	}
 }

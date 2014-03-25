@@ -1,6 +1,7 @@
 package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -62,6 +63,14 @@ public class DatabaseInitialization{
 		 */
 		m_indexAnalysisService = new IndexCalcsService(connection);
 		m_indexAnalysisService.init(indexList);
+		
+		
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//uncomment to get the scheduling back
