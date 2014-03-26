@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
@@ -30,7 +34,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		m_connection = connection;
 	}
 
-	public synchronized void tableInitialization(String[] indexList) {		
+	public synchronized void tableInitialization(String[] indexList) {
 		log.info("Starting Market Index Database Initialization");
 
 		/*
@@ -182,6 +186,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		addRecordsFromData(rowsFromYahoo);
 	}
 
+	/*
 	public long getIdByDate(String index, LocalDate Date, boolean isStartDate){
 		long value = 0;
 		String query = "SELECT id FROM `" + g_YahooIndexTableName + "`"
@@ -245,7 +250,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 		return value;
 	}
-
+	*/
 	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
 		//This query ignores duplicate dates
 		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
@@ -370,42 +375,105 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return alreadyExists;
 	}
 
-	public List<IndexCalcs> getDataBetweenIds(String symbol, long m_loopBeginId, long m_loopEndId) {
-		List<IndexCalcs> rowsFromDB = new ArrayList<IndexCalcs>();
+	public List<YahooIndexData> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
+		List<YahooIndexData> dDayList = new ArrayList<YahooIndexData>();
 		
+		String YahooTableName = getG_YahooIndexTableName();
 		
-		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
-		+ " WHERE `id` BETWEEN ? AND ?"
-		+ " AND `symbol` = ?"
-		+ " ORDER BY `id` ASC";
-		
-		try {
-			PreparedStatement selectStatement = m_connection.prepareStatement(query);
-			selectStatement.setLong(1, m_loopBeginId);
-			selectStatement.setLong(2, m_loopEndId);
-			selectStatement.setString(3, symbol);
-			ResultSet rs = selectStatement.executeQuery();
+		String query = "SELECT *"
+				+ " FROM `" + YahooTableName + "`"
+				+ " WHERE symbol = ?"
+				+ " AND date BETWEEN ? and ?"
+				+ " ORDER BY date ASC";
 
-			while (rs.next()) {
-				IndexCalcs singleRow = new IndexCalcs();
-				singleRow.setId(rs.getInt("id"));
-				singleRow.setSymbol(rs.getString("symbol"));
-				singleRow.setConvertedDate(rs.getDate("date"));
-				singleRow.setOpen(rs.getFloat("open"));
-				singleRow.setHigh(rs.getFloat("high"));
-				singleRow.setLow(rs.getFloat("low"));
-				singleRow.setClose(rs.getFloat("close"));
-				singleRow.setVolume(rs.getLong("volume"));
-				
-				rowsFromDB.add(singleRow);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			log.info("There was an error in the getDatesBetweenIds method. And that error is: ");
-			log.info(e.toString());
-			e.printStackTrace();
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<List<YahooIndexData>> h = new BeanListHandler<YahooIndexData>(YahooIndexData.class);
+		
+		try{
+			dDayList = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		symbol,
+		    		startDate.toString(),
+		    		endDate.toString());
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
 		}
 		
-		return rowsFromDB;
+		return dDayList;
+		
+	}
+
+	public IndexCalcs getFirstBySymbol(String symbol) {
+		
+		IndexCalcs dataPoint=null;
+		
+		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+				+ " WHERE `symbol` = ?"
+				+ " ORDER BY `date` ASC"
+				+ " LIMIT 1";
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		
+		try{
+			dataPoint = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		symbol);
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		
+		return dataPoint;
+	}
+	
+	public IndexCalcs getLastBySymbol(String symbol) {
+		
+		IndexCalcs dataPoint=null;
+		
+		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+				+ " WHERE `symbol` = ?"
+				+ " ORDER BY `date` DESC"
+				+ " LIMIT 1";
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		
+		try{
+			dataPoint = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		symbol);
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		
+		return dataPoint;
 	}
 }

@@ -51,6 +51,9 @@ public class IndexCalcs implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	
 	public String getSymbol() {
 		return symbol;

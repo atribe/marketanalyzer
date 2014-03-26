@@ -5,6 +5,7 @@ import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.models.YahooIndexData;
 import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
 
 import java.sql.Connection;
@@ -45,11 +46,40 @@ public class IndexCalcsService {
 
 	//member variables related to dates or number of days
 	private int m_bufferDays;
-	private long m_loopBeginId;
-	private long m_loopEndId;
+	private LocalDate m_startDate;
+	private LocalDate m_endDate;
 	
 	//member variable for holding all the information for analysis
+	private List<YahooIndexData> m_yahooIndexDataList;
 	private List<IndexCalcs> m_IndexCalcList;
+
+	public List<IndexCalcs> getM_IndexCalcList() {
+		return m_IndexCalcList;
+	}
+
+	/*
+	public void setM_IndexCalcList(List<IndexCalcs> IndexCalcList) {
+		this.m_IndexCalcList = IndexCalcList;
+	}
+	*/
+	
+	public void setM_IndexCalcList(List<YahooIndexData> yahooIndexDataList) {
+		m_IndexCalcList = new ArrayList<IndexCalcs>();
+		for(YahooIndexData A:yahooIndexDataList)
+		{
+			IndexCalcs B = new IndexCalcs();
+			B.setId(A.getId());
+			B.setDate(A.getDate());
+			B.setOpen(A.getOpen());
+			B.setHigh(A.getHigh());
+			B.setLow(A.getLow());
+			B.setClose(A.getClose());
+			B.setVolume(A.getVolume());
+			B.setSymbol(A.getSymbol());
+			
+			m_IndexCalcList.add(B);
+		}
+	}
 
 	public IndexCalcsService() {
 		m_connection = GenericDBSuperclass.getConnection();
@@ -68,11 +98,11 @@ public class IndexCalcsService {
 	public void init(String[] indexList) {
 		
 		m_indexCalcsDAO.tableInitialization(indexList);
-		
-		runIndexAnalysis(indexList[0]);//1 is the S&P500
+		for(String symbol:indexList)
+		runIndexAnalysis(symbol);//1 is the S&P500
 	}
 	
-	public void runIndexAnalysis(String index) {
+	public void runIndexAnalysis(String symbol) {
 		/*
 		 * Future Index Analysis
 		 * 
@@ -86,7 +116,7 @@ public class IndexCalcsService {
 		 * 7.Saves needed data to DB so that it maybe displayed on the website.
 		 */
 		
-		m_symbol= index;
+		setM_symbol(symbol);
 		
 		log.info("");
 		log.info("--------------------------------------------------------------------");
@@ -96,11 +126,13 @@ public class IndexCalcsService {
 		setBufferDays();
 
 		//2. Calculating the id's of the start and end date of the loop
-		setLoopBeginId();
-		setLoopEndId();
+		setM_startDate();
+		setM_endDate();
 		
-		m_IndexCalcList = m_indexYahooTable.getDataBetweenIds(m_symbol, m_loopBeginId, m_loopEndId);
+		m_yahooIndexDataList = m_indexYahooTable.getRowsBetweenDatesBySymbol(m_symbol, m_startDate, m_endDate);
 
+		setM_IndexCalcList(m_yahooIndexDataList);
+		
 		calcIndexStatistics();
 		
 		//2. Calculate d-dates
@@ -109,6 +141,14 @@ public class IndexCalcsService {
 		//followThruAnalysis();
 		
 		m_indexCalcsDAO.addAllRowsToDB(m_symbol, m_IndexCalcList);
+	}
+
+	public String getM_symbol() {
+		return m_symbol;
+	}
+
+	public void setM_symbol(String m_symbol) {
+		this.m_symbol = m_symbol;
 	}
 
 	private void setBufferDays(){
@@ -135,22 +175,23 @@ public class IndexCalcsService {
 	 * Gets the loopEndId by pulling the end date from the parameter database and then looking that date up in the price/volume database
 	 * 
 	 */
-	private void setLoopEndId() {
+	private void setM_endDate() {
 		//LocalDate endDate = m_indexParamTable.getDateValue("endDate");
-		LocalDate endDate = new LocalDate();
-
-		m_loopEndId = m_indexYahooTable.getIdByDate(m_symbol, endDate, false);
+		m_endDate = new LocalDate();
 	}
 
-	private void setLoopBeginId() {
+	private void setM_startDate() {
 		//LocalDate startDate = m_indexParamTable.getDateValue("startDate");
-		LocalDate startDate = new LocalDate(m_prop.getProperty("indexcalcs.startdate.startdate"));
+		LocalDate startDate = new LocalDate(m_prop.getProperty("indexcalcs.startdate"));
 
-		long beginId = m_indexYahooTable.getIdByDate(m_symbol, startDate, true);
-		if(beginId-m_bufferDays<1) {
-			m_loopBeginId = 1;
+		IndexCalcs beginDataPoint = m_indexYahooTable.getFirstBySymbol(m_symbol);
+		LocalDate symbolBeginDate = beginDataPoint.getConvertedDate();
+		
+		if( symbolBeginDate.isBefore( startDate.minusDays( getBufferDays() ) ) )
+		{
+			m_startDate = symbolBeginDate;
 		} else {
-			m_loopBeginId = beginId-m_bufferDays;
+			m_startDate = startDate;
 		}
 	}
 
@@ -465,7 +506,7 @@ public class IndexCalcsService {
 				+ " ON C.id = Y.id"
 				+ " WHERE Y.date BETWEEN ? and ?"
 				+ " AND Y.symbol = ?"
-				+ " ORDER BY Y.date";
+				+ " ORDER BY Y.date ASC";
 
 		/*
 		 * Beginning of DbUtils code
