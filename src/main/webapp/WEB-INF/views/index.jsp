@@ -10,72 +10,50 @@
 <%@page isELIgnored="false" %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head><% System.out.println("Starting Head of Index.jsp"); %>
-		<title><%-- <spring:message code="label.applicationTitle" /> --%>Test MarketAnalyzer</title>
+	<head>
+		<title>Test MarketAnalyzer</title>
 	
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-		
 		<link rel="stylesheet" type="text/css" href="<c:url value="css/style.css" />" />
-		
-		<!-- <script type="text/javascript" src="<c:url value="js/HumbleFinance.js" />"></script> -->
-		
-		<% System.out.println("End Head of Index.jsp"); %>
 	</head>
 
-	<body>
+	<body><% System.out.println("Start of Body Tag"); %>
 		<div id="container">
-		<% System.out.println("Start of Body Tag"); %>
-		<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
-	
-		<div id="humbleFinance">
-			<!--[if IE]>
-		    <script type="text/javascript" src="/static/lib/FlashCanvas/bin/flashcanvas.js"></script>
-		    <![endif]-->
-		    <script type="text/javascript" src="<c:url value="js/flotr2.min.js"/>"></script>
-		    <script type="text/javascript">
-		      (function () {
-		
-		        var
-		          container = document.getElementById('humbleFinance'),
-		          start = (new Date).getTime(),
-		          data, graph, offset, i;
-		
-		        // Draw a sine curve at time t
-		        function animate (t) {
-		
-		          data = [];
-		          offset = 2 * Math.PI * (t - start) / 10000;
-		
-		          // Sample the sine function
-		          for (i = 0; i < 4 * Math.PI; i += 0.2) {
-		            data.push([i, Math.sin(i - offset)]);
-		          }
-		
-		          // Draw Graph
-		          graph = Flotr.draw(container, [ data ], {
-		            yaxis : {
-		              max : 2,
-		              min : -2
-		            }
-		          });
-		
-		          // Animate
-		          setTimeout(function () {
-		            animate((new Date).getTime());
-		          }, 50);
-		        }
-		
-		        animate(start);
-		      })();
-		    </script>
-		</div>
-		<div id="demo junk">
-			<p>test. Hi Merritt!</p>
-			
-			<img src="<c:url value="charts/piechart" />" />
-		</div>
-		<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
+			<!-- Header Div (in mpHeader file)-->
+				<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
+			<!-- End Header Div -->
+			<div id="content">
+				<div class="D_Day_Table">
+					<h3>Nasdaq Distribution Days in the Last 20 Days</h3>
+					<table class="DDays">
+						<tr>
+							<th>DB id</th>
+							<th>Date</th>
+							<th>Is a D Day?</th>
+							<th>Churn or Regular</th>
+							<th>D Day Count</th>
+						</tr>
+						<c:forEach items="${dDayList}" var="indexCalcs">
+						<tr>
+							<td>${indexCalcs.id}</td>
+							<td>${indexCalcs.date}</td>
+							<td>${indexCalcs.getDDay()}</td>
+							<td>${indexCalcs.getChurnDay()}</td>
+							<td>${indexCalcs.dDayCounter}</td>
+						</tr>
+						</c:forEach>
+						
+					</table>
+				</div>
+				<div id="demo">
+					<h3>Demo jFreeChart</h3>	
+					<img src="<c:url value="charts/piechart" />" />
+				</div>
+			</div>
+			<!-- Footer Div (in mpFooter file-->
+				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
+			<!-- End Footer Div -->
 		</div> <!-- close div container -->
 	</body>
 </html>

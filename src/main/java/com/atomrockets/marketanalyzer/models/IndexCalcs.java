@@ -217,6 +217,16 @@ public class IndexCalcs implements Serializable {
 	public boolean isDDay() {
 		return isDDay;
 	}
+	public String getDDay() {
+		if(isDDay)
+		{
+			return "Yes";
+		}
+		else
+		{
+			return "No";
+		}
+	}
 	/**
 	 * @param isDDay the isDDay to set
 	 */
@@ -229,6 +239,16 @@ public class IndexCalcs implements Serializable {
 	 */
 	public boolean isChurnDay() {
 		return isChurnDay;
+	}
+	public String getChurnDay() {
+		if(isChurnDay)
+		{
+			return "Yes";
+		}
+		else
+		{
+			return "No";
+		}
 	}
 	/**
 	 * @param isChurnDay the isChurnDay to set

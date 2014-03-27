@@ -49,6 +49,31 @@
 		margin-right:21px;
 		margin-top:-10px;
 	}
+table, th, td{
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	border-collapse: collapse;
+	padding:5px;
+}
+th{
+	background-color:gray;
+	color:white;
+}
+
+#content #demo{
+	margin-top:20px;
+	border: 2px gray solid;
+	width:900px;
+}
+	#demo h3{
+		margin-top:2px;
+		text-align:center;
+	}
+	#demo img{
+		width:750px;
+		margin-left:75px;
+	}
 #footer{
 	text-align:center;
 }

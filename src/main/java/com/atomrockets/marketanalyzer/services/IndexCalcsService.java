@@ -98,8 +98,16 @@ public class IndexCalcsService {
 	public void init(String[] indexList) {
 		
 		m_indexCalcsDAO.tableInitialization(indexList);
+		String tableName = m_indexCalcsDAO.getTableName();
+		//Reset the table so that the data can be reanalyzed
+		try {
+			m_indexCalcsDAO.resetTable(tableName);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(String symbol:indexList)
-		runIndexAnalysis(symbol);//1 is the S&P500
+			runIndexAnalysis(symbol);//1 is the S&P500
 	}
 	
 	public void runIndexAnalysis(String symbol) {
@@ -270,7 +278,6 @@ public class IndexCalcsService {
 	private void distributionDayAnalysis(){
 		log.info("     Starting D-Day Counting and recording");
 		
-		String tableName = m_indexCalcsDAO.getTableName();
 		
 		try {
 			/* 
@@ -281,8 +288,7 @@ public class IndexCalcsService {
 			 * Then when this method is run it would first check to see if there have been any changes to either table since the last update
 			 */		
 
-			//Reset the table so that the data can be reanalyzed
-			m_indexCalcsDAO.resetTable(tableName);
+			
 			
 			//Check and record all d days in the DB
 			checkForDDays();
@@ -291,8 +297,7 @@ public class IndexCalcsService {
 			checkForChurningDays();
 			
 			//Getting window length from parameter database
-			String keydDayWindow = "dDayWindow";
-			int dDayWindow = m_indexParamTable.getIntValue(keydDayWindow);
+			int dDayWindow = m_indexParamTable.getIntValue("dDayWindow");
 		
 			//Counting up d-day that have fallen in a given window is handled in the following function
 			countDDaysInWindow(dDayWindow);
