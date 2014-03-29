@@ -6,13 +6,12 @@ import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.models.YahooIndexData;
-import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -29,10 +28,8 @@ public class IndexCalcsService {
 
 	//Connection to the database
 	private Connection m_connection;
+	private boolean m_connectionAlive;
 	
-	//properties
-	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
-	private Properties m_prop = propertiesLoader.loadActivePropertiesFile();
 	//logger
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
@@ -82,10 +79,35 @@ public class IndexCalcsService {
 	}
 
 	public IndexCalcsService() {
-		m_connection = GenericDBSuperclass.getConnection();
-		m_indexYahooTable = new IndexYahooDataTableManager(m_connection);
-		m_indexParamTable = new IndexParameterTableManager(m_connection);
-		m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
+		try {
+			m_connection = GenericDBSuperclass.getConnection();
+			setM_connectionAlive(true);
+			m_indexYahooTable = new IndexYahooDataTableManager(m_connection);
+			m_indexParamTable = new IndexParameterTableManager(m_connection);
+			m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
+		} catch (ClassNotFoundException e) {
+			// Handles errors if the JDBC driver class not found.
+			setM_connectionAlive(false);
+			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
+		} catch (SQLException ex){
+			// Handles any errors from MySQL
+			setM_connectionAlive(false);
+			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
+			log.error("SQLException: " + ex.getMessage());
+			log.error("SQLState: " + ex.getSQLState());
+			log.error("VendorError: " + ex.getErrorCode());
+		} finally {
+			try {
+				setM_connectionAlive(false);
+				m_connection.close();
+			} catch (NullPointerException ne) {
+				//do nothing, just means that the connection was never initialized
+				log.debug("Connection didn't need to be closed, it was never initialized");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public IndexCalcsService(Connection connection) {
@@ -189,9 +211,7 @@ public class IndexCalcsService {
 	}
 
 	private void setM_startDate() {
-		//LocalDate startDate = m_indexParamTable.getDateValue("startDate");
-		LocalDate startDate = new LocalDate(m_prop.getProperty("indexcalcs.startdate"));
-
+		LocalDate startDate = new LocalDate(PropCache.getCachedProps("indexcalcs.startdate"));
 		IndexCalcs beginDataPoint = m_indexYahooTable.getFirstBySymbol(m_symbol);
 		LocalDate symbolBeginDate = beginDataPoint.getConvertedDate();
 		
@@ -335,12 +355,12 @@ public class IndexCalcsService {
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < closePercentRequiredDrop /*This is rule #1*/)
 			{
 				ddayCount++;
-				m_IndexCalcList.get(i).setDDay(true);
+				m_IndexCalcList.get(i).setIsDDay(true);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
 			}
 			else
 			{
-				m_IndexCalcList.get(i).setDDay(false);
+				m_IndexCalcList.get(i).setIsDDay(false);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), false);
 			}
 		}
@@ -400,7 +420,7 @@ public class IndexCalcsService {
 					todaysClose <= previousDaysClose*(1+churnPriceRange) /*rule 3*/)
 			{
 				churningDayCount++;
-				m_IndexCalcList.get(i).setChurnDay(true);
+				m_IndexCalcList.get(i).setIsChurnDay(true);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
 			} else {
 				// {{ Churn day conditions set by the parameter db
@@ -425,7 +445,7 @@ public class IndexCalcsService {
 				
 				if(conditionsRequired == conditionsMet && conditionsRequired != 0)
 				{
-					m_IndexCalcList.get(i).setChurnDay(true);
+					m_IndexCalcList.get(i).setIsChurnDay(true);
 				}
 			}
 			//No need set to false because it was already done by the d-day method.
@@ -447,7 +467,7 @@ public class IndexCalcsService {
 
 			for(int j=i; j>i-dDayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
 
-				if(m_IndexCalcList.get(j).isDDay() || m_IndexCalcList.get(j).isChurnDay())
+				if( Boolean.TRUE.equals(m_IndexCalcList.get(j).getIsDDay()) || Boolean.TRUE.equals(m_IndexCalcList.get(j).getIsChurnDay()) )
 					m_IndexCalcList.get(i).addDDayCounter();
 			}
 		}
@@ -482,7 +502,7 @@ public class IndexCalcsService {
 	public List<IndexCalcs> getLatestDDays() {
 		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
 		
-		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName()))
+		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
 		/*
 		 * 1. get the id for the begin date = 20 days previous
 		 * 2. get the id for the end date = today
@@ -579,6 +599,19 @@ public class IndexCalcsService {
 		*/
 		return dDayList;
 		
+	}
+
+	public boolean connectionAlive() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isM_connectionAlive() {
+		return m_connectionAlive;
+	}
+
+	public void setM_connectionAlive(boolean m_connectionAlive) {
+		this.m_connectionAlive = m_connectionAlive;
 	}
 
 }

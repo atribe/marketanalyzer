@@ -19,10 +19,23 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
  * 3. If failed to found one, loads it from source directory � useful while running the application exploded i.e. via jetty-maven-plugin
  * 4. If failed to found one, panicks and returns empty Properties object
  */
-public class PropertiesLoader {
-	static Logger log = Logger.getLogger(PropertiesLoader.class.getName());
+public class PropCache {
+	static Logger log = Logger.getLogger(PropCache.class.getName());
 
-    public Properties load(String fileName) {
+	//This will store the cached properties
+	private static Properties cachedProps = null;
+	public static synchronized String getCachedProps(String propertyName) {
+		if (cachedProps == null) {
+			cachedProps = new Properties();
+			Properties propSet1 = loadActivePropertiesFile();
+			Properties propSet2 = load("constant.properties");
+			cachedProps.putAll(propSet1);
+			cachedProps.putAll(propSet2);
+		}
+		return cachedProps.getProperty(propertyName);
+	}
+	
+    public static Properties load(String fileName) {
         Properties prop = new Properties();
         InputStream im = null;
         try {
@@ -40,33 +53,33 @@ public class PropertiesLoader {
         return prop;
     }
 
-    private InputStream findFile(String fileName) throws FileNotFoundException {
+    private static InputStream findFile(String fileName) throws FileNotFoundException {
         InputStream im = findInWorkingDirectory(fileName);
         if (im == null) im = findInClasspath(fileName);
         if (im == null) im = findInSourceDirectory(fileName);
         return im;
     }
 
-    private InputStream findInSourceDirectory(String fileName) throws FileNotFoundException {
-        log.debug("Trying "+ fileName +" in source directory");
+    private static InputStream findInSourceDirectory(String fileName) throws FileNotFoundException {
+        log.trace("__--++Trying "+ fileName +" in source directory");
         return new FileInputStream("src/main/resources/" + fileName);
     }
 
-    private InputStream findInClasspath(String fileName) {
-        log.debug("Trying "+ fileName +" on the classpath");
+    private static InputStream findInClasspath(String fileName) {
+        log.trace("__--++Trying "+ fileName +" on the classpath");
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
     }
 
-    private InputStream findInWorkingDirectory(String fileName) {
+    private static InputStream findInWorkingDirectory(String fileName) {
         try {
-            log.debug("Trying "+ fileName +" in current directory");
+            log.trace("__--++Trying "+ fileName +" in current directory");
             return new FileInputStream(System.getProperty("user.dir") + fileName);
         } catch (FileNotFoundException e) {
             return null;
         }
     }
 
-    public Properties loadActivePropertiesFile() {
+    private static Properties loadActivePropertiesFile() {
     	Properties propSpring = new Properties();
     	Properties prop = new Properties();
         InputStream im = null;

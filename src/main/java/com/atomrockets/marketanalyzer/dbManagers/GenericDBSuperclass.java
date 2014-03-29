@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 /**
  * This class is the Parent class to all database classes
@@ -20,13 +20,9 @@ import com.atomrockets.marketanalyzer.spring.init.PropertiesLoader;
  */
 public class GenericDBSuperclass {
 
-	static Logger staticLog = Logger.getLogger(GenericDBSuperclass.class.getName());
+	protected static Logger staticLog = Logger.getLogger(GenericDBSuperclass.class.getName());
 	//Setting the logger for the class
 	protected Logger log = Logger.getLogger(this.getClass().getName());
-	
-	//properties
-	protected static final PropertiesLoader propertiesLoader = new PropertiesLoader();
-	protected Properties m_prop = propertiesLoader.loadActivePropertiesFile();
 	
 	//Member variable of the connection, so I don't have to keep passing it between methods
 	//This variable only needs to be set once in the classes that inherit this class.
@@ -53,47 +49,41 @@ public class GenericDBSuperclass {
 	/**
 	 * Establishes a connection to the database
 	 * @return connection
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public static Connection getConnection() {
-	
-		Properties prop = propertiesLoader.loadActivePropertiesFile();
+	public static Connection getConnection() throws SQLException, ClassNotFoundException {
 		
 		m_connection = null;
-		String host, port, dbURL, username, password, DBName;
-		try {
-			//Loading the JDBC MySQL drivers that are used by java.sql.Connection
-			Class.forName(prop.getProperty("db.driver"));//loads the mysql driver from the property file
+		String host, port, dbURL, username, password;
+		String DBName="marketpred";
+		
+	
+		//Loading the JDBC MySQL drivers that are used by java.sql.Connection
+		Class.forName(PropCache.getCachedProps("db.driver"));//loads the mysql driver from the property file
 
-			// ************For Open Shift Account************	  
-			//if(LoadProperties.environment.trim().equalsIgnoreCase("production")){
-			if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
-				host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable
-				port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");//$OPENSHIFT_MYSQL_DB_PORT is also an OpenShift variable
-			}else{
-				// ************For Local Account************
-				host = prop.getProperty("db.host");
-				port = prop.getProperty("db.port");
-			}
-			
-			DBName = prop.getProperty("db.dbname");
-			dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
-			
-			username = prop.getProperty("db.username");
-			password = prop.getProperty("db.password");
-			
-			m_connection = DriverManager.getConnection(dbURL, username, password);
-
-			staticLog.info("Connection established to " + DBName);
-		} catch (ClassNotFoundException e) { //Handle errors for Class.forName
-			staticLog.info("Database Driver not found in MarketDB.java with teedixindices "+e);
-		} catch (SQLException ex){
-			// handle any errors
-			staticLog.info("Exception loading Database Driver in MarketDB.java with teedixindices");
-			staticLog.info("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			staticLog.info("SQLException: " + ex.getMessage());
-			staticLog.info("SQLState: " + ex.getSQLState());
-			staticLog.info("VendorError: " + ex.getErrorCode());
+		// ************For Open Shift Account************	  
+		//if(LoadProperties.environment.trim().equalsIgnoreCase("production")){
+		if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
+			staticLog.trace("-----Preparing to connect to OpenShift DB");
+			host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable
+			port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");//$OPENSHIFT_MYSQL_DB_PORT is also an OpenShift variable
+		}else{
+			// ************For Local Account************
+			staticLog.trace("-----Preparing to connect to Local Xampp DB");
+			host = PropCache.getCachedProps("db.host");
+			port = PropCache.getCachedProps("db.port");
 		}
+		
+		DBName = PropCache.getCachedProps("db.dbname");
+		dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
+		
+		username = PropCache.getCachedProps("db.username");
+		password = PropCache.getCachedProps("db.password");
+			
+		m_connection = DriverManager.getConnection(dbURL, username, password);
+		staticLog.info("Connection established to " + DBName);
+	
 		return m_connection;
 	}
 

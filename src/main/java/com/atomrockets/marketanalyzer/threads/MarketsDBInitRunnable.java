@@ -1,31 +1,32 @@
 package com.atomrockets.marketanalyzer.threads;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.atomrockets.marketanalyzer.dbManagers.DatabaseInitialization;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 @Component
 @Scope("prototype")
 public class MarketsDBInitRunnable implements Runnable {
 
-	String name="MarketsDBInitRunnable";
+	
 	Logger log = Logger.getLogger(this.getClass().getName());
 	
-	public void setName(String name) {
-		this.name = name;
-	}
+	String thread_name;
 	
+	public String getThread_name() {
+		thread_name = PropCache.getCachedProps("threads.dbinit");
+		return thread_name;
+	}
+
 	@Override
 	public void run() { 
-		log.info(name + " is running");
+		log.trace("2.0 " + getThread_name() + " is running");
 		
 		DatabaseInitialization.marketsDBInitialization();
 		
-		log.info(name + " had ended");
+		log.trace("2.1 " + getThread_name() + " has ended");
 	}
 }

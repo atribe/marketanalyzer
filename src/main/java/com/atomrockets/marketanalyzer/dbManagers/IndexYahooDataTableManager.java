@@ -16,6 +16,7 @@ import org.joda.time.LocalDate;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.models.YahooIndexData;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	
@@ -159,7 +160,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			//Container to hold the downloaded data
 			List<YahooIndexData> rowsFromYahoo = null;
 			//This date represents the beginning of time as far as any of the indexes go
-			LocalDate beginningDate = new LocalDate(m_prop.getProperty("yahoo.startdate"));
+			LocalDate beginningDate = new LocalDate(PropCache.getCachedProps("yahoo.startdate"));
 	
 			//calculates the number of days from today back to beginning date
 			int numDays = MarketRetriever.getNumberOfDaysFromNow(beginningDate);

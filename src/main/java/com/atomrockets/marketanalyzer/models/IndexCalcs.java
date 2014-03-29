@@ -7,6 +7,11 @@ import org.joda.time.LocalDate;
 
 public class IndexCalcs implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5343792322441098873L;
+
 	private long id;
 	
 	//Data from the yahooDataTable
@@ -27,10 +32,10 @@ public class IndexCalcs implements Serializable {
 	private float priceTrend35;
 	
 	//Analysis variables
-	private boolean isDDay;
-	private boolean isChurnDay;
+	private Boolean isDDay;
+	private Boolean isChurnDay;
 	private int dDayCounter;
-	private boolean isFollowThruDay;
+	private Boolean isFollowThruDay;
 	
 	//Buy, sell, hold
 	private String dayAction;
@@ -210,53 +215,7 @@ public class IndexCalcs implements Serializable {
 	public void setPriceTrend35(float priceTrend35) {
 		this.priceTrend35 = priceTrend35;
 	}
-
-	/**
-	 * @return the isDDay
-	 */
-	public boolean isDDay() {
-		return isDDay;
-	}
-	public String getDDay() {
-		if(isDDay)
-		{
-			return "Yes";
-		}
-		else
-		{
-			return "No";
-		}
-	}
-	/**
-	 * @param isDDay the isDDay to set
-	 */
-	public void setDDay(boolean isDDay) {
-		this.isDDay = isDDay;
-	}
-
-	/**
-	 * @return the isChurnDay
-	 */
-	public boolean isChurnDay() {
-		return isChurnDay;
-	}
-	public String getChurnDay() {
-		if(isChurnDay)
-		{
-			return "Yes";
-		}
-		else
-		{
-			return "No";
-		}
-	}
-	/**
-	 * @param isChurnDay the isChurnDay to set
-	 */
-	public void setChurnDay(boolean isChurnDay) {
-		this.isChurnDay = isChurnDay;
-	}
-
+	
 	/**
 	 * @return the dDayCounter
 	 */
@@ -273,19 +232,35 @@ public class IndexCalcs implements Serializable {
 		dDayCounter++;
 	}
 
-	public boolean isFollowThruDay() {
-		return isFollowThruDay;
-	}
-
-	public void setFollowThruDay(boolean isFollowThruDay) {
-		this.isFollowThruDay = isFollowThruDay;
-	}
-
 	public String getDayAction() {
 		return dayAction;
 	}
 
 	public void setDayAction(String dayAction) {
 		this.dayAction = dayAction;
+	}
+
+	public Boolean getIsDDay() {
+		return isDDay;
+	}
+
+	public void setIsDDay(Boolean isDDay) {
+		this.isDDay = isDDay;
+	}
+
+	public Boolean getIsChurnDay() {
+		return isChurnDay;
+	}
+
+	public void setIsChurnDay(Boolean isChurnDay) {
+		this.isChurnDay = isChurnDay;
+	}
+
+	public Boolean getIsFollowThruDay() {
+		return isFollowThruDay;
+	}
+
+	public void setIsFollowThruDay(Boolean isFollowThruDay) {
+		this.isFollowThruDay = isFollowThruDay;
 	}
 }

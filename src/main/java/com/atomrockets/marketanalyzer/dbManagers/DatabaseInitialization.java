@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 /**
  * This class is the highest level class that deals with all things market index.
@@ -36,40 +37,63 @@ public class DatabaseInitialization{
 	
 
 	static public void marketsDBInitialization() {
-
-		//Get a database connection
-		Connection connection = GenericDBSuperclass.getConnection();
-
-		/*
-		 * Dabase initialization Section
-		 */
-		//Creating the table manager
-		m_indexYahooTable = new IndexYahooDataTableManager(connection);
-		//Initialize the price/volume databases for each index
-		m_indexYahooTable.tableInitialization(indexList);
-
-		
-		//Initialize the parameter table
-		m_indexParamTable = new IndexParameterTableManager(connection);
-		m_indexParamTable.tableInitialization(indexList);
-
-		
-		/*
-		 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
-		 * to clear and repopulate when doing debugging or optimization. The analysis data table can be dropped without
-		 * having to reimport all the data, which is quite time consuming.
-		 * 
-		 * IndexAnalysisDBInitialization checks if the table already
-		 */
-		m_indexAnalysisService = new IndexCalcsService(connection);
-		m_indexAnalysisService.init(indexList);
-		
-		
+		Connection connection = null;
 		try {
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.trace("3.0 Starting markets DB init method");
+			
+			//Get a database connection
+			log.trace("3.1 Getting a connection");
+			connection = GenericDBSuperclass.getConnection();
+			
+			String test = PropCache.getCachedProps("threads.dbinit");
+	
+			/*
+			 * Dabase initialization Section
+			 */
+			//Creating the table manager
+			log.trace("3.2 Creating IndexyahooDataTableManager");
+			m_indexYahooTable = new IndexYahooDataTableManager(connection);
+			//Initialize the price/volume databases for each index
+			log.trace("3.3 Initializing YahooIndexData Table");
+			m_indexYahooTable.tableInitialization(indexList);
+	
+			//Initialize the parameter table
+			log.trace("3.4 Creating IndexParameterTableManager");
+			m_indexParamTable = new IndexParameterTableManager(connection);
+			log.trace("3.5 Initializing IndexParameter Table");
+			m_indexParamTable.tableInitialization(indexList);
+			
+			/*
+			 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
+			 * to clear and repopulate when doing debugging or optimization. The analysis data table can be dropped without
+			 * having to reimport all the data, which is quite time consuming.
+			 * 
+			 * IndexAnalysisDBInitialization checks if the table already
+			 */
+			log.trace("3.6 Creating IndexCalcsService");
+			m_indexAnalysisService = new IndexCalcsService(connection);
+			log.trace("3.7 Initializing IndexCalcs table");
+			m_indexAnalysisService.init(indexList);
+			
+		} catch (ClassNotFoundException e) {
+			// Handles errors if the JDBC driver class not found.
+			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
+		} catch (SQLException ex){
+			// Handles any errors from MySQL
+			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
+			log.error("SQLException: " + ex.getMessage());
+			log.error("SQLState: " + ex.getSQLState());
+			log.error("VendorError: " + ex.getErrorCode());
+		} finally {
+			try {
+				connection.close();
+			} catch (NullPointerException ne) {
+				//do nothing, just means that the connection was never initialized
+				log.debug("Connection didn't need to be closed, it was never initialized");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

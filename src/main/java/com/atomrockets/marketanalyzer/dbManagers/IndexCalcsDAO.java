@@ -44,7 +44,30 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	};
 	
 	public IndexCalcsDAO() {
-		m_connection = getConnection();
+		try {
+			
+			m_connection = getConnection();
+			
+		} catch (ClassNotFoundException e) {
+			// Handles errors if the JDBC driver class not found.
+			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
+		} catch (SQLException ex){
+			// Handles any errors from MySQL
+			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
+			log.error("SQLException: " + ex.getMessage());
+			log.error("SQLState: " + ex.getSQLState());
+			log.error("VendorError: " + ex.getErrorCode());
+		} finally {
+			try {
+				m_connection.close();
+			} catch (NullPointerException ne) {
+				//do nothing, just means that the connection was never initialized
+				log.debug("Connection didn't need to be closed, it was never initialized");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 			
 	public IndexCalcsDAO(Connection connection) {
@@ -118,12 +141,12 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			IndexCalcs singleResult = new IndexCalcs();
 			singleResult.setId(rs.getInt("PVD_id"));
 			singleResult.setConvertedDate(rs.getDate("Date"));
-			boolean isDDay;
+			Boolean isDDay;
 			if(rs.getInt("IsDDay")==1)
 				isDDay=true;
 			else
 				isDDay=false;
-			singleResult.setDDay(isDDay);
+			singleResult.setIsDDay(isDDay);
 			
 			AnalysisRows.add(singleResult);
 		}
@@ -164,10 +187,10 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 				ps.setDouble(4,  analysisRows.get(i).getCloseAvg200());
 				ps.setLong(5,  analysisRows.get(i).getVolumeAvg50());
 				ps.setDouble(6, analysisRows.get(i).getPriceTrend35());
-				ps.setBoolean(7,  analysisRows.get(i).isDDay());
-				ps.setBoolean(8,  analysisRows.get(i).isChurnDay());
+				ps.setBoolean(7,  analysisRows.get(i).getIsDDay());
+				ps.setBoolean(8,  analysisRows.get(i).getIsChurnDay());
 				ps.setInt(9, analysisRows.get(i).getdDayCounter());
-				ps.setBoolean(10, analysisRows.get(i).isFollowThruDay());
+				ps.setBoolean(10, analysisRows.get(i).getIsFollowThruDay());
 				ps.setString(11, analysisRows.get(i).getDayAction());
 				ps.addBatch();
 				

@@ -24,8 +24,10 @@ public class RootController {
         
         //Getting the d-dates from the database
         IndexCalcsService  indexCalcsService = new IndexCalcsService ();
-        List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
-        mav.addObject("dDayList", dDayList);
+        if(indexCalcsService.isM_connectionAlive()) {
+        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
+        	mav.addObject("dDayList", dDayList);
+        }
         
         mav.addObject("someText", "Listing all accounts!");
         mav.setViewName("index");
