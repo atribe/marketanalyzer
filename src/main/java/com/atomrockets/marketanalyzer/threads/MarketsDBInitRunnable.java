@@ -23,10 +23,10 @@ public class MarketsDBInitRunnable implements Runnable {
 
 	@Override
 	public void run() { 
-		log.trace("2.0 " + getThread_name() + " is running");
+		log.info("2.0 " + getThread_name() + " commenced running");
 		
 		DatabaseInitialization.marketsDBInitialization();
 		
-		log.trace("2.1 " + getThread_name() + " has ended");
+		log.info("2.1 " + getThread_name() + " has ended");
 	}
 }

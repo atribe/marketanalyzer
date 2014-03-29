@@ -153,7 +153,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 		for(String index : indexList)
 		{
-			log.info("     -Populating Table " + index);		
+			log.info("     -Populating Table with data for " + index);		
 		
 			//Container to hold the downloaded data
 			List<YahooIndexData> rowsFromYahoo = null;
@@ -184,90 +184,26 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		addRecordsFromData(rowsFromYahoo);
 	}
 
-	/*
-	public long getIdByDate(String index, LocalDate Date, boolean isStartDate){
-		long value = 0;
-		String query = "SELECT id FROM `" + g_YahooIndexTableName + "`"
-				+ " WHERE `date` = ?"
-				+ " AND `symbol` = ?";
-		
-
-		try {
-			PreparedStatement selectStatement = m_connection.prepareStatement(query);
-			selectStatement.setString(1, Date.toString());
-			selectStatement.setString(2, index);
-			ResultSet rs = selectStatement.executeQuery();
-			if(rs.next()) {
-				value = rs.getInt("id");
-			} else if (isStartDate) {
-				log.info("     The date of " + Date.toString() + " not found in the database.");
-				log.info("          Let me check the preceeding couple of days in case you chose a weekend or holiday.");
-				for(int i = 1;i<7;i++)
-				{
-					selectStatement.setString(1, Date.minusDays(i).toString());
-					selectStatement.setString(2, index);
-					rs = selectStatement.executeQuery();
-					if(rs.next())
-					{
-						value = rs.getInt("id");
-						log.info("          Looks like I found one...and you got all worried for nothing.");
-						break;
-					}
-					else if(i==6)
-					{
-						log.info("          I didn't find an earlier date, so I'll just choose the first date in the data set");
-						value=1;
-					}
-				}
-			} else {
-				log.info("     The date of " + Date.toString() + " not found in the database.");
-				log.info("          Let me check the next couple days in case you chose a weekend or holiday.");
-				for(int i = 1;i<7;i++)
-				{
-					selectStatement.setString(1, Date.plusDays(i).toString());
-					selectStatement.setString(2, index);
-					rs = selectStatement.executeQuery();
-					if(rs.next())
-					{
-						value = rs.getInt("id");
-						log.info("          Looks like I found one...and you got all worried for nothing.");
-						break;
-					}
-					else if(i==6)
-					{
-						log.info("          I didn't find an earlier date, so I'll just choose the last date in the data set");
-						value= getLastRowId(g_YahooIndexTableName);
-					}
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			log.info("There was an error in the getIdByDate method. And that error is: ");
-			log.info(e.toString());
-			e.printStackTrace();
-		}
-		return value;
-	}
-	*/
+	
 	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
 		//This query ignores duplicate dates
 		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
+		String [] columnNames = {"symbol","date","open","high","low","close","volume"};
 		PreparedStatement ps=null;
-		int batchSize = 500;
+		int batchSize = 100;
 		try {
+			//preparing the MySQL statement
 			ps = m_connection.prepareStatement(insertQuery);
-
+			//creating DbUtils QuerryRunner
+			QueryRunner runner = new QueryRunner();
+			int i=0;
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
-			for (int i = rowsFromYahoo.size()-1; i > 0 ; i--) {
-				ps.setString(1, rowsFromYahoo.get(i).getSymbol());
-				ps.setString(2, rowsFromYahoo.get(i).getDate());
-				ps.setDouble(3,  rowsFromYahoo.get(i).getOpen());
-				ps.setDouble(4,  rowsFromYahoo.get(i).getHigh());
-				ps.setDouble(5,  rowsFromYahoo.get(i).getLow());
-				ps.setDouble(6,  rowsFromYahoo.get(i).getClose());
-				ps.setLong(7,  rowsFromYahoo.get(i).getVolume());
+			for (i = rowsFromYahoo.size()-1; i > 0 ; i--) {
+				
+				runner.fillStatementWithBean(ps, rowsFromYahoo.get(i), columnNames);
+				
 				ps.addBatch();
 				if (i % batchSize == 0) //if i/batch size remainder == 0 execute batch
 				{
@@ -277,6 +213,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			}
 			//Execute the last batch, in case the last value of i isn't a multiple of batchSize
 			ps.executeBatch();
+			log.info("Final batch executed at i="+i);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

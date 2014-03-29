@@ -22,8 +22,17 @@ import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 public class PropCache {
 	static Logger log = Logger.getLogger(PropCache.class.getName());
 
-	//This will store the cached properties
 	private static Properties cachedProps = null;
+	
+	/**
+	 * @param propertyName
+	 * @return propertyValue
+	 * 
+	 * This function replaces the typical prop.getProperty(String propName).
+	 * This function when called the first time loads the property files (multiple)
+	 * Then retains that prop file info in memory, acting as a property cache.
+	 * This allows for the loading of property files once and never again.
+	 */
 	public static synchronized String getCachedProps(String propertyName) {
 		if (cachedProps == null) {
 			cachedProps = new Properties();

@@ -184,14 +184,12 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			//preparing the MySQL statement
 			ps = m_connection.prepareStatement(insertQuery);
 			//creating DbUtils QuerryRunner
-			QueryRunner run = new QueryRunner();
+			QueryRunner runner = new QueryRunner();
 			
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
 			for (IndexCalcs row:analysisRows) {
-				
-				run.fillStatementWithBean(ps, row, columnNames);
-				
 				/*
+				 * Old Manual method. Left as a referece to see how much better the new method is.
 				ps.setLong(1, row.getId());
 				ps.setDouble(2,  row.getCloseAvg50());
 				ps.setDouble(3,  row.getCloseAvg100());
@@ -204,18 +202,26 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 				ps.setBoolean(10, row.getIsFollowThruDay());
 				ps.setString(11, row.getDayAction());
 				*/
-				ps.addBatch();
 				
+				/*
+				 * New code using DbUtils
+				 */
+				runner.fillStatementWithBean(ps, row, columnNames);
+				/*
+				 * Wasn't that awesome
+				 */
+				ps.addBatch();
 				counter++;
 				
-				if (counter % batchSize == 0) //if i/batch size remainder == 0 execute batch
-				{
+				if (counter % batchSize == 0) { //if i/batch size remainder == 0 execute batch
 					ps.executeBatch();
 					log.info("Executed at i="+counter);
 				}
 			}
-			
+			//execute the batch at the end for the leftovers that didn't hit counter%batch==0
 			ps.executeBatch();
+			log.info("Executed at i="+counter);
+			
 		} catch (SQLException e) {
 			log.info("SQLException: " + e.getMessage());
 			log.info("SQLState: " + e.getSQLState());
