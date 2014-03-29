@@ -148,7 +148,6 @@ public class IndexCalcsService {
 		
 		setM_symbol(symbol);
 		
-		log.info("");
 		log.info("--------------------------------------------------------------------");
 		log.info("Starting Index Analyzer for " + m_symbol);
 
@@ -217,9 +216,9 @@ public class IndexCalcsService {
 		
 		if( symbolBeginDate.isBefore( startDate.minusDays( getBufferDays() ) ) )
 		{
-			m_startDate = symbolBeginDate;
-		} else {
 			m_startDate = startDate;
+		} else {
+			m_startDate = symbolBeginDate;
 		}
 	}
 

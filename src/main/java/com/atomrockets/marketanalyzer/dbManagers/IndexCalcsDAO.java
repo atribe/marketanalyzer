@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbutils.QueryRunner;
+
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
 
 public class IndexCalcsDAO extends GenericDBSuperclass{
@@ -37,7 +39,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			put("priceTrend35", "FLOAT");
 			put("isDDay", "TINYINT(1)");//1 == true, 0 == false
 			put("isChurnDay", "TINYINT(1)");//1 == true, 0 == false
-			put("DDayCounter", "INT");
+			put("dDayCounter", "INT");
 			put("isFollowThruDay", "TINYINT(1)");
 			put("dayAction", "VARCHAR(4)");//buy, or sell, or hold
 		}
@@ -170,34 +172,46 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		
 		String insertQuery = addOrUpdatePreparedString();
 		
+		String[] columnNames = getColumnNames();
+		
 		//Batch add
 		//Follow the initalAddRecordsFromData method in the MarketIndexDB class
 		PreparedStatement ps=null;
-		int batchSize = 200;
+		int batchSize = 100;
 		
 		try {
+			long counter = 0;
+			//preparing the MySQL statement
 			ps = m_connection.prepareStatement(insertQuery);
+			//creating DbUtils QuerryRunner
+			QueryRunner run = new QueryRunner();
 			
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
-			for (int i = 0; i < analysisRows.size() ; i++) {
-				//if the row is not in the DB prepare it for insertion
-				ps.setLong(1, analysisRows.get(i).getId());
-				ps.setDouble(2,  analysisRows.get(i).getCloseAvg50());
-				ps.setDouble(3,  analysisRows.get(i).getCloseAvg100());
-				ps.setDouble(4,  analysisRows.get(i).getCloseAvg200());
-				ps.setLong(5,  analysisRows.get(i).getVolumeAvg50());
-				ps.setDouble(6, analysisRows.get(i).getPriceTrend35());
-				ps.setBoolean(7,  analysisRows.get(i).getIsDDay());
-				ps.setBoolean(8,  analysisRows.get(i).getIsChurnDay());
-				ps.setInt(9, analysisRows.get(i).getdDayCounter());
-				ps.setBoolean(10, analysisRows.get(i).getIsFollowThruDay());
-				ps.setString(11, analysisRows.get(i).getDayAction());
+			for (IndexCalcs row:analysisRows) {
+				
+				run.fillStatementWithBean(ps, row, columnNames);
+				
+				/*
+				ps.setLong(1, row.getId());
+				ps.setDouble(2,  row.getCloseAvg50());
+				ps.setDouble(3,  row.getCloseAvg100());
+				ps.setDouble(4,  row.getCloseAvg200());
+				ps.setLong(5,  row.getVolumeAvg50());
+				ps.setDouble(6, row.getPriceTrend35());
+				ps.setBoolean(7,  row.getIsDDay());
+				ps.setBoolean(8,  row.getIsChurnDay());
+				ps.setInt(9, row.getdDayCounter());
+				ps.setBoolean(10, row.getIsFollowThruDay());
+				ps.setString(11, row.getDayAction());
+				*/
 				ps.addBatch();
 				
-				if (i % batchSize == 0) //if i/batch size remainder == 0 execute batch
+				counter++;
+				
+				if (counter % batchSize == 0) //if i/batch size remainder == 0 execute batch
 				{
 					ps.executeBatch();
-					log.info("Executed at i="+i);
+					log.info("Executed at i="+counter);
 				}
 			}
 			
@@ -254,6 +268,17 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		//******End add string builder******
 		
 		return insertQuery;
+	}
+	
+	private String[] getColumnNames() {
+		String[] columnNames = new String[m_mySQLColumnList.size()];
+		int counter = 0;
+		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
+			columnNames[counter] = entry.getKey();
+			counter++;
+		 }
+		
+		return columnNames;
 	}
 	public String getTableName() {
 		return g_indexCalsTableName;

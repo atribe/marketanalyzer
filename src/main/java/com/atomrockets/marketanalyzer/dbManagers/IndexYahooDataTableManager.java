@@ -29,21 +29,21 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 */
 	
 	public IndexYahooDataTableManager(Connection connection) {
-		log.debug("------------------------------Yahoo Table Manager Created--------------------------");
+		log.trace("IY.0 Yahoo Table Manager Created");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
 		m_connection = connection;
 	}
 
 	public synchronized void tableInitialization(String[] indexList) {
-		log.info("Starting Market Index Database Initialization");
+		log.trace("IY.1 Starting Market Index Database Initialization");
 
 		/*
 		 * Checking to see if a table with the index name exists
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + g_YahooIndexTableName + " exists.");
+		log.trace("IY.1.1 Checking if table " + g_YahooIndexTableName + " exists.");
 		if(!tableExists(g_YahooIndexTableName)) {
 			// Table does not exist, so create it
 			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + g_YahooIndexTableName + "` (" +
@@ -65,27 +65,27 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.info("     -Checking if table " + g_YahooIndexTableName + " is empty.");
+		log.trace("IY.1.2 Checking if table " + g_YahooIndexTableName + " is empty.");
 		if(tableEmpty(g_YahooIndexTableName)){
 			//if table is empty
 			//populate it
 			populateFreshDB(indexList);
 		}
 		
+		log.trace("IY.1.3 Updating the indexes with the most current info");
 		updateIndexes(indexList);
-		
-		log.info("--------------------------------------------------------------------");
 	}
 	
 	public void updateIndexes(String[] indexList) {
 		//Loop for each Price Volume DBs for each index
-		for(String index:indexList) {
-			log.info("Loop Iteration " + index + ":");
-			
-			log.info("     -Checking to see if table " + index +" is up to date.");
+		log.trace("IY.2.0 Looping through each index to update them");
+		for(String index:indexList) {			
+			log.trace("IY.2.1 Checking to see if table " + index +" is up to date.");
 			int indexDaysBehind = getIndexDaysBehind(index);
+			log.info("IY.2.2 " +index + " is " + indexDaysBehind + " days out of date.");
 			if(indexDaysBehind>0)
 			{
+				log.info("IY.2.3 Starting to update " + index + " in the DB");
 				updateIndexDB(index, indexDaysBehind);
 			}
 		}
@@ -119,13 +119,13 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 				newestDate = LocalDate.fromDateFields(rs.getDate("Date"));
 			}
 		} catch (SQLException e) {
-			log.info("SQLException: " + e.getMessage());
-			log.info("SQLState: " + e.getSQLState());
-			log.info("VendorError: " + e.getErrorCode());
+			log.error("SQLException: " + e.getMessage());
+			log.error("SQLState: " + e.getSQLState());
+			log.error("VendorError: " + e.getErrorCode());
 			e.printStackTrace();
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
-			log.info(e);
+			log.error(e);
 		} catch(NullPointerException e) {
 			// probably don't bother doing clean up
 		} finally {
@@ -142,12 +142,10 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		//calls the getNumberOfDaysFromNow method from market retriever and immediately returns
 		//how many behind the database is from the current date
 		//log.info("          The newest date in the database is " + newestDateInDB.toString() + ".");
-		log.info("          The newest date in the database is " + newestDate.toString() + ".");
-
+		log.debug("IY.3.1--The newest date in the database for " + index + "is " + newestDate.toString() + ".");
 		
 		int DBDaysTilNow = MarketRetriever.getNumberOfDaysFromNow(newestDate);
-		//log.info("          Which is " + DBDaysTilNow + " days out of date.");
-		log.info("          Which is " + DBDaysTilNow + " days out of date.");
+		
 		return DBDaysTilNow;//DBDaysTilNow;
 	}
 
@@ -179,7 +177,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		List<YahooIndexData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = MarketRetriever.getYahooURL(index, indexDaysBehind);
-
 
 		rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
 

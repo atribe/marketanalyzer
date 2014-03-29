@@ -25,7 +25,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
 		
-	private Thread t;
+	private static Thread t;
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -48,7 +48,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 		// TODO Auto-generated method stub	
 	}
 	
-	public boolean dbInitThreadIsAlive() {
+	public static boolean dbInitThreadIsAlive() {
 		// java.lang.Thread.State can be NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
 		System.out.println("State:" + t.getState());
 		System.out.println("Is alive?:" + t.isAlive());

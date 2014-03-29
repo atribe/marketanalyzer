@@ -76,9 +76,7 @@ public class MarketRetriever {
 	public static String getYahooURL(String symbol, int daysAgo) {
 		LocalDate endDate = new LocalDate();
 		LocalDate startDate = endDate.minusDays(daysAgo);
-		//TODO remove old date code
-		//GregorianCalendar calendarStart = new GregorianCalendar();
-		//calendarStart.add(Calendar.DAY_OF_MONTH, -daysAgo);//this subtracts the number of startDaysAgo from todays date.  The add command changes the calendar object
+
 		int a_startMonth, b_startDay, c_startYear;
 		int d_endMonth, e_endDay, f_endYear; 
 		a_startMonth = startDate.getMonthOfYear()-1;//Yahoo uses zero based month numbering, this gets the beginning dates month

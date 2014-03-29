@@ -44,8 +44,6 @@ public class DatabaseInitialization{
 			//Get a database connection
 			log.trace("3.1 Getting a connection");
 			connection = GenericDBSuperclass.getConnection();
-			
-			String test = PropCache.getCachedProps("threads.dbinit");
 	
 			/*
 			 * Dabase initialization Section
@@ -54,13 +52,13 @@ public class DatabaseInitialization{
 			log.trace("3.2 Creating IndexyahooDataTableManager");
 			m_indexYahooTable = new IndexYahooDataTableManager(connection);
 			//Initialize the price/volume databases for each index
-			log.trace("3.3 Initializing YahooIndexData Table");
+			log.info("3.3 Initializing YahooIndexData Table");
 			m_indexYahooTable.tableInitialization(indexList);
 	
 			//Initialize the parameter table
 			log.trace("3.4 Creating IndexParameterTableManager");
 			m_indexParamTable = new IndexParameterTableManager(connection);
-			log.trace("3.5 Initializing IndexParameter Table");
+			log.info("3.5 Initializing IndexParameter Table");
 			m_indexParamTable.tableInitialization(indexList);
 			
 			/*
@@ -72,7 +70,7 @@ public class DatabaseInitialization{
 			 */
 			log.trace("3.6 Creating IndexCalcsService");
 			m_indexAnalysisService = new IndexCalcsService(connection);
-			log.trace("3.7 Initializing IndexCalcs table");
+			log.info("3.7 Initializing IndexCalcs table");
 			m_indexAnalysisService.init(indexList);
 			
 		} catch (ClassNotFoundException e) {

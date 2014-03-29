@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
+import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 @Controller
 @RequestMapping("/")
@@ -22,11 +23,17 @@ public class RootController {
         ModelAndView mav = new ModelAndView();
         //the view name is the name of the jsp
         
-        //Getting the d-dates from the database
-        IndexCalcsService  indexCalcsService = new IndexCalcsService ();
-        if(indexCalcsService.isM_connectionAlive()) {
-        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
-        	mav.addObject("dDayList", dDayList);
+        if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
+	        //Getting the d-dates from the database
+	        IndexCalcsService  indexCalcsService = new IndexCalcsService ();
+	        if(indexCalcsService.isM_connectionAlive()) {
+	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
+	        	mav.addObject("dDayList", dDayList);
+	        }
+        } else {
+        	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
+        	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
         }
         
         mav.addObject("someText", "Listing all accounts!");
