@@ -60,6 +60,9 @@ public class IndexCalcsService {
 	}
 	*/
 	
+	/*
+	 * Converts the YahooIndexData object list into IndexCalcs object list
+	 */
 	public void setM_IndexCalcList(List<YahooIndexData> yahooIndexDataList) {
 		m_IndexCalcList = new ArrayList<IndexCalcs>();
 		for(YahooIndexData A:yahooIndexDataList)
@@ -96,17 +99,6 @@ public class IndexCalcsService {
 			log.error("SQLException: " + ex.getMessage());
 			log.error("SQLState: " + ex.getSQLState());
 			log.error("VendorError: " + ex.getErrorCode());
-		} finally {
-			try {
-				setM_connectionAlive(false);
-				m_connection.close();
-			} catch (NullPointerException ne) {
-				//do nothing, just means that the connection was never initialized
-				log.debug("Connection didn't need to be closed, it was never initialized");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -354,13 +346,11 @@ public class IndexCalcsService {
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < closePercentRequiredDrop /*This is rule #1*/)
 			{
 				ddayCount++;
-				m_IndexCalcList.get(i).setIsDDay(true);
-				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
+				m_IndexCalcList.get(i).setDistributionDay(Boolean.valueOf(true));
 			}
 			else
 			{
-				m_IndexCalcList.get(i).setIsDDay(false);
-				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), false);
+				m_IndexCalcList.get(i).setDistributionDay(Boolean.valueOf(false));
 			}
 		}
 	}
@@ -419,7 +409,7 @@ public class IndexCalcsService {
 					todaysClose <= previousDaysClose*(1+churnPriceRange) /*rule 3*/)
 			{
 				churningDayCount++;
-				m_IndexCalcList.get(i).setIsChurnDay(true);
+				m_IndexCalcList.get(i).setChurnDay(true);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
 			} else {
 				// {{ Churn day conditions set by the parameter db
@@ -444,7 +434,9 @@ public class IndexCalcsService {
 				
 				if(conditionsRequired == conditionsMet && conditionsRequired != 0)
 				{
-					m_IndexCalcList.get(i).setIsChurnDay(true);
+					m_IndexCalcList.get(i).setChurnDay(Boolean.valueOf(true));
+				} else {
+					m_IndexCalcList.get(i).setChurnDay(Boolean.valueOf(false));
 				}
 			}
 			//No need set to false because it was already done by the d-day method.
@@ -466,7 +458,7 @@ public class IndexCalcsService {
 
 			for(int j=i; j>i-dDayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
 
-				if( Boolean.TRUE.equals(m_IndexCalcList.get(j).getIsDDay()) || Boolean.TRUE.equals(m_IndexCalcList.get(j).getIsChurnDay()) )
+				if( Boolean.TRUE.equals(m_IndexCalcList.get(j).getDistributionDay()) || Boolean.TRUE.equals(m_IndexCalcList.get(j).getChurnDay()) )
 					m_IndexCalcList.get(i).addDDayCounter();
 			}
 		}
@@ -515,6 +507,13 @@ public class IndexCalcsService {
 
 		dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);
 		
+		try {
+			m_connection.close();
+			setM_connectionAlive(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return dDayList;
 	}
 
@@ -554,48 +553,7 @@ public class IndexCalcsService {
 		} catch(SQLException sqle) {
 			sqle.printStackTrace();
 		}
-		/*
-		 * commenting this code out while I try Apache Commons DbUtils
-		PreparedStatement ps = null;
 		
-		try {
-			ps = m_connection.prepareStatement(query);
-			ps.setString(1, startDate.toString());
-			ps.setString(2, endDate.toString());
-			ps.setString(3, symbol);
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				IndexCalcs singleRow = new IndexCalcs();
-				singleRow.setId(rs.getInt("id"));
-				singleRow.setSymbol(rs.getString("symbol"));
-				singleRow.setConvertedDate(rs.getDate("date"));
-				singleRow.setOpen(rs.getFloat("open"));
-				singleRow.setHigh(rs.getFloat("high"));
-				singleRow.setLow(rs.getFloat("low"));
-				singleRow.setClose(rs.getFloat("close"));
-				singleRow.setVolume(rs.getLong("volume"));
-				singleRow.
-				
-				dDayList.add(singleRow);
-			}
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			log.info("There was an error in the getRowsBetweenDatesBySymbol method. And that error is: ");
-			log.info(e.toString());
-			e.printStackTrace();
-		} finally {
-			if (ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				ps = null;
-			}
-		}
-		*/
 		return dDayList;
 		
 	}

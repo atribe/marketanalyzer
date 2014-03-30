@@ -38,9 +38,9 @@
 						<tr>
 							<td>${indexCalcs.id}</td>
 							<td>${indexCalcs.date}</td>
-							<td>${indexCalcs.getDDay()}</td>
-							<td>${indexCalcs.getChurnDay()}</td>
-							<td>${indexCalcs.dDayCounter}</td>
+							<td>${indexCalcs.distributionDay}</td>
+							<td>${indexCalcs.churnDay}</td>
+							<td>${indexCalcs.distributionDayCounter}</td>
 						</tr>
 						</c:forEach>
 						

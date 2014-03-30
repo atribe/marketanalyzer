@@ -26,14 +26,16 @@ public class RootController {
         if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
         	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
 	        //Getting the d-dates from the database
-	        IndexCalcsService  indexCalcsService = new IndexCalcsService ();
+	        IndexCalcsService  indexCalcsService = new IndexCalcsService();
 	        if(indexCalcsService.isM_connectionAlive()) {
 	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
 	        	mav.addObject("dDayList", dDayList);
 	        }
+	        log.debug("");
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
+        	
         }
         
         mav.addObject("someText", "Listing all accounts!");

@@ -32,17 +32,17 @@ public class IndexCalcs implements Serializable {
 	private float priceTrend35;
 	
 	//Analysis variables
-	private Boolean isDDay;
-	private Boolean isChurnDay;
-	private int dDayCounter;
-	private Boolean isFollowThruDay;
+	private Boolean distributionDay;
+	private Boolean churnDay;
+	private int distributionDayCounter;
+	private Boolean followThruDay;
 	
 	//Buy, sell, hold
 	private String dayAction;
 	//add more stuff as needed here
 
 	public IndexCalcs() {
-		dDayCounter=0;
+		distributionDayCounter=0;
 	}
 
 	@Override
@@ -216,20 +216,24 @@ public class IndexCalcs implements Serializable {
 		this.priceTrend35 = priceTrend35;
 	}
 	
-	/**
-	 * @return the dDayCounter
-	 */
-	public int getdDayCounter() {
-		return dDayCounter;
+	public Boolean getDistributionDay() {
+		return distributionDay;
 	}
-	/**
-	 * @param dDayCounter the dDayCounter to set
-	 */
-	public void setdDayCounter(int dDayCounter) {
-		this.dDayCounter = dDayCounter;
+
+	public void setDistributionDay(Boolean distributionDay) {
+		this.distributionDay = distributionDay;
 	}
+
+	public int getDistributionDayCounter() {
+		return distributionDayCounter;
+	}
+
+	public void setDistributionDayCounter(int distributionDayCounter) {
+		this.distributionDayCounter = distributionDayCounter;
+	}
+
 	public void addDDayCounter() {
-		dDayCounter++;
+		setDistributionDayCounter(getDistributionDayCounter() + 1);
 	}
 
 	public String getDayAction() {
@@ -240,27 +244,19 @@ public class IndexCalcs implements Serializable {
 		this.dayAction = dayAction;
 	}
 
-	public Boolean getIsDDay() {
-		return isDDay;
+	public Boolean getChurnDay() {
+		return churnDay;
 	}
 
-	public void setIsDDay(Boolean isDDay) {
-		this.isDDay = isDDay;
+	public void setChurnDay(Boolean churnDay) {
+		this.churnDay = churnDay;
 	}
 
-	public Boolean getIsChurnDay() {
-		return isChurnDay;
+	public Boolean getFollowThruDay() {
+		return followThruDay;
 	}
 
-	public void setIsChurnDay(Boolean isChurnDay) {
-		this.isChurnDay = isChurnDay;
-	}
-
-	public Boolean getIsFollowThruDay() {
-		return isFollowThruDay;
-	}
-
-	public void setIsFollowThruDay(Boolean isFollowThruDay) {
-		this.isFollowThruDay = isFollowThruDay;
+	public void setFollowThruDay(Boolean followThruDay) {
+		this.followThruDay = followThruDay;
 	}
 }

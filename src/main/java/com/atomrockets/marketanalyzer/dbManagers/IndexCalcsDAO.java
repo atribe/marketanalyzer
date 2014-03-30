@@ -37,10 +37,10 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			put("closeAvg200", "FLOAT");
 			put("volumeAvg50", "BIGINT(50)");
 			put("priceTrend35", "FLOAT");
-			put("isDDay", "TINYINT(1)");//1 == true, 0 == false
-			put("isChurnDay", "TINYINT(1)");//1 == true, 0 == false
-			put("dDayCounter", "INT");
-			put("isFollowThruDay", "TINYINT(1)");
+			put("distributionDay", "TINYINT(1)");//1 == true, 0 == false
+			put("churnDay", "TINYINT(1)");//1 == true, 0 == false
+			put("distributionDayCounter", "INT");
+			put("followThruDay", "TINYINT(1)");
 			put("dayAction", "VARCHAR(4)");//buy, or sell, or hold
 		}
 	};
@@ -117,57 +117,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 				" FOREIGN KEY (id) REFERENCES `" + g_YahooIndexTableName + "`(id))";
 		 return creationString;
 	}
-	
-	public void addDDayStatus(PreparedStatement ps, int id, boolean isDDay) throws SQLException {
-		ps.setInt(1, id);
-		if(isDDay)
-			ps.setInt(2, 1);
-		else
-			ps.setInt(2, 0);
-		ps.execute();
-	}
 
-	public List<IndexCalcs> getAllDDayData() throws SQLException {
-		
-		String query = "SELECT A.PVD_id, I.Date, A.IsDDay" 
-				+ " FROM `" + g_indexCalsTableName + "` I"
-				+ " INNER JOIN `" + g_YahooIndexTableName + "` A ON I.id = A.PVD_id"
-				+ " ORDER BY I.Date DESC";
-		PreparedStatement ps = null;
-		ps = m_connection.prepareStatement(query);
-		ResultSet rs = ps.executeQuery();
-		
-		List<IndexCalcs> AnalysisRows = new ArrayList<IndexCalcs>();
-		
-		while (rs.next()) {
-			IndexCalcs singleResult = new IndexCalcs();
-			singleResult.setId(rs.getInt("PVD_id"));
-			singleResult.setConvertedDate(rs.getDate("Date"));
-			Boolean isDDay;
-			if(rs.getInt("IsDDay")==1)
-				isDDay=true;
-			else
-				isDDay=false;
-			singleResult.setIsDDay(isDDay);
-			
-			AnalysisRows.add(singleResult);
-		}
-		
-		return AnalysisRows;
-	}
-
-	public void updateRow(String indexTableName, IndexCalcs analysisRow) throws SQLException {
-		
-		String updateQuery = "UPDATE `" + g_indexCalsTableName + "`"
-				+ " SET DDayCounter=?"
-				+ " WHERE id=?";
-		PreparedStatement ps = m_connection.prepareStatement(updateQuery);
-		ps.setInt(1, analysisRow.getdDayCounter());
-		ps.setLong(2, analysisRow.getId());
-		int rowsUpdated = ps.executeUpdate();
-		rowsUpdated = rowsUpdated;//just something to stop the debugging
-	}
-	
 	public void addAllRowsToDB(String indexTableName, List<IndexCalcs> analysisRows) {
 		
 		String insertQuery = addOrUpdatePreparedString();
