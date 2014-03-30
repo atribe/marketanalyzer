@@ -55,12 +55,6 @@ public class IndexCalcsService {
 	}
 
 	/*
-	public void setM_IndexCalcList(List<IndexCalcs> IndexCalcList) {
-		this.m_IndexCalcList = IndexCalcList;
-	}
-	*/
-	
-	/*
 	 * Converts the YahooIndexData object list into IndexCalcs object list
 	 */
 	public void setM_IndexCalcList(List<YahooIndexData> yahooIndexDataList) {
@@ -490,7 +484,7 @@ public class IndexCalcsService {
 		}
 	}
 
-	public List<IndexCalcs> getLatestDDays() {
+	public synchronized List<IndexCalcs> getLatestDDays() {
 		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
 		
 		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
@@ -502,7 +496,7 @@ public class IndexCalcsService {
 		 */
 		m_symbol = "^IXIC";
 		
-		LocalDate startDate = new LocalDate().minusDays(20);
+		LocalDate startDate = new LocalDate().minusDays(120);
 		LocalDate today = new LocalDate();
 
 		dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);

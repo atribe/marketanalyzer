@@ -25,7 +25,10 @@
 			<!-- End Header Div -->
 			<div id="content">
 				<div class="D_Day_Table">
-					<h3>Nasdaq Distribution Days in the Last 20 Days</h3>
+					<h3>Nasdaq Distribution Days in the Last 120 Days</h3>
+					<div id="dDayChart" class="chart">
+						<img src="<c:url value="charts/dday" />" />
+					</div>
 					<table class="DDays">
 						<tr>
 							<th>DB id</th>
