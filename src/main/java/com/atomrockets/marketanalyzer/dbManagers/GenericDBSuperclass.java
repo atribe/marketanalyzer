@@ -76,7 +76,7 @@ public class GenericDBSuperclass {
 		}
 		
 		DBName = PropCache.getCachedProps("db.dbname");
-		dbURL = "jdbc:mysql://"+host+":"+port+"/" + DBName;
+		dbURL = String.format("jdbc:mysql://%s:%s/%s", host, port, DBName);
 		
 		username = PropCache.getCachedProps("db.username");
 		password = PropCache.getCachedProps("db.password");
