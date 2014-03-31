@@ -37,7 +37,7 @@ public class PropCache {
 		if (cachedProps == null) {
 			cachedProps = new Properties();
 			Properties propSet1 = loadActivePropertiesFile();
-			Properties propSet2 = load("constant.properties");
+			Properties propSet2 = load("common.properties");
 			cachedProps.putAll(propSet1);
 			cachedProps.putAll(propSet2);
 		}

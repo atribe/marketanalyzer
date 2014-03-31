@@ -2,6 +2,7 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -28,7 +29,7 @@ public class DatabaseInitialization{
 	static Logger log = Logger.getLogger(DatabaseInitialization.class.getName());
 	
 	//							  		  Nasdaq  S&P500
-	static private String[] indexList = {"^IXIC","^GSPC","^SML","^MID"};
+	static private String[] indexList;
 	
 	//Database Table Managers
 	static private IndexYahooDataTableManager m_indexYahooTable;
@@ -45,6 +46,10 @@ public class DatabaseInitialization{
 			log.trace("3.1 Getting a connection");
 			connection = GenericDBSuperclass.getConnection();
 	
+			/*
+			 * Getting the index list from the property file
+			 */
+			indexList = PropCache.getCachedProps("index.names").split(",");
 			/*
 			 * Dabase initialization Section
 			 */

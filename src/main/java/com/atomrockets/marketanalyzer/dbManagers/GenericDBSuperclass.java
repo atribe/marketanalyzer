@@ -55,8 +55,7 @@ public class GenericDBSuperclass {
 	public static Connection getConnection() throws SQLException, ClassNotFoundException {
 		
 		m_connection = null;
-		String host, port, dbURL, username, password;
-		String DBName="marketpred";
+		String host, port, dbURL, username, password, DBName;
 		
 	
 		//Loading the JDBC MySQL drivers that are used by java.sql.Connection

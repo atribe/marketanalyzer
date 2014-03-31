@@ -28,7 +28,7 @@ public class RootController {
 	        //Getting the d-dates from the database
 	        IndexCalcsService  indexCalcsService = new IndexCalcsService();
 	        if(indexCalcsService.isM_connectionAlive()) {
-	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays();
+	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays("^IXIC");
 	        	mav.addObject("dDayList", dDayList);
 	        }
 	        log.debug("");

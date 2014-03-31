@@ -484,7 +484,7 @@ public class IndexCalcsService {
 		}
 	}
 
-	public synchronized List<IndexCalcs> getLatestDDays() {
+	public synchronized List<IndexCalcs> getLatestDDays(String symbol) {
 		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
 		
 		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
@@ -494,7 +494,7 @@ public class IndexCalcsService {
 		 * 3. get the ids for the symbol between the two ids
 		 * 4. get all those ids from both databases
 		 */
-		m_symbol = "^IXIC";
+		m_symbol = symbol;
 		
 		LocalDate startDate = new LocalDate().minusDays(120);
 		LocalDate today = new LocalDate();
