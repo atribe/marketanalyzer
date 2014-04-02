@@ -7,8 +7,8 @@
 	</div> <!-- close div banner -->
 	<nav>
 	  <ul>
-	    <li><a class="currentPage" href="<c:url value="" />">Home</a></li>
-	    <li><a href="tempDisplay">Temp Display</a></li>
+	    <li><a class="currentPage" href="<c:url value="/" />">Home</a></li>
+	    <li><a href="<c:url value="backtest" />">Backtest</a></li>
 	    <li><a href="contact">Contact</a></li>
 	  </ul>
 	</nav>

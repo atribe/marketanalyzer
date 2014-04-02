@@ -49,30 +49,38 @@
 		margin-right:21px;
 		margin-top:-10px;
 	}
-table, th, td{
-	border-width: 1px;
-	border-style: solid;
-	border-color: black;
-	border-collapse: collapse;
-	padding:5px;
-}
-th{
-	background-color:gray;
-	color:white;
-}
-
-#content #demo{
-	margin-top:20px;
-	border: 2px gray solid;
-	width:900px;
-}
-	#demo h3{
-		margin-top:2px;
-		text-align:center;
+	.DDays td {
+		border-width: 1px;
+		border-style: solid;
+		border-color: black;
+		border-collapse: collapse;
+		padding:5px;
 	}
-	#demo img{
-		width:750px;
-		margin-left:75px;
+	th{
+		border-width: 1px;
+		border-style: solid;
+		border-color: black;
+		border-collapse: collapse;
+		padding:5px;
+		background-color:gray;
+		color:white;
+	}
+#D_Day_Table h3{
+	text-align:center;
+}
+#dDayChart img{
+	margin-bottom:30px;
+}
+	#backtestIndexPicker td{
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	}
+	#backtestIndexPicker li{
+		display:inline;
+		list-style-type: none;
+		margin-right: 70px;
+		margin-left: 70px;
 	}
 #footer{
 	text-align:center;

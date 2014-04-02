@@ -24,32 +24,11 @@
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 			<!-- End Header Div -->
 			<div id="content">
-				<div class="D_Day_Table">
-					<h3>Nasdaq Distribution Days in the Last 120 Days</h3>
-					<div id="dDayChart" class="chart">
-						<img src="<c:url value="charts/dday" />" />
-					</div>
-					<table class="DDays">
-						<tr>
-							<th>DB id</th>
-							<th>Date</th>
-							<th>Is a D Day?</th>
-							<th>Churn or Regular</th>
-							<th>D Day Count</th>
-						</tr>
-						<c:forEach items="${dDayList}" var="indexCalcs">
-						<tr>
-							<td>${indexCalcs.id}</td>
-							<td>${indexCalcs.date}</td>
-							<td>${indexCalcs.distributionDay}</td>
-							<td>${indexCalcs.churnDay}</td>
-							<td>${indexCalcs.distributionDayCounter}</td>
-						</tr>
-						</c:forEach>
-						
-					</table>
+				<div id="backtestResults">
+					<h1>Sport result page</h1>  
+					Your favorite sport is: ${backtestModel.index}
 				</div>
-			</div>
+
 			<!-- Footer Div (in mpFooter file-->
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 			<!-- End Footer Div -->

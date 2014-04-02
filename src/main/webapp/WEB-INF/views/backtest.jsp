@@ -9,7 +9,7 @@
 
 <%@page isELIgnored="false" %>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 	<head>
 		<title>Test MarketAnalyzer</title>
 	
@@ -24,32 +24,21 @@
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 			<!-- End Header Div -->
 			<div id="content">
-				<div class="D_Day_Table">
-					<h3>Nasdaq Distribution Days in the Last 120 Days</h3>
-					<div id="dDayChart" class="chart">
-						<img src="<c:url value="charts/dday" />" />
+				<div id="backtest">
+					<p>Select the index to backtest.</p>
+					<form:form method="POST" commandName="backtestModel" action="backtestResults">
+					<div id="backtestIndexPicker">
+						<ul>
+							<form:radiobuttons element="li" path="index" items="${indexList}" />
+						</ul>
 					</div>
-					<table class="DDays">
-						<tr>
-							<th>DB id</th>
-							<th>Date</th>
-							<th>Is a D Day?</th>
-							<th>Churn or Regular</th>
-							<th>D Day Count</th>
-						</tr>
-						<c:forEach items="${dDayList}" var="indexCalcs">
-						<tr>
-							<td>${indexCalcs.id}</td>
-							<td>${indexCalcs.date}</td>
-							<td>${indexCalcs.distributionDay}</td>
-							<td>${indexCalcs.churnDay}</td>
-							<td>${indexCalcs.distributionDayCounter}</td>
-						</tr>
-						</c:forEach>
-						
-					</table>
+					<div>
+						<p>The model parameters for the selected index are:</p>
+					</div>
+					<input value="Submit" type="submit">
+					</form:form>
 				</div>
-			</div>
+
 			<!-- Footer Div (in mpFooter file-->
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 			<!-- End Footer Div -->
