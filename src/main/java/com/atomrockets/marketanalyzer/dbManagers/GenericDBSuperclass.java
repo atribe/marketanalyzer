@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
@@ -59,10 +60,10 @@ public class GenericDBSuperclass {
 		
 	
 		//Loading the JDBC MySQL drivers that are used by java.sql.Connection
-		Class.forName(PropCache.getCachedProps("db.driver"));//loads the mysql driver from the property file
-
+		//Class.forName(PropCache.getCachedProps("db.driver"));//loads the mysql driver from the property file
+		DbUtils.loadDriver(PropCache.getCachedProps("db.driver"));
+		
 		// ************For Open Shift Account************	  
-		//if(LoadProperties.environment.trim().equalsIgnoreCase("production")){
 		if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
 			staticLog.trace("-----Preparing to connect to OpenShift DB");
 			host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable

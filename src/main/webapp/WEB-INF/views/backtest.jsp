@@ -32,8 +32,11 @@
 							<form:radiobuttons element="li" path="index" items="${indexList}" />
 						</ul>
 					</div>
-					<div>
-						<p>The model parameters for the selected index are:</p>
+					<p>The model parameters for the selected index are:</p>
+					<div id="backtestModelParameters">
+						<ul>
+							<form:input path="" value="" />
+						</ul>
 					</div>
 					<input value="Submit" type="submit">
 					</form:form>

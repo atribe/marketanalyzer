@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.dbutils.QueryRunner;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
+
+import com.atomrockets.marketanalyzer.models.BacktestModel;
 
 /**
  * This subclass handles all database operations involving the price and volume data for each index
@@ -40,22 +43,21 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	 */
 	public void tableInitialization(String[] indexList) {
 		log.info("Starting Market Index Parameters Database Initialization");
+		
+		BacktestModel b = new BacktestModel();
+		
+		String tableName = b.getTableName();
 	
 		/*
 		 * Checking to see if a table with the indexParams name exists
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + g_parameterTableName + " exists.");
-		if(!tableExists(g_parameterTableName)) {
+		log.info("     -Checking if table " + tableName+ " exists.");
+		if(!tableExists(tableName)) {
 			// Table does not exist, so create it
-			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + g_parameterTableName + "` (" +
-					" id INT not NULL AUTO_INCREMENT," +
-					" symbol VARCHAR(10)," +
-					" var_name VARCHAR(100)," +
-					" var_value VARCHAR(50)," +
-					" PRIMARY KEY (id))";
-			createTable(createTableSQL, g_parameterTableName);
+			String createTableSQL = b.tableCreationString();
+			createTable(createTableSQL, tableName);
 		}
 
 		/*
@@ -64,8 +66,8 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.info("     -Checking if table " + g_parameterTableName + " is empty.");
-		if(tableEmpty(g_parameterTableName)){
+		log.info("     -Checking if table " + tableName + " is empty.");
+		if(tableEmpty(tableName)){
 			//if table is empty
 			//populate it
 			populateFreshParamDB(indexList);
@@ -82,8 +84,14 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	 */
 	private void populateFreshParamDB(String[] indexList){
 		
+		
 		//Creating a HashMap to store the parameters so they can be put in the DB
-		HashMap<String, String> parametersMap = new HashMap<String, String>();
+		//HashMap<String, String> parametersMap = new HashMap<String, String>();
+		BacktestModel b = new BacktestModel();
+		
+		PreparedStatement ps = null;
+		String[] columnNames = getColumnNames();
+		QueryRunner runner = new QueryRunner();
 		
 		for(String index:indexList)
 		{
@@ -92,6 +100,32 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				/*
 				 * Parameters with comments have been used. The rest are not yet used.
 				 */
+				b.setSymbol(index);
+				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
+				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setdDayWindow(20);
+				b.setdDayParam(9);
+				b.setChurnVolRange(0.03);
+				b.setChurnPriceRange(0.02);
+				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnAVG50On(false);
+				b.setChurnPriceTrend35On(false);
+				b.setChurnPriceTrend35(0.009);
+				b.setVolVolatilityOn(false);
+				b.setVolumeMult(1.11);
+				b.setVolMultTop(1.09);
+				b.setVolMultBot(1.01);
+				b.setPriceVolatilityOn(false);
+				b.setPriceMult(1.007);
+				b.setPriceMultTop(1.009);
+				b.setPriceMultBot(1.007);
+				b.setrDaysMin(3);
+				b.setrDaysMax(8);
+				b.setPivotTrend35On(false);
+				b.setPivotTrend35(-0.004);
+				b.setRallyVolAVG50On(true);
+				b.setRallyPriceHighOn(true);
+				/*  OLD Parameter Method
 				parametersMap.put("fileName", "ResultsNasdaq.txt");
 				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
@@ -99,7 +133,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("dDayParam", "9");//10 d days in a window = sell
 				parametersMap.put("churnVolRange", "0.03");
 				parametersMap.put("churnPriceRange", "0.02");
-				parametersMap.put("chrunPriceCloseHigherOn", "true");
+				parametersMap.put("churnPriceCloseHigherOn", "true");
 				parametersMap.put("churnAVG50On", "false");
 				parametersMap.put("churnPriceTrend350n", "false");
 				parametersMap.put("churnPriceTrend35", "0.009");
@@ -117,8 +151,35 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("pivotTrend35", "-0.004");
 				parametersMap.put("rallyVolAVG50On", "true");
 				parametersMap.put("rallyPriceHighOn", "true");
+				*/
 				break;
 			case "^GSPC":
+				b.setSymbol(index);
+				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
+				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setdDayWindow(20);
+				b.setdDayParam(9);
+				b.setChurnVolRange(0.03);
+				b.setChurnPriceRange(0.02);
+				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnAVG50On(false);
+				b.setChurnPriceTrend35On(false);
+				b.setChurnPriceTrend35(0.009);
+				b.setVolVolatilityOn(false);
+				b.setVolumeMult(1.11);
+				b.setVolMultTop(1.09);
+				b.setVolMultBot(1.01);
+				b.setPriceVolatilityOn(false);
+				b.setPriceMult(1.007);
+				b.setPriceMultTop(1.009);
+				b.setPriceMultBot(1.007);
+				b.setrDaysMin(3);
+				b.setrDaysMax(8);
+				b.setPivotTrend35On(false);
+				b.setPivotTrend35(-0.004);
+				b.setRallyVolAVG50On(true);
+				b.setRallyPriceHighOn(true);
+				/*  OLD Parameter Method
 				parametersMap.put("fileName", "ResultsSP500.txt");
 				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
@@ -144,9 +205,36 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("pivotTrend35", "-0.003");
 				parametersMap.put("rallyVolAVG50On", "false");
 				parametersMap.put("rallyPriceHighOn", "true");
+				*/
 				break;
 			case "^SML":
+				b.setSymbol(index);
+				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
+				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setdDayWindow(20);
+				b.setdDayParam(9);
+				b.setChurnVolRange(0.03);
+				b.setChurnPriceRange(0.02);
+				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnAVG50On(false);
+				b.setChurnPriceTrend35On(false);
+				b.setChurnPriceTrend35(0.009);
+				b.setVolVolatilityOn(false);
+				b.setVolumeMult(1.11);
+				b.setVolMultTop(1.09);
+				b.setVolMultBot(1.01);
+				b.setPriceVolatilityOn(false);
+				b.setPriceMult(1.007);
+				b.setPriceMultTop(1.009);
+				b.setPriceMultBot(1.007);
+				b.setrDaysMin(3);
+				b.setrDaysMax(8);
+				b.setPivotTrend35On(false);
+				b.setPivotTrend35(-0.004);
+				b.setRallyVolAVG50On(true);
+				b.setRallyPriceHighOn(true);
 				//set the same as S&P because I don't have anything saying differently
+				/*  OLD Parameter Method
 				parametersMap.put("fileName", "ResultsSP500.txt");
 				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
@@ -172,9 +260,36 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("pivotTrend35", "-0.003");
 				parametersMap.put("rallyVolAVG50On", "false");
 				parametersMap.put("rallyPriceHighOn", "true");
+				*/
 				break;
 			case "^MID":
+				b.setSymbol(index);
+				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
+				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setdDayWindow(20);
+				b.setdDayParam(9);
+				b.setChurnVolRange(0.03);
+				b.setChurnPriceRange(0.02);
+				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnAVG50On(false);
+				b.setChurnPriceTrend35On(false);
+				b.setChurnPriceTrend35(0.009);
+				b.setVolVolatilityOn(false);
+				b.setVolumeMult(1.11);
+				b.setVolMultTop(1.09);
+				b.setVolMultBot(1.01);
+				b.setPriceVolatilityOn(false);
+				b.setPriceMult(1.007);
+				b.setPriceMultTop(1.009);
+				b.setPriceMultBot(1.007);
+				b.setrDaysMin(3);
+				b.setrDaysMax(8);
+				b.setPivotTrend35On(false);
+				b.setPivotTrend35(-0.004);
+				b.setRallyVolAVG50On(true);
+				b.setRallyPriceHighOn(true);
 				//set the same as S&P because I don't have anything saying differently
+				/*  OLD Parameter Method
 				parametersMap.put("fileName", "ResultsSP500.txt");
 				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2013-12-31");//Analysis End Date
@@ -200,9 +315,35 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("pivotTrend35", "-0.003");
 				parametersMap.put("rallyVolAVG50On", "false");
 				parametersMap.put("rallyPriceHighOn", "true");
-
+				*/
 				break;
 			case "^DJI":
+				b.setSymbol(index);
+				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
+				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setdDayWindow(20);
+				b.setdDayParam(9);
+				b.setChurnVolRange(0.03);
+				b.setChurnPriceRange(0.02);
+				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnAVG50On(false);
+				b.setChurnPriceTrend35On(false);
+				b.setChurnPriceTrend35(0.009);
+				b.setVolVolatilityOn(false);
+				b.setVolumeMult(1.11);
+				b.setVolMultTop(1.09);
+				b.setVolMultBot(1.01);
+				b.setPriceVolatilityOn(false);
+				b.setPriceMult(1.007);
+				b.setPriceMultTop(1.009);
+				b.setPriceMultBot(1.007);
+				b.setrDaysMin(3);
+				b.setrDaysMax(8);
+				b.setPivotTrend35On(false);
+				b.setPivotTrend35(-0.004);
+				b.setRallyVolAVG50On(true);
+				b.setRallyPriceHighOn(true);
+				/*  OLD Parameter Method
 				parametersMap.put("fileName", "ResultsDow.txt");
 				parametersMap.put("startDate", "2013-05-01");//Analysis Start Date
 				parametersMap.put("endDate", "2009-12-31");//Analysis End Date
@@ -228,25 +369,34 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				parametersMap.put("pivotTrend35", "-0.003");
 				parametersMap.put("rallyVolAVG50On", "false");
 				parametersMap.put("rallyPriceHighOn", "true");
+				*/
 				break;
 			}
 	
 			//Get a set of the entries
-			Set<String> keys = parametersMap.keySet();
+			//Set<String> keys = parametersMap.keySet();
 	
 			//Get an iterator
-			Iterator<String> itr = keys.iterator();
+			//Iterator<String> itr = keys.iterator();
 	
 			log.info("Populating variable database for " + g_parameterTableName);
 	
 			//Add each entry to the DB
+			/*
 			while(itr.hasNext()) {
 				String key = (String)itr.next();
 				String value = parametersMap.get(key);
 				addVarPairRecord(index, key, value);
 			}
 			
-			parametersMap.clear();
+			parametersMap.clear();*/
+			
+			/*New insert method*/
+			//creating DbUtils QuerryRunner
+			
+			
+			runner.fillStatementWithBean(ps, b, columnNames);
+			b = new BacktestModel();
 		}
 
 	}
