@@ -30,8 +30,10 @@ public class BacktestController {
         List<String> indexList = BtS.getIndexList();
         mav.addObject("indexList", indexList);
         
+        BacktestModel b = new BacktestModel();
+        b.setdDayWindow(55);
         //adding a backtestModel object to the mav
-        mav.addObject("backtestModel", new BacktestModel());
+        mav.addObject("backtestModel", b);
         /*
          * 1. Select Index via Radio Button
          * 2. View Current Parameters and previous results

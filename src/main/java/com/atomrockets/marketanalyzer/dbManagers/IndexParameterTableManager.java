@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.models.BacktestModel;
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
 
 /**
  * This subclass handles all database operations involving the price and volume data for each index
@@ -40,8 +45,9 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	
 	/**
 	 * @param indexList
+	 * @throws SQLException 
 	 */
-	public void tableInitialization(String[] indexList) {
+	public void tableInitialization(String[] indexList) throws SQLException {
 		log.info("Starting Market Index Parameters Database Initialization");
 		
 		BacktestModel b = new BacktestModel();
@@ -80,9 +86,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	 * @param connection
 	 * @param indexList 
 	 * @param indexParams
+	 * @throws SQLException 
 	 * 
 	 */
-	private void populateFreshParamDB(String[] indexList){
+	private void populateFreshParamDB(String[] indexList) throws SQLException{
 		
 		
 		//Creating a HashMap to store the parameters so they can be put in the DB
@@ -90,11 +97,17 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 		BacktestModel b = new BacktestModel();
 		
 		PreparedStatement ps = null;
-		String[] columnNames = getColumnNames();
+		String[] columnNames = b.getColumnNameList();
+		String insertQuery = b.getInsertOrUpdateQuery();
 		QueryRunner runner = new QueryRunner();
+		
+		ps = m_connection.prepareStatement(insertQuery);
 		
 		for(String index:indexList)
 		{
+			//this parameter is true for every row set in this method
+			b.setCurrentParameters(true);
+			
 			switch(index){
 			case "^IXIC":
 				/*
@@ -393,96 +406,30 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			
 			/*New insert method*/
 			//creating DbUtils QuerryRunner
-			
-			
+
 			runner.fillStatementWithBean(ps, b, columnNames);
+			
+			ps.execute();
+		
 			b = new BacktestModel();
 		}
 
 	}
 
-	/**
-	 * @param connection
-	 * @param indexParams
-	 * @param key
-	 * @param value
-	 */
-	private void addVarPairRecord(String index, String key, String value) {
-		String insertQuery = "INSERT INTO `" + g_parameterTableName + "` "
-				+ "(symbol, var_name, var_value)"
-				+ "VALUES"
-				+ "(?,?,?)"
-				+ " ON DUPLICATE KEY UPDATE var_value=?";
-		PreparedStatement ps=null;
-		try {
-			ps = m_connection.prepareStatement(insertQuery);
-			ps.setString(1, index);
-			ps.setString(2, key);
-			ps.setString(3, value);
-			ps.setString(4, value);
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			log.info("SQLException: " + e.getMessage());
-			log.info("SQLState: " + e.getSQLState());
-			log.info("VendorError: " + e.getErrorCode());
-			e.printStackTrace();
-		} finally {
-			if (ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				ps = null;
-			}
-		}
-	}
-
-	public String getStringValue(String key){
-
-		String value;
-		String query = "SELECT var_value FROM `" + g_parameterTableName + "`"
-				+ " WHERE var_name=?";
-
-		try {
-			PreparedStatement selectStatement = m_connection.prepareStatement(query);
-			selectStatement.setString(1, key);
-			ResultSet rs = selectStatement.executeQuery();
-			if(rs.next()) {
-				value = rs.getString("var_value");
-			} else {
-				value = "Error, value not found from the given key. Or something else went really wrong.";
-			}
-		} catch (SQLException e) {
-			log.info("SQLException: " + e.getMessage());
-			log.info("SQLState: " + e.getSQLState());
-			log.info("VendorError: " + e.getErrorCode());
-			value = e.toString();
-			e.printStackTrace();
-		}
-		return value;
-	}
-	
-	public boolean getBooleanValue(String key){
-		String stringValue = getStringValue(key);
-		boolean boolValue = Boolean.parseBoolean(stringValue);
-		return boolValue;
-	}
-
-	public LocalDate getDateValue(String key){
-		String stringValue = getStringValue(key);
-		LocalDate dateValue = new LocalDate(stringValue);
-		return dateValue;
-	}
-
-	public int getIntValue(String key) {
-		String stringValue = getStringValue(key);
-		int intValue = Integer.parseInt(stringValue);
-		return intValue;
-	}
-	
-	public float getFloatValue(String key) {
-		String stringValue = getStringValue(key);
-		float floatValue = Float.parseFloat(stringValue);
-		return floatValue;
+	public BacktestModel getSymbolParameters(String symbol) throws SQLException {
+		BacktestModel b = new BacktestModel(symbol);
+		
+		String[] columnNames = b.getColumnNameList();
+		String getParametersQuery = b.getParameterQuery();
+		QueryRunner runner = new QueryRunner();
+		ResultSetHandler<BacktestModel> h = new BeanHandler<BacktestModel>(BacktestModel.class);
+		
+		b = runner.query(
+				m_connection,
+				getParametersQuery,
+				h,
+				symbol
+				);
+		return b;
 	}
 }

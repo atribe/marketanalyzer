@@ -25,8 +25,8 @@
 			<!-- End Header Div -->
 			<div id="content">
 				<div id="backtestResults">
-					<h1>Sport result page</h1>  
-					Your favorite sport is: ${backtestModel.index}
+					<h1>Symbol</h1>  
+					Your favorite sport is: ${backtestModel.symbol}
 				</div>
 
 			<!-- Footer Div (in mpFooter file-->

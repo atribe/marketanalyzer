@@ -29,16 +29,111 @@
 					<form:form method="POST" commandName="backtestModel" action="backtestResults">
 					<div id="backtestIndexPicker">
 						<ul>
-							<form:radiobuttons element="li" path="index" items="${indexList}" />
+							<form:radiobuttons element="li" path="symbol" items="${indexList}" />
 						</ul>
 					</div>
 					<p>The model parameters for the selected index are:</p>
 					<div id="backtestModelParameters">
 						<ul>
-							<form:input path="" value="" />
+							<li class="backtestLabel">Start Date</li>
+							<li><form:input class="backtestInput" path="startDate" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">End Date</li>
+							<li><form:input class="backtestInput" path="endDate" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">D Day Window</li>
+							<li><form:input class="backtestInput" path="dDayWindow" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">D Day Parameter</li>
+							<li><form:input class="backtestInput" path="dDayParam" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Volume Range</li>
+							<li><form:input class="backtestInput" path="churnVolRange" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Price Range</li>
+							<li><form:input class="backtestInput" path="churnPriceRange" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Price Close Higher On</li>
+							<li><form:input class="backtestInput" path="churnPriceCloseHigherOn" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Average 50 On</li>
+							<li><form:input class="backtestInput" path="churnAVG50On" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Price Trend 35 On</li>
+							<li><form:input class="backtestInput" path="churnPriceTrend35On" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Churn Price Trend 35</li>
+							<li><form:input class="backtestInput" path="churnPriceTrend35" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Volume Volatility On</li>
+							<li><form:input class="backtestInput" path="volVolatilityOn" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Volume Mult</li>
+							<li><form:input class="backtestInput" path="volumeMult" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Volume Mult Top</li>
+							<li><form:input class="backtestInput" path="volMultTop" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Volume Mult Bot</li>
+							<li><form:input class="backtestInput" path="volMultBot" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Price Volatility On</li>
+							<li><form:input class="backtestInput" path="priceVolatilityOn" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Price Mult</li>
+							<li><form:input class="backtestInput" path="priceMult" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Price Mult Top</li>
+							<li><form:input class="backtestInput" path="priceMultTop" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Price Mult Bot</li>
+							<li><form:input class="backtestInput" path="priceMultBot" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">R Days Min</li>
+							<li><form:input class="backtestInput" path="rDaysMin" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">R Days Max</li>
+							<li><form:input class="backtestInput" path="rDaysMax" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">pivotTrent35On</li>
+							<li><form:input class="backtestInput" path="pivotTrend35On" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">pivotTrent35</li>
+							<li><form:input class="backtestInput" path="pivotTrend35" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Rally Volume Average 50 On</li>
+							<li><form:input class="backtestInput" path="rallyVolAVG50On" /></li>
+						</ul>
+						<ul>
+							<li class="backtestLabel">Rally Price High On</li>
+							<li><form:input class="backtestInput" path="rallyPriceHighOn" /></li>
 						</ul>
 					</div>
-					<input value="Submit" type="submit">
+					<div class="clear">
+					<input class="submitButton" value="Submit" type="submit">
+					</div>
 					</form:form>
 				</div>
 

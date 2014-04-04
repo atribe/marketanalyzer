@@ -82,6 +82,27 @@
 		margin-right: 70px;
 		margin-left: 70px;
 	}
+	#backtestModelParameters ul{
+		display:inline;
+		list-style-type: none;
+		float:left;
+		padding-left:10px;
+		width:100px;
+		height:52px;
+	}
+	.backtestLabel{
+		font-size:10px;
+	}
+	.backtestInput{
+		width:60px;
+	}
+	
+	.clear{
+	clear:both;
+	}
+	
+/*---FOOTER css*/
 #footer{
+	clear:both;
 	text-align:center;
 }

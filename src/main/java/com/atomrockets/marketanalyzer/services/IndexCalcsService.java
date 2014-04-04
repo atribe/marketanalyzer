@@ -4,6 +4,7 @@ import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
+import com.atomrockets.marketanalyzer.models.BacktestModel;
 import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.models.YahooIndexData;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
@@ -37,6 +38,8 @@ public class IndexCalcsService {
 	private IndexYahooDataTableManager m_indexYahooTable;
 	private IndexParameterTableManager m_indexParamTable;
 	private IndexCalcsDAO m_indexCalcsDAO;
+	
+	private BacktestModel m_b;
 
 	//Index names
 	private String m_symbol;
@@ -137,6 +140,14 @@ public class IndexCalcsService {
 		log.info("--------------------------------------------------------------------");
 		log.info("Starting Index Analyzer for " + m_symbol);
 
+		//0. Get parameters for the given index
+		try {
+			m_b = m_indexParamTable.getSymbolParameters(getM_symbol());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//1. Setting the number of buffer days needed to calc averages and such
 		setBufferDays();
 
@@ -171,11 +182,10 @@ public class IndexCalcsService {
 		 * Conditions should be put in order of most amount days to fewest.
 		 * That way the if statements will progress through and stop on the longest one that is active.
 		 */
-		String bufferConditionCheck1 = "churnAVG50On";
-		String bufferConditionCheck2 = "pivotTrend35On";
-		if(m_indexParamTable.getBooleanValue(bufferConditionCheck1)) {
+		
+		if(m_b.getChurnAVG50On()) {
 			m_bufferDays=50;
-		} else if(m_indexParamTable.getBooleanValue(bufferConditionCheck2)) {
+		} else if(m_b.getPivotTrend35On()) {
 			m_bufferDays=35;
 		} else {
 			m_bufferDays=0;
@@ -302,7 +312,7 @@ public class IndexCalcsService {
 			checkForChurningDays();
 			
 			//Getting window length from parameter database
-			int dDayWindow = m_indexParamTable.getIntValue("dDayWindow");
+			int dDayWindow = m_b.getdDayWindow();
 		
 			//Counting up d-day that have fallen in a given window is handled in the following function
 			countDDaysInWindow(dDayWindow);
@@ -356,12 +366,13 @@ public class IndexCalcsService {
 		int churningDayCount=0;
 		
 		// {{ Getting variables from the parameter database
-		float churnVolRange = m_indexParamTable.getFloatValue("churnVolRange");
-		float churnPriceRange = m_indexParamTable.getFloatValue("churnPriceRange");
-		boolean churnPriceCloseHigherOn = m_indexParamTable.getBooleanValue("churnPriceCloseHigherOn");
-		boolean churnAVG50On = m_indexParamTable.getBooleanValue("churnAVG50On");
-		boolean churnPriceTrend35On = m_indexParamTable.getBooleanValue("churnPriceTrend35On");
-		float churnPriceTrend35 = m_indexParamTable.getFloatValue("churnPriceTrend35");
+		
+		float churnVolRange = m_b.getChurnVolRange();
+		float churnPriceRange = m_b.getChurnPriceRange();
+		boolean churnPriceCloseHigherOn = m_b.getChurnPriceCloseHigherOn();
+		boolean churnAVG50On = m_b.getChurnAVG50On();
+		boolean churnPriceTrend35On = m_b.getChurnPriceTrend35On();
+		float churnPriceTrend35 = m_b.getChurnPriceTrend35();
 		// }}
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{
@@ -465,12 +476,9 @@ public class IndexCalcsService {
 		int followThroughDayCount=0;
 		
 		// {{ Getting variables from the parameter database
-		String keyrDaysMax = "rDaysMax";
-		int rDaysMax = m_indexParamTable.getIntValue(keyrDaysMax);
-		String keypivotTrend35On = "pivotTrend35On";
-		boolean churnpivotTrend35On = m_indexParamTable.getBooleanValue(keypivotTrend35On);
-		String keypivotTrend35 = "pivotTrend35";
-		float pivotTrend35 = m_indexParamTable.getFloatValue(keypivotTrend35);
+		int rDaysMax = m_b.getrDaysMax();
+		boolean churnpivotTrend35On = m_b.getPivotTrend35On();
+		float pivotTrend35 = m_b.getPivotTrend35();
 		// }}
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 

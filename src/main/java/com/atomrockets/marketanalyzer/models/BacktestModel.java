@@ -48,6 +48,12 @@ public class BacktestModel {
 	private Boolean rallyVolAVG50On;
 	private Boolean rallyPriceHighOn;
 	
+	//empty constructor to qualify as a javabean
+	public BacktestModel() { }
+	//constructor that sets the symbol
+	public BacktestModel(String symbol) {
+		setSymbol(symbol);
+	}
 	
 	//Static method to assist in creating the table
 	private LinkedHashMap<String, String> getColumnNames() {
@@ -93,7 +99,63 @@ public class BacktestModel {
 		
 		return createTableSQL;
 	}
-
+	
+	public String[] getColumnNameList() {
+		LinkedHashMap<String, String> fieldMap = getColumnNames();
+		String [] columnNames = new String[fieldMap.size()];
+		int counter = 0;
+		
+		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			columnNames[counter] = entry.getKey();
+			counter++;
+		 }
+		
+		return columnNames;
+	}
+	
+	public String getInsertOrUpdateQuery() {
+		LinkedHashMap<String, String> fieldMap = getColumnNames();
+		
+		//******Start add string builder******
+		String insertQuery = "INSERT INTO `" + getTableName() + "` "
+				+ "(";
+		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			insertQuery += entry.getKey() + ",";
+		 }
+		
+		/*This line is to clean off the last "," added by the previous loop.
+		So my code isn't perfect, but it is still pretty cool.*/
+		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
+		
+		insertQuery += ") VALUES"
+				+ "(";
+		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			insertQuery += "?,";
+		 }
+		
+		//Another last comma removal
+		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
+		
+		insertQuery += ") ON DUPLICATE KEY UPDATE ";
+		
+		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			insertQuery += entry.getKey() + "=VALUES(" + entry.getKey() + "), ";
+		}
+		
+		//Another last comma removal
+		insertQuery = insertQuery.substring(0, insertQuery.length()-2);
+		//******End add string builder******
+		
+		return insertQuery;
+	}
+	public String getParameterQuery() {
+		String query = "SELECT *"
+				+ " FROM `" + getTableName() + "`"
+				+ " WHERE symbol = ?"
+				+ " AND currentParameters = 1";
+		
+		return query;
+	}
 	/*
 	 * Getters and Setters
 	 */
