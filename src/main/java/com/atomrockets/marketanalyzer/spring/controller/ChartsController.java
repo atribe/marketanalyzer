@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.atomrockets.marketanalyzer.plotting.PlotDDay;
+import com.atomrockets.marketanalyzer.plotting.PlotOHLC;
 
 @Controller
 @RequestMapping("/charts")
@@ -24,6 +25,20 @@ public class ChartsController {
 		response.setContentType("image/png");
 		
 		JFreeChart chart = PlotDDay.createChart();
+		
+		try {
+    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);
+    		response.getOutputStream().close();
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+    	}
+	}
+	
+	@RequestMapping(value = "/OHLC", method = RequestMethod.GET)
+	public void drawOHLCChart(HttpServletResponse response) {
+		response.setContentType("image/png");
+		
+		JFreeChart chart = PlotOHLC.createCombinedChart("^IXIC");
 		
 		try {
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);

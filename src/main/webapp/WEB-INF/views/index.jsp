@@ -24,7 +24,14 @@
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 			<!-- End Header Div -->
 			<div id="content">
+				<div class="OHLCSection">
+					<div class="sectionHeader"><h2>Index OHLC Section</h2></div>
+					<div id="OHLCChart" class="chart">
+						<img src="<c:url value="charts/OHLC" />" />
+					</div>
+				</div>
 				<div class="D_Day_Table">
+					<div class="sectionHeader"><h2>D Day Section</h2></div>
 					<h3>Nasdaq Distribution Days in the Last 120 Days</h3>
 					<div id="dDayChart" class="chart">
 						<img src="<c:url value="charts/dday" />" />

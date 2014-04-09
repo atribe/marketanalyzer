@@ -3,20 +3,24 @@
 	margin: 0 auto;
 	font-family: Verdana, Geneva, sans-serif;
 }
+/*---Generic css---*/
 .clear {
 	clear:both;
 }
+
+/*---HEADER css---*/
 #header {
-	height:90px;
+	height:80px;
 	border-bottom:solid black 1px;
+	margin-bottom:10px;
 }
 	#banner{
 		float:left;
-		height:90px;
+		height:100%;
 	}
 		#banner h1{
 			font-size:40px;
-			line-height:90px;
+			line-height:80px;
 			margin-top:0;
 			margin-bottom:0;
 			margin-left:20px;
@@ -42,6 +46,15 @@
 		nav .currentPage {
 			color:#7CBEC6;
 		}
+		
+/*---Content css---*/
+.sectionHeader{
+	border:solid black 1px;
+	width:100%;
+	text-align:center;
+	
+}
+
 	#headerDate{
 		clear:right;
 		float:right;
@@ -101,7 +114,7 @@
 	clear:both;
 	}
 	
-/*---FOOTER css*/
+/*---FOOTER css---*/
 #footer{
 	clear:both;
 	text-align:center;

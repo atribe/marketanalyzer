@@ -27,6 +27,12 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 * log
 	 * 
 	 */
+	public IndexYahooDataTableManager() throws ClassNotFoundException, SQLException {
+		log.trace("IY.0 Yahoo Table Manager Created");
+		
+		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
+		m_connection = getConnection();
+	}
 	
 	public IndexYahooDataTableManager(Connection connection) {
 		log.trace("IY.0 Yahoo Table Manager Created");
@@ -183,7 +189,6 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		// extract price and volume data for URL, # of yahoo days
 		addRecordsFromData(rowsFromYahoo);
 	}
-
 	
 	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
 		//This query ignores duplicate dates
