@@ -68,18 +68,21 @@ public class GenericDBSuperclass {
 			staticLog.trace("-----Preparing to connect to OpenShift DB");
 			host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable
 			port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");//$OPENSHIFT_MYSQL_DB_PORT is also an OpenShift variable
+			username = PropCache.getCachedProps("OpenShiftDB.username");
+			password = PropCache.getCachedProps("OpenShiftDB.password");
 		}else{
 			// ************For Local Account************
 			staticLog.trace("-----Preparing to connect to Local Xampp DB");
-			host = PropCache.getCachedProps("db.host");
-			port = PropCache.getCachedProps("db.port");
+			host = PropCache.getCachedProps("localhostdb.host");
+			port = PropCache.getCachedProps("localhostdb.port");
+			username = PropCache.getCachedProps("localhostdb.username");
+			password = PropCache.getCachedProps("localhostdb.password");
 		}
 		
 		DBName = PropCache.getCachedProps("db.dbname");
 		dbURL = String.format("jdbc:mysql://%s:%s/%s", host, port, DBName);
 		
-		username = PropCache.getCachedProps("db.username");
-		password = PropCache.getCachedProps("db.password");
+		
 			
 		m_connection = DriverManager.getConnection(dbURL, username, password);
 		staticLog.info("Connection established to " + DBName);
