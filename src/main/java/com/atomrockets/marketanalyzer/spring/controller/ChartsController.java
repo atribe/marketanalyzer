@@ -41,7 +41,7 @@ public class ChartsController {
 		JFreeChart chart = PlotOHLC.createCombinedChart("^IXIC");
 		
 		try {
-    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);
+    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  600);
     		response.getOutputStream().close();
     	} catch (IOException ex) {
     		ex.printStackTrace();

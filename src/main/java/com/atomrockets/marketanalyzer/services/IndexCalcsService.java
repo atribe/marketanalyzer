@@ -522,6 +522,28 @@ public class IndexCalcsService {
 	public List<IndexCalcs> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
 		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
 		
+		//Converting the dates into valid dates in the db
+		//1. checks the provided date and then goes backwards looking for a valid date
+		IndexCalcs first = m_indexYahooTable.getValidDate(symbol, startDate, false);
+		if(first==null) {
+			//2. if it didn't find a valid date (hence the IndexCalcs returned is null) then look forward
+			 first = m_indexYahooTable.getValidDate(symbol, startDate, true);
+		}
+		//3. if the first is still null get the first value in the database for that symbol
+		if(first==null) {
+			first = m_indexYahooTable.getFirstBySymbol(symbol);
+		}
+		
+		//1. checks the provided date and then goes backwards looking for a valid date
+		IndexCalcs last = m_indexYahooTable.getValidDate(symbol, endDate, false);
+		if(last == null) {
+			//2. if it didn't find a valid date (hence the IndexCalcs returned is null) then look forward
+			last = m_indexYahooTable.getValidDate(symbol, endDate, true);
+		}
+		//3. if the first is still null get the first value in the database for that symbol
+		if(last==null) {
+			last = m_indexYahooTable.getLastBySymbol(symbol);
+		}
 		String YahooTableName = m_indexCalcsDAO.getG_YahooIndexTableName();
 		String IndexCalcTableName = m_indexCalcsDAO.getG_indexCalsTableName();
 		
@@ -573,4 +595,5 @@ public class IndexCalcsService {
 		this.m_connectionAlive = m_connectionAlive;
 	}
 
+	
 }

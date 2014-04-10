@@ -416,4 +416,58 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 		return dataPoint;
 	}
+
+	public IndexCalcs getBySymbolAndDate(String symbol, LocalDate date) {
+		IndexCalcs dataPoint=null;
+		
+		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+				+ " WHERE `symbol` = ?"
+				+ " AND `date` = ?";
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		
+		try{
+			dataPoint = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		symbol,
+		    		date.toDate());
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		
+		return dataPoint;
+	}
+	private boolean checkDate(String symbol, LocalDate date) {
+		IndexCalcs a = getBySymbolAndDate(symbol, date);
+		if(a!=null)
+			return true;
+		else
+			return false;
+	}
+	
+	public IndexCalcs getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
+		int counter=0;
+		
+		while(!checkDate(symbol, date) && counter < 7) {
+			if(futureSearchDirection)
+				date = date.plusDays(1);
+			else
+				date = date.minusDays(1);
+			counter++;
+		}
+		
+		IndexCalcs a = getBySymbolAndDate(symbol, date);;
+		
+		return a;
+	}
 }

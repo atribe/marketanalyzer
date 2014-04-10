@@ -9,9 +9,11 @@ import java.util.Enumeration;
 import org.apache.log4j.Appender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
@@ -77,7 +79,7 @@ public class DatabaseInitialization{
 			m_indexAnalysisService = new IndexCalcsService(connection);
 			log.info("3.7 Initializing IndexCalcs table");
 			//skipping this while I work on the view portion of the program
-			m_indexAnalysisService.init(indexList);
+			//m_indexAnalysisService.init(indexList);
 			
 		} catch (ClassNotFoundException e) {
 			// Handles errors if the JDBC driver class not found.
