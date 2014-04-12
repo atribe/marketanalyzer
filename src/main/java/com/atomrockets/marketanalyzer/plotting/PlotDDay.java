@@ -9,8 +9,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -23,8 +21,6 @@ import com.atomrockets.marketanalyzer.spring.init.PropCache;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotDDay {
-
-	private static final long serialVersionUID = 1L;
 	
 	static Logger log = Logger.getLogger(PlotDDay.class.getName());
 	
@@ -53,12 +49,14 @@ public class PlotDDay {
 	        plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
 	                
 	        // Set series line styles
+	        /*
 	        XYItemRenderer r = plot.getRenderer();
 	        if (r instanceof XYLineAndShapeRenderer) {
 	            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
 	            //renderer.setShapesVisible(true);
 	            //renderer.setShapesFilled(true);
 	        }
+	        */
 	        
 	        // Set date axis style
 	        DateAxis axis = (DateAxis) plot.getDomainAxis();
@@ -73,7 +71,8 @@ public class PlotDDay {
      *
      * @return the dataset.
      */
-    private static XYDataset createDataset(String symbol) {
+    @SuppressWarnings("unused")
+	private static XYDataset createDataset(String symbol) {
 
         TimeSeries s1 = new TimeSeries(symbol);
         

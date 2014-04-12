@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
+
 /**
  * 
  * @author Allan
@@ -24,7 +26,8 @@ public class marketAnalyzerListener implements ServletContextListener{
 	private MarketsDBInitRunnable maBean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
-		
+	protected static Logger staticLog = Logger.getLogger(marketAnalyzerListener.class.getName());
+	
 	private static Thread t;
 	
 	@Override
@@ -50,8 +53,8 @@ public class marketAnalyzerListener implements ServletContextListener{
 	
 	public static boolean dbInitThreadIsAlive() {
 		// java.lang.Thread.State can be NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
-		System.out.println("State:" + t.getState());
-		System.out.println("Is alive?:" + t.isAlive());
+		String thread_name = PropCache.getCachedProps("threads.dbinit");
+		staticLog.debug("Checking thread state. Thread name: " + thread_name + " State:" + t.getState() + " and currently is alive? " + t.isAlive());
 		return t.isAlive();
 	}
 }

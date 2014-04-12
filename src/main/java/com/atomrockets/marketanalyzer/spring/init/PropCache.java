@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 
 /*
  * From: http://kielczewski.eu/2013/11/setting-active-profile-and-property-sources-in-spring-mvc/

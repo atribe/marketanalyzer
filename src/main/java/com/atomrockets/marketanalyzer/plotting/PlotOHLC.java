@@ -36,8 +36,6 @@ import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotOHLC {
-
-	private static final long serialVersionUID = 1L;
 	
 	static Logger log = Logger.getLogger(PlotOHLC.class.getName());
 	

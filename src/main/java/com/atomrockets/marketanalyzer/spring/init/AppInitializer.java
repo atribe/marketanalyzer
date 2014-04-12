@@ -13,7 +13,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.atomrockets.marketanalyzer.spring.controller.AccountController;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
@@ -26,7 +25,6 @@ public class AppInitializer implements WebApplicationInitializer {
     private static final String SPRING_PROPERTIES_FILE_NAME = "spring.properties";
     private static final String ACTIVE_PROFILE_PROPERTY_NAME = "spring.profiles.active";
     private static final String DEFAULT_PROFILE = "dev";
-    private static final PropCache propCache = new PropCache();
 	
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -45,7 +43,7 @@ public class AppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.setConfigLocation(CONFIG_LOCATION);
         
-        Properties prop = propCache.load(SPRING_PROPERTIES_FILE_NAME);
+        Properties prop = PropCache.load(SPRING_PROPERTIES_FILE_NAME);
         context.getEnvironment().setActiveProfiles(prop.getProperty(ACTIVE_PROFILE_PROPERTY_NAME, DEFAULT_PROFILE));
         return context;
     }

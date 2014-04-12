@@ -9,6 +9,7 @@ import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
+import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -465,6 +466,7 @@ public class IndexCalcsService {
 			}
 		}
 	}
+	/*
 
 	private void followThruAnalysis() {
 		log.info("          Checking to see if each day is a Follow Through Day");
@@ -480,38 +482,36 @@ public class IndexCalcsService {
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{
-			/*
-			 * this part gets followthrough days
-			 * 
-			 */
+			
+			// this part gets followthrough days
+			 
 			double rallyPriceHigh = 0;
 			
 		}
 	}
-
+	*/
 	public synchronized List<IndexOHLCVCalcs> getLatestDDays(String symbol) {
 		List<IndexOHLCVCalcs> dDayList = new ArrayList<IndexOHLCVCalcs>();
 		
-		if(m_indexCalcsDAO.tableExists(IndexCalcs.getTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
-		/*
-		 * 1. get the id for the begin date = 20 days previous
-		 * 2. get the id for the end date = today
-		 * 3. get the ids for the symbol between the two ids
-		 * 4. get all those ids from both databases
-		 */
-		m_symbol = symbol;
-		
-		LocalDate startDate = new LocalDate().minusDays(120);
-		LocalDate today = new LocalDate();
-
-		dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);
-		
-		try {
-			m_connection.close();
-			setM_connectionAlive(false);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(m_indexCalcsDAO.tableExists(IndexCalcs.getTableName()))
+		{
+			/*
+			 * 1. Select dates 
+			 */
+			m_symbol = symbol;
+			
+			LocalDate startDate = new LocalDate().minusDays(120);
+			LocalDate today = new LocalDate();
+	
+			dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);
+			
+			try {
+				m_connection.close();
+				setM_connectionAlive(false);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return dDayList;
 	}
@@ -547,7 +547,7 @@ public class IndexCalcsService {
 		String query = "SELECT *"
 				+ " FROM `" + YahooTableName + "` Y"
 				+ " INNER JOIN `" + IndexCalcTableName + "` C"
-				+ " ON C.id = Y.id"
+				+ " ON C.OHLCid = Y.id"
 				+ " WHERE Y.date BETWEEN ? and ?"
 				+ " AND Y.symbol = ?"
 				+ " ORDER BY Y.date ASC";

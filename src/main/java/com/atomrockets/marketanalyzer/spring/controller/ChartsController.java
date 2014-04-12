@@ -22,14 +22,18 @@ public class ChartsController {
 
 	@RequestMapping(value = "/dday", method = RequestMethod.GET)
 	public void drawDDayChart(HttpServletResponse response) {
-		response.setContentType("image/png");
-		
-		JFreeChart chart = PlotDDay.createChart();
 		
 		try {
-    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);
-    		response.getOutputStream().close();
-    	} catch (IOException ex) {
+			JFreeChart chart = PlotDDay.createChart();
+			
+			if(chart!=null) {
+				//Setting the response type
+				response.setContentType("image/png");
+				ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);
+				response.getOutputStream().close();
+		    	
+			}
+		} catch (IOException ex) {
     		ex.printStackTrace();
     	}
 	}
@@ -39,12 +43,13 @@ public class ChartsController {
 		response.setContentType("image/png");
 		
 		JFreeChart chart = PlotOHLC.createChart("^IXIC");
-		
-		try {
-    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  600);
-    		response.getOutputStream().close();
-    	} catch (IOException ex) {
-    		ex.printStackTrace();
-    	}
+		if(chart!=null) {
+			try {
+	    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  600);
+	    		response.getOutputStream().close();
+	    	} catch (IOException ex) {
+	    		ex.printStackTrace();
+	    	}
+		}
 	}
 }
