@@ -2,7 +2,6 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +12,12 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.joda.time.LocalDate;
 
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
+import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.helpers.MarketRetriever;
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
-import com.atomrockets.marketanalyzer.models.YahooIndexData;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
-public class IndexYahooDataTableManager extends GenericDBSuperclass {
+public class OHLCVDao extends GenericDBSuperclass {
 	
 	/*
 	 * Important Stuff inherited from GenericDBSuperclass
@@ -26,15 +25,15 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	 * m_connection
 	 * log
 	 * 
-	 */
-	public IndexYahooDataTableManager() throws ClassNotFoundException, SQLException {
+	 */	
+	public OHLCVDao() throws ClassNotFoundException, SQLException {
 		log.trace("IY.0 Yahoo Table Manager Created");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
 		m_connection = getConnection();
 	}
 	
-	public IndexYahooDataTableManager(Connection connection) {
+	public OHLCVDao(Connection connection) {
 		log.trace("IY.0 Yahoo Table Manager Created");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
@@ -49,20 +48,18 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.trace("IY.1.1 Checking if table " + g_YahooIndexTableName + " exists.");
-		if(!tableExists(g_YahooIndexTableName)) {
+		
+		
+		OHLCVData a = new OHLCVData();
+		
+		@SuppressWarnings("static-access")
+		String tableName =a.getTablename();
+		
+		log.trace("IY.1.1 Checking if table " + tableName + " exists.");
+		if(!tableExists(tableName)) {
 			// Table does not exist, so create it
-			String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + g_YahooIndexTableName + "` (" +
-					" id INT not NULL AUTO_INCREMENT," +
-					" symbol VARCHAR(10)," +
-					" date DATE not NULL," +
-					" open FLOAT(20)," +
-					" high FLOAT(20)," +
-					" low FLOAT(20)," +
-					" close FLOAT(20)," +
-					" volume BIGINT(50)," +
-					" PRIMARY KEY (id))";
-			createTable(createTableSQL, g_YahooIndexTableName);
+			String createTableSQL = a.tableCreationString();
+			createTable(createTableSQL, tableName);
 		}
 		
 		/*
@@ -71,10 +68,9 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		 * If not, check if they are up to date
 		 * 		If not, update them
 		 */
-		log.trace("IY.1.2 Checking if table " + g_YahooIndexTableName + " is empty.");
-		if(tableEmpty(g_YahooIndexTableName)){
-			//if table is empty
-			//populate it
+		log.trace("IY.1.2 Checking if table " + tableName + " is empty.");
+		if(tableEmpty(tableName)){
+			//if table is empty -> populate it
 			populateFreshDB(indexList);
 		}
 		
@@ -85,44 +81,50 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 	public void updateIndexes(String[] indexList) {
 		//Loop for each Price Volume DBs for each index
 		log.trace("IY.2.0 Looping through each index to update them");
-		for(String index:indexList) {			
-			log.trace("IY.2.1 Checking to see if table " + index +" is up to date.");
-			int indexDaysBehind = getIndexDaysBehind(index);
-			log.info("IY.2.2 " +index + " is " + indexDaysBehind + " days out of date.");
+		
+		for(String symbol:indexList) {			
+			log.trace("IY.2.1 Checking to see if table " + symbol +" is up to date.");
+			int indexDaysBehind = getIndexDaysBehind(symbol);
+			
+			log.info("IY.2.2 " +symbol + " is " + indexDaysBehind + " days out of date.");
 			if(indexDaysBehind>0)
 			{
-				log.info("IY.2.3 Starting to update " + index + " in the DB");
-				updateIndexDB(index, indexDaysBehind);
+				log.info("IY.2.3 Starting to update " + symbol + " in the DB");
+				updateIndexDB(symbol, indexDaysBehind);
 			}
 		}
 	}
 
-	private int getIndexDaysBehind(String index) {
+	private int getIndexDaysBehind(String symbol) {
 
 		//initializing variables
 		//java.sql.Date newestDateInDB=null;
 		LocalDate newestDate=null;
 
-		String getNewestDateInDBQuery = "SELECT Date FROM `" + g_YahooIndexTableName + "` "
-				+ "WHERE `symbol` = '" + index + "' "
+		String getNewestDateInDBQuery = "SELECT Date FROM `" + OHLCVData.getTablename() + "` "
+				+ "WHERE `symbol` = ?"
 				+ "ORDER BY date "
 				+ "DESC LIMIT 1";
-		PreparedStatement ps=null;
-		ResultSet rs = null;
+	
+		OHLCVData a = new OHLCVData();
 
 		try {
-			// Querying the database for the newest date
-			ps = m_connection.prepareStatement(getNewestDateInDBQuery);
-			rs = ps.executeQuery();
+			QueryRunner runner = new QueryRunner();
+			ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
+			
+			a = runner.query(
+					m_connection,
+					getNewestDateInDBQuery,
+					h,
+					symbol
+					);
 
-			if (!rs.next() ) {
-				log.info("no data");
-				//java.util.Calendar cal = java.util.Calendar.getInstance(); 
-				//newestDateInDB = new Date(cal.getTimeInMillis());
+			if (a == null ) {
+				log.debug("no data in the database for the symbol " + symbol );
 				newestDate = new LocalDate();
 			} else {
 				//newestDateInDB = rs.getDate("Date");
-				newestDate = LocalDate.fromDateFields(rs.getDate("Date"));
+				newestDate = a.getLocalDate();
 			}
 		} catch (SQLException e) {
 			log.error("SQLException: " + e.getMessage());
@@ -134,21 +136,12 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			log.error(e);
 		} catch(NullPointerException e) {
 			// probably don't bother doing clean up
-		} finally {
-			//This if statement doesn't make much sense
-			try {
-				if(rs!=null) {
-					rs.close();
-				}
-				if(ps!=null) {
-					ps.close();
-				}
-			} catch (SQLException sqlEx) { } // ignore
-		}
+		} 
+		
 		//calls the getNumberOfDaysFromNow method from market retriever and immediately returns
 		//how many behind the database is from the current date
 		//log.info("          The newest date in the database is " + newestDateInDB.toString() + ".");
-		log.debug("IY.3.1--The newest date in the database for " + index + "is " + newestDate.toString() + ".");
+		log.debug("IY.3.1--The newest date in the database for " + symbol + "is " + newestDate.toString() + ".");
 		
 		int DBDaysTilNow = MarketRetriever.getNumberOfDaysFromNow(newestDate);
 		
@@ -162,7 +155,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			log.info("     -Populating Table with data for " + index);		
 		
 			//Container to hold the downloaded data
-			List<YahooIndexData> rowsFromYahoo = null;
+			List<OHLCVData> rowsFromYahoo = null;
 			//This date represents the beginning of time as far as any of the indexes go
 			LocalDate beginningDate = new LocalDate(PropCache.getCachedProps("yahoo.startdate"));
 	
@@ -180,7 +173,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 
 	public void updateIndexDB(String index,int indexDaysBehind) {
 		//Container to hold the downloaded data
-		List<YahooIndexData> rowsFromYahoo = null;
+		List<OHLCVData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = MarketRetriever.getYahooURL(index, indexDaysBehind);
 
@@ -190,9 +183,9 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		addRecordsFromData(rowsFromYahoo);
 	}
 	
-	public void initialAddRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
+	public void initialAddRecordsFromData(List<OHLCVData> rowsFromYahoo) {
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
+		String insertQuery = "INSERT INTO `" + OHLCVData.getTablename() + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		String [] columnNames = {"symbol","date","open","high","low","close","volume"};
@@ -236,46 +229,46 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 	
-	public void addRecordsFromData(List<YahooIndexData> rowsFromYahoo) {
+	public void addRecordsFromData(List<OHLCVData> rowsFromYahoo) {
 
-		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + g_YahooIndexTableName + "` "
-				+ "(symbol,date,open,high,low,close,volume) VALUES"
-				+ "(?,?,?,?,?,?,?)";
-		PreparedStatement ps = null;
-		int batchSize = 20;
+		OHLCVData a = new OHLCVData();
+		
+		String insertQuery = a.getInsertOrUpdateQuery();
+		
+		String[] columnNames = a.getColumnNameList();
+		
+		PreparedStatement ps=null;
+		int batchSize = 100;
 		
 		try {
+			long counter = 0;
+			
 			//prepare the statement
 			ps = m_connection.prepareStatement(insertQuery);
-
-			//Iterate through the list backwards. I want the oldest date in first and this achieves that
-			for (int i = rowsFromYahoo.size()-1; i >= 0 ; i--) {
+			
+			//creating DbUtils QuerryRunner
+			QueryRunner runner = new QueryRunner();
+			
+			for(OHLCVData row : rowsFromYahoo) {
+				//DbUtils QueryRunner fills in the preparedStatement
+				runner.fillStatementWithBean(ps, row, columnNames);
 				
-				//Check if the row is already in the DB
-				if( !isAlreadyInDB(rowsFromYahoo.get(i)) ) {
-					//if the row is not in the DB prepare it for insertion
-					ps.setString(1, rowsFromYahoo.get(i).getSymbol());
-					ps.setString(2, rowsFromYahoo.get(i).getDate());
-					ps.setDouble(3,  rowsFromYahoo.get(i).getOpen());
-					ps.setDouble(4,  rowsFromYahoo.get(i).getHigh());
-					ps.setDouble(5,  rowsFromYahoo.get(i).getLow());
-					ps.setDouble(6,  rowsFromYahoo.get(i).getClose());
-					ps.setLong(7,  rowsFromYahoo.get(i).getVolume());
-					ps.addBatch();
-				}
+				ps.addBatch();
+				counter++;
 				
-				if (i % batchSize == 0) //if i/batch size remainder == 0 execute batch
-				{
+				if (counter % batchSize == 0) { //if i/batch size remainder == 0 execute batch
 					ps.executeBatch();
-					log.info("Executed at i="+i);
+					log.info("OHLCV insert executed at i="+counter);
 				}
 			}
-			//Execute the last batch, in case the last value of i isn't a multiple of batchSize
+			//execute the batch at the end for the leftovers that didn't hit counter%batch==0
 			ps.executeBatch();
+			log.info("OHLCV insert executed at i="+counter);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			log.info("SQLException: " + e.getMessage());
+			log.info("SQLState: " + e.getSQLState());
+			log.info("VendorError: " + e.getErrorCode());
 			e.printStackTrace();
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -291,34 +284,36 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		}
 	}
 		
-	public boolean isAlreadyInDB(YahooIndexData row) throws SQLException {
+	public boolean isAlreadyInDB(OHLCVData row) throws SQLException {
 		
 		boolean alreadyExists = false;
-		int j=0;
-		String checkQuery = "SELECT `id` FROM `" + g_YahooIndexTableName + "`"
+
+		String checkQuery = "SELECT `id` FROM `" + OHLCVData.getTablename() + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
-		PreparedStatement ps_check = null;
+		QueryRunner runner = new QueryRunner();
+		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
 		
-		ps_check = m_connection.prepareStatement(checkQuery);
-
-		ps_check.setString(1, row.getDate());
-		ps_check.setString(2, row.getSymbol());
-		ResultSet rs = ps_check.executeQuery();
+		OHLCVData result = runner.query(
+							m_connection,
+							checkQuery,
+							h,
+							row.getDate(),
+							row.getSymbol()
+							);
 			
-		while(rs.next())
-		{
-			log.debug("Just tried to insert a duplicate row into table " + g_YahooIndexTableName + ". The id of the entry already in the table is " + rs.getInt("id"));
+		if(result != null) {
+			log.debug("Just tried to insert a duplicate row into table " + OHLCVData.getTablename() + ". The id of the entry already in the table is " + result.getId());
 			alreadyExists = true;
 		}
 		return alreadyExists;
 	}
 
-	public List<YahooIndexData> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
-		List<YahooIndexData> dDayList = new ArrayList<YahooIndexData>();
+	public List<OHLCVData> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
+		List<OHLCVData> dDayList = new ArrayList<OHLCVData>();
 		
-		String YahooTableName = getG_YahooIndexTableName();
+		String YahooTableName = OHLCVData.getTablename();
 		
 		String query = "SELECT *"
 				+ " FROM `" + YahooTableName + "`"
@@ -332,7 +327,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner();
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<List<YahooIndexData>> h = new BeanListHandler<YahooIndexData>(YahooIndexData.class);
+		ResultSetHandler<List<OHLCVData>> h = new BeanListHandler<OHLCVData>(OHLCVData.class);
 		
 		try{
 			dDayList = run.query(
@@ -353,11 +348,11 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		
 	}
 
-	public IndexCalcs getFirstBySymbol(String symbol) {
+	public IndexOHLCVCalcs getFirstBySymbol(String symbol) {
 		
-		IndexCalcs dataPoint=null;
+		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " ORDER BY `date` ASC"
 				+ " LIMIT 1";
@@ -367,7 +362,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner();
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dataPoint = run.query(
@@ -385,11 +380,11 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return dataPoint;
 	}
 	
-	public IndexCalcs getLastBySymbol(String symbol) {
+	public IndexOHLCVCalcs getLastBySymbol(String symbol) {
 		
-		IndexCalcs dataPoint=null;
+		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " ORDER BY `date` DESC"
 				+ " LIMIT 1";
@@ -399,7 +394,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner();
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dataPoint = run.query(
@@ -417,10 +412,10 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return dataPoint;
 	}
 
-	public IndexCalcs getBySymbolAndDate(String symbol, LocalDate date) {
-		IndexCalcs dataPoint=null;
+	public IndexOHLCVCalcs getBySymbolAndDate(String symbol, LocalDate date) {
+		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + g_YahooIndexTableName + "`"
+		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " AND `date` = ?";
 		/*
@@ -429,7 +424,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner();
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<IndexCalcs> h = new BeanHandler<IndexCalcs>(IndexCalcs.class);
+		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dataPoint = run.query(
@@ -448,14 +443,14 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 		return dataPoint;
 	}
 	private boolean checkDate(String symbol, LocalDate date) {
-		IndexCalcs a = getBySymbolAndDate(symbol, date);
+		IndexOHLCVCalcs a = getBySymbolAndDate(symbol, date);
 		if(a!=null)
 			return true;
 		else
 			return false;
 	}
 	
-	public IndexCalcs getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
+	public IndexOHLCVCalcs getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
 		int counter=0;
 		
 		while(!checkDate(symbol, date) && counter < 7) {
@@ -466,7 +461,7 @@ public class IndexYahooDataTableManager extends GenericDBSuperclass {
 			counter++;
 		}
 		
-		IndexCalcs a = getBySymbolAndDate(symbol, date);;
+		IndexOHLCVCalcs a = getBySymbolAndDate(symbol, date);;
 		
 		return a;
 	}

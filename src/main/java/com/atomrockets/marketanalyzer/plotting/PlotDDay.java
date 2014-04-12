@@ -17,7 +17,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
@@ -83,8 +83,8 @@ public class PlotDDay {
 	        //Getting the d-dates from the database
 	        IndexCalcsService  indexCalcsService = new IndexCalcsService();
 	        if(indexCalcsService.isM_connectionAlive()) {
-	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays(symbol);
-	        	for(IndexCalcs a:dDayList) {
+	        	List<IndexOHLCVCalcs> dDayList = indexCalcsService.getLatestDDays(symbol);
+	        	for(IndexOHLCVCalcs a:dDayList) {
 	        		s1.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getDistributionDayCounter());
 	        	}
 	        	
@@ -116,8 +116,8 @@ public class PlotDDay {
 		        //Getting the d-dates from the database
 		        IndexCalcsService  indexCalcsService = new IndexCalcsService();
 		        if(indexCalcsService.isM_connectionAlive()) {
-		        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays(symbol);
-		        	for(IndexCalcs a:dDayList) {
+		        	List<IndexOHLCVCalcs> dDayList = indexCalcsService.getLatestDDays(symbol);
+		        	for(IndexOHLCVCalcs a:dDayList) {
 		        		s1.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getDistributionDayCounter());
 		        	}
 		        	

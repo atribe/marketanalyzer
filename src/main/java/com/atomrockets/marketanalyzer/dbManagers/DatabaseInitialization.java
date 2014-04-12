@@ -2,18 +2,11 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Enumeration;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
@@ -34,7 +27,7 @@ public class DatabaseInitialization{
 	static private String[] indexList;
 	
 	//Database Table Managers
-	static private IndexYahooDataTableManager m_indexYahooTable;
+	static private OHLCVDao m_OHLCVDao;
 	static private IndexParameterTableManager m_indexParamTable;
 	static private IndexCalcsService m_indexAnalysisService;
 	
@@ -57,10 +50,10 @@ public class DatabaseInitialization{
 			 */
 			//Creating the table manager
 			log.trace("3.2 Creating IndexyahooDataTableManager");
-			m_indexYahooTable = new IndexYahooDataTableManager(connection);
+			m_OHLCVDao = new OHLCVDao(connection);
 			//Initialize the price/volume databases for each index
 			log.info("3.3 Initializing YahooIndexData Table");
-			m_indexYahooTable.tableInitialization(indexList);
+			m_OHLCVDao.tableInitialization(indexList);
 	
 			//Initialize the parameter table
 			log.trace("3.4 Creating IndexParameterTableManager");
@@ -77,9 +70,9 @@ public class DatabaseInitialization{
 			 */
 			log.trace("3.6 Creating IndexCalcsService");
 			m_indexAnalysisService = new IndexCalcsService(connection);
-			log.info("3.7 Initializing IndexCalcs table");
+			log.info("3.7 Initializing IndexOHLCVCalcs table");
 			//skipping this while I work on the view portion of the program
-			//m_indexAnalysisService.init(indexList);
+			m_indexAnalysisService.init(indexList);
 			
 		} catch (ClassNotFoundException e) {
 			// Handles errors if the JDBC driver class not found.
@@ -121,9 +114,4 @@ public class DatabaseInitialization{
         	}
         }*/
     }
-
-	//getters
-	static private String[] getIndexList() {
-		return indexList;
-	}
 }

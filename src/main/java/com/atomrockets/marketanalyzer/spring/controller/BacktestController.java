@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.models.BacktestModel;
+import com.atomrockets.marketanalyzer.beans.BacktestModel;
 import com.atomrockets.marketanalyzer.services.BacktestService;
 
 @Controller

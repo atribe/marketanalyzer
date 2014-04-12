@@ -78,6 +78,11 @@
 		background-color:gray;
 		color:white;
 	}
+/*--------OHLC Chart Styling-------*/
+.OHLCSection {
+	margin-bottom: 30px;
+}
+/*--------D Day Chart Styling-------*/
 #D_Day_Table h3{
 	text-align:center;
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
@@ -28,7 +28,7 @@ public class RootController {
 	        //Getting the d-dates from the database
 	        IndexCalcsService  indexCalcsService = new IndexCalcsService();
 	        if(indexCalcsService.isM_connectionAlive()) {
-	        	List<IndexCalcs> dDayList = indexCalcsService.getLatestDDays("^IXIC");
+	        	List<IndexOHLCVCalcs> dDayList = indexCalcsService.getLatestDDays("^IXIC");
 	        	mav.addObject("dDayList", dDayList);
 	        }
 	        log.debug("");

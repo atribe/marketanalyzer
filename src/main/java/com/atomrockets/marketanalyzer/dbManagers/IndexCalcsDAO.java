@@ -2,16 +2,13 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.dbutils.QueryRunner;
 
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 
 public class IndexCalcsDAO extends GenericDBSuperclass{
 
@@ -23,27 +20,6 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	 * table names
 	 * 
 	 */
-	
-	/*
-	 * The columns for this class are defined in the LinkedHashMap below
-	 * This is so I have one place that shows everything in an easily readable format.
-	 */
-	private final LinkedHashMap<String, String> m_mySQLColumnList = new LinkedHashMap<String, String>() {
-		private final long serialVersionUID = 1L;
-		{
-			put("id", "INT");
-			put("closeAvg50", "FLOAT");
-			put("closeAvg100", "FLOAT");
-			put("closeAvg200", "FLOAT");
-			put("volumeAvg50", "BIGINT(50)");
-			put("priceTrend35", "FLOAT");
-			put("distributionDay", "TINYINT(1)");//1 == true, 0 == false
-			put("churnDay", "TINYINT(1)");//1 == true, 0 == false
-			put("distributionDayCounter", "INT");
-			put("followThruDay", "TINYINT(1)");
-			put("dayAction", "VARCHAR(4)");//buy, or sell, or hold
-		}
-	};
 	
 	public IndexCalcsDAO() {
 		try {
@@ -82,47 +58,32 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	public void tableInitialization(String[] indexList) {
 		log.info("Starting Index Analysis Database Initialization");
 		
+		IndexCalcs c = new IndexCalcs();
+		
+		@SuppressWarnings("static-access")
+		String tableName = c.getTableName();
+		
 		/*
 		 * Checking to see if a table with the index name exists
 		 * If it does, print to the command prompt
 		 * if not create the table
 		 */
-		log.info("     -Checking if table " + g_indexCalsTableName + " exists.");
-		if(!tableExists(g_indexCalsTableName)) {
+		log.info("     -Checking if table " + tableName + " exists.");
+		if(!tableExists(tableName)) {
 			// Table does not exist, so create it
-			String createTableSQL = tableCreationString();
-			createTable(createTableSQL, g_indexCalsTableName);
+			String createTableSQL = c.tableCreationString();
+			createTable(createTableSQL, tableName);
 		}
 		
 	}
 
-	public String tableCreationString() {
-		 String creationString = "CREATE TABLE IF NOT EXISTS `" + g_indexCalsTableName + "` (" +
-				" id INT not NULL AUTO_INCREMENT, ";
-		 /*
-		  * Using a LinkedHashMap in the creation and elsewhere allows for a centralized
-		  * storage of all the column names and types. This should allow for an easy expansion
-		  * of this table as more columns are calculated.
-		  * I should really add an update table method so it doesn't have to be dropped and readded for
-		  * changes to be applied.
-		  */
-		 for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			 if(entry.getKey() != "id")
-			 {
-				 creationString += entry.getKey() + " " + entry.getValue() + ", ";
-			 }
-		 }
-
-		 creationString += "PRIMARY KEY (id)," +
-				" FOREIGN KEY (id) REFERENCES `" + g_YahooIndexTableName + "`(id))";
-		 return creationString;
-	}
-
-	public void addAllRowsToDB(String indexTableName, List<IndexCalcs> analysisRows) {
+	public void addAllRowsToDB(String indexTableName, List<IndexOHLCVCalcs> analysisRows) {
 		
-		String insertQuery = addOrUpdatePreparedString();
+		IndexCalcs c = new IndexCalcs();
 		
-		String[] columnNames = getColumnNames();
+		String insertQuery = c.getInsertOrUpdateQuery();
+		
+		String[] columnNames = c.getColumnNameList();
 		
 		//Batch add
 		//Follow the initalAddRecordsFromData method in the MarketIndexDB class
@@ -137,21 +98,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			QueryRunner runner = new QueryRunner();
 			
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
-			for (IndexCalcs row:analysisRows) {
-				/*
-				 * Old Manual method. Left as a referece to see how much better the new method is.
-				ps.setLong(1, row.getId());
-				ps.setDouble(2,  row.getCloseAvg50());
-				ps.setDouble(3,  row.getCloseAvg100());
-				ps.setDouble(4,  row.getCloseAvg200());
-				ps.setLong(5,  row.getVolumeAvg50());
-				ps.setDouble(6, row.getPriceTrend35());
-				ps.setBoolean(7,  row.getIsDDay());
-				ps.setBoolean(8,  row.getIsChurnDay());
-				ps.setInt(9, row.getdDayCounter());
-				ps.setBoolean(10, row.getIsFollowThruDay());
-				ps.setString(11, row.getDayAction());
-				*/
+			for (IndexOHLCVCalcs row:analysisRows) {
 				
 				/*
 				 * New code using DbUtils
@@ -165,12 +112,12 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 				
 				if (counter % batchSize == 0) { //if i/batch size remainder == 0 execute batch
 					ps.executeBatch();
-					log.info("Executed at i="+counter);
+					log.info("IndexCalc insert executed at i="+counter);
 				}
 			}
 			//execute the batch at the end for the leftovers that didn't hit counter%batch==0
 			ps.executeBatch();
-			log.info("Executed at i="+counter);
+			log.info("IndexCalc insert executed at i="+counter);
 			
 		} catch (SQLException e) {
 			log.info("SQLException: " + e.getMessage());
@@ -190,53 +137,5 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			}
 		}
 
-	}
-
-	private String addOrUpdatePreparedString() {
-		//******Start add string builder******
-		String insertQuery = "INSERT INTO `" + g_indexCalsTableName + "` "
-				+ "(";
-		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			insertQuery += entry.getKey() + ",";
-		 }
-		
-		/*This line is to clean off the last "," added by the previous loop.
-		So my code isn't perfect, but it is still pretty cool.*/
-		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
-		
-		insertQuery += ") VALUES"
-				+ "(";
-		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			insertQuery += "?,";
-		 }
-		
-		//Another last comma removal
-		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
-		
-		insertQuery += ") ON DUPLICATE KEY UPDATE ";
-		
-		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			insertQuery += entry.getKey() + "=VALUES(" + entry.getKey() + "), ";
-		}
-		
-		//Another last comma removal
-		insertQuery = insertQuery.substring(0, insertQuery.length()-2);
-		//******End add string builder******
-		
-		return insertQuery;
-	}
-	
-	private String[] getColumnNames() {
-		String[] columnNames = new String[m_mySQLColumnList.size()];
-		int counter = 0;
-		for(Map.Entry<String, String> entry : m_mySQLColumnList.entrySet()) {
-			columnNames[counter] = entry.getKey();
-			counter++;
-		 }
-		
-		return columnNames;
-	}
-	public String getTableName() {
-		return g_indexCalsTableName;
 	}
 }

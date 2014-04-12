@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
-
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
@@ -28,24 +26,6 @@ public class GenericDBSuperclass {
 	//Member variable of the connection, so I don't have to keep passing it between methods
 	//This variable only needs to be set once in the classes that inherit this class.
 	protected static Connection m_connection;
-	
-	/*
-	 * table names, so they are available to all subclasses
-	 */
-	protected final String g_YahooIndexTableName = "YahooIndex";
-	protected final String g_indexCalsTableName = "IndexCalcs";
-	protected final String g_parameterTableName = "indexParameters";
-	
-	public String getG_YahooIndexTableName() {
-		return g_YahooIndexTableName;
-	}
-	public String getG_indexCalsTableName() {
-		return g_indexCalsTableName;
-	}
-	public String getG_parameterTableName() {
-		return g_parameterTableName;
-	}
-
 	
 	/**
 	 * Establishes a connection to the database
@@ -102,15 +82,14 @@ public class GenericDBSuperclass {
 
 			if (tables.next()) {
 				// Table exists
-				log.info(
-						"          " + tables.getString("TABLE_TYPE") 
-						+ " " + tables.getString("TABLE_NAME")
+				log.info(tables.getString("TABLE_TYPE") + " " 
+						+ tables.getString("TABLE_NAME")
 						+ " already exists.");
 				tableExists = true;
 			}
 			else {
 				tableExists = false;
-				log.info("          Table " + tableName + " does not yet exist, let me try and create that for you.");
+				log.info("Table " + tableName + " does not yet exist.");
 			}
 		} catch (SQLException ex){
 			// handle any errors

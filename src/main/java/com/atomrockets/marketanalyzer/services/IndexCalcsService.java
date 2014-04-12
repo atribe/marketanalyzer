@@ -1,12 +1,13 @@
 package com.atomrockets.marketanalyzer.services;
 
+import com.atomrockets.marketanalyzer.beans.BacktestModel;
+import com.atomrockets.marketanalyzer.beans.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
+import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
-import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
-import com.atomrockets.marketanalyzer.models.BacktestModel;
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
-import com.atomrockets.marketanalyzer.models.YahooIndexData;
+import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 import java.sql.Connection;
@@ -35,7 +36,7 @@ public class IndexCalcsService {
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	//Database Table Managers
-	private IndexYahooDataTableManager m_indexYahooTable;
+	private OHLCVDao m_indexYahooTable;
 	private IndexParameterTableManager m_indexParamTable;
 	private IndexCalcsDAO m_indexCalcsDAO;
 	
@@ -50,22 +51,22 @@ public class IndexCalcsService {
 	private LocalDate m_endDate;
 	
 	//member variable for holding all the information for analysis
-	private List<YahooIndexData> m_yahooIndexDataList;
-	private List<IndexCalcs> m_IndexCalcList;
+	private List<OHLCVData> m_yahooIndexDataList;
+	private List<IndexOHLCVCalcs> m_IndexCalcList;
 
-	public List<IndexCalcs> getM_IndexCalcList() {
+	public List<IndexOHLCVCalcs> getM_IndexCalcList() {
 		return m_IndexCalcList;
 	}
 
 	/*
-	 * Converts the YahooIndexData object list into IndexCalcs object list
+	 * Converts the YahooIndexData object list into IndexOHLCVCalcs object list
 	 */
-	public void setM_IndexCalcList(List<YahooIndexData> yahooIndexDataList) {
-		m_IndexCalcList = new ArrayList<IndexCalcs>();
-		for(YahooIndexData A:yahooIndexDataList)
+	public void setM_IndexCalcList(List<OHLCVData> yahooIndexDataList) {
+		m_IndexCalcList = new ArrayList<IndexOHLCVCalcs>();
+		for(OHLCVData A:yahooIndexDataList)
 		{
-			IndexCalcs B = new IndexCalcs();
-			B.setId(A.getId());
+			IndexOHLCVCalcs B = new IndexOHLCVCalcs();
+			B.setOHLCid(A.getId());
 			B.setDate(A.getDate());
 			B.setOpen(A.getOpen());
 			B.setHigh(A.getHigh());
@@ -82,7 +83,7 @@ public class IndexCalcsService {
 		try {
 			m_connection = GenericDBSuperclass.getConnection();
 			setM_connectionAlive(true);
-			m_indexYahooTable = new IndexYahooDataTableManager(m_connection);
+			m_indexYahooTable = new OHLCVDao(m_connection);
 			m_indexParamTable = new IndexParameterTableManager(m_connection);
 			m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
 		} catch (ClassNotFoundException e) {
@@ -101,7 +102,7 @@ public class IndexCalcsService {
 	
 	public IndexCalcsService(Connection connection) {
 		m_connection = connection;
-		m_indexYahooTable = new IndexYahooDataTableManager(m_connection);
+		m_indexYahooTable = new OHLCVDao(m_connection);
 		m_indexParamTable = new IndexParameterTableManager(m_connection);
 		m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
 	}
@@ -109,7 +110,7 @@ public class IndexCalcsService {
 	public void init(String[] indexList) {
 		
 		m_indexCalcsDAO.tableInitialization(indexList);
-		String tableName = m_indexCalcsDAO.getTableName();
+		String tableName = IndexCalcs.getTableName();
 		//Reset the table so that the data can be reanalyzed
 		try {
 			m_indexCalcsDAO.resetTable(tableName);
@@ -207,7 +208,7 @@ public class IndexCalcsService {
 
 	private void setM_startDate() {
 		LocalDate startDate = new LocalDate(PropCache.getCachedProps("indexcalcs.startdate"));
-		IndexCalcs beginDataPoint = m_indexYahooTable.getFirstBySymbol(m_symbol);
+		IndexOHLCVCalcs beginDataPoint = m_indexYahooTable.getFirstBySymbol(m_symbol);
 		LocalDate symbolBeginDate = beginDataPoint.getConvertedDate();
 		
 		if( symbolBeginDate.isBefore( startDate.minusDays( getBufferDays() ) ) )
@@ -239,7 +240,7 @@ public class IndexCalcsService {
 			 * and calculates the 50 day moving volume average
 			 */
 			int loopDays = 50;
-			float priceCloseSum = 0;
+			double priceCloseSum = 0;
 			long volumeSum = 0;
 			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
@@ -281,7 +282,7 @@ public class IndexCalcsService {
 			 * 		This is the average percent gain over the last 35 days (excluding today)
 			 */
 			loopDays = 35;
-			float closePercentChange = 0;
+			double closePercentChange = 0;
 			for(int j=i; j>i-loopDays && j>2; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				closePercentChange+=(m_IndexCalcList.get(j-1).getClose() - m_IndexCalcList.get(j-2).getClose()) / m_IndexCalcList.get(j-2).getClose();
 			}
@@ -326,7 +327,6 @@ public class IndexCalcsService {
 		log.info("          Checking to see if each day is a D-Day");
 		
 		int rowCount = m_IndexCalcList.size();
-		int ddayCount=0;
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{ 
@@ -340,16 +340,15 @@ public class IndexCalcsService {
 			long todaysVolume = m_IndexCalcList.get(i).getVolume();
 			long previousDaysVolume = m_IndexCalcList.get(i-1).getVolume();
 			
-			float todaysClose = m_IndexCalcList.get(i).getClose();
-			float previousDaysClose = m_IndexCalcList.get(i-1).getClose();
+			double todaysClose = m_IndexCalcList.get(i).getClose();
+			double previousDaysClose = m_IndexCalcList.get(i-1).getClose();
 
-			float closePercentChange = (todaysClose/previousDaysClose-1);
-			float closePercentRequiredDrop = (float) -0.002; //TODO make this come from the parameter database
+			double closePercentChange = (todaysClose/previousDaysClose-1);
+			double closePercentRequiredDrop = m_b.getdDayPriceDrop();
 			// }}
 			
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < closePercentRequiredDrop /*This is rule #1*/)
 			{
-				ddayCount++;
 				m_IndexCalcList.get(i).setDistributionDay(Boolean.valueOf(true));
 			}
 			else
@@ -363,16 +362,15 @@ public class IndexCalcsService {
 		log.info("          Checking to see if each day is a Churning Day");
 		
 		int rowCount = m_IndexCalcList.size();
-		int churningDayCount=0;
 		
 		// {{ Getting variables from the parameter database
 		
-		float churnVolRange = m_b.getChurnVolRange();
-		float churnPriceRange = m_b.getChurnPriceRange();
+		double churnVolRange = m_b.getChurnVolRange();
+		double churnPriceRange = m_b.getChurnPriceRange();
 		boolean churnPriceCloseHigherOn = m_b.getChurnPriceCloseHigherOn();
 		boolean churnAVG50On = m_b.getChurnAVG50On();
 		boolean churnPriceTrend35On = m_b.getChurnPriceTrend35On();
-		float churnPriceTrend35 = m_b.getChurnPriceTrend35();
+		double churnPriceTrend35 = m_b.getChurnPriceTrend35();
 		// }}
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{
@@ -383,27 +381,27 @@ public class IndexCalcsService {
 			 * 2. volume must be within 3% of the previous days volume
 			 * 3. priceClose must be less than 102% of the previous day
 			 * The next rules can be turned on or off from the parameter DB
-			 * 4. priceClose must be greater than or equal to previous day
+			 * 4. priceClose must be greater than or equal to previous day (should not be turned on by itself)
 			 * 5. volume must be greater than avg daily
 			 * 6. price must be on upswing over  previous 35 days
 			 */
 			
 			// {{ pulling variables from List, just to make the code below prettier
-			float todaysHigh = m_IndexCalcList.get(i).getHigh();			
-			float previousDaysHigh = m_IndexCalcList.get(i-1).getHigh();
+			double todaysHigh = m_IndexCalcList.get(i).getHigh();			
+			//double previousDaysHigh = m_IndexCalcList.get(i-1).getHigh();
 			
-			float todaysLow = m_IndexCalcList.get(i).getLow();			
-			float previousDaysLow = m_IndexCalcList.get(i-1).getLow();
+			double todaysLow = m_IndexCalcList.get(i).getLow();			
+			//double previousDaysLow = m_IndexCalcList.get(i-1).getLow();
 			
-			float todaysClose = m_IndexCalcList.get(i).getClose();
-			float previousDaysClose = m_IndexCalcList.get(i-1).getClose();
+			double todaysClose = m_IndexCalcList.get(i).getClose();
+			double previousDaysClose = m_IndexCalcList.get(i-1).getClose();
 			
 			long todaysVolume = m_IndexCalcList.get(i).getVolume();
 			long previousDaysVolume = m_IndexCalcList.get(i-1).getVolume();
 			
 			long todaysVolumeAvg50 = m_IndexCalcList.get(i).getVolumeAvg50();
 			
-			float todaysPriceTrend35 = m_IndexCalcList.get(i).getPriceTrend35();
+			double todaysPriceTrend35 = m_IndexCalcList.get(i).getPriceTrend35();
 			
 			// }}
 			
@@ -413,7 +411,6 @@ public class IndexCalcsService {
 					todaysVolume <= previousDaysVolume*(1+churnVolRange) /*rule 2b*/ &&
 					todaysClose <= previousDaysClose*(1+churnPriceRange) /*rule 3*/)
 			{
-				churningDayCount++;
 				m_IndexCalcList.get(i).setChurnDay(true);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
 			} else {
@@ -478,7 +475,7 @@ public class IndexCalcsService {
 		// {{ Getting variables from the parameter database
 		int rDaysMax = m_b.getrDaysMax();
 		boolean churnpivotTrend35On = m_b.getPivotTrend35On();
-		float pivotTrend35 = m_b.getPivotTrend35();
+		double pivotTrend35 = m_b.getPivotTrend35();
 		// }}
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
@@ -487,15 +484,15 @@ public class IndexCalcsService {
 			 * this part gets followthrough days
 			 * 
 			 */
-			float rallyPriceHigh = 0;
+			double rallyPriceHigh = 0;
 			
 		}
 	}
 
-	public synchronized List<IndexCalcs> getLatestDDays(String symbol) {
-		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
+	public synchronized List<IndexOHLCVCalcs> getLatestDDays(String symbol) {
+		List<IndexOHLCVCalcs> dDayList = new ArrayList<IndexOHLCVCalcs>();
 		
-		if(m_indexCalcsDAO.tableExists(m_indexCalcsDAO.getG_indexCalsTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
+		if(m_indexCalcsDAO.tableExists(IndexCalcs.getTableName())/* && !marketAnalyzerListener.dbInitThreadIsAlive()*/)
 		/*
 		 * 1. get the id for the begin date = 20 days previous
 		 * 2. get the id for the end date = today
@@ -519,14 +516,14 @@ public class IndexCalcsService {
 		return dDayList;
 	}
 
-	public List<IndexCalcs> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
-		List<IndexCalcs> dDayList = new ArrayList<IndexCalcs>();
+	public List<IndexOHLCVCalcs> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
+		List<IndexOHLCVCalcs> dDayList = new ArrayList<IndexOHLCVCalcs>();
 		
 		//Converting the dates into valid dates in the db
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexCalcs first = m_indexYahooTable.getValidDate(symbol, startDate, false);
+		IndexOHLCVCalcs first = m_indexYahooTable.getValidDate(symbol, startDate, false);
 		if(first==null) {
-			//2. if it didn't find a valid date (hence the IndexCalcs returned is null) then look forward
+			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
 			 first = m_indexYahooTable.getValidDate(symbol, startDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
@@ -535,17 +532,17 @@ public class IndexCalcsService {
 		}
 		
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexCalcs last = m_indexYahooTable.getValidDate(symbol, endDate, false);
+		IndexOHLCVCalcs last = m_indexYahooTable.getValidDate(symbol, endDate, false);
 		if(last == null) {
-			//2. if it didn't find a valid date (hence the IndexCalcs returned is null) then look forward
+			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
 			last = m_indexYahooTable.getValidDate(symbol, endDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
 		if(last==null) {
 			last = m_indexYahooTable.getLastBySymbol(symbol);
 		}
-		String YahooTableName = m_indexCalcsDAO.getG_YahooIndexTableName();
-		String IndexCalcTableName = m_indexCalcsDAO.getG_indexCalsTableName();
+		String YahooTableName = OHLCVData.getTablename();
+		String IndexCalcTableName = IndexCalcs.getTableName();
 		
 		String query = "SELECT *"
 				+ " FROM `" + YahooTableName + "` Y"
@@ -561,7 +558,7 @@ public class IndexCalcsService {
 		QueryRunner run = new QueryRunner();
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<List<IndexCalcs>> h = new BeanListHandler<IndexCalcs>(IndexCalcs.class);
+		ResultSetHandler<List<IndexOHLCVCalcs>> h = new BeanListHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dDayList = run.query(
@@ -580,11 +577,6 @@ public class IndexCalcsService {
 		
 		return dDayList;
 		
-	}
-
-	public boolean connectionAlive() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public boolean isM_connectionAlive() {

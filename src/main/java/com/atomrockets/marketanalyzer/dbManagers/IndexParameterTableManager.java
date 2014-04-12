@@ -2,22 +2,13 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
 
-import com.atomrockets.marketanalyzer.models.BacktestModel;
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.BacktestModel;
 
 /**
  * This subclass handles all database operations involving the price and volume data for each index
@@ -52,6 +43,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 		
 		BacktestModel b = new BacktestModel();
 		
+		@SuppressWarnings("static-access")
 		String tableName = b.getTableName();
 	
 		/*
@@ -118,9 +110,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
+				b.setdDayPriceDrop(-0.002);
 				b.setChurnVolRange(0.03);
 				b.setChurnPriceRange(0.02);
-				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnPriceCloseHigherOn(false);
 				b.setChurnAVG50On(false);
 				b.setChurnPriceTrend35On(false);
 				b.setChurnPriceTrend35(0.009);
@@ -172,9 +165,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
+				b.setdDayPriceDrop(-0.002);
 				b.setChurnVolRange(0.03);
 				b.setChurnPriceRange(0.02);
-				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnPriceCloseHigherOn(false);
 				b.setChurnAVG50On(false);
 				b.setChurnPriceTrend35On(false);
 				b.setChurnPriceTrend35(0.009);
@@ -226,9 +220,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
+				b.setdDayPriceDrop(-0.002);
 				b.setChurnVolRange(0.03);
 				b.setChurnPriceRange(0.02);
-				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnPriceCloseHigherOn(false);
 				b.setChurnAVG50On(false);
 				b.setChurnPriceTrend35On(false);
 				b.setChurnPriceTrend35(0.009);
@@ -281,9 +276,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
+				b.setdDayPriceDrop(-0.002);
 				b.setChurnVolRange(0.03);
 				b.setChurnPriceRange(0.02);
-				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnPriceCloseHigherOn(false);
 				b.setChurnAVG50On(false);
 				b.setChurnPriceTrend35On(false);
 				b.setChurnPriceTrend35(0.009);
@@ -336,9 +332,10 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
+				b.setdDayPriceDrop(-0.002);
 				b.setChurnVolRange(0.03);
 				b.setChurnPriceRange(0.02);
-				b.setChurnPriceCloseHigherOn(true);
+				b.setChurnPriceCloseHigherOn(false);
 				b.setChurnAVG50On(false);
 				b.setChurnPriceTrend35On(false);
 				b.setChurnPriceTrend35(0.009);
@@ -392,7 +389,7 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 			//Get an iterator
 			//Iterator<String> itr = keys.iterator();
 	
-			log.info("Populating variable database for " + g_parameterTableName);
+			log.info("Populating variable database for " + BacktestModel.getTableName());
 	
 			//Add each entry to the DB
 			/*
@@ -419,7 +416,6 @@ public class IndexParameterTableManager extends GenericDBSuperclass{
 	public BacktestModel getSymbolParameters(String symbol) throws SQLException {
 		BacktestModel b = new BacktestModel(symbol);
 		
-		String[] columnNames = b.getColumnNameList();
 		String getParametersQuery = b.getParameterQuery();
 		QueryRunner runner = new QueryRunner();
 		ResultSetHandler<BacktestModel> h = new BeanHandler<BacktestModel>(BacktestModel.class);

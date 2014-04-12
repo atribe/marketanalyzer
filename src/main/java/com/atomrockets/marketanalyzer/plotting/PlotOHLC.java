@@ -2,30 +2,21 @@ package com.atomrockets.marketanalyzer.plotting;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Paint;
-import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.HighLowRenderer;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.ohlc.OHLCSeries;
@@ -35,10 +26,9 @@ import org.jfree.data.xy.OHLCDataset;
 import org.jfree.ui.TextAnchor;
 import org.joda.time.LocalDate;
 
-import com.atomrockets.marketanalyzer.dbManagers.IndexYahooDataTableManager;
-import com.atomrockets.marketanalyzer.models.IndexCalcs;
-import com.atomrockets.marketanalyzer.models.YahooIndexData;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
+import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotOHLC {
 
@@ -46,21 +36,31 @@ public class PlotOHLC {
 	
 	static Logger log = Logger.getLogger(PlotOHLC.class.getName());
 	
+	public static JFreeChart createChart(String symbol) {
+		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
+			return null;
+		} else {
+			return createCombinedChart(symbol);
+		}
+	}
+	
 	public static JFreeChart createCombinedChart(String symbol)
 	{
-		IndexCalcsService a = new IndexCalcsService();
-		
-		//getting the first and last so I can get the first and last dates
-		List<IndexCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(40), new LocalDate());
+		IndexCalcsService a = new IndexCalcsService();		
 		
 		/*
 		 * Code modified from:
 		 * http://stackoverflow.com/questions/11330370/jfreechart-how-to-draw-the-moving-average-over-a-ohlc-chart
 		 */
+		//getting the first and last so I can get the first and last dates
+		 List<IndexOHLCVCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(40), new LocalDate());
 		
 		//Getting the OHLC dataset
-	    OHLCDataset OHLCdata = createOHLCDataset(symbol, OHLCList);
-
+		OHLCDataset OHLCdata = createOHLCDataset(symbol, OHLCList);
+		//add a second dataset (volume)
+		IntervalXYDataset volumeData = createVolumeDataset(symbol, OHLCList);
+		
+	    
 	    //setting up the renderer
 	    XYItemRenderer renderer1 = new HighLowRenderer();
 	    renderer1.setSeriesPaint(0, Color.GREEN);
@@ -93,8 +93,7 @@ public class PlotOHLC {
 	    plot1.setDataset(1, collection);*/
 	    //plot1.setRenderer(1, new StandardXYItemRenderer());
 
-	    //add a second dataset (volume)
-	    IntervalXYDataset volumeData = createVolumeDataset(symbol, OHLCList);
+	    
 	    
 	    //create the second renderer
 	    XYBarRenderer renderer2 = new XYBarRenderer();
@@ -126,7 +125,7 @@ public class PlotOHLC {
 	
 
 
-	private static OHLCDataset createOHLCDataset(String symbol, List<IndexCalcs> OHLCList)
+	private static OHLCDataset createOHLCDataset(String symbol, List<IndexOHLCVCalcs> OHLCList)
 	{
 
 	    OHLCSeries sHigher = new OHLCSeries(symbol + " Higher");
@@ -134,7 +133,7 @@ public class PlotOHLC {
 	    
 	    double yesterdayClose=0;
 		    
-		for(IndexCalcs YID : OHLCList) {
+		for(IndexOHLCVCalcs YID : OHLCList) {
 			Day date       =  new Day(YID.getConvertedDate().toDate());
 			double open     = YID.getOpen();
 			double high     = YID.getHigh();
@@ -158,7 +157,7 @@ public class PlotOHLC {
 	}
 	
 	//create volume dataset
-	private static IntervalXYDataset createVolumeDataset(String filename, List<IndexCalcs> OHLCList)
+	private static IntervalXYDataset createVolumeDataset(String filename, List<IndexOHLCVCalcs> OHLCList)
 	{
 	    //create dataset 2...
 	    TimeSeries sHigher = new TimeSeries("Volume Higher");
@@ -166,7 +165,7 @@ public class PlotOHLC {
 	    
 	    double yesterdaysVolume = 0;
 
-	    for(IndexCalcs YID : OHLCList) {
+	    for(IndexOHLCVCalcs YID : OHLCList) {
 			Day date       =  new Day(YID.getConvertedDate().toDate());
 			double volume = YID.getVolume();
 			
@@ -184,7 +183,7 @@ public class PlotOHLC {
 	    return volumeDataset;
 	}
 
-	private static XYPlot annotateOHLC_DDays(XYPlot plot, List<IndexCalcs> OHLCList) {
+	private static XYPlot annotateOHLC_DDays(XYPlot plot, List<IndexOHLCVCalcs> OHLCList) {
 		// add some annotations...   
         XYTextAnnotation annotation = null;   
         Font font = new Font("SansSerif", Font.PLAIN, 9); 
@@ -192,20 +191,20 @@ public class PlotOHLC {
         double x = 0;
         double y = 0;
         
-        for(IndexCalcs YID : OHLCList) {
+        for(IndexOHLCVCalcs YID : OHLCList) {
         	if(YID.getDistributionDay()) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("D Day", x, y);  
                 annotation.setFont(font);   
-                annotation.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);   
+                annotation.setTextAnchor(TextAnchor.BOTTOM_CENTER);   
                 plot.addAnnotation(annotation); 
         	} else if (YID.getChurnDay()) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("C Day", x, y);  
                 annotation.setFont(font);   
-                annotation.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);   
+                annotation.setTextAnchor(TextAnchor.BOTTOM_CENTER);   
                 plot.addAnnotation(annotation);
         	}
         }

@@ -38,7 +38,7 @@ public class ChartsController {
 	public void drawOHLCChart(HttpServletResponse response) {
 		response.setContentType("image/png");
 		
-		JFreeChart chart = PlotOHLC.createCombinedChart("^IXIC");
+		JFreeChart chart = PlotOHLC.createChart("^IXIC");
 		
 		try {
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  600);

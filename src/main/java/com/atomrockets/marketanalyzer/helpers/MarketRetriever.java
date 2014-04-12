@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,8 +20,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
+import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
-import com.atomrockets.marketanalyzer.models.YahooIndexData;
 
 /**
  * @author Aaron
@@ -31,8 +30,8 @@ public class MarketRetriever {
 	
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<YahooIndexData> yahooDataParser(String url, String index) {
-		List<YahooIndexData> rowsFromYahooURL = null;
+	public static List<OHLCVData> yahooDataParser(String url, String index) {
+		List<OHLCVData> rowsFromYahooURL = null;
 		
 		try {
 			URL ur = new URL(url);
@@ -43,11 +42,11 @@ public class MarketRetriever {
 			
 			//OpenCSV parser
 			CSVReader csvReader = new CSVReader(reader, ',', '\"');
-			ColumnPositionMappingStrategy<YahooIndexData> strategy = new ColumnPositionMappingStrategy<YahooIndexData>();
-		    strategy.setType(YahooIndexData.class);
-		    strategy.setColumnMapping(new String[]{"date","open","high","low","close","volume","adjClose"});
+			ColumnPositionMappingStrategy<OHLCVData> strategy = new ColumnPositionMappingStrategy<OHLCVData>();
+		    strategy.setType(OHLCVData.class);
+		    strategy.setColumnMapping(new String[]{"dateString","open","high","low","close","volume","adjClose"});
 
-		    CsvToBean<YahooIndexData> csv = new CsvToBean<YahooIndexData>();
+		    CsvToBean<OHLCVData> csv = new CsvToBean<OHLCVData>();
 		    rowsFromYahooURL = csv.parse(strategy, csvReader);
 		    
 		} catch (MalformedURLException e) {
@@ -56,6 +55,8 @@ public class MarketRetriever {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (RuntimeException re) {
+			re.printStackTrace();
 		}
 		
 		/*
@@ -87,7 +88,6 @@ public class MarketRetriever {
 		log.debug("Start Day (variable B): " + b_startDay);
 		log.debug("Start Year (variable C): " + c_startYear);
 
-		GregorianCalendar calendarEnd = new GregorianCalendar();
 		d_endMonth = endDate.getMonthOfYear()-1;//Yahoo uses zero based month numbering,this gets todays month
 		e_endDay = endDate.getDayOfMonth();//this gets todays day of month
 		f_endYear = endDate.getYear();//this gets todays year
@@ -114,10 +114,10 @@ public class MarketRetriever {
 		return Days.daysBetween(date, today).getDays();
 	}
 	
-	private static List<YahooIndexData> addSymbolstoYahooDataObjectList(
-			List<YahooIndexData> rowsFromYahooURL, String index) {
+	private static List<OHLCVData> addSymbolstoYahooDataObjectList(
+			List<OHLCVData> rowsFromYahooURL, String index) {
 		
-		for(YahooIndexData rowFromYahooURL:rowsFromYahooURL) {
+		for(OHLCVData rowFromYahooURL:rowsFromYahooURL) {
 			rowFromYahooURL.setSymbol(index);
 		}
 		

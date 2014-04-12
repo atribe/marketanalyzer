@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.models;
+package com.atomrockets.marketanalyzer.beans;
 
 import java.lang.reflect.Field;
 import java.sql.Date;
@@ -12,7 +12,7 @@ import java.util.Map;
 import org.joda.time.LocalDate;
 
 public class BacktestModel {
-	private final String tableName="backtest";
+	private final static String tableName="backtest";
 	private int id;
 
 	//Stock or index symbol
@@ -27,24 +27,25 @@ public class BacktestModel {
 	private Date endDate;
 	private int dDayWindow;
 	private int dDayParam;
-	private float churnVolRange;
-	private float churnPriceRange;
+	private double dDayPriceDrop;
+	private double churnVolRange;
+	private double churnPriceRange;
 	private Boolean churnPriceCloseHigherOn;
 	private Boolean churnAVG50On;
 	private Boolean churnPriceTrend35On;
-	private float churnPriceTrend35;
+	private double churnPriceTrend35;
 	private Boolean volVolatilityOn;
-	private float volumeMult;
-	private float volMultTop;
-	private float volMultBot;
+	private double volumeMult;
+	private double volMultTop;
+	private double volMultBot;
 	private Boolean priceVolatilityOn;
-	private float priceMult;
-	private float priceMultTop;
-	private float priceMultBot;
+	private double priceMult;
+	private double priceMultTop;
+	private double priceMultBot;
 	private int rDaysMin;
 	private int rDaysMax;
 	private Boolean pivotTrend35On;
-	private float pivotTrend35;
+	private double pivotTrend35;
 	private Boolean rallyVolAVG50On;
 	private Boolean rallyPriceHighOn;
 	
@@ -65,8 +66,8 @@ public class BacktestModel {
 			if(name != "tableName") {
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
-				} else if (type.equals(float.class)){
-					typeName = "FLOAT(20)";
+				} else if (type.equals(double.class)){
+					typeName = "DOUBLE";
 				} else if (type.equals(int.class)){
 					typeName = "INT";
 				} else if (type.equals(long.class)){
@@ -113,6 +114,7 @@ public class BacktestModel {
 		return columnNames;
 	}
 	
+	@SuppressWarnings("unused") //entry is not used at some point (on purpose), and the warning was annoying
 	public String getInsertOrUpdateQuery() {
 		LinkedHashMap<String, String> fieldMap = getColumnNames();
 		
@@ -156,17 +158,17 @@ public class BacktestModel {
 		
 		return query;
 	}
+	
 	/*
 	 * Getters and Setters
 	 */
-	public String getTableName() {
+	public static String getTableName() {
 		return tableName;
 	}
 	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -174,7 +176,6 @@ public class BacktestModel {
 	public Boolean getCurrentParameters() {
 		return currentParameters;
 	}
-
 	public void setCurrentParameters(Boolean currentParameters) {
 		this.currentParameters = currentParameters;
 	}
@@ -182,7 +183,6 @@ public class BacktestModel {
 	public Timestamp getEntryTimestamp() {
 		return entryTimestamp;
 	}
-
 	public void setEntryTimestamp(Timestamp entryTimestamp) {
 		this.entryTimestamp = entryTimestamp;
 	}
@@ -190,7 +190,6 @@ public class BacktestModel {
 	public String getSymbol() {
 		return symbol;
 	}
-
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
@@ -201,7 +200,6 @@ public class BacktestModel {
 	public LocalDate getLocalDateStartDate() {
 		return new LocalDate(startDate);
 	}
-
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
@@ -209,7 +207,6 @@ public class BacktestModel {
 	public Date getEndDate() {
 		return endDate;
 	}
-
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
@@ -217,7 +214,6 @@ public class BacktestModel {
 	public int getdDayWindow() {
 		return dDayWindow;
 	}
-
 	public void setdDayWindow(int dDayWindow) {
 		this.dDayWindow = dDayWindow;
 	}
@@ -225,37 +221,35 @@ public class BacktestModel {
 	public int getdDayParam() {
 		return dDayParam;
 	}
-
 	public void setdDayParam(int dDayParam) {
 		this.dDayParam = dDayParam;
 	}
 
-	public float getChurnVolRange() {
+	public double getdDayPriceDrop() {
+		return dDayPriceDrop;
+	}
+	public void setdDayPriceDrop(double dDayPriceDrop) {
+		this.dDayPriceDrop = dDayPriceDrop;
+	}
+	public double getChurnVolRange() {
 		return churnVolRange;
 	}
 
-	public void setChurnVolRange(float churnVolRange) {
-		this.churnVolRange = churnVolRange;
-	}
 	public void setChurnVolRange(double churnVolRange) {
-		this.churnVolRange = (float) churnVolRange;
+		this.churnVolRange = (double) churnVolRange;
 	}
 
-	public float getChurnPriceRange() {
+	public double getChurnPriceRange() {
 		return churnPriceRange;
 	}
 
-	public void setChurnPriceRange(float churnPriceRange) {
-		this.churnPriceRange = churnPriceRange;
-	}
 	public void setChurnPriceRange(double churnPriceRange) {
-		this.churnPriceRange = (float) churnPriceRange;
+		this.churnPriceRange = (double) churnPriceRange;
 	}
 
 	public Boolean getChurnPriceCloseHigherOn() {
 		return churnPriceCloseHigherOn;
 	}
-
 	public void setChurnPriceCloseHigherOn(Boolean churnPriceCloseHigherOn) {
 		this.churnPriceCloseHigherOn = churnPriceCloseHigherOn;
 	}
@@ -263,7 +257,6 @@ public class BacktestModel {
 	public Boolean getChurnAVG50On() {
 		return churnAVG50On;
 	}
-
 	public void setChurnAVG50On(Boolean churnAVG50On) {
 		this.churnAVG50On = churnAVG50On;
 	}
@@ -271,103 +264,76 @@ public class BacktestModel {
 	public Boolean getChurnPriceTrend35On() {
 		return churnPriceTrend35On;
 	}
-
 	public void setChurnPriceTrend35On(Boolean churnPriceTrend35On) {
 		this.churnPriceTrend35On = churnPriceTrend35On;
 	}
 
-	public float getChurnPriceTrend35() {
+	public double getChurnPriceTrend35() {
 		return churnPriceTrend35;
 	}
-
-	public void setChurnPriceTrend35(float churnPriceTrend35) {
-		this.churnPriceTrend35 = churnPriceTrend35;
-	}
 	public void setChurnPriceTrend35(double churnPriceTrend35) {
-		this.churnPriceTrend35 = (float)churnPriceTrend35;
+		this.churnPriceTrend35 = (double)churnPriceTrend35;
 	}
+	
 	public Boolean getVolVolatilityOn() {
 		return volVolatilityOn;
 	}
-
 	public void setVolVolatilityOn(Boolean volVolatilityOn) {
 		this.volVolatilityOn = volVolatilityOn;
 	}
 
-	public float getVolumeMult() {
+	public double getVolumeMult() {
 		return volumeMult;
 	}
-
-	public void setVolumeMult(float volumeMult) {
-		this.volumeMult = volumeMult;
-	}
 	public void setVolumeMult(double volumeMult) {
-		this.volumeMult = (float)volumeMult;
+		this.volumeMult = (double)volumeMult;
 	}
-	public float getVolMultTop() {
+	
+	public double getVolMultTop() {
 		return volMultTop;
 	}
-
-	public void setVolMultTop(float volMultTop) {
-		this.volMultTop = volMultTop;
-	}
 	public void setVolMultTop(double volMultTop) {
-		this.volMultTop = (float)volMultTop;
+		this.volMultTop = (double)volMultTop;
 	}
 
-	public float getVolMultBot() {
+	public double getVolMultBot() {
 		return volMultBot;
 	}
-
-	public void setVolMultBot(float volMultBot) {
-		this.volMultBot = volMultBot;
-	}
 	public void setVolMultBot(double volMultBot) {
-		this.volMultBot = (float)volMultBot;
+		this.volMultBot = (double)volMultBot;
 	}
 
 	public Boolean getPriceVolatilityOn() {
 		return priceVolatilityOn;
 	}
-
 	public void setPriceVolatilityOn(Boolean priceVolatilityOn) {
 		this.priceVolatilityOn = priceVolatilityOn;
 	}
 
-	public float getPriceMult() {
+	public double getPriceMult() {
 		return priceMult;
 	}
-
-	public void setPriceMult(float priceMult) {
-		this.priceMult = priceMult;
-	}
 	public void setPriceMult(double priceMult) {
-		this.priceMult = (float)priceMult;
+		this.priceMult = (double)priceMult;
 	}
-	public float getPriceMultTop() {
+	
+	public double getPriceMultTop() {
 		return priceMultTop;
 	}
-
-	public void setPriceMultTop(float priceMultTop) {
-		this.priceMultTop = priceMultTop;
-	}
 	public void setPriceMultTop(double priceMultTop) {
-		this.priceMultTop = (float)priceMultTop;
+		this.priceMultTop = (double)priceMultTop;
 	}
-	public float getPriceMultBot() {
+	
+	public double getPriceMultBot() {
 		return priceMultBot;
 	}
-
-	public void setPriceMultBot(float priceMultBot) {
-		this.priceMultBot = priceMultBot;
-	}
 	public void setPriceMultBot(double priceMultBot) {
-		this.priceMultBot = (float)priceMultBot;
+		this.priceMultBot = (double)priceMultBot;
 	}
+	
 	public int getrDaysMin() {
 		return rDaysMin;
 	}
-
 	public void setrDaysMin(int rDaysMin) {
 		this.rDaysMin = rDaysMin;
 	}
@@ -375,7 +341,6 @@ public class BacktestModel {
 	public int getrDaysMax() {
 		return rDaysMax;
 	}
-
 	public void setrDaysMax(int rDaysMax) {
 		this.rDaysMax = rDaysMax;
 	}
@@ -383,25 +348,20 @@ public class BacktestModel {
 	public Boolean getPivotTrend35On() {
 		return pivotTrend35On;
 	}
-
 	public void setPivotTrend35On(Boolean pivotTrend35On) {
 		this.pivotTrend35On = pivotTrend35On;
 	}
-
-	public float getPivotTrend35() {
+	
+	public double getPivotTrend35() {
 		return pivotTrend35;
 	}
-
-	public void setPivotTrend35(float pivotTrend35) {
-		this.pivotTrend35 = pivotTrend35;
-	}
 	public void setPivotTrend35(double pivotTrend35) {
-		this.pivotTrend35 = (float)pivotTrend35;
+		this.pivotTrend35 = (double)pivotTrend35;
 	}
+	
 	public Boolean getRallyVolAVG50On() {
 		return rallyVolAVG50On;
 	}
-
 	public void setRallyVolAVG50On(Boolean rallyVolAVG50On) {
 		this.rallyVolAVG50On = rallyVolAVG50On;
 	}
@@ -409,7 +369,6 @@ public class BacktestModel {
 	public Boolean getRallyPriceHighOn() {
 		return rallyPriceHighOn;
 	}
-
 	public void setRallyPriceHighOn(Boolean rallyPriceHighOn) {
 		this.rallyPriceHighOn = rallyPriceHighOn;
 	}
