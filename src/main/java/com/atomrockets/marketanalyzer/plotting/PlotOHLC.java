@@ -2,13 +2,18 @@ package com.atomrockets.marketanalyzer.plotting;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickMarkPosition;
+import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.XYPlot;
@@ -75,6 +80,11 @@ public class PlotOHLC {
 	    */
 	    
 	    DateAxis domainAxis = new DateAxis("Date");
+	    //Setting the proper domainAxis tick marks
+	    DateFormat formatter = new SimpleDateFormat("MM-dd");
+	    DateTickUnit unit = new DateTickUnit(DateTickUnitType.DAY, 2, formatter);
+	    domainAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
+	    domainAxis.setTickUnit(unit);
 	    NumberAxis rangeAxis = new NumberAxis("Price");
 	    rangeAxis.setNumberFormatOverride(new DecimalFormat("$0"));
 	    rangeAxis.setAutoRange(true);
@@ -197,14 +207,14 @@ public class PlotOHLC {
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("D Day", x, y);  
                 annotation.setFont(font);   
-                annotation.setTextAnchor(TextAnchor.BOTTOM_CENTER);   
+                annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation); 
         	} else if (YID.getChurnDay()) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("C Day", x, y);  
                 annotation.setFont(font);   
-                annotation.setTextAnchor(TextAnchor.BOTTOM_CENTER);   
+                annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation);
         	}
         }
