@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.plotting;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.text.DateFormat;
@@ -65,9 +66,11 @@ public class PlotOHLC {
 		
 	    
 	    //setting up the renderer
-	    XYItemRenderer renderer1 = new HighLowRenderer();
+	    XYItemRenderer renderer1 = new CustomHighLowRenderer();
 	    renderer1.setSeriesPaint(0, Color.GREEN);
 	    renderer1.setSeriesPaint(1, Color.RED);
+	    renderer1.setSeriesStroke(0, new BasicStroke(3f));
+	    renderer1.setSeriesStroke(1, new BasicStroke(3f));
 	    
 	    /*
 	     * tool tip generator not used when sending the chart through the output stream

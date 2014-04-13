@@ -86,9 +86,20 @@
 
 		<!-- Plotting -->
 		<dependency>
-		    <groupId>jfree</groupId>
-		    <artifactId>jfreechart</artifactId>
-		    <version>1.0.13</version>
+			<groupId>org.jfree</groupId>
+			<artifactId>jcommon</artifactId>
+			<version>1.0.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.17</version>
+			<classifier>sources</classifier>
 		</dependency>
 		
 			<!-- Plotting with Google Charts using the charts4j api -->

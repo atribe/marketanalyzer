@@ -312,12 +312,9 @@ public class IndexCalcsService {
 			
 			//churning D Day finder
 			checkForChurningDays();
-			
-			//Getting window length from parameter database
-			int dDayWindow = m_b.getdDayWindow();
 		
 			//Counting up d-day that have fallen in a given window is handled in the following function
-			countDDaysInWindow(dDayWindow);
+			countDDaysInWindow();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -446,7 +443,12 @@ public class IndexCalcsService {
 		}
 	}
 	
-	public void countDDaysInWindow(int dDayWindow) {
+	public void countDDaysInWindow() {
+		
+		//Getting window length from parameter database
+		int dDayWindow = m_b.getdDayWindow();
+		//getting the sell threshold
+		int dDayParam = m_b.getdDayParam();
 		log.info("          Looking at each day to see how many D-Dates at in the current window (" + dDayWindow + " days).");
 		
 		/* 
@@ -455,14 +457,20 @@ public class IndexCalcsService {
 		 * 			and see how many d-days there are
 		 * 		4. Write the results to the database 
 		*/
+		
 
 		//This list starts with the newest date, which means the loop is goes back in time with each iteration 
 		for(int i=m_IndexCalcList.size()-1; i>0; i--) {
 
 			for(int j=i; j>i-dDayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
 
-				if( Boolean.TRUE.equals(m_IndexCalcList.get(j).getDistributionDay()) || Boolean.TRUE.equals(m_IndexCalcList.get(j).getChurnDay()) )
+				if( Boolean.TRUE.equals(m_IndexCalcList.get(j).getDistributionDay()) || Boolean.TRUE.equals(m_IndexCalcList.get(j).getChurnDay()) ) {
 					m_IndexCalcList.get(i).addDDayCounter();
+				}
+				
+				if( m_IndexCalcList.get(i).getDistributionDayCounter() > dDayParam) {
+					m_IndexCalcList.get(i).setDayAction(IndexCalcs.dayActionType.SELL);
+				}
 			}
 		}
 	}

@@ -72,7 +72,7 @@ public class DatabaseInitialization{
 			m_indexAnalysisService = new IndexCalcsService(connection);
 			log.info("3.7 Initializing IndexOHLCVCalcs table");
 			//skipping this while I work on the view portion of the program
-			m_indexAnalysisService.init(indexList);
+			//m_indexAnalysisService.init(indexList);
 			
 		} catch (ClassNotFoundException e) {
 			// Handles errors if the JDBC driver class not found.

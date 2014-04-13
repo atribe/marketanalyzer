@@ -8,6 +8,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class IndexCalcs {
 	protected final static String tableName="IndexCalcs";
+	public static enum dayActionType {
+		SELL(-1), 
+		HOLD(0), 
+		BUY(1);
+		
+		private final int value;
+		dayActionType(int value) { this.value = value; }
+		public int getValue() {return value; }
+	};
+	
 	
 	protected long id;
 	protected long OHLCid;
@@ -25,8 +35,8 @@ public class IndexCalcs {
 	protected int distributionDayCounter;
 	protected Boolean followThruDay;
 	
-	//Buy, sell, hold
-	protected String dayAction;
+	//set by the enum dayActionType. sell=-1, hold=0, buy=1
+	protected int dayAction;
 	
 	//Empty constructor
 	public IndexCalcs() {}
@@ -39,7 +49,7 @@ public class IndexCalcs {
 			Class<?> type = f.getType();
 			String typeName=null;
 			//Don't include the stuff from the yahoo OHLC table in this table
-			if( name != "tableName") {
+			if( name != "tableName" && name != "dayActionType") {
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
 				} else if (type.equals(double.class)){
@@ -54,6 +64,11 @@ public class IndexCalcs {
 					typeName = "DATE";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
+				}
+				
+				//Special cases
+				if( name == "dayAction" ) {
+					typeName = "TINYINT(1) DEFAULT '0'";
 				}
 				mySQLColumnList.put(f.getName(), typeName);
 			}
@@ -213,11 +228,14 @@ public class IndexCalcs {
 		this.distributionDayCounter = distributionDayCounter;
 	}
 
-	public String getDayAction() {
+	public int getDayAction() {
 		return dayAction;
 	}
-	public void setDayAction(String dayAction) {
+	public void setDayAction(int dayAction) {
 		this.dayAction = dayAction;
+	}
+	public void setDayAction(dayActionType dayAction) {
+		this.dayAction = dayAction.getValue();
 	}
 
 	public Boolean getChurnDay() {
