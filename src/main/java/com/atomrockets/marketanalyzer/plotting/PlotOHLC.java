@@ -16,12 +16,13 @@ import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.DateTickUnit;
 import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.HighLowRenderer;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -93,9 +94,28 @@ public class PlotOHLC {
 	    
 	    //creating the xy plot with the OHLC data
 	    XYPlot plot1 = new XYPlot(OHLCdata, domainAxis, rangeAxis, renderer1);
+	    
 
 	    //Adding D-Day annotations to the OHLC plot
 	    plot1 = annotateOHLC_DDays(plot1,  OHLCList);
+	    
+	    /*
+	     * Stuff to put the running d day count on the OHLC plot
+	     */
+	    IntervalXYDataset runningTotaldataSet = createRunningTotalDataset(OHLCList);
+	    XYLineAndShapeRenderer runningTotalRenderer = new XYLineAndShapeRenderer(true,false);
+	    NumberAxis rangeAxisForDDays = new NumberAxis("Running D Day Count");
+	    rangeAxisForDDays.setNumberFormatOverride(new DecimalFormat("0"));
+	    NumberTickUnit numberTickUnit = new NumberTickUnit(1);
+	    rangeAxisForDDays.setTickUnit(numberTickUnit);
+	    runningTotalRenderer.setSeriesPaint(0, Color.BLUE);
+        plot1.setRenderer(1, runningTotalRenderer);
+        plot1.setDataset(1, runningTotaldataSet);
+        
+        plot1.setRangeAxis(1, rangeAxisForDDays);
+        plot1.mapDatasetToRangeAxis(1, 1);
+	    
+	    
 	    
 	    //Overlay the Long-Term Trend Indicator
 	    /*TimeSeries dataset3 = MovingAverage.createMovingAverage(t1, "LT", 49, 49);
@@ -221,4 +241,19 @@ public class PlotOHLC {
         }
 		return plot;
 	}
+	private static IntervalXYDataset createRunningTotalDataset(List<IndexOHLCVCalcs> OHLCList) {
+		String symbol = OHLCList.get(0).getSymbol();
+        TimeSeries s1 = new TimeSeries(symbol);
+        
+    	for(IndexOHLCVCalcs a : OHLCList) {
+    		s1.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getDistributionDayCounter());
+    	}
+	  
+        s1.setDescription("D Day Chart for " + symbol);
+        s1.setKey("D Day Chart for " + symbol);
+        TimeSeriesCollection dataset = new TimeSeriesCollection();
+        dataset.addSeries(s1);
+
+        return dataset;
+    }
 }

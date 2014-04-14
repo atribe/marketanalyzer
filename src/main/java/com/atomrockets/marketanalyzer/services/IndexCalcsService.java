@@ -9,7 +9,6 @@ import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
-import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 import java.sql.Connection;
 import java.sql.SQLException;
