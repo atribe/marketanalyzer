@@ -36,6 +36,8 @@
 					<div id="dDayChart" class="chart">
 						<img src="<c:url value="charts/dday" />" />
 					</div>
+					
+				<!-- D Day table stuff used for debugging
 					<table class="DDays">
 						<tr>
 							<th>DB id</th>
@@ -52,8 +54,31 @@
 							<td>${indexCalcs.churnDay}</td>
 							<td>${indexCalcs.distributionDayCounter}</td>
 						</tr>
+						</c:forEach>	
+					</table>
+				 -->
+				</div>
+				<div class="Index_Results">
+					<div class="sectionHeader"><h2>Results Section</h2></div>
+					<table>
+						<tr>
+							<th>Index</th>
+							<th>Results Type</th>
+							<th>Results Start Date</th>
+							<th>Results End Date</th>
+							<th>Return</th>
+						</tr>
+						<!-- Not ready to impelemtn yet	
+						<c:forEach items="${resultList}" var="result">
+						<tr>
+							<td>${result.symbol}</td>
+							<td>${result.type}</td>
+							<td>${result.startDate}</td>
+							<td>${result.endDate}</td>
+							<td>${result.return}</td>
+						</tr>
 						</c:forEach>
-						
+						 -->
 					</table>
 				</div>
 			</div>
