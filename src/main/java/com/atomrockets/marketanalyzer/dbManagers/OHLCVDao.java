@@ -250,10 +250,14 @@ public class OHLCVDao extends GenericDBSuperclass {
 			QueryRunner runner = new QueryRunner();
 			
 			for(OHLCVData row : rowsFromYahoo) {
-				//DbUtils QueryRunner fills in the preparedStatement
-				runner.fillStatementWithBean(ps, row, columnNames);
 				
-				ps.addBatch();
+				//Check to see if row is already in the DB
+				if(!isAlreadyInDB(row)) {
+					//DbUtils QueryRunner fills in the preparedStatement
+					runner.fillStatementWithBean(ps, row, columnNames);
+					
+					ps.addBatch();
+				}
 				counter++;
 				
 				if (counter % batchSize == 0) { //if i/batch size remainder == 0 execute batch
