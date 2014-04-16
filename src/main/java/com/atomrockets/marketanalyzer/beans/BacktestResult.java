@@ -5,21 +5,30 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-
-
 import java.util.Map;
 
 import org.joda.time.LocalDate;
 
-public class BacktestModel {
-	private final static String tableName="backtest";
+public class BacktestResult {
+	private final static String tableName="backtestResult";
+	
+	public static enum parametersTypeEnum {
+		BASE(0),
+		CURRENT(1),
+		PREVIOUS(2);
+		
+		private final int value;
+		parametersTypeEnum(int value) {this.value = value; }
+		public int getValue() {return value;}
+	}
+	
 	private int id;
 
 	//Stock or index symbol
 	private String symbol;
 	
 	//Is this row in the DB the most current parameters or are they an archived result
-	private Boolean currentParameters;
+	private int parametersType;
 	private Timestamp entryTimestamp; //The time the model results were entered into the DB
 	
 	//Parameters
@@ -49,10 +58,16 @@ public class BacktestModel {
 	private Boolean rallyVolAVG50On;
 	private Boolean rallyPriceHighOn;
 	
+	//Results
+	private double totalPercentReturn;
+	private int numberOfTrades;
+	private int numberOfProfitableTrades;
+	
+	
 	//empty constructor to qualify as a javabean
-	public BacktestModel() { }
+	public BacktestResult() { }
 	//constructor that sets the symbol
-	public BacktestModel(String symbol) {
+	public BacktestResult(String symbol) {
 		setSymbol(symbol);
 	}
 	
@@ -63,7 +78,7 @@ public class BacktestModel {
 			String name = f.getName();
 			Class<?> type = f.getType();
 			String typeName=null;
-			if(name != "tableName") {
+			if(name != "tableName" && name != "parametersTypeEnum") {
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
 				} else if (type.equals(double.class)){
@@ -154,7 +169,7 @@ public class BacktestModel {
 		String query = "SELECT *"
 				+ " FROM `" + getTableName() + "`"
 				+ " WHERE symbol = ?"
-				+ " AND currentParameters = 1";
+				+ " AND parametersType = 1";
 		
 		return query;
 	}
@@ -173,13 +188,15 @@ public class BacktestModel {
 		this.id = id;
 	}
 
-	public Boolean getCurrentParameters() {
-		return currentParameters;
+	public int getParametersType() {
+		return parametersType;
 	}
-	public void setCurrentParameters(Boolean currentParameters) {
-		this.currentParameters = currentParameters;
+	public void setParametersType(int parametersType) {
+		this.parametersType = parametersType;
 	}
-
+	public void setParametersType(parametersTypeEnum type) {
+		this.parametersType = type.getValue();
+	}
 	public Timestamp getEntryTimestamp() {
 		return entryTimestamp;
 	}
@@ -372,4 +389,23 @@ public class BacktestModel {
 	public void setRallyPriceHighOn(Boolean rallyPriceHighOn) {
 		this.rallyPriceHighOn = rallyPriceHighOn;
 	}
+	public double getTotalPercentReturn() {
+		return totalPercentReturn;
+	}
+	public void setTotalPercentReturn(double totalPercentReturn) {
+		this.totalPercentReturn = totalPercentReturn;
+	}
+	public int getNumberOfTrades() {
+		return numberOfTrades;
+	}
+	public void setNumberOfTrades(int numberOfTrades) {
+		this.numberOfTrades = numberOfTrades;
+	}
+	public int getNumberOfProfitableTrades() {
+		return numberOfProfitableTrades;
+	}
+	public void setNumberOfProfitableTrades(int numberOfProfitableTrades) {
+		this.numberOfProfitableTrades = numberOfProfitableTrades;
+	}
+	
 }

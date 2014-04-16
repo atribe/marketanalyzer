@@ -53,7 +53,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		OHLCVData a = new OHLCVData();
 		
 		@SuppressWarnings("static-access")
-		String tableName =a.getTablename();
+		String tableName = a.getTablename();
 		
 		log.trace("IY.1.1 Checking if table " + tableName + " exists.");
 		if(!tableExists(tableName)) {
@@ -416,7 +416,37 @@ public class OHLCVDao extends GenericDBSuperclass {
 		return dataPoint;
 	}
 
-	public IndexOHLCVCalcs getBySymbolAndDate(String symbol, LocalDate date) {
+	public OHLCVData getBySymbolAndDate(String symbol, LocalDate date) {
+		OHLCVData dataPoint=null;
+		
+		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
+				+ " WHERE `symbol` = ?"
+				+ " AND `date` = ?";
+		/*
+		 * Beginning of DbUtils code
+		 */
+		QueryRunner run = new QueryRunner();
+		// Use the BeanListHandler implementation to convert all
+		// ResultSet rows into a List of Person JavaBeans.
+		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
+		
+		try{
+			dataPoint = run.query(
+		    		m_connection, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		symbol,
+		    		date.toDate());
+		        // do something with the result
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		
+		return dataPoint;
+	}
+	public IndexOHLCVCalcs getBySymbolAndDateAsCalcs(String symbol, LocalDate date) {
 		IndexOHLCVCalcs dataPoint=null;
 		
 		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
@@ -447,7 +477,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		return dataPoint;
 	}
 	private boolean checkDate(String symbol, LocalDate date) {
-		IndexOHLCVCalcs a = getBySymbolAndDate(symbol, date);
+		OHLCVData a = getBySymbolAndDate(symbol, date);
 		if(a!=null)
 			return true;
 		else
@@ -465,7 +495,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			counter++;
 		}
 		
-		IndexOHLCVCalcs a = getBySymbolAndDate(symbol, date);;
+		IndexOHLCVCalcs a = getBySymbolAndDateAsCalcs(symbol, date);;
 		
 		return a;
 	}

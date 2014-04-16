@@ -1,12 +1,12 @@
 package com.atomrockets.marketanalyzer.services;
 
-import com.atomrockets.marketanalyzer.beans.BacktestModel;
+import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
-import com.atomrockets.marketanalyzer.dbManagers.IndexParameterTableManager;
+import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
@@ -36,11 +36,11 @@ public class IndexCalcsService {
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	//Database Table Managers
-	private OHLCVDao m_indexYahooTable;
-	private IndexParameterTableManager m_indexParamTable;
+	private OHLCVDao m_OHLCVDao;
+	private BacktestResultDAO m_BacktestResultDAO;
 	private IndexCalcsDAO m_indexCalcsDAO;
 	
-	private BacktestModel m_b;
+	private BacktestResult m_b;
 
 	//Index names
 	private String m_symbol;
@@ -83,8 +83,8 @@ public class IndexCalcsService {
 		try {
 			m_connection = GenericDBSuperclass.getConnection();
 			setM_connectionAlive(true);
-			m_indexYahooTable = new OHLCVDao(m_connection);
-			m_indexParamTable = new IndexParameterTableManager(m_connection);
+			m_OHLCVDao = new OHLCVDao(m_connection);
+			m_BacktestResultDAO = new BacktestResultDAO(m_connection);
 			m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
 		} catch (ClassNotFoundException e) {
 			// Handles errors if the JDBC driver class not found.
@@ -102,8 +102,8 @@ public class IndexCalcsService {
 	
 	public IndexCalcsService(Connection connection) {
 		m_connection = connection;
-		m_indexYahooTable = new OHLCVDao(m_connection);
-		m_indexParamTable = new IndexParameterTableManager(m_connection);
+		m_OHLCVDao = new OHLCVDao(m_connection);
+		m_BacktestResultDAO = new BacktestResultDAO(m_connection);
 		m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
 	}
 	
@@ -143,7 +143,7 @@ public class IndexCalcsService {
 
 		//0. Get parameters for the given index
 		try {
-			m_b = m_indexParamTable.getSymbolParameters(getM_symbol());
+			m_b = m_BacktestResultDAO.getSymbolParameters(getM_symbol());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,7 +156,7 @@ public class IndexCalcsService {
 		setM_startDate();
 		setM_endDate();
 		
-		m_yahooIndexDataList = m_indexYahooTable.getRowsBetweenDatesBySymbol(m_symbol, m_startDate, m_endDate);
+		m_yahooIndexDataList = m_OHLCVDao.getRowsBetweenDatesBySymbol(m_symbol, m_startDate, m_endDate);
 
 		setM_IndexCalcList(m_yahooIndexDataList);
 		
@@ -202,13 +202,12 @@ public class IndexCalcsService {
 	 * 
 	 */
 	private void setM_endDate() {
-		//LocalDate endDate = m_indexParamTable.getDateValue("endDate");
 		m_endDate = new LocalDate();
 	}
 
 	private void setM_startDate() {
-		LocalDate startDate = new LocalDate(PropCache.getCachedProps("indexcalcs.startdate"));
-		IndexOHLCVCalcs beginDataPoint = m_indexYahooTable.getFirstBySymbol(m_symbol);
+		LocalDate startDate = new LocalDate(m_b.getStartDate());
+		IndexOHLCVCalcs beginDataPoint = m_OHLCVDao.getFirstBySymbol(m_symbol);
 		LocalDate symbolBeginDate = beginDataPoint.getConvertedDate();
 		
 		if( symbolBeginDate.isBefore( startDate.minusDays( getBufferDays() ) ) )
@@ -528,25 +527,25 @@ public class IndexCalcsService {
 		
 		//Converting the dates into valid dates in the db
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexOHLCVCalcs first = m_indexYahooTable.getValidDate(symbol, startDate, false);
+		IndexOHLCVCalcs first = m_OHLCVDao.getValidDate(symbol, startDate, false);
 		if(first==null) {
 			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
-			 first = m_indexYahooTable.getValidDate(symbol, startDate, true);
+			 first = m_OHLCVDao.getValidDate(symbol, startDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
 		if(first==null) {
-			first = m_indexYahooTable.getFirstBySymbol(symbol);
+			first = m_OHLCVDao.getFirstBySymbol(symbol);
 		}
 		
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexOHLCVCalcs last = m_indexYahooTable.getValidDate(symbol, endDate, false);
+		IndexOHLCVCalcs last = m_OHLCVDao.getValidDate(symbol, endDate, false);
 		if(last == null) {
 			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
-			last = m_indexYahooTable.getValidDate(symbol, endDate, true);
+			last = m_OHLCVDao.getValidDate(symbol, endDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
 		if(last==null) {
-			last = m_indexYahooTable.getLastBySymbol(symbol);
+			last = m_OHLCVDao.getLastBySymbol(symbol);
 		}
 		String YahooTableName = OHLCVData.getTablename();
 		String IndexCalcTableName = IndexCalcs.getTableName();

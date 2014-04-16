@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.beans.BacktestModel;
+import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.services.BacktestService;
 
 @Controller
@@ -30,7 +30,7 @@ public class BacktestController {
         List<String> indexList = BtS.getIndexList();
         mav.addObject("indexList", indexList);
         
-        BacktestModel b = new BacktestModel();
+        BacktestResult b = new BacktestResult();
         b.setdDayWindow(55);
         //adding a backtestModel object to the mav
         mav.addObject("backtestModel", b);
@@ -45,7 +45,7 @@ public class BacktestController {
     }
     
     @RequestMapping(value="/backtestResults")
-    private ModelAndView processBacktest(@ModelAttribute BacktestModel bt) {
+    private ModelAndView processBacktest(@ModelAttribute BacktestResult bt) {
     	ModelAndView mav = new ModelAndView();
     	mav.setViewName("backtestResults");
     	mav.addObject("backtestModel", bt);

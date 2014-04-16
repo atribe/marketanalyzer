@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class IndexCalcs {
 	protected final static String tableName="IndexCalcs";
+	
 	public static enum dayActionType {
 		SELL(-1), 
 		HOLD(0), 

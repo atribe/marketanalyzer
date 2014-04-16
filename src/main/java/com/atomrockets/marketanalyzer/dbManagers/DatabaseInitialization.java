@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.atomrockets.marketanalyzer.services.BacktestService;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
@@ -28,7 +29,7 @@ public class DatabaseInitialization{
 	
 	//Database Table Managers
 	static private OHLCVDao m_OHLCVDao;
-	static private IndexParameterTableManager m_indexParamTable;
+	static private BacktestService m_BacktestService;
 	static private IndexCalcsService m_indexAnalysisService;
 	
 
@@ -56,10 +57,11 @@ public class DatabaseInitialization{
 			m_OHLCVDao.tableInitialization(indexList);
 	
 			//Initialize the parameter table
-			log.trace("3.4 Creating IndexParameterTableManager");
-			m_indexParamTable = new IndexParameterTableManager(connection);
+			log.trace("3.4 Creating BacktestResultDAO");
+			m_BacktestService = new BacktestService(connection);
 			log.info("3.5 Initializing IndexParameter Table");
-			m_indexParamTable.tableInitialization(indexList);
+			m_BacktestService.init(indexList);
+			
 			
 			/*
 			 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
