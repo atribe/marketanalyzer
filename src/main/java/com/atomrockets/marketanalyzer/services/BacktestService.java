@@ -8,8 +8,6 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
-import com.atomrockets.marketanalyzer.beans.IndexCalcs;
-import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.beans.StockTransaction;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
@@ -80,6 +78,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		
 	}
+	
 	private void runBaseline(String symbol) throws SQLException {
 		BacktestResult backtest = m_backtestResultDAO.getSymbolParameters(symbol);
 		
@@ -89,5 +88,22 @@ public class BacktestService extends GenericServiceSuperclass{
 		StockTransaction d = new StockTransaction(backtest.getId(), beginningDataPoint, endingDataPoint);
 		
 		m_stockTransationDAO.insertTransaction(d);
+		//TODO
+		/*
+		 * There needs to be a follow up method that inserts results into the backtest table
+		 */
+		backtest.setNumberOfTrades(1);
+		if(d.getProfitable()) {
+			backtest.setNumberOfProfitableTrades(1);
+		} else {
+			backtest.setNumberOfProfitableTrades(0);
+		}
+		backtest.setTotalPercentReturn(d.getPercentReturn());
+		
+		m_backtestResultDAO.insertOrUpdateBacktest(backtest);
+	}
+	
+	public BacktestResult getBaseline(String symbol) {
+		return null;
 	}
 }

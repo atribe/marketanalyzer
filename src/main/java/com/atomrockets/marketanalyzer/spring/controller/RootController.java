@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
+import com.atomrockets.marketanalyzer.services.BacktestService;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
@@ -35,6 +36,11 @@ public class RootController {
 	        }
 	        log.debug("");
 	        */
+        	
+        	BacktestService backtestService = new BacktestService();
+        	if(backtestService.isM_connectionAlive()) {
+        		
+        	}
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.

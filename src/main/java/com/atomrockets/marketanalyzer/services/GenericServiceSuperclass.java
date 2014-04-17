@@ -31,4 +31,8 @@ public class GenericServiceSuperclass {
 		public void setM_connectionAlive(boolean m_connectionAlive) {
 			this.m_connectionAlive = m_connectionAlive;
 		}
+		
+		public boolean isM_connectionAlive() {
+			return m_connectionAlive;
+		}
 }

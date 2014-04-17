@@ -8,7 +8,6 @@ import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
-import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,22 +17,14 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
-public class IndexCalcsService {
+public class IndexCalcsService extends GenericServiceSuperclass{
 	/*
 	 * These variables are class member properties and once set they can be used by 
 	 * all methods of the class. However, because this is a static class they need to be
 	 * set every time you enter into the class from outside.
 	 */
-
-	//Connection to the database
-	private Connection m_connection;
-	private boolean m_connectionAlive;
-	
-	//logger
-	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	//Database Table Managers
 	private OHLCVDao m_OHLCVDao;
@@ -584,14 +575,4 @@ public class IndexCalcsService {
 		return dDayList;
 		
 	}
-
-	public boolean isM_connectionAlive() {
-		return m_connectionAlive;
-	}
-
-	public void setM_connectionAlive(boolean m_connectionAlive) {
-		this.m_connectionAlive = m_connectionAlive;
-	}
-
-	
 }

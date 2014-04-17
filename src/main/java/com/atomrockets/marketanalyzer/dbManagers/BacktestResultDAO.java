@@ -109,10 +109,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	 * 
 	 */
 	private void populateFreshParamDB(String[] indexList) throws SQLException{
-		
-		
-		//Creating a HashMap to store the parameters so they can be put in the DB
-		//HashMap<String, String> parametersMap = new HashMap<String, String>();
 		BacktestResult b = new BacktestResult();
 		
 		PreparedStatement ps = null;
@@ -299,5 +295,19 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				symbol
 				);
 		return b;
+	}
+
+	public void insertOrUpdateBacktest(BacktestResult b) throws SQLException {
+		
+		PreparedStatement ps = null;
+		String[] columnNames = b.getColumnNameList();
+		String insertQuery = b.getInsertOrUpdateQuery();
+		QueryRunner runner = new QueryRunner();
+		
+		ps = m_connection.prepareStatement(insertQuery);
+
+		runner.fillStatementWithBean(ps, b, columnNames);
+		
+		ps.execute();
 	}
 }
