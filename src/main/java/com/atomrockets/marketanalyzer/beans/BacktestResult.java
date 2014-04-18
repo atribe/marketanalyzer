@@ -253,7 +253,7 @@ public class BacktestResult {
 	}
 
 	public void setChurnVolRange(double churnVolRange) {
-		this.churnVolRange = (double) churnVolRange;
+		this.churnVolRange = churnVolRange;
 	}
 
 	public double getChurnPriceRange() {
@@ -261,7 +261,7 @@ public class BacktestResult {
 	}
 
 	public void setChurnPriceRange(double churnPriceRange) {
-		this.churnPriceRange = (double) churnPriceRange;
+		this.churnPriceRange = churnPriceRange;
 	}
 
 	public Boolean getChurnPriceCloseHigherOn() {
@@ -289,7 +289,7 @@ public class BacktestResult {
 		return churnPriceTrend35;
 	}
 	public void setChurnPriceTrend35(double churnPriceTrend35) {
-		this.churnPriceTrend35 = (double)churnPriceTrend35;
+		this.churnPriceTrend35 = churnPriceTrend35;
 	}
 	
 	public Boolean getVolVolatilityOn() {
@@ -303,21 +303,21 @@ public class BacktestResult {
 		return volumeMult;
 	}
 	public void setVolumeMult(double volumeMult) {
-		this.volumeMult = (double)volumeMult;
+		this.volumeMult = volumeMult;
 	}
 	
 	public double getVolMultTop() {
 		return volMultTop;
 	}
 	public void setVolMultTop(double volMultTop) {
-		this.volMultTop = (double)volMultTop;
+		this.volMultTop = volMultTop;
 	}
 
 	public double getVolMultBot() {
 		return volMultBot;
 	}
 	public void setVolMultBot(double volMultBot) {
-		this.volMultBot = (double)volMultBot;
+		this.volMultBot = volMultBot;
 	}
 
 	public Boolean getPriceVolatilityOn() {
@@ -331,21 +331,21 @@ public class BacktestResult {
 		return priceMult;
 	}
 	public void setPriceMult(double priceMult) {
-		this.priceMult = (double)priceMult;
+		this.priceMult = priceMult;
 	}
 	
 	public double getPriceMultTop() {
 		return priceMultTop;
 	}
 	public void setPriceMultTop(double priceMultTop) {
-		this.priceMultTop = (double)priceMultTop;
+		this.priceMultTop = priceMultTop;
 	}
 	
 	public double getPriceMultBot() {
 		return priceMultBot;
 	}
 	public void setPriceMultBot(double priceMultBot) {
-		this.priceMultBot = (double)priceMultBot;
+		this.priceMultBot = priceMultBot;
 	}
 	
 	public int getrDaysMin() {
@@ -373,7 +373,7 @@ public class BacktestResult {
 		return pivotTrend35;
 	}
 	public void setPivotTrend35(double pivotTrend35) {
-		this.pivotTrend35 = (double)pivotTrend35;
+		this.pivotTrend35 = pivotTrend35;
 	}
 	
 	public Boolean getRallyVolAVG50On() {

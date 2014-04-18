@@ -52,8 +52,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		
 		OHLCVData a = new OHLCVData();
 		
-		@SuppressWarnings("static-access")
-		String tableName = a.getTablename();
+		String tableName = OHLCVData.getTablename();
 		
 		log.trace("IY.1.1 Checking if table " + tableName + " exists.");
 		if(!tableExists(tableName)) {

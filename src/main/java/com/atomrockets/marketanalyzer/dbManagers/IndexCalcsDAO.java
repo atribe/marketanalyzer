@@ -39,8 +39,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		
 		IndexCalcs c = new IndexCalcs();
 		
-		@SuppressWarnings("static-access")
-		String tableName = c.getTableName();
+		String tableName = IndexCalcs.getTableName();
 		
 		/*
 		 * Checking to see if a table with the index name exists

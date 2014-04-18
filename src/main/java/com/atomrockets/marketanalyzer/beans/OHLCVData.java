@@ -260,6 +260,7 @@ public class OHLCVData implements OHLCVInterface{
 	public void setVolume(long volume) {
 		this.volume = volume;
 	}
+	@Override
 	public void setVolume(double volume) {
 		volume = Math.round(volume);
 	}

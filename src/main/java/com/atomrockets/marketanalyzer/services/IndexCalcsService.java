@@ -147,7 +147,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		//2. Calculate d-dates
 		distributionDayAnalysis();
 		
-		//followThruAnalysis();
+		followThruAnalysis();
 		
 		m_indexCalcsDAO.addAllRowsToDB(m_symbol, m_IndexCalcList);
 	}
@@ -454,18 +454,23 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			}
 		}
 	}
-	/*
-
-	private void followThruAnalysis() {
+	
+	public void followThruAnalysis() {
 		log.info("          Checking to see if each day is a Follow Through Day");
 		
+		findPivotDay();
+		
 		int rowCount = m_IndexCalcList.size();
+		
 		int followThroughDayCount=0;
 		
 		// {{ Getting variables from the parameter database
 		int rDaysMax = m_b.getrDaysMax();
-		boolean churnpivotTrend35On = m_b.getPivotTrend35On();
-		double pivotTrend35 = m_b.getPivotTrend35();
+		int rDaysMin = m_b.getrDaysMin();
+		double priceMult = m_b.getPriceMult();
+		double volMult = m_b.getVolumeMult();
+		
+		
 		// }}
 		
 		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
@@ -477,7 +482,82 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			
 		}
 	}
-	*/
+
+	private void findPivotDay() {
+		/*
+		 * Deffinition: PivotDay = first day of a rally
+		 */
+		boolean potentialPivotDay = false;
+		
+		double support = 0; //if price goes below support the rally is broken
+		
+		/*
+		 * Optional criteria: rally can't start unless the pivotTrend35 < -.1%
+		 * I'm not going to implement this right away
+		 */
+		boolean churnpivotTrend35On = m_b.getPivotTrend35On();
+		double pivotTrend35 = m_b.getPivotTrend35();
+		
+		int rDaysMin = m_b.getrDaysMin();
+		
+		//Loops starts on 2 because the object at i-2 is accessed
+		for(int i = 2; i< m_IndexCalcList.size(); i++) {
+			//Initializing variables for this loop run
+			potentialPivotDay = false;
+			double todaysClose = m_IndexCalcList.get(i).getClose();
+			double previousClose = m_IndexCalcList.get(i-1).getClose();
+			double previousPreviousClose = m_IndexCalcList.get(i-2).getClose();
+			
+			/*
+			 * Pivot day conditions:
+			 * 1. Price dropped yesterday from the day before that
+			 * 1. Price came up today from yesterday 
+			 */
+			if( previousPreviousClose > previousClose && todaysClose > previousClose) {
+				
+				/*
+				 * Optional Condition:
+				 * PivotDayTrend35 < -.1%
+				 */
+				double todaysPivotTrend35 = m_IndexCalcList.get(i).getPriceTrend35();
+				
+				if(!churnpivotTrend35On) { //if churnPivotTrend35 is turned off then today is a potential pivotDay because it met the criteria in the if statement above
+					potentialPivotDay = true;
+				} else if( churnpivotTrend35On && todaysPivotTrend35 < pivotTrend35) { //if churnPivotTrend35 is on and pivotTrend35 criteria is met then the day is still a potential pivot day
+					potentialPivotDay = true;
+				} else { //if churnPivotTrend35 is on and pivotTrend35 criteria is not met then the day is no longer a potential pivot day
+					potentialPivotDay = false;
+				}
+				
+				//if the day is still a potentialPivotDay after the additional criteria then check to see if the rally achieves the minimum of rDaysMin days (typically 4)
+				if( potentialPivotDay ) {
+					support = m_IndexCalcList.get(i).getLow();
+					
+					/*
+					 * Loop starts at the 2nd day in the rally from the potential pivot day (i+1)
+					 * 
+					 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
+					 */
+					for(int j = i+1; j < i + rDaysMin; j++) {
+						double nextDayInRallyLow = m_IndexCalcList.get(j).getLow();
+						if( nextDayInRallyLow < support) {
+							//not a rally
+							potentialPivotDay = false;
+							break;
+						}
+					}
+				}
+			}
+			
+			if(potentialPivotDay == true) {
+				m_IndexCalcList.get(i).setPivotDay(true);
+			} else {
+				m_IndexCalcList.get(i).setPivotDay(false);
+			}
+			
+		}
+	}
+
 	public synchronized List<IndexOHLCVCalcs> getLatestDDays(String symbol) {
 		List<IndexOHLCVCalcs> dDayList = new ArrayList<IndexOHLCVCalcs>();
 		

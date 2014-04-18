@@ -50,8 +50,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		
 		BacktestResult b = new BacktestResult();
 		
-		@SuppressWarnings("static-access")
-		String tableName = b.getTableName();
+		String tableName = BacktestResult.getTableName();
 	
 		/*
 		 * Checking to see if a table with the indexParams name exists

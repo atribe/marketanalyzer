@@ -1,6 +1,5 @@
 package com.atomrockets.marketanalyzer.services;
 
-import java.sql.Connection;
 import java.util.List;
 
 import javax.sql.DataSource;

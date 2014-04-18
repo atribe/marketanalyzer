@@ -2,7 +2,6 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,10 +9,7 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
-
-import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 /**
  * This class is the Parent class to all database classes

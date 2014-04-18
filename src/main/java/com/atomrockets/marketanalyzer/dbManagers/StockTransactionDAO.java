@@ -38,8 +38,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		
 		StockTransaction d = new StockTransaction();
 		
-		@SuppressWarnings("static-access")
-		String tableName = d.getTableName();
+		String tableName = StockTransaction.getTableName();
 		
 		/*
 		 * Checking to see if a table with the index name exists

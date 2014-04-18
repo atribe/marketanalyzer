@@ -1,16 +1,13 @@
 package com.atomrockets.marketanalyzer.spring.controller;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
+import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.services.BacktestService;
-import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 
 @Controller
@@ -39,7 +36,23 @@ public class RootController {
         	
         	BacktestService backtestService = new BacktestService();
         	if(backtestService.isM_connectionAlive()) {
-        		mav.addObject("result", backtestService.getBaseline("^IXIC"));
+        		BacktestResult b1 = backtestService.getBaseline("^IXIC");
+        		double initialInvestment = 10000;
+        		mav.addObject("result1", b1);
+        		mav.addObject("initialInvestment1", initialInvestment);
+        		mav.addObject("finalValue1", initialInvestment*(1+b1.getTotalPercentReturn()));
+        		
+        		BacktestResult b2 = backtestService.getBaseline("^GSPC");
+        		initialInvestment = 10000;
+        		mav.addObject("result2", b2);
+        		mav.addObject("initialInvestment2", initialInvestment);
+        		mav.addObject("finalValue2", initialInvestment*(1+b2.getTotalPercentReturn()));
+        		
+        		BacktestResult b3 = backtestService.getBaseline("^SML");
+        		initialInvestment = 10000;
+        		mav.addObject("result3", b3);
+        		mav.addObject("initialInvestment3", initialInvestment);
+        		mav.addObject("finalValue3", initialInvestment*(1+b3.getTotalPercentReturn()));
         	}
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");

@@ -1,6 +1,5 @@
 package com.atomrockets.marketanalyzer.services;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.joda.time.LocalDate;
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.beans.StockTransaction;
-import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
 import com.atomrockets.marketanalyzer.dbManagers.MarketPredDataSource;

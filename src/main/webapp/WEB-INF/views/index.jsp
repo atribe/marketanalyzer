@@ -3,7 +3,7 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
@@ -65,13 +65,33 @@
 							<th>Index</th>
 							<th>Results Start Date</th>
 							<th>Results End Date</th>
-							<th>Return</th>
+							<th>Initial Investment</th>
+							<th>Final Value</th>
+							<th>% Return</th>
 						</tr>
 						<tr>
-							<td>${result.symbol}</td>
-							<td>${result.startDate}</td>
-							<td>${result.endDate}</td>
-							<td>${result.totalPercentReturn}</td>
+							<td>${result1.symbol}</td>
+							<td>${result1.startDate}</td>
+							<td>${result1.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment1}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue1}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result1.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result2.symbol}</td>
+							<td>${result2.startDate}</td>
+							<td>${result2.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment2}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue2}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result2.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result3.symbol}</td>
+							<td>${result3.startDate}</td>
+							<td>${result3.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment3}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue3}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result3.totalPercentReturn}" /></td>
 						</tr>
 					</table>
 				</div>

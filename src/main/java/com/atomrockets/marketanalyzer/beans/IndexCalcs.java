@@ -34,6 +34,7 @@ public class IndexCalcs {
 	protected Boolean distributionDay;
 	protected Boolean churnDay;
 	protected int distributionDayCounter;
+	protected Boolean pivotDay;
 	protected Boolean followThruDay;
 	
 	//set by the enum dayActionType. sell=-1, hold=0, buy=1
@@ -244,6 +245,14 @@ public class IndexCalcs {
 	}
 	public void setChurnDay(Boolean churnDay) {
 		this.churnDay = churnDay;
+	}
+
+	public Boolean getPivotDay() {
+		return pivotDay;
+	}
+
+	public void setPivotDay(Boolean pivotDay) {
+		this.pivotDay = pivotDay;
 	}
 
 	public Boolean getFollowThruDay() {

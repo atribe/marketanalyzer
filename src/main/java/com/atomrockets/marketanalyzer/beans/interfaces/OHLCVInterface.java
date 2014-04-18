@@ -3,6 +3,7 @@ package com.atomrockets.marketanalyzer.beans.interfaces;
 import java.sql.Date;
 
 public interface OHLCVInterface {	
+	@Override
 	public String toString();
 	
 	public long getId();
