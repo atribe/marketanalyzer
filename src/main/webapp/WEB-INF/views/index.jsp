@@ -63,22 +63,16 @@
 					<table>
 						<tr>
 							<th>Index</th>
-							<th>Results Type</th>
 							<th>Results Start Date</th>
 							<th>Results End Date</th>
 							<th>Return</th>
 						</tr>
-						<!-- Not ready to impelemtn yet	
-						<c:forEach items="${resultList}" var="result">
 						<tr>
 							<td>${result.symbol}</td>
-							<td>${result.type}</td>
 							<td>${result.startDate}</td>
 							<td>${result.endDate}</td>
-							<td>${result.return}</td>
+							<td>${result.totalPercentReturn}</td>
 						</tr>
-						</c:forEach>
-						 -->
 					</table>
 				</div>
 			</div>

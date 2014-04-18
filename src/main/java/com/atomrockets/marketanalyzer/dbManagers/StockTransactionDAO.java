@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -21,36 +23,14 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 	 */
 	
 	public StockTransactionDAO() {
-		try {
-			m_connection = getConnection();
-			
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		} finally {
-			try {
-				m_connection.close();
-			} catch (NullPointerException ne) {
-				//do nothing, just means that the connection was never initialized
-				log.debug("Connection didn't need to be closed, it was never initialized");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		setM_ds(MarketPredDataSource.setDataSource());
 	}
 	
-	public StockTransactionDAO(Connection connection) {
+	public StockTransactionDAO(DataSource ds) {
 		log.debug("------------------------------StockTransactionDAO Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_connection = connection;
+		m_ds = ds;
 	}
 	
 	public void tableInitialization(String[] indexList) {
@@ -91,14 +71,15 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		String[] columnNames = d.getColumnNameList();
 		
 		PreparedStatement ps = null;
-	
-		ps = m_connection.prepareStatement(insertQuery);
+		Connection con = m_ds.getConnection();
+		ps = con.prepareStatement(insertQuery);
 		
 		QueryRunner runner = new QueryRunner();
 		
 		runner.fillStatementWithBean(ps, d, columnNames);
 		
 		ps.execute();
+		con.close();
 	}
 
 	private long transactionAlreadyInDB(StockTransaction d) throws SQLException {
@@ -110,11 +91,10 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 				+ " AND buyDate = ?"
 				+ " AND sellDate = ?";
 		
-		QueryRunner runner = new QueryRunner();
+		QueryRunner runner = new QueryRunner(m_ds);
 		ResultSetHandler<StockTransaction> h = new BeanHandler<StockTransaction>(StockTransaction.class);
 		
 		inDBAlready = runner.query(
-						m_connection,
 						query,
 						h,
 						d.getBacktestId(),

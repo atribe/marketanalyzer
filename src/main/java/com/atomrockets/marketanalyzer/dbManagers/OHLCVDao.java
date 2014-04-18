@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -29,15 +31,13 @@ public class OHLCVDao extends GenericDBSuperclass {
 	public OHLCVDao() throws ClassNotFoundException, SQLException {
 		log.trace("IY.0 Yahoo Table Manager Created");
 		
-		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_connection = getConnection();
+		setM_ds(MarketPredDataSource.setDataSource());
 	}
-	
-	public OHLCVDao(Connection connection) {
+
+	public OHLCVDao(DataSource ds) {
 		log.trace("IY.0 Yahoo Table Manager Created");
-		
-		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_connection = connection;
+			
+		m_ds = ds;
 	}
 
 	public synchronized void tableInitialization(String[] indexList) {
@@ -109,11 +109,10 @@ public class OHLCVDao extends GenericDBSuperclass {
 		OHLCVData a = new OHLCVData();
 
 		try {
-			QueryRunner runner = new QueryRunner();
+			QueryRunner runner = new QueryRunner(m_ds);
 			ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
 			
 			a = runner.query(
-					m_connection,
 					getNewestDateInDBQuery,
 					h,
 					symbol
@@ -192,8 +191,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		PreparedStatement ps=null;
 		int batchSize = 100;
 		try {
+			Connection con = m_ds.getConnection();
 			//preparing the MySQL statement
-			ps = m_connection.prepareStatement(insertQuery);
+			ps = con.prepareStatement(insertQuery);
 			//creating DbUtils QuerryRunner
 			QueryRunner runner = new QueryRunner();
 			int i=0;
@@ -211,6 +211,8 @@ public class OHLCVDao extends GenericDBSuperclass {
 			}
 			//Execute the last batch, in case the last value of i isn't a multiple of batchSize
 			ps.executeBatch();
+			con.close();
+			
 			log.info("Final batch executed at i="+i);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -243,8 +245,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		try {
 			long counter = 0;
 			
+			Connection con = m_ds.getConnection();
 			//prepare the statement
-			ps = m_connection.prepareStatement(insertQuery);
+			ps = con.prepareStatement(insertQuery);
 			
 			//creating DbUtils QuerryRunner
 			QueryRunner runner = new QueryRunner();
@@ -268,6 +271,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			//execute the batch at the end for the leftovers that didn't hit counter%batch==0
 			ps.executeBatch();
 			log.info("OHLCV insert executed at i="+counter);
+			con.close();
 			
 		} catch (SQLException e) {
 			log.info("SQLException: " + e.getMessage());
@@ -296,11 +300,10 @@ public class OHLCVDao extends GenericDBSuperclass {
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
-		QueryRunner runner = new QueryRunner();
+		QueryRunner runner = new QueryRunner(m_ds);
 		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
 		
 		OHLCVData result = runner.query(
-							m_connection,
 							checkQuery,
 							h,
 							row.getDate(),
@@ -311,6 +314,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			log.debug("Just tried to insert a duplicate row into table " + OHLCVData.getTablename() + ". The id of the entry already in the table is " + result.getId());
 			alreadyExists = true;
 		}
+		
 		return alreadyExists;
 	}
 
@@ -328,14 +332,12 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner();
+		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<List<OHLCVData>> h = new BeanListHandler<OHLCVData>(OHLCVData.class);
-		
-		try{
+		try{		
 			dDayList = run.query(
-		    		m_connection, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query
@@ -363,20 +365,18 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner();
+		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
-		try{
+		try{			
 			dataPoint = run.query(
-		    		m_connection, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query
 		    		symbol);
 		        // do something with the result
-		        
 		} catch(SQLException sqle) {
 			sqle.printStackTrace();
 		}
@@ -395,20 +395,18 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner();
+		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dataPoint = run.query(
-		    		m_connection, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query
 		    		symbol);
 		        // do something with the result
-		        
 		} catch(SQLException sqle) {
 			sqle.printStackTrace();
 		}
@@ -425,21 +423,20 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner();
+		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
 		
-		try{
+		try{		
 			dataPoint = run.query(
-		    		m_connection, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query
 		    		symbol,
 		    		date.toDate());
 		        // do something with the result
-		        
+		
 		} catch(SQLException sqle) {
 			sqle.printStackTrace();
 		}
@@ -455,14 +452,13 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner();
+		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
 			dataPoint = run.query(
-		    		m_connection, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
@@ -13,6 +15,7 @@ import com.atomrockets.marketanalyzer.beans.StockTransaction;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
+import com.atomrockets.marketanalyzer.dbManagers.MarketPredDataSource;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.dbManagers.StockTransactionDAO;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
@@ -20,32 +23,21 @@ import com.atomrockets.marketanalyzer.spring.init.PropCache;
 public class BacktestService extends GenericServiceSuperclass{
 	
 	public BacktestService() {
-		try {
-			m_connection = GenericDBSuperclass.getConnection();
-			setM_connectionAlive(true);
-			m_OHLCVDao = new OHLCVDao(m_connection);
-			m_backtestResultDAO = new BacktestResultDAO(m_connection);
-			m_stockTransationDAO = new StockTransactionDAO(m_connection);
-			m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			setM_connectionAlive(false);
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			setM_connectionAlive(false);
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		}
+	
+		m_ds = MarketPredDataSource.setDataSource();
+		setM_connectionAlive(true);
+		m_OHLCVDao = new OHLCVDao(m_ds);
+		m_backtestResultDAO = new BacktestResultDAO(m_ds);
+		m_stockTransationDAO = new StockTransactionDAO(m_ds);
+		m_indexCalcsDAO = new IndexCalcsDAO(m_ds);
+	
 	}
-	public BacktestService(Connection connection) {
-		m_connection = connection;
-		m_OHLCVDao = new OHLCVDao(m_connection);
-		m_backtestResultDAO = new BacktestResultDAO(m_connection);
-		m_stockTransationDAO = new StockTransactionDAO(m_connection);
-		m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
+	public BacktestService(DataSource ds) {
+		m_ds = ds;
+		m_OHLCVDao = new OHLCVDao(m_ds);
+		m_backtestResultDAO = new BacktestResultDAO(m_ds);
+		m_stockTransationDAO = new StockTransactionDAO(m_ds);
+		m_indexCalcsDAO = new IndexCalcsDAO(m_ds);
 	}
 	
 	public List<String> getIndexList()
@@ -104,6 +96,13 @@ public class BacktestService extends GenericServiceSuperclass{
 	}
 	
 	public BacktestResult getBaseline(String symbol) {
-		return null;
+		BacktestResult b = null;
+		try {
+			b = m_backtestResultDAO.getSymbolParameters(symbol);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	}
 }

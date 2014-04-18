@@ -3,6 +3,8 @@ package com.atomrockets.marketanalyzer.services;
 import java.sql.Connection;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
@@ -14,7 +16,7 @@ import com.atomrockets.marketanalyzer.dbManagers.StockTransactionDAO;
 public class GenericServiceSuperclass {
 
 	//Connection to the database
-		protected Connection m_connection;
+		DataSource m_ds;
 		protected boolean m_connectionAlive;
 		
 		//logger

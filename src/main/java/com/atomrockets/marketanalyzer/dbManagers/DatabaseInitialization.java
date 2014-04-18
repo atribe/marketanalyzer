@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -34,68 +36,45 @@ public class DatabaseInitialization{
 	
 
 	static public void marketsDBInitialization() {
-		Connection connection = null;
-		try {
-			log.trace("3.0 Starting markets DB init method");
-			
-			//Get a database connection
-			log.trace("3.1 Getting a connection");
-			connection = GenericDBSuperclass.getConnection();
-	
-			/*
-			 * Getting the index list from the property file
-			 */
-			indexList = PropCache.getCachedProps("index.names").split(",");
-			/*
-			 * Dabase initialization Section
-			 */
-			//Creating the table manager
-			log.trace("3.2 Creating IndexyahooDataTableManager");
-			m_OHLCVDao = new OHLCVDao(connection);
-			//Initialize the price/volume databases for each index
-			log.info("3.3 Initializing YahooIndexData Table");
-			m_OHLCVDao.tableInitialization(indexList);
-	
-			//Initialize the parameter table
-			log.trace("3.4 Creating BacktestResultDAO");
-			m_BacktestService = new BacktestService(connection);
-			log.info("3.5 Initializing IndexParameter Table");
-			m_BacktestService.init(indexList);
-			
-			
-			/*
-			 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
-			 * to clear and repopulate when doing debugging or optimization. The analysis data table can be dropped without
-			 * having to reimport all the data, which is quite time consuming.
-			 * 
-			 * IndexAnalysisDBInitialization checks if the table already
-			 */
-			log.trace("3.6 Creating IndexCalcsService");
-			m_indexAnalysisService = new IndexCalcsService(connection);
-			log.info("3.7 Initializing IndexOHLCVCalcs table");
-			//skipping this while I work on the view portion of the program
-			m_indexAnalysisService.init(indexList);
-			
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		} finally {
-			try {
-				connection.close();
-			} catch (NullPointerException ne) {
-				//do nothing, just means that the connection was never initialized
-				log.debug("Connection didn't need to be closed, it was never initialized");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		log.trace("3.0 Starting markets DB init method");
+		
+		//Get a database connection
+		log.trace("3.1 Getting a connection");
+		DataSource ds = MarketPredDataSource.setDataSource();
+		
+		/*
+		 * Getting the index list from the property file
+		 */
+		indexList = PropCache.getCachedProps("index.names").split(",");
+		/*
+		 * Dabase initialization Section
+		 */
+		//Creating the table manager
+		log.trace("3.2 Creating IndexyahooDataTableManager");
+		m_OHLCVDao = new OHLCVDao(ds);
+		//Initialize the price/volume databases for each index
+		log.info("3.3 Initializing YahooIndexData Table");
+		m_OHLCVDao.tableInitialization(indexList);
+
+		//Initialize the parameter table
+		log.trace("3.4 Creating BacktestResultDAO");
+		m_BacktestService = new BacktestService(ds);
+		log.info("3.5 Initializing IndexParameter Table");
+		m_BacktestService.init(indexList);
+		
+		
+		/*
+		 * Analysis data for each index is stored in a separate database. I chose this because it makes it easier
+		 * to clear and repopulate when doing debugging or optimization. The analysis data table can be dropped without
+		 * having to reimport all the data, which is quite time consuming.
+		 * 
+		 * IndexAnalysisDBInitialization checks if the table already
+		 */
+		log.trace("3.6 Creating IndexCalcsService");
+		m_indexAnalysisService = new IndexCalcsService(ds);
+		log.info("3.7 Initializing IndexOHLCVCalcs table");
+		//skipping this while I work on the view portion of the program
+		m_indexAnalysisService.init(indexList);	
 	}
 	
 	//uncomment to get the scheduling back

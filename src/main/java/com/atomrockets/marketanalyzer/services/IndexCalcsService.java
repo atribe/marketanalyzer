@@ -4,15 +4,17 @@ import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
-import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
 import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
+import com.atomrockets.marketanalyzer.dbManagers.MarketPredDataSource;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -71,31 +73,18 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 	}
 
 	public IndexCalcsService() {
-		try {
-			m_connection = GenericDBSuperclass.getConnection();
-			setM_connectionAlive(true);
-			m_OHLCVDao = new OHLCVDao(m_connection);
-			m_BacktestResultDAO = new BacktestResultDAO(m_connection);
-			m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			setM_connectionAlive(false);
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			setM_connectionAlive(false);
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		}
+		m_ds = MarketPredDataSource.setDataSource();
+		setM_connectionAlive(true);
+		m_OHLCVDao = new OHLCVDao(m_ds);
+		m_BacktestResultDAO = new BacktestResultDAO(m_ds);
+		m_indexCalcsDAO = new IndexCalcsDAO(m_ds);
 	}
 	
-	public IndexCalcsService(Connection connection) {
-		m_connection = connection;
-		m_OHLCVDao = new OHLCVDao(m_connection);
-		m_BacktestResultDAO = new BacktestResultDAO(m_connection);
-		m_indexCalcsDAO = new IndexCalcsDAO(m_connection);
+	public IndexCalcsService(DataSource ds) {
+		m_ds = ds;
+		m_OHLCVDao = new OHLCVDao(ds);
+		m_BacktestResultDAO = new BacktestResultDAO(ds);
+		m_indexCalcsDAO = new IndexCalcsDAO(ds);
 	}
 	
 	public void init(String[] indexList) {
@@ -501,14 +490,6 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			LocalDate today = new LocalDate();
 	
 			dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);
-			
-			try {
-				m_connection.close();
-				setM_connectionAlive(false);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return dDayList;
 	}
@@ -558,15 +539,17 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		ResultSetHandler<List<IndexOHLCVCalcs>> h = new BeanListHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
 		
 		try{
+			Connection con = m_ds.getConnection();
 			dDayList = run.query(
-		    		m_connection, //connection
+		    		con, //connection
 		    		query, //query (in the same form as for a prepared statement
 		    		h, //ResultSetHandler
 		    		// an arg should be entered for every ? in the query
 		    		startDate.toString(),
 		    		endDate.toString(),
 		    		symbol);
-		        // do something with the result
+
+			con.close();
 		        
 		} catch(SQLException sqle) {
 			sqle.printStackTrace();

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -29,36 +31,14 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	
 	//Constructor
 	public BacktestResultDAO() {
-		try {
-			m_connection = getConnection();
-			
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		} finally {
-			try {
-				m_connection.close();
-			} catch (NullPointerException ne) {
-				//do nothing, just means that the connection was never initialized
-				log.debug("Connection didn't need to be closed, it was never initialized");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		setM_ds(MarketPredDataSource.setDataSource());
 	}
 	
-	public BacktestResultDAO(Connection connection) {
+	public BacktestResultDAO(DataSource ds) {
 		log.debug("------------------------------Index Parameter Table Manager Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_connection = connection;
+		m_ds = ds;
 	}
 	
 	/**
@@ -114,9 +94,9 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		PreparedStatement ps = null;
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
-		QueryRunner runner = new QueryRunner();
-		
-		ps = m_connection.prepareStatement(insertQuery);
+		QueryRunner runner = new QueryRunner(m_ds);
+		Connection con = m_ds.getConnection();
+		ps = con.prepareStatement(insertQuery);
 		
 		for(String index:indexList)
 		{
@@ -273,9 +253,10 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	
 			//Add each entry to the DB
 			runner.fillStatementWithBean(ps, b, columnNames);
-			
+
 			ps.execute();
 		
+			con.close();
 			b = new BacktestResult();
 		}
 
@@ -285,11 +266,10 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		BacktestResult b = new BacktestResult(symbol);
 		
 		String getParametersQuery = b.getParameterQuery();
-		QueryRunner runner = new QueryRunner();
+		QueryRunner runner = new QueryRunner(m_ds);
 		ResultSetHandler<BacktestResult> h = new BeanHandler<BacktestResult>(BacktestResult.class);
 		
 		b = runner.query(
-				m_connection,
 				getParametersQuery,
 				h,
 				symbol
@@ -302,12 +282,13 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		PreparedStatement ps = null;
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
-		QueryRunner runner = new QueryRunner();
-		
-		ps = m_connection.prepareStatement(insertQuery);
+		QueryRunner runner = new QueryRunner(m_ds);
+		Connection con = m_ds.getConnection();
+		ps = con.prepareStatement(insertQuery);
 
 		runner.fillStatementWithBean(ps, b, columnNames);
 		
 		ps.execute();
+		con.close();
 	}
 }

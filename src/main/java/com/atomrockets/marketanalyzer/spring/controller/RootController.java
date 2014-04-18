@@ -39,15 +39,13 @@ public class RootController {
         	
         	BacktestService backtestService = new BacktestService();
         	if(backtestService.isM_connectionAlive()) {
-        		
+        		mav.addObject("result", backtestService.getBaseline("^IXIC"));
         	}
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
         	
         }
-        
-        mav.addObject("someText", "Listing all accounts!");
         mav.setViewName("index");
         return mav;
     }

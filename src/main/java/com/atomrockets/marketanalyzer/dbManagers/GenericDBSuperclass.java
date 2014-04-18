@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
@@ -25,14 +28,23 @@ public class GenericDBSuperclass {
 	
 	//Member variable of the connection, so I don't have to keep passing it between methods
 	//This variable only needs to be set once in the classes that inherit this class.
-	protected static Connection m_connection;
+	protected static DataSource m_ds;
 	
+	public static DataSource getM_ds() {
+		return m_ds;
+	}
+
+	public static void setM_ds(DataSource m_ds) {
+		GenericDBSuperclass.m_ds = m_ds;
+	}
+
 	/**
 	 * Establishes a connection to the database
 	 * @return connection
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
+	/*
 	public static Connection getConnection() throws SQLException, ClassNotFoundException {
 		//if connection is null, make a connection, if not just return the valid connection
 		if(m_connection == null) {
@@ -70,7 +82,7 @@ public class GenericDBSuperclass {
 		}
 		return m_connection;
 	}
-
+*/
 	public boolean tableExists(String tableName){
 		boolean tableExists = false;
 
@@ -78,7 +90,9 @@ public class GenericDBSuperclass {
 		ResultSet tables = null;
 
 		try {
-			metadata = m_connection.getMetaData();
+			Connection con = m_ds.getConnection();
+			metadata = con.getMetaData();
+			con.close();
 			tables = metadata.getTables(null, null, tableName, null);
 
 			if (tables.next()) {
@@ -119,8 +133,10 @@ public class GenericDBSuperclass {
 		Statement createStatement = null;
 
 		try {
-			createStatement = m_connection.createStatement();
+			Connection con = m_ds.getConnection();
+			createStatement = con.createStatement();
 			status = createStatement.executeUpdate(createTableSQL);
+			con.close();
 		} catch (SQLException ex){
 			// handle any errors
 			log.info("SQLException: " + ex.getMessage());
@@ -163,8 +179,10 @@ public class GenericDBSuperclass {
 		int i = 0;
 
 		try {
-			queryStatement = m_connection.createStatement();
+			Connection con = m_ds.getConnection();
+			queryStatement = con.createStatement();
 			rs = queryStatement.executeQuery("SELECT * FROM `" + tableName + "`");
+			con.close();
 			while (rs.next())
 			{
 				empty = false;
@@ -208,23 +226,29 @@ public class GenericDBSuperclass {
 	}
 
 	public void resetTable(String tableName) throws SQLException {
-		String truncQuery = "TRUNCATE TABLE `" + tableName + "`"; 
-		Statement s = m_connection.createStatement();
+		String truncQuery = "TRUNCATE TABLE `" + tableName + "`";
+		Connection con = m_ds.getConnection();
+		Statement s = con.createStatement();
 		s.execute(truncQuery);
+		con.close();
 	}
 	
 	public boolean dropTable(String tableName) throws SQLException {
 		String dropQuery = "DROP TABLE IF EXISTS `" + tableName + "`";
-		PreparedStatement ps = m_connection.prepareStatement(dropQuery);
-		return ps.execute();
+		Connection con = m_ds.getConnection();
+		PreparedStatement ps = con.prepareStatement(dropQuery);
+		boolean success = ps.execute();
+		con.close();
+		return success;
 	}
 	
 	protected long getLastRowId(String tableName) throws SQLException {
 		Statement queryStatement = null;
 		ResultSet rs = null;
-		
-		queryStatement = m_connection.createStatement();
+		Connection con = m_ds.getConnection();
+		queryStatement = con.createStatement();
 		rs = queryStatement.executeQuery("select max(`id`) as last_id from `" + tableName + "`");
+		con.close();
 		long lastId = 0;
 		if(rs.next())
 			lastId = rs.getLong("last_id");

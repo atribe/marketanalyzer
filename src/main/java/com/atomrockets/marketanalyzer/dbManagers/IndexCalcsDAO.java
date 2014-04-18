@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbutils.QueryRunner;
 
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
@@ -22,37 +24,14 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	 */
 	
 	public IndexCalcsDAO() {
-		try {
-			
-			m_connection = getConnection();
-			
-		} catch (ClassNotFoundException e) {
-			// Handles errors if the JDBC driver class not found.
-			log.error("Database Driver not found in " + GenericDBSuperclass.class.getSimpleName() + ". Error as follows: "+e);
-		} catch (SQLException ex){
-			// Handles any errors from MySQL
-			log.error("Did you forget to turn on Apache and MySQLL again? From Exception:");
-			log.error("SQLException: " + ex.getMessage());
-			log.error("SQLState: " + ex.getSQLState());
-			log.error("VendorError: " + ex.getErrorCode());
-		} finally {
-			try {
-				m_connection.close();
-			} catch (NullPointerException ne) {
-				//do nothing, just means that the connection was never initialized
-				log.debug("Connection didn't need to be closed, it was never initialized");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		setM_ds(MarketPredDataSource.setDataSource());
 	}
 			
-	public IndexCalcsDAO(Connection connection) {
+	public IndexCalcsDAO(DataSource ds) {
 		log.debug("------------------------------Index Analysis Table Manager Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_connection = connection;
+		m_ds = ds;
 	}
 
 	public void tableInitialization(String[] indexList) {
@@ -93,7 +72,8 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		try {
 			long counter = 0;
 			//preparing the MySQL statement
-			ps = m_connection.prepareStatement(insertQuery);
+			Connection con = m_ds.getConnection();
+			ps = con.prepareStatement(insertQuery);
 			//creating DbUtils QuerryRunner
 			QueryRunner runner = new QueryRunner();
 			
@@ -117,6 +97,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			}
 			//execute the batch at the end for the leftovers that didn't hit counter%batch==0
 			ps.executeBatch();
+			con.close();
 			log.info("IndexCalc insert executed at i="+counter);
 			
 		} catch (SQLException e) {

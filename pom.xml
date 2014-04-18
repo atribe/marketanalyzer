@@ -61,6 +61,13 @@
 			<artifactId>commons-dbutils</artifactId>
 			<version>1.5</version>
 		</dependency>
+			<!-- Connection Pool -->
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>0.8.0.RELEASE</version>
+		</dependency>
+            
             
 		
 		<!-- Used in toString() for classes -->
