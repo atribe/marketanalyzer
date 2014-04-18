@@ -1,12 +1,11 @@
 package com.atomrockets.marketanalyzer.dbManagers;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Date;
 
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.atomrockets.marketanalyzer.services.BacktestService;
@@ -77,22 +76,18 @@ public class DatabaseInitialization{
 		m_indexAnalysisService.init(indexList);	
 	}
 	
-	//uncomment to get the scheduling back
-	//@Scheduled(fixedDelay = 5000)
-    public void demoServiceMethod()
+	//Scheduled to run every weekday at 5 pm
+	@Scheduled(cron="0 0 17 * * MON-FRI")
+    public void dataBaseUpdate()
     {
-        log.debug("Method executed at every 15 seconds. Current time is :: "+ new Date());
+        log.debug("Method executed every weekday at 5 pm. Current time is :: "+ new Date());
         
-        /*
-         * Useful code that tells you where the log file is being written to for log4j
-         *
-        Enumeration e = Logger.getRootLogger().getAllAppenders();
-        while ( e.hasMoreElements() )
-        {
-        	Appender app = (Appender)e.nextElement();
-        	if ( app instanceof FileAppender ){
-        		System.out.println("File: " + ((FileAppender)app).getFile());
-        	}
-        }*/
+        indexList = PropCache.getCachedProps("index.names").split(",");
+        
+        m_OHLCVDao.updateIndexes(indexList);
+        
+        
+        m_indexAnalysisService.updateIndexCalcs(indexList);
+        log.info("End of scheduled update method at: "+ new Date());
     }
 }

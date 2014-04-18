@@ -99,7 +99,9 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			e.printStackTrace();
 		}
 		for(String symbol:indexList)
+		{
 			runIndexAnalysis(symbol);//1 is the S&P500
+		}
 	}
 	
 	public void runIndexAnalysis(String symbol) {
@@ -557,5 +559,21 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		
 		return dDayList;
 		
+	}
+
+	
+	public void updateIndexCalcs(String[] indexList) {
+		String tableName = IndexCalcs.getTableName();
+		//Reset the table so that the data can be reanalyzed
+		try {
+			m_indexCalcsDAO.resetTable(tableName);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(String symbol:indexList)
+		{
+			runIndexAnalysis(symbol);//1 is the S&P500
+		}
 	}
 }
