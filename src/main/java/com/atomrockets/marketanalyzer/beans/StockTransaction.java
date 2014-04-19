@@ -90,7 +90,8 @@ public class StockTransaction {
 		 }
 		//Set stuff like primary key and foriegn key at the end
 		createTableSQL += " PRIMARY KEY (id), " +
-		"FOREIGN KEY (backtestId) REFERENCES `" + BacktestResult.getTableName() + "`(id))";
+		"FOREIGN KEY (backtestId) REFERENCES `" + BacktestResult.getTableName() + "`(id)) " +
+				"ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}

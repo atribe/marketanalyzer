@@ -2,6 +2,7 @@ package com.atomrockets.marketanalyzer.services;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
+import com.atomrockets.marketanalyzer.beans.IndexCalcs.dayActionType;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.dbManagers.IndexCalcsDAO;
@@ -148,6 +149,8 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		distributionDayAnalysis();
 		
 		followThruAnalysis();
+		
+		determineDayAction();
 		
 		m_indexCalcsDAO.addAllRowsToDB(m_symbol, m_IndexCalcList);
 	}
@@ -592,6 +595,19 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		}
 	}
 
+	private void determineDayAction() {
+		for(IndexOHLCVCalcs c : m_IndexCalcList) {
+			if(c.getFollowThruDay()) {
+				c.setDayAction(dayActionType.BUY);
+			} else if (c.getDistributionDayCounter() > m_b.getdDayParam()) {
+				c.setDayAction(dayActionType.SELL);
+			} else {
+				c.setDayAction(dayActionType.HOLD);
+			}
+		}
+		
+	}
+	
 	public synchronized List<IndexOHLCVCalcs> getLatestDDays(String symbol) {
 		List<IndexOHLCVCalcs> dDayList = new ArrayList<IndexOHLCVCalcs>();
 		
@@ -615,10 +631,10 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		
 		//Converting the dates into valid dates in the db
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexOHLCVCalcs first = m_OHLCVDao.getValidDate(symbol, startDate, false);
+		IndexOHLCVCalcs first = m_OHLCVDao.getValidDateAsCalc(symbol, startDate, false);
 		if(first==null) {
 			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
-			 first = m_OHLCVDao.getValidDate(symbol, startDate, true);
+			 first = m_OHLCVDao.getValidDateAsCalc(symbol, startDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
 		if(first==null) {
@@ -626,10 +642,10 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		}
 		
 		//1. checks the provided date and then goes backwards looking for a valid date
-		IndexOHLCVCalcs last = m_OHLCVDao.getValidDate(symbol, endDate, false);
+		IndexOHLCVCalcs last = m_OHLCVDao.getValidDateAsCalc(symbol, endDate, false);
 		if(last == null) {
 			//2. if it didn't find a valid date (hence the IndexOHLCVCalcs returned is null) then look forward
-			last = m_OHLCVDao.getValidDate(symbol, endDate, true);
+			last = m_OHLCVDao.getValidDateAsCalc(symbol, endDate, true);
 		}
 		//3. if the first is still null get the first value in the database for that symbol
 		if(last==null) {

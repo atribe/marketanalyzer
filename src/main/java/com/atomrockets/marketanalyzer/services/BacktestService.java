@@ -72,8 +72,8 @@ public class BacktestService extends GenericServiceSuperclass{
 	private void runBaseline(String symbol) throws SQLException {
 		BacktestResult backtest = m_backtestResultDAO.getSymbolParameters(symbol);
 		
-		OHLCVData beginningDataPoint = m_OHLCVDao.getBySymbolAndDate(symbol, new LocalDate(backtest.getStartDate()));
-		OHLCVData endingDataPoint = m_OHLCVDao.getBySymbolAndDate(symbol, new LocalDate(backtest.getEndDate()));
+		OHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getStartDate()), true);
+		OHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getEndDate()), false);
 		
 		StockTransaction d = new StockTransaction(backtest.getId(), beginningDataPoint, endingDataPoint);
 		

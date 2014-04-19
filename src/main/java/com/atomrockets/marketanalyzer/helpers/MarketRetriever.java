@@ -30,34 +30,23 @@ public class MarketRetriever {
 	
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<OHLCVData> yahooDataParser(String url, String index) {
+	public static List<OHLCVData> yahooDataParser(String url, String index) throws IOException {
 		List<OHLCVData> rowsFromYahooURL = null;
 		
-		try {
-			URL ur = new URL(url);
-			HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(HUC.getInputStream()));
-			
-			reader.readLine();//reads the first line, it's just headers
-			
-			//OpenCSV parser
-			CSVReader csvReader = new CSVReader(reader, ',', '\"');
-			ColumnPositionMappingStrategy<OHLCVData> strategy = new ColumnPositionMappingStrategy<OHLCVData>();
-		    strategy.setType(OHLCVData.class);
-		    strategy.setColumnMapping(new String[]{"dateString","open","high","low","close","volume","adjClose"});
+		URL ur = new URL(url);
+		HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(HUC.getInputStream()));
+		
+		reader.readLine();//reads the first line, it's just headers
+		
+		//OpenCSV parser
+		CSVReader csvReader = new CSVReader(reader, ',', '\"');
+		ColumnPositionMappingStrategy<OHLCVData> strategy = new ColumnPositionMappingStrategy<OHLCVData>();
+	    strategy.setType(OHLCVData.class);
+	    strategy.setColumnMapping(new String[]{"dateString","open","high","low","close","volume","adjClose"});
 
-		    CsvToBean<OHLCVData> csv = new CsvToBean<OHLCVData>();
-		    rowsFromYahooURL = csv.parse(strategy, csvReader);
-		    
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RuntimeException re) {
-			re.printStackTrace();
-		}
+	    CsvToBean<OHLCVData> csv = new CsvToBean<OHLCVData>();
+	    rowsFromYahooURL = csv.parse(strategy, csvReader);
 		
 		/*
 		 * Because the symbol is not downloaded in the CSV I add it, in the following

@@ -1,5 +1,7 @@
 package com.atomrockets.marketanalyzer.dbManagers;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -163,7 +165,15 @@ public class OHLCVDao extends GenericDBSuperclass {
 			//Creates a yahoo URL given the index symbol from now back a given number of days
 			String URL = MarketRetriever.getYahooURL(index, numDays);
 	
-			rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
+			try {
+				rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
+			} catch (FileNotFoundException fe) {
+				fe.printStackTrace();
+				//ignore
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	
 			initialAddRecordsFromData(rowsFromYahoo);
 		}
@@ -175,10 +185,15 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = MarketRetriever.getYahooURL(index, indexDaysBehind);
 
-		rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
-
-		// extract price and volume data for URL, # of yahoo days
-		addRecordsFromData(rowsFromYahoo);
+		try {
+			rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
+			
+			// extract price and volume data for URL, # of yahoo days
+			addRecordsFromData(rowsFromYahoo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void initialAddRecordsFromData(List<OHLCVData> rowsFromYahoo) {
@@ -479,7 +494,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			return false;
 	}
 	
-	public IndexOHLCVCalcs getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
+	public IndexOHLCVCalcs getValidDateAsCalc(String symbol, LocalDate date, boolean futureSearchDirection) {
 		int counter=0;
 		
 		while(!checkDate(symbol, date) && counter < 7) {
@@ -491,6 +506,21 @@ public class OHLCVDao extends GenericDBSuperclass {
 		}
 		
 		IndexOHLCVCalcs a = getBySymbolAndDateAsCalcs(symbol, date);;
+		
+		return a;
+	}
+	public OHLCVData getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
+		int counter=0;
+		
+		while(!checkDate(symbol, date) && counter < 7) {
+			if(futureSearchDirection)
+				date = date.plusDays(1);
+			else
+				date = date.minusDays(1);
+			counter++;
+		}
+		
+		OHLCVData a = getBySymbolAndDate(symbol, date);;
 		
 		return a;
 	}

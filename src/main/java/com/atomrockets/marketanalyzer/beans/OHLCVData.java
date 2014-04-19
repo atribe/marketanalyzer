@@ -90,7 +90,7 @@ public class OHLCVData implements OHLCVInterface{
 		//Get the hashmap of class fields and types
 		LinkedHashMap<String, String> fieldMap = getColumnNames();
 		//Create the table create statement
-		String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (" +
+		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
 				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
@@ -99,7 +99,8 @@ public class OHLCVData implements OHLCVInterface{
 			}
 		 }
 		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (id))";
+		createTableSQL += " PRIMARY KEY (id)) " +
+				"ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}

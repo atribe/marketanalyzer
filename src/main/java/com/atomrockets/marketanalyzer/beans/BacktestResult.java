@@ -111,7 +111,8 @@ public class BacktestResult {
 			}
 		 }
 				
-		createTableSQL += " PRIMARY KEY (id))";
+		createTableSQL += " PRIMARY KEY (id)) " +
+				"ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}

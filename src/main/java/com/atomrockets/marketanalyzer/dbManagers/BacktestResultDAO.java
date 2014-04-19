@@ -12,6 +12,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.BacktestResult.parametersTypeEnum;
+import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 /**
  * This subclass handles all database operations involving the price and volume data for each index
@@ -27,7 +28,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	 * log
 	 * 
 	 */
-
+	private static final String startDate = PropCache.getCachedProps("analysis.startDate");
+	private static final String endDate = PropCache.getCachedProps("analysis.endDate");
 	
 	//Constructor
 	public BacktestResultDAO() {
@@ -108,8 +110,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				 * Parameters with comments have been used. The rest are not yet used.
 				 */
 				b.setSymbol(index);
-				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
-				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setStartDate(java.sql.Date.valueOf(startDate));
+				b.setEndDate(java.sql.Date.valueOf(endDate));
 				b.setdDayWindow(20);
 				b.setdDayParam(9);
 				b.setdDayPriceDrop(-0.002);
@@ -136,8 +138,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				break;
 			case "^GSPC":
 				b.setSymbol(index);
-				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
-				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setStartDate(java.sql.Date.valueOf(startDate));
+				b.setEndDate(java.sql.Date.valueOf(endDate));
 				b.setdDayWindow(20);
 				b.setdDayParam(10);
 				b.setdDayPriceDrop(-0.002);
@@ -164,8 +166,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				break;
 			case "^SML":
 				b.setSymbol(index);
-				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
-				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setStartDate(java.sql.Date.valueOf(startDate));
+				b.setEndDate(java.sql.Date.valueOf(endDate));
 				b.setdDayWindow(20);
 				b.setdDayParam(10);
 				b.setdDayPriceDrop(-0.002);
@@ -192,8 +194,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				break;
 			case "^MID":
 				b.setSymbol(index);
-				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
-				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setStartDate(java.sql.Date.valueOf(startDate));
+				b.setEndDate(java.sql.Date.valueOf(endDate));
 				b.setdDayWindow(20);
 				b.setdDayParam(10);
 				b.setdDayPriceDrop(-0.002);
@@ -220,8 +222,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				break;
 			case "^DJI":
 				b.setSymbol(index);
-				b.setStartDate(java.sql.Date.valueOf("2013-05-01"));
-				b.setEndDate(java.sql.Date.valueOf("2013-12-31"));
+				b.setStartDate(java.sql.Date.valueOf(startDate));
+				b.setEndDate(java.sql.Date.valueOf(endDate));
 				b.setdDayWindow(20);
 				b.setdDayParam(10);
 				b.setdDayPriceDrop(-0.002);
