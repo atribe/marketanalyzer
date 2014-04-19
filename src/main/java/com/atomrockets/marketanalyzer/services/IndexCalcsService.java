@@ -568,7 +568,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			 */
 			m_symbol = symbol;
 			
-			LocalDate startDate = new LocalDate().minusDays(120);
+			LocalDate startDate = new LocalDate().minusDays(150);
 			LocalDate today = new LocalDate();
 	
 			dDayList = getRowsBetweenDatesBySymbol(m_symbol, startDate, today);

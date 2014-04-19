@@ -58,7 +58,7 @@ public class PlotOHLC {
 		 * http://stackoverflow.com/questions/11330370/jfreechart-how-to-draw-the-moving-average-over-a-ohlc-chart
 		 */
 		//getting the first and last so I can get the first and last dates
-		 List<IndexOHLCVCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(40), new LocalDate());
+		 List<IndexOHLCVCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(120), new LocalDate());
 		
 		//Getting the OHLC dataset
 		OHLCDataset OHLCdata = createOHLCDataset(symbol, OHLCList);
@@ -82,6 +82,7 @@ public class PlotOHLC {
 	    */
 	    
 	    DateAxis domainAxis = new DateAxis("Date");
+	    domainAxis.setVerticalTickLabels(true);
 	    //Setting the proper domainAxis tick marks
 	    DateFormat formatter = new SimpleDateFormat("MM-dd");
 	    DateTickUnit unit = new DateTickUnit(DateTickUnitType.DAY, 2, formatter);
@@ -218,7 +219,8 @@ public class PlotOHLC {
 		// add some annotations...   
         XYTextAnnotation annotation = null;   
         Font font = new Font("SansSerif", Font.PLAIN, 9); 
-
+        Font pivotFont = new Font("SansSerif", Font.BOLD, 12);
+        
         double x = 0;
         double y = 0;
         
@@ -237,10 +239,18 @@ public class PlotOHLC {
                 annotation.setFont(font);   
                 annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation);
+        	} else if (YID.getPivotDay()) {
+        		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
+        		y = YID.getHigh();
+        		annotation = new XYTextAnnotation("Pivot", x, y);  
+                annotation.setFont(pivotFont);   
+                annotation.setTextAnchor(TextAnchor.TOP_CENTER);   
+                plot.addAnnotation(annotation);
         	}
         }
 		return plot;
 	}
+	
 	private static IntervalXYDataset createRunningTotalDataset(List<IndexOHLCVCalcs> OHLCList) {
 		String symbol = OHLCList.get(0).getSymbol();
         TimeSeries s1 = new TimeSeries(symbol);

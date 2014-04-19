@@ -29,7 +29,7 @@ public class ChartsController {
 			if(chart!=null) {
 				//Setting the response type
 				response.setContentType("image/png");
-				ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  400);
+				ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  1400,  400);
 				response.getOutputStream().close();
 		    	
 			}
@@ -45,7 +45,7 @@ public class ChartsController {
 		JFreeChart chart = PlotOHLC.createChart("^IXIC");
 		if(chart!=null) {
 			try {
-	    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  900,  600);
+	    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  1400,  600);
 	    		response.getOutputStream().close();
 	    	} catch (IOException ex) {
 	    		ex.printStackTrace();

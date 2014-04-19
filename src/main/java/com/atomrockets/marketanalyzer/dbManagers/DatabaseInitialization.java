@@ -73,7 +73,7 @@ public class DatabaseInitialization{
 		m_indexAnalysisService = new IndexCalcsService(ds);
 		log.info("3.7 Initializing IndexOHLCVCalcs table");
 		//skipping this while I work on the view portion of the program
-		m_indexAnalysisService.init(indexList);	
+		//m_indexAnalysisService.init(indexList);	
 	}
 	
 	//Scheduled to run every weekday at 5 pm
