@@ -597,7 +597,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 
 	private void determineDayAction() {
 		for(IndexOHLCVCalcs c : m_IndexCalcList) {
-			if(c.getFollowThruDay()) {
+			if(Boolean.TRUE.equals(c.getFollowThruDay())) {//written in this form because a Boolean could be null
 				c.setDayAction(dayActionType.BUY);
 			} else if (c.getDistributionDayCounter() > m_b.getdDayParam()) {
 				c.setDayAction(dayActionType.SELL);
