@@ -220,7 +220,7 @@ public class PlotOHLC {
         XYTextAnnotation annotation = null;   
         Font font = new Font("SansSerif", Font.PLAIN, 9); 
         Font pivotFont = new Font("SansSerif", Font.BOLD, 12);
-        
+        Font followThruFont = new Font("SansSerif", Font.BOLD, 20);
         double x = 0;
         double y = 0;
         
@@ -244,6 +244,13 @@ public class PlotOHLC {
         		y = YID.getHigh();
         		annotation = new XYTextAnnotation("Pivot", x, y);  
                 annotation.setFont(pivotFont);   
+                annotation.setTextAnchor(TextAnchor.TOP_CENTER);   
+                plot.addAnnotation(annotation);
+        	} else if (YID.getFollowThruDay()) {
+        		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
+        		y = YID.getHigh();
+        		annotation = new XYTextAnnotation("F", x, y);  
+                annotation.setFont(followThruFont);   
                 annotation.setTextAnchor(TextAnchor.TOP_CENTER);   
                 plot.addAnnotation(annotation);
         	}

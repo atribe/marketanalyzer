@@ -261,4 +261,13 @@ public class IndexCalcs {
 	public void setFollowThruDay(Boolean followThruDay) {
 		this.followThruDay = followThruDay;
 	}
+	public void setFollowThruDaySafe(Boolean followThruDay) {
+		//if the followThruDay is null, then it can be set to something
+		//if the followThruDay is false, then it can be set to something
+		if(this.followThruDay == null) {
+			this.followThruDay = followThruDay;
+		} else if(this.followThruDay.equals(false)) {
+			this.followThruDay = followThruDay;
+		}
+	}
 }

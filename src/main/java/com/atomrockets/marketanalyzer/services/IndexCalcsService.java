@@ -460,26 +460,60 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		
 		findPivotDay();
 		
-		int rowCount = m_IndexCalcList.size();
-		
-		int followThroughDayCount=0;
-		
 		// {{ Getting variables from the parameter database
 		int rDaysMax = m_b.getrDaysMax();
 		int rDaysMin = m_b.getrDaysMin();
 		double priceMult = m_b.getPriceMult();
 		double volMult = m_b.getVolumeMult();
-		
-		
 		// }}
 		
-		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
-		{
-			
-			// this part gets followthrough days
-			 
-			double rallyPriceHigh = 0;
-			
+		//loop starts at 2 because i-2 is accessed
+		for(int i = 2; i < m_IndexCalcList.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
+			//if the day is a pivot day, as set by the findPivotDay method then...
+			if(m_IndexCalcList.get(i).getPivotDay()) {
+				double rallyHigh = m_IndexCalcList.get(i).getHigh(); 
+				double support = m_IndexCalcList.get(i).getLow();
+				
+				int rallyDayCount = 1;
+				/*
+				 * When j = i that is the the pivot day
+				 * Loop goes until rDaysMax days have been checked for a follow thru day
+				 * or a follow thru day has been found
+				 */
+				for(int j = i; j < i + rDaysMax && j < m_IndexCalcList.size(); j++) {
+					//Checking to see if a new high for the rally has been set has been set
+					double todaysHigh = m_IndexCalcList.get(j).getHigh();
+					if( todaysHigh > rallyHigh) {
+						rallyHigh = todaysHigh;
+					}
+					
+					double todaysClose = m_IndexCalcList.get(j).getClose();
+					double previousClose = m_IndexCalcList.get(j-1).getClose();
+					
+					double todaysLow = m_IndexCalcList.get(j).getLow();
+					
+					long todaysVolume = m_IndexCalcList.get(j).getVolume();
+					long previousVolume = m_IndexCalcList.get(j-1).getVolume();
+					long previousPreviousVolume = m_IndexCalcList.get(j-2).getVolume();
+					
+					if( todaysClose > previousClose * priceMult && //price requirement 
+							( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
+							rallyDayCount > rDaysMin && //follow thru days from pivot day requirement 1
+							rallyDayCount < rDaysMax) { //follow thru days from pivot day requirement 2
+						//if the above conditions are true the day is a follow thru day
+						m_IndexCalcList.get(j).setFollowThruDaySafe(true);
+						//and end checking conditions to see if the day is a follow thru day
+						break;
+					} else if( todaysLow < support) { //if the low drops below the support the rally is over and the day is not a follow thru day
+						m_IndexCalcList.get(j).setFollowThruDaySafe(false);
+						break;
+					} else { //the day must not 
+						m_IndexCalcList.get(j).setFollowThruDaySafe(false);
+					}
+					rallyDayCount++;
+				}
+			}
+			m_IndexCalcList.get(i).setFollowThruDaySafe(false);
 		}
 	}
 
