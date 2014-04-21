@@ -2,6 +2,7 @@ package com.atomrockets.marketanalyzer.dbManagers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -102,7 +103,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		for(String index:indexList)
 		{
 			//this parameter is true for every row set in this method
-			b.setParametersType(parametersTypeEnum.CURRENT);
+			b.setParametersType(parametersTypeEnum.BASE);
 			
 			switch(index){
 			case "^IXIC":
@@ -277,9 +278,30 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				);
 		return b;
 	}
-
-	public void insertOrUpdateBacktest(BacktestResult b) throws SQLException {
+	
+	public BacktestResult getNewParametersFromBaseline(String symbol) throws SQLException {
+		BacktestResult b = new BacktestResult(symbol);
 		
+		String getParametersQuery = b.getParameterQuery();
+		QueryRunner runner = new QueryRunner(m_ds);
+		ResultSetHandler<BacktestResult> h = new BeanHandler<BacktestResult>(BacktestResult.class);
+		
+		b = runner.query(
+				getParametersQuery,
+				h,
+				symbol
+				);
+		b.setId(0);
+		b.setParametersType(parametersTypeEnum.CURRENT);
+		
+		return b;
+	}
+
+	public long insertOrUpdateBacktest(BacktestResult b) throws SQLException {
+		
+		/*
+		 * inserting and/or updating b into the db
+		 */
 		PreparedStatement ps = null;
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
@@ -290,6 +312,20 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		runner.fillStatementWithBean(ps, b, columnNames);
 		
 		ps.execute();
+		
+		/*
+		 * Getting the id of the new row from the db
+		 */
+		long insertedId = 0;
+		
+		ps = con.prepareStatement("SELECT LAST_INSERT_ID();");
+		ResultSet rs = ps.getResultSet();
+		if(rs != null && rs.next()) {
+			insertedId = rs.getLong(0);
+		}
+		 
 		con.close();
+		
+		return insertedId;
 	}
 }

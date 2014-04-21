@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.LocalDate;
 
 public class StockTransaction {
 	//Table Names
@@ -23,7 +24,20 @@ public class StockTransaction {
 	private Boolean profitable;
 	
 	//Empty constructor
-	public StockTransaction() {}
+	public StockTransaction() {
+		this.buyPrice=0;
+		this.sellPrice=0;
+		this.dollarReturn=0;
+		this.percentReturn=0;
+	}
+	
+	public StockTransaction(long backtestID) {
+		setBacktestId(backtestID);
+		this.buyPrice=0;
+		this.sellPrice=0;
+		this.dollarReturn=0;
+		this.percentReturn=0;
+	}
 	
 	public StockTransaction(long backtestID, OHLCVData beginningDataPoint,
 			OHLCVData endingDataPoint) {
@@ -36,7 +50,6 @@ public class StockTransaction {
 		setSellPrice(endingDataPoint.getClose());
 		
 		calcStats();
-		
 	}
 
 	/*
@@ -170,6 +183,34 @@ public class StockTransaction {
 		}
 	}
 	
+	public void OpenTransaction(IndexOHLCVCalcs c) {
+		setBuyDate(c.getDate());
+		setBuyPrice(c.getOpen());
+	}
+	public void CloseTransaction(IndexOHLCVCalcs c) {
+		setSellDate(c.getDate());
+		setSellPrice(c.getOpen());
+	}
+	public boolean isTransactionOpen() {
+		if(this.buyDate != null &&
+				this.buyPrice > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public boolean isTransactionClosed() {
+		if(this.buyDate != null &&
+				this.buyPrice > 0 &&
+				this.sellDate != null &&
+				this.sellPrice > 0)
+		{
+			calcStats();
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/*
 	 * Getters and Setters
 	 */
@@ -194,8 +235,14 @@ public class StockTransaction {
 	public void setBuyDate(Date buyDate) {
 		this.buyDate = buyDate;
 	}
+	public void setBuyDate(LocalDate buyDate) {
+		this.buyDate = new java.sql.Date(buyDate.toDate().getTime());
+	}
 	public Date getSellDate() {
 		return sellDate;
+	}
+	public void setSellDate(LocalDate sellDate) {
+		this.sellDate = new java.sql.Date(sellDate.toDate().getTime());
 	}
 	public void setSellDate(Date sellDate) {
 		this.sellDate = sellDate;

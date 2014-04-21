@@ -168,14 +168,15 @@ public class OHLCVDao extends GenericDBSuperclass {
 			try {
 				rowsFromYahoo = MarketRetriever.yahooDataParser(URL, index);
 			} catch (FileNotFoundException fe) {
-				fe.printStackTrace();
-				//ignore
+				log.error("the yahoo URL: " + URL + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	
-			initialAddRecordsFromData(rowsFromYahoo);
+			if(rowsFromYahoo != null) {
+				initialAddRecordsFromData(rowsFromYahoo);
+			}
 		}
 	}
 
@@ -203,7 +204,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 				+ "(?,?,?,?,?,?,?)";
 		String [] columnNames = {"symbol","date","open","high","low","close","volume"};
 		PreparedStatement ps=null;
-		int batchSize = 100;
+		int batchSize = 500;
 		try {
 			Connection con = m_ds.getConnection();
 			//preparing the MySQL statement

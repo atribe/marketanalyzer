@@ -60,6 +60,42 @@
 				</div>
 				<div class="Index_Results">
 					<div class="sectionHeader"><h2>Results Section</h2></div>
+					<h2>Baseline Results for each Index</h2>
+					<table>
+						<tr>
+							<th>Index</th>
+							<th>Results Start Date</th>
+							<th>Results End Date</th>
+							<th>Initial Investment</th>
+							<th>Final Value</th>
+							<th>% Return</th>
+						</tr>
+						<tr>
+							<td>${result1.symbol}</td>
+							<td>${result1.startDate}</td>
+							<td>${result1.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment1}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue1}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result1.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result2.symbol}</td>
+							<td>${result2.startDate}</td>
+							<td>${result2.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment2}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue2}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result2.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result3.symbol}</td>
+							<td>${result3.startDate}</td>
+							<td>${result3.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment3}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue3}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result3.totalPercentReturn}" /></td>
+						</tr>
+					</table>
+					<h2>Current Model Results for Each Index</h2>
 					<table>
 						<tr>
 							<th>Index</th>
