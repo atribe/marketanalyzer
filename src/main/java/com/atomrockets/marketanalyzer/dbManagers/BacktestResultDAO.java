@@ -264,7 +264,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 
 	}
 
-	public BacktestResult getSymbolParameters(String symbol) throws SQLException {
+	public BacktestResult getSymbolParameters(String symbol, parametersTypeEnum type) throws SQLException {
 		BacktestResult b = new BacktestResult(symbol);
 		
 		String getParametersQuery = b.getParameterQuery();
@@ -274,29 +274,12 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		b = runner.query(
 				getParametersQuery,
 				h,
-				symbol
+				symbol,
+				type.getValue()
 				);
 		return b;
 	}
 	
-	public BacktestResult getNewParametersFromBaseline(String symbol) throws SQLException {
-		BacktestResult b = new BacktestResult(symbol);
-		
-		String getParametersQuery = b.getParameterQuery();
-		QueryRunner runner = new QueryRunner(m_ds);
-		ResultSetHandler<BacktestResult> h = new BeanHandler<BacktestResult>(BacktestResult.class);
-		
-		b = runner.query(
-				getParametersQuery,
-				h,
-				symbol
-				);
-		b.setId(0);
-		b.setParametersType(parametersTypeEnum.CURRENT);
-		
-		return b;
-	}
-
 	public long insertOrUpdateBacktest(BacktestResult b) throws SQLException {
 		
 		/*

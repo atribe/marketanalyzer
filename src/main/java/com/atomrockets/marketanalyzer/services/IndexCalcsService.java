@@ -1,6 +1,7 @@
 package com.atomrockets.marketanalyzer.services;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
+import com.atomrockets.marketanalyzer.beans.BacktestResult.parametersTypeEnum;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs.dayActionType;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
@@ -126,7 +127,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 
 		//0. Get parameters for the given index
 		try {
-			m_b = m_BacktestResultDAO.getSymbolParameters(getM_symbol());
+			m_b = m_BacktestResultDAO.getSymbolParameters(getM_symbol(), parametersTypeEnum.BASE);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

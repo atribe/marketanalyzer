@@ -170,9 +170,51 @@ public class BacktestResult {
 		String query = "SELECT *"
 				+ " FROM `" + getTableName() + "`"
 				+ " WHERE symbol = ?"
-				+ " AND parametersType = 1";
+				+ " AND parametersType = ?";
 		
 		return query;
+	}
+	
+	/*
+	 * Helper Methods
+	 */
+	public boolean equals(Object o) {
+		if(!(o instanceof BacktestResult)) {
+			return false;
+		}
+		BacktestResult b = (BacktestResult) o;
+		
+		if( b.churnAVG50On.equals(this.churnAVG50On) &&
+			b.churnPriceCloseHigherOn.equals(this.churnPriceCloseHigherOn)	&&
+			b.churnPriceTrend35On.equals(this.churnPriceTrend35On) && 
+			b.pivotTrend35On.equals(this.pivotTrend35On) &&
+			b.priceVolatilityOn.equals(this.priceVolatilityOn) &&
+			b.rallyPriceHighOn.equals(this.rallyPriceHighOn) &&
+			b.rallyVolAVG50On.equals(this.rallyVolAVG50On) &&
+			b.volVolatilityOn.equals(this.volVolatilityOn) &&
+			b.churnPriceRange == this.churnPriceRange &&
+			b.churnPriceTrend35 == this.churnPriceTrend35 &&
+			b.churnVolRange == this.churnVolRange &&
+			b.dDayParam == this.dDayParam &&
+			b.dDayPriceDrop == this.dDayPriceDrop &&
+			b.dDayWindow == this.dDayWindow &&
+			b.endDate.equals(this.endDate) &&
+			b.pivotTrend35 == this.pivotTrend35 &&
+			b.priceMult == this.priceMult &&
+			b.priceMultBot == this.priceMultBot &&
+			b.priceMultTop == this.priceMultTop &&
+			b.rDaysMax == this.rDaysMax &&
+			b.rDaysMin == this.rDaysMin &&
+			b.startDate.equals(this.startDate) &&
+			b.symbol.equalsIgnoreCase(this.symbol) &&
+			b.volMultBot == this.volMultBot &&
+			b.volMultTop == this.volMultTop &&
+			b.volumeMult == this.volumeMult ) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 	/*

@@ -54,6 +54,23 @@ public class RootController {
         		mav.addObject("initialInvestment3", initialInvestment);
         		mav.addObject("finalValue3", initialInvestment*(1+b3.getTotalPercentReturn()));
         		
+        		BacktestResult c1 = backtestService.getCurrent("^IXIC");
+        		initialInvestment = 10000;
+        		mav.addObject("current1", c1);
+        		mav.addObject("initialInvestmentc1", initialInvestment);
+        		mav.addObject("finalValuec1", initialInvestment*(1+c1.getTotalPercentReturn()));
+        		
+        		BacktestResult c2 = backtestService.getCurrent("^GSPC");
+        		initialInvestment = 10000;
+        		mav.addObject("current2", c2);
+        		mav.addObject("initialInvestmentc2", initialInvestment);
+        		mav.addObject("finalValuec2", initialInvestment*(1+c2.getTotalPercentReturn()));
+        		
+        		BacktestResult c3 = backtestService.getCurrent("^SML");
+        		initialInvestment = 10000;
+        		mav.addObject("current3", c3);
+        		mav.addObject("initialInvestmentc3", initialInvestment);
+        		mav.addObject("finalValuec3", initialInvestment*(1+c3.getTotalPercentReturn()));
         	}
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");

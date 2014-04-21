@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
+import com.atomrockets.marketanalyzer.beans.BacktestResult.parametersTypeEnum;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
 import com.atomrockets.marketanalyzer.beans.StockTransaction;
@@ -74,7 +75,7 @@ public class BacktestService extends GenericServiceSuperclass{
 	}
 	
 	private void runBaseline(String symbol) throws SQLException {
-		BacktestResult backtest = m_backtestResultDAO.getSymbolParameters(symbol);
+		BacktestResult backtest = getBaseline(symbol);
 		
 		OHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getStartDate()), true);
 		OHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getEndDate()), false);
@@ -82,10 +83,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		StockTransaction d = new StockTransaction(backtest.getId(), beginningDataPoint, endingDataPoint);
 		
 		m_stockTransationDAO.insertTransaction(d);
-		//TODO
-		/*
-		 * There needs to be a follow up method that inserts results into the backtest table
-		 */
+		
 		backtest.setNumberOfTrades(1);
 		if(d.getProfitable()) {
 			backtest.setNumberOfProfitableTrades(1);
@@ -100,7 +98,18 @@ public class BacktestService extends GenericServiceSuperclass{
 	public BacktestResult getBaseline(String symbol) {
 		BacktestResult b = null;
 		try {
-			b = m_backtestResultDAO.getSymbolParameters(symbol);
+			b = m_backtestResultDAO.getSymbolParameters(symbol, parametersTypeEnum.BASE);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
+	}
+	
+	public BacktestResult getCurrent(String symbol) {
+		BacktestResult b = null;
+		try {
+			b = m_backtestResultDAO.getSymbolParameters(symbol, parametersTypeEnum.CURRENT);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,14 +120,30 @@ public class BacktestService extends GenericServiceSuperclass{
 	public void runAllIndexModels(String[] indexList) {
 		for(String symbol:indexList) {
 			try {
-				runIndexModels(symbol);
+				//Getting the new backtest
+				//Need a check to see if the backtest has already been run, if so then we don't need to run it again.
+				BacktestResult newBacktest = getBaseline(symbol);
+				
+				BacktestResult currentBacktest = getCurrent(symbol);
+				
+				if(!newBacktest.equals(currentBacktest)) {
+					newBacktest.setId(0);
+					newBacktest.setParametersType(parametersTypeEnum.CURRENT);
+				
+					//run the backtest
+					newBacktest = runIndexModels(newBacktest);
+					
+					//update the backtest in the DB
+					m_backtestResultDAO.insertOrUpdateBacktest(newBacktest);
+				} //else the model has that would have been run has already been run
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	private void runIndexModels(String symbol) throws SQLException {
+	
+	private BacktestResult runIndexModels(BacktestResult newBacktest) throws SQLException {
 		/*
 		 * Get the parameters you want to backtest
 		 * Create a list to hold all of the transactions 
@@ -131,12 +156,10 @@ public class BacktestService extends GenericServiceSuperclass{
 		 * add each buy sell pair to a transaction.
 		 */
 		
-		//Getting the new backtest
-		//Need a check to see if the backtest has already been run, if so then we don't need to run it again.
-		BacktestResult newBacktest = m_backtestResultDAO.getNewParametersFromBaseline(symbol);
 		//getting parameters from the backtest
 		LocalDate firstBuyDate = new LocalDate(newBacktest.getStartDate());
 		LocalDate lastSellDate = new LocalDate(newBacktest.getEndDate());
+		
 		//initializing variables to be added as backtest results
 		double cummulativePercentReturn = 0;
 		int numberOfTrades = 0;
@@ -149,7 +172,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		
 
 		//Getting the OHLCV and Calcs data for the backtesting
-		List<IndexOHLCVCalcs> OHLCVCalcsList = m_indexCalcsService.getRowsBetweenDatesBySymbol(symbol, firstBuyDate, lastSellDate);
+		List<IndexOHLCVCalcs> OHLCVCalcsList = m_indexCalcsService.getRowsBetweenDatesBySymbol(newBacktest.getSymbol(), firstBuyDate, lastSellDate);
 		transaction.OpenTransaction(OHLCVCalcsList.get(0));
 		
 		//looping through all the data
@@ -195,7 +218,6 @@ public class BacktestService extends GenericServiceSuperclass{
 		newBacktest.setNumberOfTrades(numberOfTrades);
 		newBacktest.setNumberOfProfitableTrades(numberOfPofitableTrades);
 		
-		//update the backtest in the DB
-		m_backtestResultDAO.insertOrUpdateBacktest(newBacktest);
+		return newBacktest;
 	}
 }
