@@ -258,7 +258,7 @@ public class BacktestResult {
 		return startDate;
 	}
 	public LocalDate getLocalDateStartDate() {
-		return new LocalDate(startDate);
+		return new LocalDate(this.startDate);
 	}
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
@@ -270,7 +270,9 @@ public class BacktestResult {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
+	public LocalDate getLocalDateEndDate() {
+		return new LocalDate(this.endDate);
+	}
 	public int getdDayWindow() {
 		return dDayWindow;
 	}

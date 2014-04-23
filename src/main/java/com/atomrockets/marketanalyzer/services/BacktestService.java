@@ -119,6 +119,7 @@ public class BacktestService extends GenericServiceSuperclass{
 	
 	public void runAllIndexModels(String[] indexList) {
 		for(String symbol:indexList) {
+			log.info("3.8.1 Starting backtest for " + symbol);
 			try {
 				//Getting the new backtest
 				//Need a check to see if the backtest has already been run, if so then we don't need to run it again.
@@ -127,9 +128,12 @@ public class BacktestService extends GenericServiceSuperclass{
 				BacktestResult currentBacktest = getCurrent(symbol);
 				
 				if(!newBacktest.equals(currentBacktest)) {
-					newBacktest.setId(0);
 					newBacktest.setParametersType(parametersTypeEnum.CURRENT);
-				
+					newBacktest.setId(0); //need to set the ID to 0 so it will be auto incremented instead of updating the baseline row
+					//insert the new backtest into the database. I need the autoincrement id to be set for the transaction stuff
+					int id = m_backtestResultDAO.insertOrUpdateBacktest(newBacktest);
+					newBacktest.setId(id);
+					
 					//run the backtest
 					newBacktest = runIndexModels(newBacktest);
 					
@@ -159,6 +163,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		//getting parameters from the backtest
 		LocalDate firstBuyDate = new LocalDate(newBacktest.getStartDate());
 		LocalDate lastSellDate = new LocalDate(newBacktest.getEndDate());
+		int backtestId = newBacktest.getId();
 		
 		//initializing variables to be added as backtest results
 		double cummulativePercentReturn = 0;
@@ -168,7 +173,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		//Creating list to hold the transactions
 		List<StockTransaction> transactionList = new ArrayList<StockTransaction>();
 		//Setting up the first transaction. You always buy first thing in a backtest
-		StockTransaction transaction = new StockTransaction(newBacktest.getId());
+		StockTransaction transaction = new StockTransaction(backtestId);
 		
 
 		//Getting the OHLCV and Calcs data for the backtesting
@@ -195,7 +200,7 @@ public class BacktestService extends GenericServiceSuperclass{
 					numberOfPofitableTrades++;
 				}
 				m_stockTransationDAO.insertTransaction(transaction);
-				transaction = new StockTransaction(newBacktest.getId());//reseting the variable for new info
+				transaction = new StockTransaction(backtestId);//reseting the variable for new info
 			}
 			
 		}
@@ -219,5 +224,24 @@ public class BacktestService extends GenericServiceSuperclass{
 		newBacktest.setNumberOfProfitableTrades(numberOfPofitableTrades);
 		
 		return newBacktest;
+	}
+
+	public List<IndexOHLCVCalcs> getModelResults(String symbol, parametersTypeEnum type) {
+		List<IndexOHLCVCalcs> resultList = new ArrayList<IndexOHLCVCalcs>();
+		BacktestResult modelResult = null;
+
+		if( type==parametersTypeEnum.CURRENT ) {
+			modelResult = getCurrent(symbol);
+		} else if (type == parametersTypeEnum.BASE) {
+			modelResult = getCurrent(symbol);
+		}
+		
+		resultList = m_indexCalcsService.getRowsBetweenDatesBySymbol(symbol, modelResult.getLocalDateStartDate(), modelResult.getLocalDateEndDate());
+		
+		return resultList;
+	}
+	
+	public List<StockTransaction> getCurrentTransactions(String symbol) {
+		return m_stockTransationDAO.getTransactions(getCurrent(symbol));
 	}
 }

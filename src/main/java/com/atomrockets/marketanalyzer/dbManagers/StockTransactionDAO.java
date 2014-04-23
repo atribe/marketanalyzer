@@ -3,13 +3,18 @@ package com.atomrockets.marketanalyzer.dbManagers;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.atomrockets.marketanalyzer.beans.BacktestResult;
+import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 import com.atomrockets.marketanalyzer.beans.StockTransaction;
 
 public class StockTransactionDAO extends GenericDBSuperclass{
@@ -106,5 +111,35 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 			return inDBAlready.getId();
 		}
 		
+	}
+
+	public List<StockTransaction> getTransactions(BacktestResult backtest) {
+		List<StockTransaction> transactionList = new ArrayList<StockTransaction>();
+		
+		String query = "SELECT *" +
+				" FROM `" + StockTransaction.getTableName() + "` S" +
+				" WHERE S.backtestId= ?" +
+				" ORDER BY S.buyDate ASC";
+		
+		QueryRunner run = new QueryRunner();
+		
+		ResultSetHandler<List<StockTransaction>> h = new BeanListHandler<StockTransaction>(StockTransaction.class);
+		
+		try{
+			Connection con = m_ds.getConnection();
+			transactionList = run.query(
+		    		con, //connection
+		    		query, //query (in the same form as for a prepared statement
+		    		h, //ResultSetHandler
+		    		// an arg should be entered for every ? in the query
+		    		backtest.getId());
+
+			con.close();
+		        
+		} catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		
+		return transactionList;
 	}
 }

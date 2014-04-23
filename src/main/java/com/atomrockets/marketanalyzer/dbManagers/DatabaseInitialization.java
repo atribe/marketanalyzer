@@ -73,13 +73,14 @@ public class DatabaseInitialization{
 		m_indexAnalysisService = new IndexCalcsService(ds);
 		log.info("3.7 Initializing IndexOHLCVCalcs table");
 		//skipping this while I work on the view portion of the program
-		m_indexAnalysisService.init(indexList);
+		//m_indexAnalysisService.init(indexList);
 		
+		log.info("3.8 Running backtests based on current parameters");
 		m_BacktestService.runAllIndexModels(indexList);
 	}
 	
 	//Scheduled to run every weekday at 5 pm
-	@Scheduled(cron="0 0 17 * * MON-FRI")
+	@Scheduled(cron="0 0 18 * * MON-FRI")
     public void dataBaseUpdate()
     {
         log.debug("Method executed every weekday at 5 pm. Current time is :: "+ new Date());

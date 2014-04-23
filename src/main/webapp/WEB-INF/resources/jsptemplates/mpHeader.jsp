@@ -1,5 +1,3 @@
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div id="header">
 	<div id="banner">
@@ -7,11 +5,10 @@
 	</div> <!-- close div banner -->
 	<nav>
 	  <ul>
-	    <li><a class="currentPage" href="<c:url value="/" />">Home</a></li>
-	    <li><a href="<c:url value="backtest" />">Backtest</a></li>
-	    <li><a href="contact">Contact</a></li>
+	    <li><a id="homeLink" href="<c:url value="/" />">Home</a></li>
+	    <li><a id="backtestLink" href="<c:url value="backtest" />">Backtest</a></li>
+	    <li><a id="contactLink" href="<c:url value="contact" />">Contact</a></li>
 	  </ul>
 	</nav>
-	<div id="headerDate"><p>${dateOut}</p></div>
 	<div class="clear"></div>
 </div><!-- close div header-->

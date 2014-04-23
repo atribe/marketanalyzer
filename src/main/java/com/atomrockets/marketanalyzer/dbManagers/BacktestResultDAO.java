@@ -263,7 +263,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		}
 
 	}
-
+	
 	public BacktestResult getSymbolParameters(String symbol, parametersTypeEnum type) throws SQLException {
 		BacktestResult b = new BacktestResult(symbol);
 		
@@ -280,31 +280,30 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		return b;
 	}
 	
-	public long insertOrUpdateBacktest(BacktestResult b) throws SQLException {
+	public int insertOrUpdateBacktest(BacktestResult b) throws SQLException {
 		
 		/*
 		 * inserting and/or updating b into the db
 		 */
-		PreparedStatement ps = null;
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
 		QueryRunner runner = new QueryRunner(m_ds);
 		Connection con = m_ds.getConnection();
-		ps = con.prepareStatement(insertQuery);
+		PreparedStatement ps = con.prepareStatement(insertQuery);
 
 		runner.fillStatementWithBean(ps, b, columnNames);
 		
-		ps.execute();
+		ps.executeUpdate();
 		
 		/*
 		 * Getting the id of the new row from the db
 		 */
-		long insertedId = 0;
+		int insertedId = 0;
 		
 		ps = con.prepareStatement("SELECT LAST_INSERT_ID();");
-		ResultSet rs = ps.getResultSet();
+		ResultSet rs = ps.executeQuery();
 		if(rs != null && rs.next()) {
-			insertedId = rs.getLong(0);
+			insertedId = rs.getInt(1);
 		}
 		 
 		con.close();

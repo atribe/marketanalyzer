@@ -41,8 +41,10 @@ public class PlotDDay {
 	        // Set chart styles
 	        chart.setBackgroundPaint(Color.white);
 
-	        // Set plot styles
+	        // Get the plot from the chart
 	        XYPlot plot = (XYPlot) chart.getPlot();
+	        
+	        // Set plot styles
 	        plot.setBackgroundPaint(Color.lightGray);
 	        plot.setDomainGridlinePaint(Color.white);
 	        plot.setRangeGridlinePaint(Color.white);

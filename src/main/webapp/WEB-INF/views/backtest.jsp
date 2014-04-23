@@ -6,27 +6,104 @@
 
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page isELIgnored="false" %>
-
-<html>
-	<head>
-		<title>Test MarketAnalyzer</title>
-	
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-		<link rel="stylesheet" type="text/css" href="<c:url value="css/style.css" />" />
-	</head>
-
-	<body><% System.out.println("Start of Body Tag"); %>
+<jsp:include page="/WEB-INF/resources/jsptemplates/mpHead.jsp" />
+<% System.out.println("Backtest.jsp has been served"); %>
+	<body>
 		<div id="container">
 			<!-- Header Div (in mpHeader file)-->
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpHeader.jsp" />
 			<!-- End Header Div -->
 			<div id="content">
+				<div class="Index_Results">
+					<div class="sectionHeader"><h2>Baseline and Current Results Section</h2></div>
+					<div id="ResultChart" class="chart">
+						<img src="<c:url value="charts/resultchart" />" />
+					</div>
+					<h2>Baseline Results for each Index</h2>
+					<table>
+						<tr>
+							<th>Index</th>
+							<th>Results Start Date</th>
+							<th>Results End Date</th>
+							<th>Initial Investment</th>
+							<th>Final Value</th>
+							<th>% Return</th>
+						</tr>
+						<tr>
+							<td>${result1.symbol}</td>
+							<td>${result1.startDate}</td>
+							<td>${result1.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment1}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue1}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result1.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result2.symbol}</td>
+							<td>${result2.startDate}</td>
+							<td>${result2.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment2}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue2}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result2.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>${result3.symbol}</td>
+							<td>${result3.startDate}</td>
+							<td>${result3.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestment3}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValue3}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${result3.totalPercentReturn}" /></td>
+						</tr>
+					</table>
+					<h2>Current Model Results for Each Index</h2>
+					<table>
+						<tr>
+							<th>Index</th>
+							<th>Results Start Date</th>
+							<th>Results End Date</th>
+							<th>Initial Investment</th>
+							<th>Final Value</th>
+							<th>% Return</th>
+							<th>Number of Trades</th>
+							<th>Number of Profitable Trades</th>
+						</tr>
+						<tr>
+							<td>${current1.symbol}</td>
+							<td>${current1.startDate}</td>
+							<td>${current1.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestmentc1}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValuec1}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${current1.totalPercentReturn}" /></td>
+							<td>${current1.numberOfTrades}</td>
+							<td>${current1.numberOfProfitableTrades}</td>
+						</tr>
+						<tr>
+							<td>${current2.symbol}</td>
+							<td>${current2.startDate}</td>
+							<td>${current2.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestmentc2}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValuec2}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${current2.totalPercentReturn}" /></td>
+							<td>${current2.numberOfTrades}</td>
+							<td>${current2.numberOfProfitableTrades}</td>
+						</tr>
+						<tr>
+							<td>${current3.symbol}</td>
+							<td>${current3.startDate}</td>
+							<td>${current3.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${initialInvestmentc3}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${finalValuec3}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${current3.totalPercentReturn}" /></td>
+							<td>${current3.numberOfTrades}</td>
+							<td>${current3.numberOfProfitableTrades}</td>
+						</tr>
+					</table>
+				</div>
 				<div id="backtest">
 					<p>Select the index to backtest.</p>
-					<form:form method="POST" commandName="backtestModel" action="backtestResults">
+					<form:form method="POST" commandName="result1" action="backtestResults">
 					<div id="backtestIndexPicker">
 						<ul>
 							<form:radiobuttons element="li" path="symbol" items="${indexList}" />
@@ -136,7 +213,7 @@
 					</div>
 					</form:form>
 				</div>
-
+			</div>
 			<!-- Footer Div (in mpFooter file-->
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 			<!-- End Footer Div -->

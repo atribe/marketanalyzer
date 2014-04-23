@@ -58,7 +58,7 @@ public class PlotOHLC {
 		 * http://stackoverflow.com/questions/11330370/jfreechart-how-to-draw-the-moving-average-over-a-ohlc-chart
 		 */
 		//getting the first and last so I can get the first and last dates
-		 List<IndexOHLCVCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(120), new LocalDate());
+		List<IndexOHLCVCalcs> OHLCList = a.getRowsBetweenDatesBySymbol(symbol, new LocalDate().minusDays(120), new LocalDate());
 		
 		//Getting the OHLC dataset
 		OHLCDataset OHLCdata = createOHLCDataset(symbol, OHLCList);
