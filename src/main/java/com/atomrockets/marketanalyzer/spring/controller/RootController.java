@@ -6,10 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atomrockets.marketanalyzer.beans.BacktestResult;
-import com.atomrockets.marketanalyzer.services.BacktestService;
-import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
-
 @Controller
 @RequestMapping("/")
 public class RootController {

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -59,13 +60,19 @@ public class PlotModelResult {
 		String yAxisLabel = "Price";
 				
 		//1. Create the datasets
-		XYDataset dataset1 = createPrimaryDataset(resultList);
-		
+		XYDataset dataset1 = createPrimaryDataset(resultList, backtestModel, transactionList);
+		int seriesCount = dataset1.getSeriesCount();
 		//2. Setup Renderer for the first dataset
 		XYItemRenderer renderer1 = new XYLineAndShapeRenderer(true, false);//true for lines, false for no shapes
 		
 		//2a. Series level styles applied to the renderer
-		renderer1.setSeriesPaint(0, Color.BLUE);
+		/*
+		for(int i = 0;i < seriesCount; i = i +2)
+		{
+			renderer1.setSeriesPaint(i, Color.GREEN);
+			renderer1.setSeriesPaint(i+1, Color.RED);
+		}
+		*/
 		
 		//3. Set Domain axis
 		DateAxis domainAxis = new DateAxis(xAxisLabel);
@@ -76,6 +83,8 @@ public class PlotModelResult {
 			DateFormat formatter = new SimpleDateFormat("MM-dd-yy");
 			DateTickUnit unit = new DateTickUnit(DateTickUnitType.MONTH, 3, formatter);
 		domainAxis.setTickUnit(unit);
+		domainAxis.setMinimumDate(new LocalDate("1990-06-01").toDateTimeAtStartOfDay().toDate());
+		domainAxis.setMaximumDate(new LocalDate("2010-12-31").toDateTimeAtStartOfDay().toDate());
 		
 		//4. Set Range axis
 		NumberAxis rangeAxis = new NumberAxis(yAxisLabel);
@@ -83,6 +92,8 @@ public class PlotModelResult {
 		//4a. Set range axis style
 		rangeAxis.setAutoRangeIncludesZero(false);
 		rangeAxis.setNumberFormatOverride(new DecimalFormat("$0"));
+		rangeAxis.setLowerBound(1000);
+		rangeAxis.setUpperBound(5000);
 		
 		//5. Create Plot from dataset, domainAxis, rangeAxis, and renderer
 		XYPlot plot1 = new XYPlot(dataset1, domainAxis, rangeAxis, renderer1);
@@ -111,18 +122,54 @@ public class PlotModelResult {
 		return chart;
 	}
 
-	private static XYDataset createPrimaryDataset(List<IndexOHLCVCalcs> resultList) {
+	private static XYDataset createPrimaryDataset(List<IndexOHLCVCalcs> resultList, BacktestResult backtestModel, List<StockTransaction> transactionList) {
 		TimeSeriesCollection dataset = new TimeSeriesCollection();
 		
-		String symbol = resultList.get(0).getSymbol();
+		String symbol = backtestModel.getSymbol();
 		
-		TimeSeries seriesClosePrice = new TimeSeries(symbol);
+		TimeSeries seriesBuy = new TimeSeries(symbol);
+		TimeSeries seriesSell = new TimeSeries(symbol);
+		//Transaction Iterator
+		int i = 0;
+		
+		//Initialing transactionList variables
+		LocalDate buyDate = new LocalDate(transactionList.get(i).getBuyDate());
+		LocalDate sellDate = new LocalDate(transactionList.get(i).getSellDate());
 		
 		for(IndexOHLCVCalcs a : resultList ) {
-			seriesClosePrice.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+			
+			if(a.getConvertedDate().isEqual(sellDate)) { 
+				//if the date is the sell date, sell and move to the next transaction
+				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				
+				//moving to the next transaction
+				i++;
+				//setting the new buyDate and sellDate
+				if(i<transactionList.size()-1) {
+					try {
+						buyDate = new LocalDate(transactionList.get(i).getBuyDate());
+						sellDate = new LocalDate(transactionList.get(i).getSellDate());
+					} catch(NullPointerException e) {
+			            System.out.print("NullPointerException caught");
+			        }
+				}
+				
+				dataset.addSeries(seriesBuy);
+				dataset.addSeries(seriesSell);
+				
+				seriesBuy = new TimeSeries(symbol);
+				seriesSell = new TimeSeries(symbol);
+			} else if(a.getConvertedDate().isEqual(buyDate) || a.getConvertedDate().isAfter(buyDate)) { 
+				//if the date of the OHCLV data is after a buy date then add it to the buy list
+				seriesBuy.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+			} else { 
+				//if the date is before the buy date of the current transaction, then sell
+				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+			}
 		}
 		
-		dataset.addSeries(seriesClosePrice);
+		//dataset.addSeries(seriesBuy);
+		//dataset.addSeries(seriesSell);
 		return dataset;
 	}
 	
