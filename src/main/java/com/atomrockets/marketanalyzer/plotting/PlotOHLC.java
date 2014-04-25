@@ -225,28 +225,28 @@ public class PlotOHLC {
         double y = 0;
         
         for(IndexOHLCVCalcs YID : OHLCList) {
-        	if(YID.getDistributionDay()) {
+        	if(Boolean.TRUE.equals(YID.getDistributionDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("D Day", x, y);  
                 annotation.setFont(font);   
                 annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation); 
-        	} else if (YID.getChurnDay()) {
+        	} else if (Boolean.TRUE.equals(YID.getChurnDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getLow();
         		annotation = new XYTextAnnotation("C Day", x, y);  
                 annotation.setFont(font);   
                 annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation);
-        	} else if (YID.getPivotDay()) {
+        	} else if (Boolean.TRUE.equals(YID.getPivotDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getHigh();
         		annotation = new XYTextAnnotation("Pivot", x, y);  
                 annotation.setFont(pivotFont);   
                 annotation.setTextAnchor(TextAnchor.TOP_CENTER);   
                 plot.addAnnotation(annotation);
-        	} else if (YID.getFollowThruDay()) {
+        	} else if (Boolean.TRUE.equals(YID.getFollowThruDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = YID.getHigh();
         		annotation = new XYTextAnnotation("F", x, y);  
