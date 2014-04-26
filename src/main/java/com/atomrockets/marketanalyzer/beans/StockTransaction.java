@@ -1,6 +1,7 @@
 package com.atomrockets.marketanalyzer.beans;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,26 +18,26 @@ public class StockTransaction {
 	private long backtestId;
 	private Date buyDate;
 	private Date sellDate;
-	private double buyPrice;
-	private double sellPrice;
-	private double dollarReturn;
+	private BigDecimal buyPrice;
+	private BigDecimal sellPrice;
+	private BigDecimal dollarReturn;
 	private double percentReturn;
 	private Boolean profitable;
 	
 	//Empty constructor
 	public StockTransaction() {
-		this.buyPrice=0;
-		this.sellPrice=0;
-		this.dollarReturn=0;
-		this.percentReturn=0;
+		this.buyPrice = new BigDecimal(0);
+		this.sellPrice = new BigDecimal(0);
+		this.dollarReturn = new BigDecimal(0);
+		this.percentReturn = 0;
 	}
 	
 	public StockTransaction(long backtestID) {
 		setBacktestId(backtestID);
-		this.buyPrice=0;
-		this.sellPrice=0;
-		this.dollarReturn=0;
-		this.percentReturn=0;
+		this.buyPrice = new BigDecimal(0);
+		this.sellPrice = new BigDecimal(0);
+		this.dollarReturn = new BigDecimal(0);
+		this.percentReturn = 0;
 	}
 	
 	public StockTransaction(long backtestID, OHLCVData beginningDataPoint,
@@ -77,6 +78,8 @@ public class StockTransaction {
 					typeName = "VARCHAR(10)";
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
+				} else if (type.equals(java.math.BigDecimal.class)){
+					typeName = "DECIMAL";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -174,9 +177,9 @@ public class StockTransaction {
 	}
 	
 	private void calcStats() {
-		this.dollarReturn = this.sellPrice-this.buyPrice;
-		this.percentReturn = (this.sellPrice-this.buyPrice)/this.buyPrice;
-		if(this.dollarReturn>0) {
+		this.dollarReturn = this.sellPrice.subtract(this.buyPrice);
+		this.percentReturn = this.dollarReturn.doubleValue()/this.buyPrice.doubleValue();
+		if(this.dollarReturn.compareTo(BigDecimal.ZERO)>0) {
 			setProfitable(true);
 		} else {
 			setProfitable(false);
@@ -193,7 +196,7 @@ public class StockTransaction {
 	}
 	public boolean isTransactionOpen() {
 		if(this.buyDate != null &&
-				this.buyPrice > 0) {
+				this.buyPrice.compareTo(BigDecimal.ZERO) > 0) {
 			return true;
 		} else {
 			return false;
@@ -201,9 +204,9 @@ public class StockTransaction {
 	}
 	public boolean isTransactionClosed() {
 		if(this.buyDate != null &&
-				this.buyPrice > 0 &&
+				this.buyPrice.compareTo(BigDecimal.ZERO) > 0 &&
 				this.sellDate != null &&
-				this.sellPrice > 0)
+				this.sellPrice.compareTo(BigDecimal.ZERO) > 0)
 		{
 			calcStats();
 			return true;
@@ -247,22 +250,22 @@ public class StockTransaction {
 	public void setSellDate(Date sellDate) {
 		this.sellDate = sellDate;
 	}
-	public double getBuyPrice() {
+	public BigDecimal getBuyPrice() {
 		return buyPrice;
 	}
-	public void setBuyPrice(double buyPrice) {
+	public void setBuyPrice(BigDecimal buyPrice) {
 		this.buyPrice = buyPrice;
 	}
-	public double getSellPrice() {
+	public BigDecimal getSellPrice() {
 		return sellPrice;
 	}
-	public void setSellPrice(double sellPrice) {
+	public void setSellPrice(BigDecimal sellPrice) {
 		this.sellPrice = sellPrice;
 	}
-	public double getDollarReturn() {
+	public BigDecimal getDollarReturn() {
 		return dollarReturn;
 	}
-	public void setDollarReturn(double dollarReturn) {
+	public void setDollarReturn(BigDecimal dollarReturn) {
 		this.dollarReturn = dollarReturn;
 	}
 	public double getPercentReturn() {

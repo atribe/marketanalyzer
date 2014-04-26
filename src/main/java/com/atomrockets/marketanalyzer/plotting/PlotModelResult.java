@@ -2,6 +2,7 @@ package com.atomrockets.marketanalyzer.plotting;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -38,15 +39,15 @@ public class PlotModelResult {
 
 	static Logger log = Logger.getLogger(PlotModelResult.class.getName());
 	
-	private static double maxPrice;
-	private static double minPrice;
+	private static BigDecimal maxPrice;
+	private static BigDecimal minPrice;
 
 	public static JFreeChart createChart(String symbol) {
 		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
 			return null;
 		} else {
-			maxPrice=0;
-			minPrice=0;
+			maxPrice=new BigDecimal(0);
+			minPrice=new BigDecimal(0);
 			return reallyCreateChart(symbol);
 		}
 	}
@@ -99,8 +100,8 @@ public class PlotModelResult {
 		//4a. Set range axis style
 		rangeAxis.setAutoRangeIncludesZero(false);
 		rangeAxis.setNumberFormatOverride(new DecimalFormat("$0"));
-		rangeAxis.setLowerBound(minPrice*1.05);//min and max axis to be 5% away from the actual min and max
-		rangeAxis.setUpperBound(maxPrice*1.05);
+		rangeAxis.setLowerBound(minPrice.doubleValue()*1.05);//min and max axis to be 5% away from the actual min and max
+		rangeAxis.setUpperBound(maxPrice.doubleValue()*1.05);
 		
 		//5. Create Plot from dataset, domainAxis, rangeAxis, and renderer
 		XYPlot plot1 = new XYPlot(dataset1, domainAxis, rangeAxis, renderer1);
@@ -149,9 +150,9 @@ public class PlotModelResult {
 		
 		for(IndexOHLCVCalcs a : resultList ) {
 			//Setting the min and max price for the chart
-			if(a.getClose() < minPrice) {
+			if(a.getClose().compareTo(minPrice) < 0) {
 				minPrice = a.getClose();
-			} else if(a.getClose() > maxPrice) {
+			} else if(a.getClose().compareTo(maxPrice) > 0) {
 				maxPrice = a.getClose();
 			}
 			
@@ -228,7 +229,7 @@ public class PlotModelResult {
 			if(a.getConvertedDate().isEqual(sellDate)) {				
 				//Annotation for the word Sold
 				x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = a.getHigh()*1.20;
+        		y = a.getHigh().doubleValue()*1.20;
         		String annotationText = "SOLD";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
                 annotation.setFont(font);   
@@ -237,7 +238,7 @@ public class PlotModelResult {
                 
                 //annotation for the % return
                 x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = a.getHigh()*1.10;
+        		y = a.getHigh().doubleValue()*1.10;
         		annotationText = "Return: " + (double)Math.round(transactionList.get(i).getPercentReturn() * 1000) / 10 + "%";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
                 annotation.setFont(font);   

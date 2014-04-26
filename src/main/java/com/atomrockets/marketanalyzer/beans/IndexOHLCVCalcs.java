@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.beans;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import org.joda.time.LocalDate;
@@ -12,12 +13,12 @@ public class IndexOHLCVCalcs extends IndexCalcs implements OHLCVInterface{
 	private String symbol;
 	private Date date;
 	private LocalDate convertedDate;
-	private double open;
-	private double high;
-	private double low;
-	private double close;
+	private BigDecimal open;
+	private BigDecimal high;
+	private BigDecimal low;
+	private BigDecimal close;
 	private long volume;
-	private double adjClose;
+	private BigDecimal adjClose;
 
 	//add more stuff as needed here
 
@@ -71,39 +72,39 @@ public class IndexOHLCVCalcs extends IndexCalcs implements OHLCVInterface{
 	}
 	
 	@Override
-	public double getOpen() {
+	public BigDecimal getOpen() {
 		return open;
 	}
 	@Override
-	public void setOpen(double open) {
+	public void setOpen(BigDecimal open) {
 		this.open = open;
 	}
 	
 	@Override
-	public double getHigh() {
+	public BigDecimal getHigh() {
 		return high;
 	}
 	@Override
-	public void setHigh(double high) {
+	public void setHigh(BigDecimal high) {
 		this.high = high;
 	}
 	
 	@Override
-	public double getLow() {
+	public BigDecimal getLow() {
 		return low;
 	}
 	@Override
-	public void setLow(double low) {
+	public void setLow(BigDecimal low) {
 		this.low = low;
 	}
 
 	
 	@Override
-	public double getClose() {
+	public BigDecimal getClose() {
 		return close;
 	}
 	@Override
-	public void setClose(double close) {
+	public void setClose(BigDecimal close) {
 		this.close = close;
 	}
 	
@@ -122,11 +123,11 @@ public class IndexOHLCVCalcs extends IndexCalcs implements OHLCVInterface{
 	
 
 	@Override
-	public double getAdjClose() {
+	public BigDecimal getAdjClose() {
 		return this.adjClose;
 	}
 	@Override
-	public void setAdjClose(double adjClose) {
+	public void setAdjClose(BigDecimal adjClose) {
 		this.adjClose = adjClose;
 	}
 }

@@ -204,7 +204,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 				+ "(?,?,?,?,?,?,?)";
 		String [] columnNames = {"symbol","date","open","high","low","close","volume"};
 		PreparedStatement ps=null;
-		int batchSize = 500;
+		int batchSize = 1000;
 		try {
 			Connection con = m_ds.getConnection();
 			//preparing the MySQL statement
@@ -255,7 +255,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		String[] columnNames = a.getColumnNameList();
 		
 		PreparedStatement ps=null;
-		int batchSize = 100;
+		int batchSize = 1000;
 		
 		try {
 			long counter = 0;

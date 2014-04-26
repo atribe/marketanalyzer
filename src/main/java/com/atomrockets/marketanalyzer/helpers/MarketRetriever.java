@@ -5,12 +5,11 @@
 package com.atomrockets.marketanalyzer.helpers;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,6 +21,7 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.atomrockets.marketanalyzer.beans.OHLCVData;
+import com.atomrockets.marketanalyzer.beans.YahooOHLCV;
 import com.atomrockets.marketanalyzer.dbManagers.GenericDBSuperclass;
 
 /**
@@ -32,7 +32,7 @@ public class MarketRetriever {
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
 	public static List<OHLCVData> yahooDataParser(String url, String index) throws IOException {
-		List<OHLCVData> rowsFromYahooURL = null;
+		List<YahooOHLCV> rowsFromYahooURL = null;
 		
 		URL ur = new URL(url);
 		HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
@@ -42,20 +42,20 @@ public class MarketRetriever {
 		
 		//OpenCSV parser
 		CSVReader csvReader = new CSVReader(reader, ',', '\"');
-		ColumnPositionMappingStrategy<OHLCVData> strategy = new ColumnPositionMappingStrategy<OHLCVData>();
-	    strategy.setType(OHLCVData.class);
-	    strategy.setColumnMapping(new String[]{"dateString","open","high","low","close","volume","adjClose"});
+		ColumnPositionMappingStrategy<YahooOHLCV> strategy = new ColumnPositionMappingStrategy<YahooOHLCV>();
+	    strategy.setType(YahooOHLCV.class);
+	    strategy.setColumnMapping(new String[]{"date","open","high","low","close","volume","adjClose"});
 
-	    CsvToBean<OHLCVData> csv = new CsvToBean<OHLCVData>();
+	    CsvToBean<YahooOHLCV> csv = new CsvToBean<YahooOHLCV>();
 	    rowsFromYahooURL = csv.parse(strategy, csvReader);
 		
 		/*
 		 * Because the symbol is not downloaded in the CSV I add it, in the following
 		 * method, to the row data.
 		 */
-		rowsFromYahooURL = addSymbolstoYahooDataObjectList(rowsFromYahooURL, index);
+	    List<OHLCVData> convertedRowsFromYahooURL = addSymbolAndConvertToOHLCVData(rowsFromYahooURL, index);
 		
-		return rowsFromYahooURL;
+		return convertedRowsFromYahooURL;
 	}
 
 	/**
@@ -104,13 +104,14 @@ public class MarketRetriever {
 		return Days.daysBetween(date, today).getDays();
 	}
 	
-	private static List<OHLCVData> addSymbolstoYahooDataObjectList(
-			List<OHLCVData> rowsFromYahooURL, String index) {
-		
-		for(OHLCVData rowFromYahooURL:rowsFromYahooURL) {
+	private static List<OHLCVData> addSymbolAndConvertToOHLCVData(
+			List<YahooOHLCV> rowsFromYahooURL, String index) {
+		List<OHLCVData> convertedList = new ArrayList<OHLCVData>();
+		for(YahooOHLCV rowFromYahooURL:rowsFromYahooURL) {
 			rowFromYahooURL.setSymbol(index);
+			convertedList.add(new OHLCVData(rowFromYahooURL));
 		}
 		
-		return rowsFromYahooURL;
+		return convertedList;
 	}
 }

@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.services;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +93,8 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		backtest.setTotalPercentReturn(d.getPercentReturn());
 		
+		backtest.setBalance(backtest.getBalance().multiply(new BigDecimal(d.getPercentReturn()))); //new balance = old balance * % Return
+		
 		m_backtestResultDAO.insertOrUpdateBacktest(backtest);
 	}
 	
@@ -166,7 +169,12 @@ public class BacktestService extends GenericServiceSuperclass{
 		int backtestId = newBacktest.getId();
 		
 		//initializing variables to be added as backtest results
-		double cummulativePercentReturn = 0;
+		/*
+		 * TODO this should be done by having a fixed starting amount of cash, say $10,000 in the backtestResult, then this number gets modified by the percent change of each transaction.
+		 * Could have a starting and ending valuep-9l[]o9-y 
+		 */
+		BigDecimal initialInvestment = new BigDecimal(10000);
+		BigDecimal dollarReturn = initialInvestment;
 		int numberOfTrades = 0;
 		int numberOfPofitableTrades = 0;
 		
@@ -194,7 +202,7 @@ public class BacktestService extends GenericServiceSuperclass{
 			
 			if(transaction.isTransactionClosed()) { //if the transaction is complete (all require fields have been entered
 				//adding stats of this trade to the cumulative backtest results
-				cummulativePercentReturn += transaction.getPercentReturn();
+				dollarReturn = dollarReturn.add(dollarReturn.multiply(new BigDecimal(transaction.getPercentReturn()))); //dollarReturn = dollarReturn + dollarReturn*%ReturnOfTheTransaction
 				numberOfTrades++;
 				if(transaction.getProfitable()) {
 					numberOfPofitableTrades++;
@@ -209,7 +217,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		if( transaction.isTransactionOpen() && !transaction.isTransactionClosed()) {
 			transaction.CloseTransaction(OHLCVCalcsList.get(OHLCVCalcsList.size()-1));//close the transaction with the last data point in the list
 			if(transaction.isTransactionClosed()) {
-				cummulativePercentReturn += transaction.getPercentReturn();
+				dollarReturn = dollarReturn.add(dollarReturn.multiply(new BigDecimal(transaction.getPercentReturn()))); //dollarReturn = dollarReturn + dollarReturn*%ReturnOfTheTransaction
 				numberOfTrades++;
 				if(transaction.getProfitable()) {
 					numberOfPofitableTrades++;
@@ -219,7 +227,8 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		
 		//Add the totalReturn to the newBacktestResult
-		newBacktest.setTotalPercentReturn(cummulativePercentReturn);
+		newBacktest.setBalance(dollarReturn);
+		newBacktest.setTotalPercentReturn((dollarReturn.doubleValue()-initialInvestment.doubleValue())/initialInvestment.doubleValue());
 		newBacktest.setNumberOfTrades(numberOfTrades);
 		newBacktest.setNumberOfProfitableTrades(numberOfPofitableTrades);
 		

@@ -1,10 +1,10 @@
 package com.atomrockets.marketanalyzer.beans;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
-
 import java.util.Map;
 
 import org.joda.time.LocalDate;
@@ -60,6 +60,7 @@ public class BacktestResult {
 	
 	//Results
 	private double totalPercentReturn;
+	private BigDecimal balance;
 	private int numberOfTrades;
 	private int numberOfProfitableTrades;
 	
@@ -91,6 +92,8 @@ public class BacktestResult {
 					typeName = "VARCHAR(10)";
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
+				} else if (type.equals(java.math.BigDecimal.class)){
+					typeName = "DECIMAL";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -439,6 +442,12 @@ public class BacktestResult {
 	}
 	public void setTotalPercentReturn(double totalPercentReturn) {
 		this.totalPercentReturn = totalPercentReturn;
+	}
+	public BigDecimal getBalance() {
+		return balance;
+	}
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
 	}
 	public int getNumberOfTrades() {
 		return numberOfTrades;

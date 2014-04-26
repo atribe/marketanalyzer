@@ -1,6 +1,7 @@
 package com.atomrockets.marketanalyzer.beans;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,9 +25,9 @@ public class IndexCalcs {
 	protected long OHLCid;
 	
 	//Statistic variables
-	protected double closeAvg50;
-	protected double closeAvg100;
-	protected double closeAvg200;
+	protected BigDecimal closeAvg50;
+	protected BigDecimal closeAvg100;
+	protected BigDecimal closeAvg200;
 	protected long volumeAvg50;
 	protected double priceTrend35;
 	
@@ -64,6 +65,8 @@ public class IndexCalcs {
 					typeName = "VARCHAR(10)";
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
+				} else if (type.equals(java.math.BigDecimal.class)){
+					typeName = "DECIMAL";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -182,24 +185,24 @@ public class IndexCalcs {
 		OHLCid = oHLCid;
 	}
 
-	public double getCloseAvg50() {
+	public BigDecimal getCloseAvg50() {
 		return closeAvg50;
 	}
-	public void setCloseAvg50(double closeAvg50) {
+	public void setCloseAvg50(BigDecimal closeAvg50) {
 		this.closeAvg50 = closeAvg50;
 	}
 
-	public double getCloseAvg100() {
+	public BigDecimal getCloseAvg100() {
 		return closeAvg100;
 	}
-	public void setCloseAvg100(double closeAvg100) {
+	public void setCloseAvg100(BigDecimal closeAvg100) {
 		this.closeAvg100 = closeAvg100;
 	}
 
-	public double getCloseAvg200() {
+	public BigDecimal getCloseAvg200() {
 		return closeAvg200;
 	}
-	public void setCloseAvg200(double closeAvg200) {
+	public void setCloseAvg200(BigDecimal closeAvg200) {
 		this.closeAvg200 = closeAvg200;
 	}
 

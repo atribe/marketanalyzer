@@ -66,7 +66,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		//Batch add
 		//Follow the initalAddRecordsFromData method in the MarketIndexDB class
 		PreparedStatement ps=null;
-		int batchSize = 500;
+		int batchSize = 1000;
 		
 		try {
 			long counter = 0;

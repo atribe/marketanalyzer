@@ -167,10 +167,10 @@ public class PlotOHLC {
 		    
 		for(IndexOHLCVCalcs YID : OHLCList) {
 			Day date       =  new Day(YID.getConvertedDate().toDate());
-			double open     = YID.getOpen();
-			double high     = YID.getHigh();
-			double low      = YID.getLow();
-			double close    = YID.getClose();
+			double open     = YID.getOpen().doubleValue();
+			double high     = YID.getHigh().doubleValue();
+			double low      = YID.getLow().doubleValue();
+			double close    = YID.getClose().doubleValue();
 			
 			if(close>yesterdayClose)
 				sHigher.add(date, open, high, low, close);
@@ -227,28 +227,28 @@ public class PlotOHLC {
         for(IndexOHLCVCalcs YID : OHLCList) {
         	if(Boolean.TRUE.equals(YID.getDistributionDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = YID.getLow();
+        		y = YID.getLow().doubleValue();
         		annotation = new XYTextAnnotation("D Day", x, y);  
                 annotation.setFont(font);   
                 annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation); 
         	} else if (Boolean.TRUE.equals(YID.getChurnDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = YID.getLow();
+        		y = YID.getLow().doubleValue();
         		annotation = new XYTextAnnotation("C Day", x, y);  
                 annotation.setFont(font);   
                 annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
                 plot.addAnnotation(annotation);
         	} else if (Boolean.TRUE.equals(YID.getPivotDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = YID.getHigh();
+        		y = YID.getHigh().doubleValue();
         		annotation = new XYTextAnnotation("Pivot", x, y);  
                 annotation.setFont(pivotFont);   
                 annotation.setTextAnchor(TextAnchor.TOP_CENTER);   
                 plot.addAnnotation(annotation);
         	} else if (Boolean.TRUE.equals(YID.getFollowThruDay())) {
         		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = YID.getHigh();
+        		y = YID.getHigh().doubleValue();
         		annotation = new XYTextAnnotation("F", x, y);  
                 annotation.setFont(followThruFont);   
                 annotation.setTextAnchor(TextAnchor.TOP_CENTER);   

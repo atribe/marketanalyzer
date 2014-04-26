@@ -4,7 +4,10 @@
 package com.atomrockets.marketanalyzer.beans;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,14 +27,13 @@ public class OHLCVData implements OHLCVInterface{
 	
 	private long id;
 	private String symbol;
-	private String dateString; //OpenCSV (used for parsing the Yahoo download can't parse into a Date, must parse dates into Strings
 	private Date date;
-	private double open;
-	private double high;
-	private double low;
-	private double close;
+	private BigDecimal open;
+	private BigDecimal high;
+	private BigDecimal low;
+	private BigDecimal close;
 	private long volume;
-	private double adjClose;
+	private BigDecimal adjClose;
 	
 	/*
 	 * Constructors
@@ -39,7 +41,26 @@ public class OHLCVData implements OHLCVInterface{
 	//Empty constructed required to be a Java Bean
 	public OHLCVData() {}
 	
-	public OHLCVData(String symbol, Date date, double open, double high, double low, double close, long volume, double adjClose) {
+	public OHLCVData(YahooOHLCV y) {
+		setSymbol(y.getSymbol());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	    java.util.Date parsed=null;
+		try {
+			parsed = format.parse(y.getDate());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	setDate(new java.sql.Date(parsed.getTime()));
+		setOpen(new BigDecimal(y.getOpen()));
+		setHigh(new BigDecimal(y.getHigh()));
+		setLow(new BigDecimal(y.getLow()));
+		setClose(new BigDecimal(y.getClose()));
+		setVolume(y.getVolume());
+		setAdjClose(new BigDecimal(y.getAdjClose()));
+	}
+	
+	public OHLCVData(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
 		setSymbol(symbol);
 		setDate(date);
 		setOpen(open);
@@ -62,7 +83,7 @@ public class OHLCVData implements OHLCVInterface{
 			String name = f.getName(); //Getting the name of the field
 			Class<?> type = f.getType(); //Getting the type of the field
 			String typeName=null;
-			if( name != "tableName" && name != "dateString") { //Don't add the tableName field to the hashmap, as it isn't a column in the table
+			if( name != "tableName" ) { //Don't add the tableName field to the hashmap, as it isn't a column in the table
 				//Match the field type to the MySQL equivalent
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
@@ -76,6 +97,8 @@ public class OHLCVData implements OHLCVInterface{
 					typeName = "VARCHAR(10)";
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
+				} else if (type.equals(java.math.BigDecimal.class)){
+					typeName = "DECIMAL";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -193,15 +216,6 @@ public class OHLCVData implements OHLCVInterface{
 		this.symbol = symbol;
 	}
 
-	public String getDateString() {
-		return dateString;
-	}
-
-	public void setDateString(String dateString) {
-		this.dateString = dateString;
-		setDate(dateString);
-	}
-
 	@Override
 	public Date getDate() {
 		return date;
@@ -218,38 +232,38 @@ public class OHLCVData implements OHLCVInterface{
 	}
 	
 	@Override
-	public double getOpen() {
+	public BigDecimal getOpen() {
 		return open;
 	}
 	@Override
-	public void setOpen(double open) {
+	public void setOpen(BigDecimal open) {
 		this.open = open;
 	}
 	
 	@Override
-	public double getHigh() {
+	public BigDecimal getHigh() {
 		return high;
 	}
 	@Override
-	public void setHigh(double high) {
+	public void setHigh(BigDecimal high) {
 		this.high = high;
 	}
 	
 	@Override
-	public double getLow() {
+	public BigDecimal getLow() {
 		return low;
 	}
 	@Override
-	public void setLow(double low) {
+	public void setLow(BigDecimal low) {
 		this.low = low;
 	}
 	
 	@Override
-	public double getClose() {
+	public BigDecimal getClose() {
 		return close;
 	}
 	@Override
-	public void setClose(double close) {
+	public void setClose(BigDecimal close) {
 		this.close = close;
 	}
 	
@@ -267,11 +281,11 @@ public class OHLCVData implements OHLCVInterface{
 	}
 	
 	@Override
-	public double getAdjClose() {
+	public BigDecimal getAdjClose() {
 		return adjClose;
 	}
 	@Override
-	public void setAdjClose(double adjClose) {
+	public void setAdjClose(BigDecimal adjClose) {
 		this.adjClose = adjClose;
 	}
 	//End Getters and Setters

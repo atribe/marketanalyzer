@@ -11,6 +11,7 @@ import com.atomrockets.marketanalyzer.dbManagers.BacktestResultDAO;
 import com.atomrockets.marketanalyzer.dbManagers.MarketPredDataSource;
 import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -225,16 +226,16 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			 * and calculates the 50 day moving volume average
 			 */
 			int loopDays = 50;
-			double priceCloseSum = 0;
+			BigDecimal priceCloseSum = new BigDecimal(0.0);
 			long volumeSum = 0;
 			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum+=m_IndexCalcList.get(j).getClose();
+				priceCloseSum = priceCloseSum.add(m_IndexCalcList.get(j).getClose());
 
 				//summing up for volumeAverage
 				volumeSum+=m_IndexCalcList.get(j).getVolume();
 			}
-			m_IndexCalcList.get(i).setCloseAvg50(priceCloseSum/loopDays);
+			m_IndexCalcList.get(i).setCloseAvg50(priceCloseSum.divide(new BigDecimal(loopDays)));
 			m_IndexCalcList.get(i).setVolumeAvg50(volumeSum/loopDays);
 			
 			/*
@@ -242,24 +243,24 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			 * Calculates the 100 day moving average
 			 */
 			loopDays = 100;
-			priceCloseSum = 0;
+			priceCloseSum = new BigDecimal(0);
 			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum+=m_IndexCalcList.get(j).getClose();
+				priceCloseSum = priceCloseSum.add(m_IndexCalcList.get(j).getClose());
 			}
-			m_IndexCalcList.get(i).setCloseAvg100(priceCloseSum/loopDays);
+			m_IndexCalcList.get(i).setCloseAvg100(priceCloseSum.divide(new BigDecimal(loopDays)));
 			
 			/*
 			 * Loop for 200 days
 			 * Calculates the 200 day moving average
 			 */
 			loopDays = 200;
-			priceCloseSum = 0;
+			priceCloseSum = new BigDecimal(0);
 			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum+=m_IndexCalcList.get(j).getClose();
+				priceCloseSum = priceCloseSum.add(m_IndexCalcList.get(j).getClose());
 			}
-			m_IndexCalcList.get(i).setCloseAvg200(priceCloseSum/loopDays);
+			m_IndexCalcList.get(i).setCloseAvg200(priceCloseSum.divide(new BigDecimal(loopDays)));
 			
 			/*
 			 * Loop for 35 days
@@ -269,7 +270,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			loopDays = 35;
 			double closePercentChange = 0;
 			for(int j=i; j>i-loopDays && j>2; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
-				closePercentChange+=(m_IndexCalcList.get(j-1).getClose() - m_IndexCalcList.get(j-2).getClose()) / m_IndexCalcList.get(j-2).getClose();
+				closePercentChange+=(m_IndexCalcList.get(j-1).getClose().subtract(m_IndexCalcList.get(j-2).getClose())).doubleValue() / m_IndexCalcList.get(j-2).getClose().doubleValue();
 			}
 			m_IndexCalcList.get(i).setPriceTrend35(closePercentChange/loopDays);
 			
@@ -322,10 +323,10 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			long todaysVolume = m_IndexCalcList.get(i).getVolume();
 			long previousDaysVolume = m_IndexCalcList.get(i-1).getVolume();
 			
-			double todaysClose = m_IndexCalcList.get(i).getClose();
-			double previousDaysClose = m_IndexCalcList.get(i-1).getClose();
+			BigDecimal todaysClose = m_IndexCalcList.get(i).getClose();
+			BigDecimal previousDaysClose = m_IndexCalcList.get(i-1).getClose();
 
-			double closePercentChange = (todaysClose/previousDaysClose-1);
+			double closePercentChange = (todaysClose.doubleValue()/previousDaysClose.doubleValue()-1);
 			double closePercentRequiredDrop = m_b.getdDayPriceDrop();
 			// }}
 			
@@ -369,14 +370,14 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			 */
 			
 			// {{ pulling variables from List, just to make the code below prettier
-			double todaysHigh = m_IndexCalcList.get(i).getHigh();			
+			BigDecimal todaysHigh = m_IndexCalcList.get(i).getHigh();			
 			//double previousDaysHigh = m_IndexCalcList.get(i-1).getHigh();
 			
-			double todaysLow = m_IndexCalcList.get(i).getLow();			
+			BigDecimal todaysLow = m_IndexCalcList.get(i).getLow();			
 			//double previousDaysLow = m_IndexCalcList.get(i-1).getLow();
 			
-			double todaysClose = m_IndexCalcList.get(i).getClose();
-			double previousDaysClose = m_IndexCalcList.get(i-1).getClose();
+			BigDecimal todaysClose = m_IndexCalcList.get(i).getClose();
+			BigDecimal previousDaysClose = m_IndexCalcList.get(i-1).getClose();
 			
 			long todaysVolume = m_IndexCalcList.get(i).getVolume();
 			long previousDaysVolume = m_IndexCalcList.get(i-1).getVolume();
@@ -388,10 +389,10 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 			// }}
 			
 			
-			if( todaysClose < (todaysHigh + todaysLow)/2 /*rule 1*/ &&
+			if( todaysClose.compareTo(todaysHigh.add(todaysLow).divide(new BigDecimal(2))) < 0 /*rule 1*/ &&
 					todaysVolume >= previousDaysVolume*(1-churnVolRange) /*rule 2a*/ &&
 					todaysVolume <= previousDaysVolume*(1+churnVolRange) /*rule 2b*/ &&
-					todaysClose <= previousDaysClose*(1+churnPriceRange) /*rule 3*/)
+					todaysClose.compareTo(previousDaysClose.multiply(new BigDecimal(1+churnPriceRange))) <= 0/*rule 3*/)
 			{
 				m_IndexCalcList.get(i).setChurnDay(true);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, m_IndexCalcList.get(i).getPVD_id(), true);
@@ -407,7 +408,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 					conditionsRequired++;
 				// }}
 				
-				if(churnPriceCloseHigherOn && todaysClose >= previousDaysClose) //rule 4
+				if(churnPriceCloseHigherOn && todaysClose.compareTo(previousDaysClose) >= 0) //rule 4
 					conditionsMet++;
 								 
 				if(churnAVG50On && todaysVolume > todaysVolumeAvg50 ) //rule 5
@@ -475,8 +476,8 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		for(int i = 2; i < m_IndexCalcList.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
 			//if the day is a pivot day, as set by the findPivotDay method then...
 			if(m_IndexCalcList.get(i).getPivotDay()) {
-				double rallyHigh = m_IndexCalcList.get(i).getHigh(); 
-				double support = m_IndexCalcList.get(i).getLow();
+				BigDecimal rallyHigh = m_IndexCalcList.get(i).getHigh(); 
+				BigDecimal support = m_IndexCalcList.get(i).getLow();
 				
 				int rallyDayCount = 1;
 				/*
@@ -486,21 +487,21 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 				 */
 				for(int j = i; j < i + rDaysMax && j < m_IndexCalcList.size(); j++) {
 					//Checking to see if a new high for the rally has been set has been set
-					double todaysHigh = m_IndexCalcList.get(j).getHigh();
-					if( todaysHigh > rallyHigh) {
+					BigDecimal todaysHigh = m_IndexCalcList.get(j).getHigh();
+					if( todaysHigh.compareTo(rallyHigh) > 0) {
 						rallyHigh = todaysHigh;
 					}
 					
-					double todaysClose = m_IndexCalcList.get(j).getClose();
-					double previousClose = m_IndexCalcList.get(j-1).getClose();
+					BigDecimal todaysClose = m_IndexCalcList.get(j).getClose();
+					BigDecimal previousClose = m_IndexCalcList.get(j-1).getClose();
 					
-					double todaysLow = m_IndexCalcList.get(j).getLow();
+					BigDecimal todaysLow = m_IndexCalcList.get(j).getLow();
 					
 					long todaysVolume = m_IndexCalcList.get(j).getVolume();
 					long previousVolume = m_IndexCalcList.get(j-1).getVolume();
 					long previousPreviousVolume = m_IndexCalcList.get(j-2).getVolume();
 					
-					if( todaysClose > previousClose * priceMult && //price requirement 
+					if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0&& //price requirement 
 							( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
 							rallyDayCount > rDaysMin && //follow thru days from pivot day requirement 1
 							rallyDayCount < rDaysMax) { //follow thru days from pivot day requirement 2
@@ -508,7 +509,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 						m_IndexCalcList.get(j).setFollowThruDaySafe(true);
 						//and end checking conditions to see if the day is a follow thru day
 						break;
-					} else if( todaysLow < support) { //if the low drops below the support the rally is over and the day is not a follow thru day
+					} else if( todaysLow.compareTo(support) < 0) { //if the low drops below the support the rally is over and the day is not a follow thru day
 						m_IndexCalcList.get(j).setFollowThruDaySafe(false);
 						break;
 					} else { //the day must not 
@@ -527,7 +528,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		 */
 		boolean potentialPivotDay = false;
 		
-		double support = 0; //if price goes below support the rally is broken
+		BigDecimal support = new BigDecimal(0); //if price goes below support the rally is broken
 		
 		/*
 		 * Optional criteria: rally can't start unless the pivotTrend35 < -.1%
@@ -542,16 +543,16 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		for(int i = 2; i< m_IndexCalcList.size(); i++) {
 			//Initializing variables for this loop run
 			potentialPivotDay = false;
-			double todaysClose = m_IndexCalcList.get(i).getClose();
-			double previousClose = m_IndexCalcList.get(i-1).getClose();
-			double previousPreviousClose = m_IndexCalcList.get(i-2).getClose();
+			BigDecimal todaysClose = m_IndexCalcList.get(i).getClose();
+			BigDecimal previousClose = m_IndexCalcList.get(i-1).getClose();
+			BigDecimal previousPreviousClose = m_IndexCalcList.get(i-2).getClose();
 			
 			/*
 			 * Pivot day conditions:
 			 * 1. Price dropped yesterday from the day before that
 			 * 1. Price came up today from yesterday 
 			 */
-			if( previousPreviousClose > previousClose && todaysClose > previousClose) {
+			if( previousPreviousClose.compareTo(previousClose) > 0 && todaysClose.compareTo(previousClose) > 0) {
 				
 				/*
 				 * Optional Condition:
@@ -577,8 +578,8 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 					 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
 					 */
 					for(int j = i+1; j < i + rDaysMin; j++) {
-						double nextDayInRallyLow = m_IndexCalcList.get(j).getLow();
-						if( nextDayInRallyLow < support) {
+						BigDecimal nextDayInRallyLow = m_IndexCalcList.get(j).getLow();
+						if( nextDayInRallyLow.compareTo(support) < 0) {
 							//not a rally
 							potentialPivotDay = false;
 							break;

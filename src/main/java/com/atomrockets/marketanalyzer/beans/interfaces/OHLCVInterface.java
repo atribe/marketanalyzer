@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.beans.interfaces;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 public interface OHLCVInterface {	
@@ -16,24 +17,24 @@ public interface OHLCVInterface {
 	public Date getDate();
 	public void setDate(Date date);
 	
-	public double getOpen();
-	public void setOpen(double open);
+	public BigDecimal getOpen();
+	public void setOpen(BigDecimal open);
 
-	public double getHigh();
-	public void setHigh(double high);
+	public BigDecimal getHigh();
+	public void setHigh(BigDecimal high);
 	
-	public double getLow();
-	public void setLow(double low);
+	public BigDecimal getLow();
+	public void setLow(BigDecimal low);
 
-	public double getClose();
-	public void setClose(double close);
+	public BigDecimal getClose();
+	public void setClose(BigDecimal close);
 	
 	public long getVolume();
 	public void setVolume(long volume);
 	public void setVolume(double volume);
 	
-	public double getAdjClose();
-	public void setAdjClose(double adjClose);
+	public BigDecimal getAdjClose();
+	public void setAdjClose(BigDecimal adjClose);
 
 	
 }
