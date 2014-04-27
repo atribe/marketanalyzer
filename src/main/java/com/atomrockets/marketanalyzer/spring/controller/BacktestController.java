@@ -1,5 +1,6 @@
 package com.atomrockets.marketanalyzer.spring.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,46 +32,24 @@ public class BacktestController {
         	//Creating a backtest service
         	BacktestService backtestService = new BacktestService();
         	
+        	BacktestResult b = backtestService.getCurrent("^IXIC");
+        	mav.addObject("backtestObject", b);
         	/*
         	 * Setting up the results of the baseline and the current model.
         	 * However, it is super clunky and not good or even robust
         	 */
-    		BacktestResult b1 = backtestService.getBaseline("^IXIC");
-    		double initialInvestment = 10000;
-    		mav.addObject("result1", b1);
-    		mav.addObject("initialInvestment1", initialInvestment);
-    		mav.addObject("finalValue1", initialInvestment*(1+b1.getTotalPercentReturn()));
-    		
-    		BacktestResult b2 = backtestService.getBaseline("^GSPC");
-    		initialInvestment = 10000;
-    		mav.addObject("result2", b2);
-    		mav.addObject("initialInvestment2", initialInvestment);
-    		mav.addObject("finalValue2", initialInvestment*(1+b2.getTotalPercentReturn()));
-    		
-    		BacktestResult b3 = backtestService.getBaseline("^SML");
-    		initialInvestment = 10000;
-    		mav.addObject("result3", b3);
-    		mav.addObject("initialInvestment3", initialInvestment);
-    		mav.addObject("finalValue3", initialInvestment*(1+b3.getTotalPercentReturn()));
-    		
-    		BacktestResult c1 = backtestService.getCurrent("^IXIC");
-    		initialInvestment = 10000;
-    		mav.addObject("current1", c1);
-    		mav.addObject("initialInvestmentc1", initialInvestment);
-    		mav.addObject("finalValuec1", initialInvestment*(1+c1.getTotalPercentReturn()));
-    		
-    		BacktestResult c2 = backtestService.getCurrent("^GSPC");
-    		initialInvestment = 10000;
-    		mav.addObject("current2", c2);
-    		mav.addObject("initialInvestmentc2", initialInvestment);
-    		mav.addObject("finalValuec2", initialInvestment*(1+c2.getTotalPercentReturn()));
-    		
-    		BacktestResult c3 = backtestService.getCurrent("^SML");
-    		initialInvestment = 10000;
-    		mav.addObject("current3", c3);
-    		mav.addObject("initialInvestmentc3", initialInvestment);
-    		mav.addObject("finalValuec3", initialInvestment*(1+c3.getTotalPercentReturn()));
-    		
+        	List<BacktestResult> baselineList = new ArrayList<BacktestResult>();
+        	baselineList.add(backtestService.getBaseline("^IXIC"));
+        	baselineList.add(backtestService.getBaseline("^GSPC"));
+        	baselineList.add(backtestService.getBaseline("^SML"));
+        	mav.addObject("baselineList", baselineList);
+        	
+        	List<BacktestResult> currentBacktestList = new ArrayList<BacktestResult>();
+        	currentBacktestList.add(backtestService.getCurrent("^IXIC"));
+        	currentBacktestList.add(backtestService.getCurrent("^GSPC"));
+        	currentBacktestList.add(backtestService.getCurrent("^SML"));
+        	mav.addObject("currentBacktestList", currentBacktestList);
+        	
     		/*
     		 * Filling the fields for the next run
     		 */

@@ -60,16 +60,22 @@ public class BacktestResult {
 	
 	//Results
 	private double totalPercentReturn;
-	private BigDecimal balance;
+	private BigDecimal costBasis;
+	private BigDecimal finalValue;
 	private int numberOfTrades;
 	private int numberOfProfitableTrades;
 	
 	
 	//empty constructor to qualify as a javabean
-	public BacktestResult() { }
+	public BacktestResult() {
+		setCostBasis(new BigDecimal(10000));
+		setFinalValue(getCostBasis());
+	}
 	//constructor that sets the symbol
 	public BacktestResult(String symbol) {
 		setSymbol(symbol);
+		setCostBasis(new BigDecimal(10000));
+		setFinalValue(getCostBasis());
 	}
 	
 	//Static method to assist in creating the table
@@ -443,11 +449,17 @@ public class BacktestResult {
 	public void setTotalPercentReturn(double totalPercentReturn) {
 		this.totalPercentReturn = totalPercentReturn;
 	}
-	public BigDecimal getBalance() {
-		return balance;
+	public BigDecimal getCostBasis() {
+		return costBasis;
 	}
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
+	public void setCostBasis(BigDecimal costBasis) {
+		this.costBasis = costBasis;
+	}
+	public BigDecimal getFinalValue() {
+		return finalValue;
+	}
+	public void setFinalValue(BigDecimal finalValue) {
+		this.finalValue = finalValue;
 	}
 	public int getNumberOfTrades() {
 		return numberOfTrades;

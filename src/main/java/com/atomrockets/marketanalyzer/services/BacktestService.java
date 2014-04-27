@@ -93,7 +93,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		backtest.setTotalPercentReturn(d.getPercentReturn());
 		
-		backtest.setBalance(backtest.getBalance().multiply(new BigDecimal(d.getPercentReturn()))); //new balance = old balance * % Return
+		backtest.setFinalValue(backtest.getCostBasis().multiply(new BigDecimal(d.getPercentReturn()))); //new balance = old balance * % Return
 		
 		m_backtestResultDAO.insertOrUpdateBacktest(backtest);
 	}
@@ -173,7 +173,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		 * TODO this should be done by having a fixed starting amount of cash, say $10,000 in the backtestResult, then this number gets modified by the percent change of each transaction.
 		 * Could have a starting and ending valuep-9l[]o9-y 
 		 */
-		BigDecimal initialInvestment = new BigDecimal(10000);
+		BigDecimal initialInvestment = newBacktest.getCostBasis();
 		BigDecimal dollarReturn = initialInvestment;
 		int numberOfTrades = 0;
 		int numberOfPofitableTrades = 0;
@@ -207,7 +207,8 @@ public class BacktestService extends GenericServiceSuperclass{
 				if(transaction.getProfitable()) {
 					numberOfPofitableTrades++;
 				}
-				m_stockTransationDAO.insertTransaction(transaction);
+				transactionList.add(transaction);
+				//m_stockTransationDAO.insertTransaction(transaction);
 				transaction = new StockTransaction(backtestId);//reseting the variable for new info
 			}
 			
@@ -222,12 +223,16 @@ public class BacktestService extends GenericServiceSuperclass{
 				if(transaction.getProfitable()) {
 					numberOfPofitableTrades++;
 				}
-				m_stockTransationDAO.insertTransaction(transaction);
+				transactionList.add(transaction);
+				//m_stockTransationDAO.insertTransaction(transaction);
 			}
 		}
 		
+		//adding the list of transactions to the db
+		m_stockTransationDAO.insertTransactionList(transactionList);
+		
 		//Add the totalReturn to the newBacktestResult
-		newBacktest.setBalance(dollarReturn);
+		newBacktest.setFinalValue(dollarReturn);
 		newBacktest.setTotalPercentReturn((dollarReturn.doubleValue()-initialInvestment.doubleValue())/initialInvestment.doubleValue());
 		newBacktest.setNumberOfTrades(numberOfTrades);
 		newBacktest.setNumberOfProfitableTrades(numberOfPofitableTrades);

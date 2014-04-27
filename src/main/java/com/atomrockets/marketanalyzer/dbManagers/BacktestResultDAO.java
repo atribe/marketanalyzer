@@ -137,7 +137,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				b.setPivotTrend35(-0.004);
 				b.setRallyVolAVG50On(true);
 				b.setRallyPriceHighOn(true);
-				b.setBalance(new BigDecimal(10000));
 				break;
 			case "^GSPC":
 				b.setSymbol(index);
@@ -166,7 +165,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				b.setPivotTrend35(-0.003);
 				b.setRallyVolAVG50On(false);
 				b.setRallyPriceHighOn(true);
-				b.setBalance(new BigDecimal(10000));
 				break;
 			case "^SML":
 				b.setSymbol(index);
@@ -195,7 +193,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				b.setPivotTrend35(-0.003);
 				b.setRallyVolAVG50On(false);
 				b.setRallyPriceHighOn(true);
-				b.setBalance(new BigDecimal(10000));
 				break;
 			case "^MID":
 				b.setSymbol(index);
@@ -224,7 +221,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				b.setPivotTrend35(-0.003);
 				b.setRallyVolAVG50On(false);
 				b.setRallyPriceHighOn(true);
-				b.setBalance(new BigDecimal(10000));
 				break;
 			case "^DJI":
 				b.setSymbol(index);
@@ -253,7 +249,6 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 				b.setPivotTrend35(-0.003);
 				b.setRallyVolAVG50On(false);
 				b.setRallyPriceHighOn(true);
-				b.setBalance(new BigDecimal(10000));
 				break;
 			}
 	

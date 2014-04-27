@@ -142,4 +142,62 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		
 		return transactionList;
 	}
+
+	public void insertTransactionList(List<StockTransaction> transactionList) {
+		
+		int batchSize = 100;
+		int counter = 0;
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		String insertQuery = transactionList.get(0).getInsertOrUpdateQuery();
+		String[] columnNames = transactionList.get(0).getColumnNameList();
+		
+		try {
+			QueryRunner runner = new QueryRunner();
+			con = m_ds.getConnection();
+			ps = con.prepareStatement(insertQuery);
+			for(StockTransaction s:transactionList) {
+				/*
+				 * if transaction is not in db id will be set to -1
+				 * If transaction is in the db the id will be set to the id from the db
+				 */
+				long id = transactionAlreadyInDB(s);
+				if(id>0) {
+					s.setId(id);
+				}
+				runner.fillStatementWithBean(ps, s, columnNames);
+				
+				ps.addBatch();
+				counter++;
+				if (counter % batchSize == 0) { //if i/batch size remainder == 0 execute batch
+					ps.executeBatch();
+					log.info("StockTransactionDAO insert executed at i="+counter);
+				}
+			}
+			ps.executeBatch();
+		} catch (SQLException e) {
+			log.info("SQLException: " + e.getMessage());
+			log.info("SQLState: " + e.getSQLState());
+			log.info("VendorError: " + e.getErrorCode());
+			e.printStackTrace();
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			log.info(e);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				ps = null;
+			}
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
