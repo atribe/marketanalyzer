@@ -577,7 +577,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 					 * 
 					 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
 					 */
-					for(int j = i+1; j < i + rDaysMin; j++) {
+					for(int j = i + 1; j < i + rDaysMin && j < m_IndexCalcList.size(); j++) {
 						BigDecimal nextDayInRallyLow = m_IndexCalcList.get(j).getLow();
 						if( nextDayInRallyLow.compareTo(support) < 0) {
 							//not a rally
