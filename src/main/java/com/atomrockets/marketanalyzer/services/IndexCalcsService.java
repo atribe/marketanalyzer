@@ -501,7 +501,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 					long previousVolume = m_IndexCalcList.get(j-1).getVolume();
 					long previousPreviousVolume = m_IndexCalcList.get(j-2).getVolume();
 					
-					if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0&& //price requirement 
+					if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0 && //price requirement 
 							( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
 							rallyDayCount > rDaysMin && //follow thru days from pivot day requirement 1
 							rallyDayCount < rDaysMax) { //follow thru days from pivot day requirement 2

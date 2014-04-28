@@ -63,6 +63,8 @@
 							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${currentBacktest.costBasis}" type="currency"/></td>
 							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${currentBacktest.finalValue}" type="currency"/></td>
 							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${currentBacktest.totalPercentReturn}" /></td>
+							<td>${currentBacktest.numberOfTrades}</td>
+							<td>${currentBacktest.numberOfProfitableTrades}</td>
 						</tr>
 						</c:forEach>
 					</table>

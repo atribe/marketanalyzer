@@ -2,6 +2,7 @@ package com.atomrockets.marketanalyzer.plotting;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Shape;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -18,6 +19,7 @@ import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.DateTickUnit;
 import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -26,6 +28,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.TextAnchor;
+import org.jfree.util.ShapeUtilities;
 import org.joda.time.LocalDate;
 
 import com.atomrockets.marketanalyzer.beans.BacktestResult;
@@ -72,7 +75,7 @@ public class PlotModelResult {
 		XYDataset dataset1 = createPrimaryDataset(resultList, backtestModel, transactionList);
 		int seriesCount = dataset1.getSeriesCount();
 		//2. Setup Renderer for the first dataset
-		XYItemRenderer renderer1 = new XYLineAndShapeRenderer(true, false);//true for lines, false for no shapes
+		XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(true, false);//true for lines, false for no shapes
 		
 		//2a. Series level styles applied to the renderer
 		renderer1.setSeriesPaint(0, Color.GREEN);
@@ -82,6 +85,19 @@ public class PlotModelResult {
 			renderer1.setSeriesPaint(i+1, Color.RED);
 		}
 		
+		/*
+		 * Setting markers at the end of the symbols
+		//Setting shape and color of the buy date marker
+		renderer1.setSeriesShape(seriesCount-1, ShapeUtilities.createUpTriangle(4));
+		renderer1.setSeriesPaint(seriesCount-1, Color.CYAN);
+		renderer1.setSeriesLinesVisible(seriesCount-1, false);
+		renderer1.setSeriesShapesVisible(seriesCount-1, true);
+		//Setting shape and color of the sell date marker
+		renderer1.setSeriesShape(seriesCount-2, ShapeUtilities.createDownTriangle(4));
+		renderer1.setSeriesPaint(seriesCount-2, Color.DARK_GRAY);
+		renderer1.setSeriesLinesVisible(seriesCount-2, false);
+		renderer1.setSeriesShapesVisible(seriesCount-2, true);
+		*/
 		//3. Set Domain axis
 		DateAxis domainAxis = new DateAxis(xAxisLabel);
 		
@@ -135,6 +151,8 @@ public class PlotModelResult {
 		
 		String symbol = backtestModel.getSymbol();
 		
+		TimeSeries sellDates = new TimeSeries("Sell Dates");
+		TimeSeries buyDates = new TimeSeries("Buy Dates");
 		TimeSeries seriesBuy = new TimeSeries(symbol);
 		TimeSeries seriesSell = null;
 		//Transaction Iterator
@@ -157,7 +175,11 @@ public class PlotModelResult {
 			}
 			
 			//data point date with buy and sell date
-			if(a.getConvertedDate().isEqual(sellDate)) {				
+			if(a.getConvertedDate().isEqual(sellDate)) {
+				/*
+				 * Setting symbols at the sellDates
+				sellDates.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				*/
 				//moving to the next transaction
 				i++;
 				
@@ -181,27 +203,34 @@ public class PlotModelResult {
 				seriesSell = new TimeSeries("sell " +symbol);
 				seriesBuy = new TimeSeries("buy " + symbol);
 				
-				
 				//adding the sell date as the first data point
 				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
-				
-				
-				
 			} else if(a.getConvertedDate().isEqual(buyDate) || a.getConvertedDate().isAfter(buyDate)) { 
 				//if the date of the OHCLV data is after a buy date then add it to the buy list
 				seriesBuy.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				
+				/*
+				Setting markers at the buy date
+				if(a.getConvertedDate().isEqual(buyDate)){
+					buyDates.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				}
+				*/
 			} else { 
 				//if the date is before the buy date of the current transaction, then sell
 				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
 			}
 		}
 		
-		//dataset.addSeries(seriesBuy);
-		//dataset.addSeries(seriesSell);
+		//adding the buy and sell dates series to the dateset
+		dataset.addSeries(sellDates);
+		dataset.addSeries(buyDates);
+		
 		return dataset;
 	}
 	
 	private static XYPlot annotatePlot(XYPlot plot, List<IndexOHLCVCalcs> resultList, List<StockTransaction> transactionList) {
+		double textVerticalSpacing = calcTextVerticalSpacing(plot);
+		
 		//Transaction Iterator
 		int i = 0;
 		
@@ -215,21 +244,11 @@ public class PlotModelResult {
         double y = 0;
         
         for(IndexOHLCVCalcs a : resultList) {
-        	/*
-        	if(Boolean.TRUE.equals(YID.getDistributionDay())) {
-        		x = new Day(YID.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = YID.getLow();
-        		annotation = new XYTextAnnotation("D Day", x, y);  
-                annotation.setFont(font);   
-                annotation.setTextAnchor(TextAnchor.BASELINE_CENTER);   
-                plot.addAnnotation(annotation); 
-        	}
-        	*/
         	//if the date is the sell date
 			if(a.getConvertedDate().isEqual(sellDate)) {				
 				//Annotation for the word Sold
 				x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = a.getHigh().doubleValue()*1.20;
+        		y = a.getHigh().doubleValue()+textVerticalSpacing;
         		String annotationText = "SOLD";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
                 annotation.setFont(font);   
@@ -238,7 +257,7 @@ public class PlotModelResult {
                 
                 //annotation for the % return
                 x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
-        		y = a.getHigh().doubleValue()*1.10;
+        		y = a.getHigh().doubleValue();
         		annotationText = "Return: " + (double)Math.round(transactionList.get(i).getPercentReturn() * 1000) / 10 + "%";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
                 annotation.setFont(font);   
@@ -258,5 +277,17 @@ public class PlotModelResult {
 			}
         }
 		return plot;
+	}
+
+	private static double calcTextVerticalSpacing(XYPlot plot) {
+		ValueAxis verticalAxis = plot.getRangeAxis();
+		
+		double upperBound = verticalAxis.getUpperBound();
+		double lowerBound = verticalAxis.getLowerBound();
+		
+		double range = upperBound - lowerBound;
+		double offsetFactor = .02;
+		
+		return range*offsetFactor;
 	}
 }

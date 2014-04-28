@@ -93,7 +93,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		backtest.setTotalPercentReturn(d.getPercentReturn());
 		
-		backtest.setFinalValue(backtest.getCostBasis().multiply(new BigDecimal(d.getPercentReturn()))); //new balance = old balance * % Return
+		backtest.setFinalValue(backtest.getCostBasis().multiply(new BigDecimal(d.getPercentReturn())).add(backtest.getCostBasis())); //new balance = old balance * % Return
 		
 		m_backtestResultDAO.insertOrUpdateBacktest(backtest);
 	}
