@@ -118,4 +118,9 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		}
 
 	}
+
+	public void clearSymbolData(String symbol) {
+		// TODO Create the clear symbo method
+		
+	}
 }

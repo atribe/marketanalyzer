@@ -107,7 +107,19 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		}
 	}
 	
-	public void runIndexAnalysis(String symbol) {
+	public void runNewIndexAnalysisFromBacktest(BacktestResult bt) {
+		m_b = bt;
+		
+		clearOldIndexAnalysisDataFromDB(m_b.getSymbol());
+		
+		runIndexAnalysis(m_b.getSymbol());
+	}
+	
+	private void clearOldIndexAnalysisDataFromDB(String symbol) {
+		m_indexCalcsDAO.clearSymbolData(symbol);
+	}
+
+	private void runIndexAnalysis(String symbol) {
 		/*
 		 * Future Index Analysis
 		 * 
@@ -126,12 +138,15 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		log.info("--------------------------------------------------------------------");
 		log.info("Starting Index Analyzer for " + m_symbol);
 
-		//0. Get parameters for the given index
-		try {
-			m_b = m_BacktestResultDAO.getSymbolParameters(getM_symbol(), parametersTypeEnum.BASE);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//m_b can be set
+		if(m_b==null) {
+			//0. Get parameters for the given index
+			try {
+				m_b = m_BacktestResultDAO.getSymbolParameters(getM_symbol(), parametersTypeEnum.BASE);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		//1. Setting the number of buffer days needed to calc averages and such
@@ -155,6 +170,9 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		determineDayAction();
 		
 		m_indexCalcsDAO.addAllRowsToDB(m_symbol, m_IndexCalcList);
+		
+		//resetting m_b for the so when this method is called in a loop a new m_b will be loaded
+		m_b=null;
 	}
 
 	public String getM_symbol() {
@@ -189,11 +207,12 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 	 * 
 	 */
 	private void setM_endDate() {
+		//always want to use the backtestResult parameter to today, so that the plot on the homepage will reflect it
 		m_endDate = new LocalDate();
 	}
 
 	private void setM_startDate() {
-		LocalDate startDate = new LocalDate(m_b.getStartDate());
+		LocalDate startDate = m_b.getLocalDateStartDate();
 		IndexOHLCVCalcs beginDataPoint = m_OHLCVDao.getFirstBySymbol(m_symbol);
 		LocalDate symbolBeginDate = beginDataPoint.getConvertedDate();
 		
@@ -306,7 +325,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		}
 	}
 
-	public void checkForDDays() throws SQLException {
+	private void checkForDDays() throws SQLException {
 		log.info("          Checking to see if each day is a D-Day");
 		
 		int rowCount = m_IndexCalcList.size();
@@ -460,7 +479,7 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 		}
 	}
 	
-	public void followThruAnalysis() {
+	private void followThruAnalysis() {
 		log.info("          Checking to see if each day is a Follow Through Day");
 		
 		findPivotDay();

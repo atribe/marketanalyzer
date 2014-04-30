@@ -76,6 +76,11 @@ public class BacktestController {
     @RequestMapping(value="/backtestResults")
     private ModelAndView processBacktest(@ModelAttribute BacktestResult bt) {
     	ModelAndView mav = new ModelAndView();
+    	
+    	BacktestService bs = new BacktestService();
+    	
+    	bs.runIndexModel(bt);
+    	
     	mav.setViewName("backtestResults");
     	mav.addObject("backtestModel", bt);
     	

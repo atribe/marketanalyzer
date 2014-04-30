@@ -283,6 +283,26 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	
 	public int insertOrUpdateBacktest(BacktestResult b) throws SQLException {
 		
+		//if the new backtest to be inserted is the new current
+		if(checkNewCurrent(b)) {
+			//then make the old current a previous
+			BacktestResult oldBacktest = getSymbolParameters(b.getSymbol(),parametersTypeEnum.CURRENT);
+			//if the oldBacktest isn't null then make it a previous backtest and update it
+			if(oldBacktest != null) {
+				oldBacktest.setParametersType(parametersTypeEnum.PREVIOUS);
+				
+				insertBacktest(oldBacktest); 
+			}
+			//if oldBacktest is null then do nothing and move on to the next part of the method
+		}
+		
+		//insert the new backtest
+		int insertedId = insertBacktest(b);
+		
+		return insertedId;
+	}
+
+	private int insertBacktest(BacktestResult b) throws SQLException {
 		/*
 		 * inserting and/or updating b into the db
 		 */
@@ -310,5 +330,13 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		con.close();
 		
 		return insertedId;
+	}
+
+	private boolean checkNewCurrent(BacktestResult b) {
+		if(b.getParametersType() == parametersTypeEnum.CURRENT.getValue()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

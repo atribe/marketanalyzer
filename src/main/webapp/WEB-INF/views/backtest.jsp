@@ -96,6 +96,10 @@
 							<li><form:input class="backtestInput" path="dDayParam" /></li>
 						</ul>
 						<ul>
+							<li class="backtestLabel">D Day Price Drop</li>
+							<li><form:input class="backtestInput" path="dDayPriceDrop" /></li>
+						</ul>
+						<ul>
 							<li class="backtestLabel">Churn Volume Range</li>
 							<li><form:input class="backtestInput" path="churnVolRange" /></li>
 						</ul>

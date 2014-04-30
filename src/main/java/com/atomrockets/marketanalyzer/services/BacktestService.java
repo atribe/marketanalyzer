@@ -138,7 +138,7 @@ public class BacktestService extends GenericServiceSuperclass{
 					newBacktest.setId(id);
 					
 					//run the backtest
-					newBacktest = runIndexModels(newBacktest);
+					newBacktest = calcBacktestReturn(newBacktest);
 					
 					//update the backtest in the DB
 					m_backtestResultDAO.insertOrUpdateBacktest(newBacktest);
@@ -150,7 +150,24 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 	}
 	
-	private BacktestResult runIndexModels(BacktestResult newBacktest) throws SQLException {
+	public void runIndexModel(BacktestResult bt) {
+		
+		try {
+			
+			m_indexCalcsService.runNewIndexAnalysisFromBacktest(bt);
+			
+			//Calc the backtest
+			calcBacktestReturn(bt);
+			
+			//update the backtest in the DB
+			m_backtestResultDAO.insertOrUpdateBacktest(bt);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private BacktestResult calcBacktestReturn(BacktestResult newBacktest) throws SQLException {
 		/*
 		 * Get the parameters you want to backtest
 		 * Create a list to hold all of the transactions 
@@ -166,13 +183,12 @@ public class BacktestService extends GenericServiceSuperclass{
 		//getting parameters from the backtest
 		LocalDate firstBuyDate = new LocalDate(newBacktest.getStartDate());
 		LocalDate lastSellDate = new LocalDate(newBacktest.getEndDate());
+		
+		log.debug("Backtest for " + newBacktest.getSymbol() + " starts on: " + firstBuyDate.toString() + " and goes to:" + lastSellDate );
+		
 		int backtestId = newBacktest.getId();
 		
 		//initializing variables to be added as backtest results
-		/*
-		 * TODO this should be done by having a fixed starting amount of cash, say $10,000 in the backtestResult, then this number gets modified by the percent change of each transaction.
-		 * Could have a starting and ending valuep-9l[]o9-y 
-		 */
 		BigDecimal initialInvestment = newBacktest.getCostBasis();
 		BigDecimal dollarReturn = initialInvestment;
 		int numberOfTrades = 0;
@@ -187,20 +203,30 @@ public class BacktestService extends GenericServiceSuperclass{
 		//Getting the OHLCV and Calcs data for the backtesting
 		List<IndexOHLCVCalcs> OHLCVCalcsList = m_indexCalcsService.getRowsBetweenDatesBySymbol(newBacktest.getSymbol(), firstBuyDate, lastSellDate);
 		transaction.OpenTransaction(OHLCVCalcsList.get(0));
+		log.debug("Bought on " + transaction.getBuyDate().toString());
 		
 		//looping through all the data
 		for(IndexOHLCVCalcs c : OHLCVCalcsList ) {
 			
-			if(Boolean.TRUE.equals(c.getFollowThruDay())) { //if the day is a follow thru day, buy
-				if(!transaction.isTransactionOpen()) { //if the transaction isn't already open, then open it
+			//----Buy Conditions----
+			if(Boolean.TRUE.equals(c.getFollowThruDay()) && //if the day is a follow thru day, buy
+					c.getDistributionDayCounter() < newBacktest.getdDayParam()) { // the day isn't in a sell period
+				if(!transaction.isTransactionOpen())  //if the transaction isn't already open, then open it
+				{
 					transaction.OpenTransaction(c);
+					log.debug("Bought on " + c.getConvertedDate().toString());
 				}
-			} else if( transaction.getBuyDate() != null && //if the buy date has already been set
-					c.getDistributionDayCounter() > newBacktest.getdDayParam()) { //and if there have been too many d day sell
+			}
+			//----Sell Conditions----
+			else if( transaction.isTransactionOpen() && //if the transaction is open
+					c.getDistributionDayCounter() > newBacktest.getdDayParam())  //and if there have been too many d day, then sell
+			{
 				transaction.CloseTransaction(c);
+				log.debug("Sold on " + c.getConvertedDate().toString());
 			}
 			
-			if(transaction.isTransactionClosed()) { //if the transaction is complete (all require fields have been entered
+			//----if the transaction is complete (all require fields have been entered)
+			if(transaction.isTransactionClosed()) { 
 				//adding stats of this trade to the cumulative backtest results
 				dollarReturn = dollarReturn.add(dollarReturn.multiply(new BigDecimal(transaction.getPercentReturn()))); //dollarReturn = dollarReturn + dollarReturn*%ReturnOfTheTransaction
 				numberOfTrades++;
@@ -217,6 +243,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		//close up the last transaction if it hasn't been already
 		if( transaction.isTransactionOpen() && !transaction.isTransactionClosed()) {
 			transaction.CloseTransaction(OHLCVCalcsList.get(OHLCVCalcsList.size()-1));//close the transaction with the last data point in the list
+			log.debug("The final sell was on " + transaction.getSellDate().toString());
 			if(transaction.isTransactionClosed()) {
 				dollarReturn = dollarReturn.add(dollarReturn.multiply(new BigDecimal(transaction.getPercentReturn()))); //dollarReturn = dollarReturn + dollarReturn*%ReturnOfTheTransaction
 				numberOfTrades++;
@@ -229,13 +256,20 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 		
 		//adding the list of transactions to the db
+		log.info(numberOfTrades + " sent to be added to the DB");
 		m_stockTransationDAO.insertTransactionList(transactionList);
 		
 		//Add the totalReturn to the newBacktestResult
+		
 		newBacktest.setFinalValue(dollarReturn);
 		newBacktest.setTotalPercentReturn((dollarReturn.doubleValue()-initialInvestment.doubleValue())/initialInvestment.doubleValue());
 		newBacktest.setNumberOfTrades(numberOfTrades);
 		newBacktest.setNumberOfProfitableTrades(numberOfPofitableTrades);
+		
+		log.debug("Backtest for " + newBacktest.getSymbol() + " resulted in a portfolio value of " + dollarReturn);
+		log.debug("with " + numberOfPofitableTrades + " profitable trades");
+		log.debug("for a " + newBacktest.getTotalPercentReturn() + "% return.");
+		
 		
 		return newBacktest;
 	}
@@ -247,7 +281,7 @@ public class BacktestService extends GenericServiceSuperclass{
 		if( type==parametersTypeEnum.CURRENT ) {
 			modelResult = getCurrent(symbol);
 		} else if (type == parametersTypeEnum.BASE) {
-			modelResult = getCurrent(symbol);
+			modelResult = getBaseline(symbol);
 		}
 		
 		resultList = m_indexCalcsService.getRowsBetweenDatesBySymbol(symbol, modelResult.getLocalDateStartDate(), modelResult.getLocalDateEndDate());

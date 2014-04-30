@@ -176,6 +176,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 				}
 			}
 			ps.executeBatch();
+			log.info(counter + " transactions added to the DB.");
 		} catch (SQLException e) {
 			log.info("SQLException: " + e.getMessage());
 			log.info("SQLState: " + e.getSQLState());

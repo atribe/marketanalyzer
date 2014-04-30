@@ -84,6 +84,7 @@ public class PlotModelResult {
 			renderer1.setSeriesPaint(i, Color.GREEN);
 			renderer1.setSeriesPaint(i+1, Color.RED);
 		}
+		renderer1.setSeriesPaint(seriesCount-1, Color.RED);
 		
 		/*
 		 * Setting markers at the end of the symbols
@@ -161,12 +162,19 @@ public class PlotModelResult {
 		//Initialing transactionList variables
 		LocalDate buyDate = new LocalDate(transactionList.get(i).getBuyDate());
 		LocalDate sellDate = new LocalDate(transactionList.get(i).getSellDate());
+		boolean noMoreTransactions = false;
 		
 		//initializing min and max price
 		minPrice = resultList.get(0).getClose();
 		maxPrice = minPrice;
 		
-		for(IndexOHLCVCalcs a : resultList ) {
+		//Loop through all the data between the first buy date and last sell date
+		//for(IndexOHLCVCalcs a : resultList ) {
+		int iterator;
+		for(iterator = 0; iterator < resultList.size(); iterator++) {
+			
+			IndexOHLCVCalcs a = resultList.get(iterator);
+			
 			//Setting the min and max price for the chart
 			if(a.getClose().compareTo(minPrice) < 0) {
 				minPrice = a.getClose();
@@ -174,28 +182,43 @@ public class PlotModelResult {
 				maxPrice = a.getClose();
 			}
 			
-			//data point date with buy and sell date
-			if(a.getConvertedDate().isEqual(sellDate)) {
+			/*
+			 * If there are no more transactions (aka you've sold and aren't going to buy again for the duration of the time period)
+			 */
+			if(noMoreTransactions) { 
+				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+			}
+			/*
+			 * If today is a sell day
+			 */
+			else if(a.getConvertedDate().isEqual(sellDate)) { 
 				/*
-				 * Setting symbols at the sellDates
-				sellDates.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				 * for markers on the sellDates
 				*/
-				//moving to the next transaction
+				sellDates.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
+				
+				//moving to the next transaction in the transactionList
 				i++;
 				
-				//setting the new buyDate and sellDate
-				if(i<transactionList.size()-1) {
+				//setting the new buyDate and sellDate from the new transaction
+				if(i<transactionList.size()) {
 					try {
 						buyDate = new LocalDate(transactionList.get(i).getBuyDate());
 						sellDate = new LocalDate(transactionList.get(i).getSellDate());
 					} catch(NullPointerException e) {
 			            System.out.print("NullPointerException caught");
+			            log.debug("null pointer exception caught");
 			        }
+				} else {
+					noMoreTransactions = true;
 				}
 				
-				//adding the series to the dataset
+				//adding the buy series to the dataset
 				dataset.addSeries(seriesBuy);
+				
+				//making sure the sell series isn't empty
 				if(seriesSell!=null){
+					//adding the sell series to the dataset
 					dataset.addSeries(seriesSell);
 				}
 				
@@ -205,25 +228,37 @@ public class PlotModelResult {
 				
 				//adding the sell date as the first data point
 				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
-			} else if(a.getConvertedDate().isEqual(buyDate) || a.getConvertedDate().isAfter(buyDate)) { 
+			}
+			else if(a.getConvertedDate().isEqual(buyDate) || a.getConvertedDate().isAfter(buyDate)) { //if today is the buy day or later (but before the sell day) 
 				//if the date of the OHCLV data is after a buy date then add it to the buy list
 				seriesBuy.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
 				
 				/*
 				Setting markers at the buy date
+				*/
 				if(a.getConvertedDate().isEqual(buyDate)){
 					buyDates.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
 				}
-				*/
-			} else { 
+				
+			} else { //in the sell period
 				//if the date is before the buy date of the current transaction, then sell
 				seriesSell.add(new Day(a.getConvertedDate().toDateTimeAtStartOfDay().toDate()), a.getClose());
 			}
+			
+			if(a.getConvertedDate().isAfter(new LocalDate("2012-12-05"))) {
+				System.out.print(a.getConvertedDate().toString());
+			}
 		}
 		
+		/*
 		//adding the buy and sell dates series to the dateset
 		dataset.addSeries(sellDates);
 		dataset.addSeries(buyDates);
+		*/
+		
+		if(seriesSell != null) {
+			dataset.addSeries(seriesSell);
+		}
 		
 		return dataset;
 	}
@@ -239,7 +274,8 @@ public class PlotModelResult {
 		
 		// add some annotations...   
         XYTextAnnotation annotation = null;   
-        Font font = new Font("SansSerif", Font.PLAIN, 9); 
+        Font font = new Font("SansSerif", Font.PLAIN, 9);
+        Font soldFont = new Font("SansSerif", Font.PLAIN, 18); 
         double x = 0;
         double y = 0;
         
@@ -251,18 +287,19 @@ public class PlotModelResult {
         		y = a.getHigh().doubleValue()+textVerticalSpacing;
         		String annotationText = "SOLD";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
-                annotation.setFont(font);   
+                annotation.setFont(soldFont);   
                 annotation.setTextAnchor(TextAnchor.CENTER);   
                 plot.addAnnotation(annotation);
                 
                 //annotation for the % return
                 x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
         		y = a.getHigh().doubleValue();
-        		annotationText = "Return: " + (double)Math.round(transactionList.get(i).getPercentReturn() * 1000) / 10 + "%";
+        		annotationText = "Return: " + (double)Math.round(transactionList.get(i).getPercentReturn() * 1000) / 20 + "%";
         		annotation = new XYTextAnnotation(annotationText, x, y);  
-                annotation.setFont(font);   
+                annotation.setFont(soldFont);   
                 annotation.setTextAnchor(TextAnchor.CENTER);   
                 plot.addAnnotation(annotation);
+                
 				//moving to the next transaction
 				i++;
 				
@@ -274,6 +311,15 @@ public class PlotModelResult {
 			            System.out.print("NullPointerException caught");
 			        }
 				}
+			} else if (Boolean.TRUE.equals(a.getFollowThruDay())) {
+                //annotation for Follow Thru Days
+                x = new Day(a.getConvertedDate().toDate()).getMiddleMillisecond();
+        		y = a.getHigh().doubleValue();
+        		String annotationText = "F Day";
+        		annotation = new XYTextAnnotation(annotationText, x, y);  
+                annotation.setFont(font);   
+                annotation.setTextAnchor(TextAnchor.CENTER);   
+                plot.addAnnotation(annotation);
 			}
         }
 		return plot;
