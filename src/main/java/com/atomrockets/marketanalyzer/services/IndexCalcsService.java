@@ -116,7 +116,18 @@ public class IndexCalcsService extends GenericServiceSuperclass{
 	}
 	
 	private void clearOldIndexAnalysisDataFromDB(String symbol) {
-		m_indexCalcsDAO.clearSymbolData(symbol);
+		try {
+			String getParametersQuery = 
+					"DELETE i.* FROM `" + IndexCalcs.getTableName() + "` i" +
+					" INNER JOIN `" + OHLCVData.getTablename() + "` o ON o.id=i.OHLCid" +
+					" WHERE o.symbol = ?";
+			QueryRunner runner = new QueryRunner(m_ds);
+
+			runner.update(getParametersQuery, symbol);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void runIndexAnalysis(String symbol) {

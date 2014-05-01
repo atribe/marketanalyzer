@@ -153,8 +153,12 @@ public class BacktestService extends GenericServiceSuperclass{
 	public void runIndexModel(BacktestResult bt) {
 		
 		try {
+			bt.setParametersType(parametersTypeEnum.CURRENT);
 			
 			m_indexCalcsService.runNewIndexAnalysisFromBacktest(bt);
+			
+			//preinsert the backtestresult into the db so the correct id is set
+			bt.setId(m_backtestResultDAO.insertOrUpdateBacktest(bt));
 			
 			//Calc the backtest
 			calcBacktestReturn(bt);

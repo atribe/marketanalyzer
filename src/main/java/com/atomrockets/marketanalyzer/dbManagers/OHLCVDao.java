@@ -209,7 +209,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			Connection con = m_ds.getConnection();
 			//preparing the MySQL statement
 			ps = con.prepareStatement(insertQuery);
-			//creating DbUtils QuerryRunner
+			//creating DbUtils QueryRunner
 			QueryRunner runner = new QueryRunner();
 			int i=0;
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
@@ -264,7 +264,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			//prepare the statement
 			ps = con.prepareStatement(insertQuery);
 			
-			//creating DbUtils QuerryRunner
+			//creating DbUtils QueryRunner
 			QueryRunner runner = new QueryRunner();
 			
 			for(OHLCVData row : rowsFromYahoo) {

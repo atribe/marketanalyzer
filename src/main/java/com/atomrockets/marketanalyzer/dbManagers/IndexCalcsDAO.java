@@ -8,7 +8,10 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 
+import com.atomrockets.marketanalyzer.beans.BacktestResult;
 import com.atomrockets.marketanalyzer.beans.IndexCalcs;
 import com.atomrockets.marketanalyzer.beans.IndexOHLCVCalcs;
 
@@ -73,7 +76,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			//preparing the MySQL statement
 			Connection con = m_ds.getConnection();
 			ps = con.prepareStatement(insertQuery);
-			//creating DbUtils QuerryRunner
+			//creating DbUtils QueryRunner
 			QueryRunner runner = new QueryRunner();
 			
 			//Iterate through the list backwards. I want the oldest date in first and this achieves that
@@ -117,10 +120,5 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 			}
 		}
 
-	}
-
-	public void clearSymbolData(String symbol) {
-		// TODO Create the clear symbo method
-		
 	}
 }
