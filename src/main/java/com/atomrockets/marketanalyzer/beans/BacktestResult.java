@@ -272,12 +272,18 @@ public class BacktestResult {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = new Date(startDate.toDate().getTime());
+	}
 
 	public Date getEndDate() {
 		return endDate;
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = new Date(endDate.toDate().getTime());
 	}
 	public LocalDate getLocalDateEndDate() {
 		return new LocalDate(this.endDate);

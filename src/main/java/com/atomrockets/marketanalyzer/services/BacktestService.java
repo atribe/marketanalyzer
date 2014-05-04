@@ -75,11 +75,23 @@ public class BacktestService extends GenericServiceSuperclass{
 		
 	}
 	
+	private void runBaseline(BacktestResult backtest) throws SQLException {
+		runBaseline(backtest.getSymbol(), backtest.getLocalDateStartDate(), backtest.getLocalDateEndDate(), backtest);
+	}
 	private void runBaseline(String symbol) throws SQLException {
 		BacktestResult backtest = getBaseline(symbol);
 		
-		OHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getStartDate()), true);
-		OHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, new LocalDate(backtest.getEndDate()), false);
+		runBaseline(symbol, new LocalDate(backtest.getStartDate()), new LocalDate(backtest.getEndDate()), backtest);
+	}
+	private void runBaseline(String symbol, LocalDate startDate, LocalDate endDate) throws SQLException {
+		BacktestResult backtest = getBaseline(symbol);
+		
+		runBaseline(symbol, startDate, endDate, backtest);
+	}
+	private void runBaseline(String symbol, LocalDate startDate, LocalDate endDate, BacktestResult backtest) throws SQLException {
+		
+		OHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, startDate, true);
+		OHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, endDate, false);
 		
 		StockTransaction d = new StockTransaction(backtest.getId(), beginningDataPoint, endingDataPoint);
 		
@@ -150,11 +162,21 @@ public class BacktestService extends GenericServiceSuperclass{
 		}
 	}
 	
-	public void runIndexModel(BacktestResult bt) {
+	public void updateBacktest(BacktestResult bt) {
 		
 		try {
+			//bt is from user input
+			
+			//Update the baseline to the dates specified by the user
+			BacktestResult basebt = getBaseline(bt.getSymbol());
+			basebt.setStartDate(bt.getStartDate());
+			basebt.setEndDate(bt.getEndDate());
+			runBaseline(basebt);
+			
+			//setting the backtest the user supplied to current, because that is not a field the user enters
 			bt.setParametersType(parametersTypeEnum.CURRENT);
 			
+			//run the index
 			m_indexCalcsService.runNewIndexAnalysisFromBacktest(bt);
 			
 			//preinsert the backtestresult into the db so the correct id is set

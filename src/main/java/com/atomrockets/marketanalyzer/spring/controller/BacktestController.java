@@ -79,7 +79,7 @@ public class BacktestController {
     	
     	BacktestService bs = new BacktestService();
     	
-    	bs.runIndexModel(bt);
+    	bs.updateBacktest(bt);
     	
     	mav.setViewName("backtestResults");
     	mav.addObject("backtestModel", bt);
