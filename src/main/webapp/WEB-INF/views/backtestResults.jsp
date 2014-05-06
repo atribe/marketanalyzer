@@ -25,8 +25,12 @@
 			<!-- End Header Div -->
 			<div id="content">
 				<div id="backtestResults">
-					<h1>Symbol</h1>  
-					Your favorite sport is: ${backtestModel.symbol}
+					<h1>Backtest of ${backtestModel.symbol} is Complete</h1>  
+					<p>
+						Please return to the previous page to view the results.
+						I need to make this website do something better than that, but I haven't got around to it yet.
+						But you will have to refresh the page.
+					</p>
 				</div>
 
 			<!-- Footer Div (in mpFooter file-->

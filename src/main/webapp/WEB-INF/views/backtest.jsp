@@ -71,7 +71,7 @@
 				</div>
 				<div id="backtest">
 					<p>Select the index to backtest.</p>
-					<form:form method="POST" commandName="backtestObject" action="backtestResults">
+					<form:form method="POST" commandName="backtestObject" action="backtest/">
 					<div id="backtestIndexPicker">
 						<ul>
 							<form:radiobuttons element="li" path="symbol" items="${indexList}" />

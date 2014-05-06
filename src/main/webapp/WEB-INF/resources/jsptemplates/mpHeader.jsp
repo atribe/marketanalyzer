@@ -6,7 +6,7 @@
 	<nav>
 	  <ul>
 	    <li><a id="homeLink" href="<c:url value="/" />">Home</a></li>
-	    <li><a id="backtestLink" href="<c:url value="backtest" />">Backtest</a></li>
+	    <li><a id="backtestLink" href="<c:url value="backtest/^IXIC" />">Backtest</a></li>
 	    <li><a id="contactLink" href="<c:url value="contact" />">Contact</a></li>
 	  </ul>
 	</nav>
