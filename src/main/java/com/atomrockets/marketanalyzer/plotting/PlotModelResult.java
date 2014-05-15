@@ -105,7 +105,7 @@ public class PlotModelResult {
 		//3a. Set domain axis style
 		domainAxis.setVerticalTickLabels(true);
 		domainAxis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
-			DateFormat formatter = new SimpleDateFormat("MM-dd-yy");
+			DateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
 			DateTickUnit unit = new DateTickUnit(DateTickUnitType.MONTH, 3, formatter);
 		domainAxis.setTickUnit(unit);
 		//domainAxis.setMinimumDate(new LocalDate("1990-06-01").toDateTimeAtStartOfDay().toDate());
