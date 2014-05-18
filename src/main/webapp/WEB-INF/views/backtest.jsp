@@ -2,7 +2,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -71,7 +72,7 @@
 				</div>
 				<div id="backtest">
 					<p>Select the index to backtest.</p>
-					<form:form method="POST" commandName="backtestObject" action="backtest/">
+					<form:form method="POST" commandName="backtestObject" action="backtest/" id="backtestForm">
 					<div id="backtestIndexPicker">
 						<ul>
 							<form:radiobuttons element="li" path="symbol" items="${indexList}" />
@@ -190,5 +191,10 @@
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 			<!-- End Footer Div -->
 		</div> <!-- close div container -->
+		<!-- 
+		<c:set var="url">${pageContext.request.requestURL}</c:set>
+    	<base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
+		<script type="text/javascript" src="<c:url value="js/backtestURLChanger.js" />" ></script>
+		 -->
 	</body>
 </html>
