@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -54,14 +55,14 @@ public class ChartsController {
 		}
 	}
 	
-	@RequestMapping(value = "/resultchart", method = RequestMethod.GET)
-	public void drawModelResultChart(HttpServletResponse response) {
+	@RequestMapping(value = {"/backtest/{symbol}", "/backtest/{symbol}/"}, method = RequestMethod.GET)
+	public void drawModelResultChart(HttpServletResponse response, @PathVariable String symbol) {
 		response.setContentType("image/png");
 		
-		JFreeChart chart = PlotModelResult.createChart("^IXIC");
+		JFreeChart chart = PlotModelResult.createChart(symbol);
 		if(chart!=null) {
 			try {
-	    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  1400,  600);
+	    		ChartUtilities.writeChartAsPNG(response.getOutputStream(),  chart,  1200,  600);
 	    		response.getOutputStream().close();
 	    	} catch (IOException ex) {
 	    		ex.printStackTrace();

@@ -54,7 +54,6 @@
 	text-align:center;
 	
 }
-
 	#headerDate{
 		clear:right;
 		float:right;
@@ -82,9 +81,41 @@
 .OHLCSection {
 	margin-bottom: 30px;
 }
+/*--------Backtest Summary Styling-------*/
+.singleBacktestResult{
+	margin-bottom: 15px;
+}
+	.singleBacktestInfoBlock{
+			float: left;
+			width: 195px;
+		}
+		.singleBacktestTitle{
+			float: left;
+			width: 195px;
+		}
+		.singleBacktestStats{
+			clear: left;
+			float: left;
+		}
+			.singleBacktestStats ul{
+				list-style-type: none;
+				padding: 5px;
+				border: black solid 1px;
+				margin: 0 auto;
+			}
+				.singleBacktestStats li{
+					margin: 10px 5px;
+				}
+					.singleBacktestStats ul li h4, .singleBacktestStats ul li p{
+						margin: 5px 0;
+					}
+	.singleBacktestPlot{
+		float: right;
+		clear: none;
+	}
 /*--------D Day Chart Styling-------*/
 #D_Day_Table h3{
-	text-align:center;
+	text-align: center;
 }
 #dDayChart img{
 	margin-bottom:30px;

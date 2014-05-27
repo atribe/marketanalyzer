@@ -21,7 +21,7 @@
 				<div class="Index_Results">
 					<div class="sectionHeader"><h2>Baseline and Current Results Section</h2></div>
 					<div id="ResultChart" class="chart">
-						<img src="<c:url value="charts/resultchart" />" />
+						<img src="<c:url value="charts/backtest/^IXIC" />" />
 					</div>
 					<h2>Baseline Results for each Index</h2>
 					<table>
