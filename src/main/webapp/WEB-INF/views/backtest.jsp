@@ -29,7 +29,7 @@
 			<div id="content">
 			<c:if test="${not empty backtests}">
 				<div id="backtestSummaries">
-				<c:forEach items="${backtests}" var="backtest">
+				<c:forEach items="${backtests}" var="backtest" varStatus="backtestIterator">
 					<div class="singleBacktestResult">
 						<div class="singleBacktestInfoBlock">
 							<div class="singleBacktestTitle">
@@ -40,12 +40,18 @@
 							</div> <!-- End singleBacktestTitle div -->
 							<div class="singleBacktestStats">
 								<ul>
-									<li><h4>Result Time Period:</h4> 
-									<p>"Time Period"</p></li>
-									<li><h4>Baseline Return:</h4>
-									<p>"Percent Return"</p></li>
-									<li><h4>Model Return:</h4>
-									<p class="percentReturn"><fmt:formatNumber type="percent" minIntegerDigits="1" maxFractionDigits="2" value="${backtest.totalPercentReturn}" /></p></li>
+									<li>
+										<h4>Result Time Period:</h4> 
+										<p class="daterange">${backtest.startDate} - ${backtest.endDate}</p>
+									</li>
+									<li>
+										<h4>Baseline Return:</h4>
+										<p class="percentReturn"><fmt:formatNumber type="percent" minIntegerDigits="1" maxFractionDigits="2" value="${baselineList[backtestIterator.index].totalPercentReturn}" /></p>
+									</li>
+									<li>
+										<h4>Current Model:</h4>
+										<p class="percentReturn"><fmt:formatNumber type="percent" minIntegerDigits="1" maxFractionDigits="2" value="${backtest.totalPercentReturn}" /></p>
+									</li>
 								</ul>
 							</div> <!-- End singleBacktestStats div -->
 						</div> <!-- End singleBacktestInfoBlock div -->

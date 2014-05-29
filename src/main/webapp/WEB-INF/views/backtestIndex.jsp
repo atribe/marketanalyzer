@@ -20,33 +20,37 @@
 			<div id="content">
 				<div class="Index_Results">
 					<div class="sectionHeader"><h2>Baseline and Current Results Section</h2></div>
+						<div class="singleBacktestInfoBlock">
+							<div class="singleBacktestTitle">
+								<h3><a href="<c:url value="backtest/${backtest.symbol}" />" >
+									<c:out value="${currentBacktest.symbol}">No name</c:out> Result
+								</a></h3>
+								<h5>Full Name of the symbol</h5>
+							</div> <!-- End singleBacktestTitle div -->
+							<div class="singleBacktestStats">
+								<ul>
+									<li>
+										<h4>Result Time Period:</h4> 
+										<p class="daterange">${currentBacktest.startDate} - ${currentBacktest.endDate}</p>
+									</li>
+									<li>
+										<h4>Baseline Return:</h4>
+										<p class="percentReturn"><fmt:formatNumber type="percent" minIntegerDigits="1" maxFractionDigits="2" value="${baseline.totalPercentReturn}" /></p>
+									</li>
+									<li>
+										<h4>Current Model:</h4>
+										<p class="percentReturn"><fmt:formatNumber type="percent" minIntegerDigits="1" maxFractionDigits="2" value="${currentBacktest.totalPercentReturn}" /></p>
+									</li>
+								</ul>
+							</div> <!-- End singleBacktestStats div -->
+						</div> <!-- End singleBacktestInfoBlock div -->
 					<div id="ResultChart" class="chart">
 						<img src="<c:url value="charts/backtest/^IXIC" />" />
 					</div>
-					<h2>Baseline Results for each Index</h2>
-					<table>
-						<tr>
-							<th>Index</th>
-							<th>Results Start Date</th>
-							<th>Results End Date</th>
-							<th>Initial Investment</th>
-							<th>Final Value</th>
-							<th>% Return</th>
-						</tr>
-						<c:forEach items="${baselineList}" var="baseline">
-						<tr>
-							<td>${baseline.symbol}</td>
-							<td>${baseline.startDate}</td>
-							<td>${baseline.endDate}</td>
-							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${baseline.costBasis}" type="currency"/></td>
-							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${baseline.finalValue}" type="currency"/></td>
-							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${baseline.totalPercentReturn}" /></td>
-						</tr>
-						</c:forEach>
-					</table>
 					<h2>Current Model Results for Each Index</h2>
 					<table>
 						<tr>
+							<th>Type</th>
 							<th>Index</th>
 							<th>Results Start Date</th>
 							<th>Results End Date</th>
@@ -56,8 +60,17 @@
 							<th>Number of Trades</th>
 							<th>Number of Profitable Trades</th>
 						</tr>
-						<c:forEach items="${currentBacktestList}" var="currentBacktest">
 						<tr>
+							<td>Baseline</td>
+							<td>${baseline.symbol}</td>
+							<td>${baseline.startDate}</td>
+							<td>${baseline.endDate}</td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${baseline.costBasis}" type="currency"/></td>
+							<td><fmt:setLocale value="en_US"/><fmt:formatNumber value="${baseline.finalValue}" type="currency"/></td>
+							<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${baseline.totalPercentReturn}" /></td>
+						</tr>
+						<tr>
+							<td>Current</td>
 							<td>${currentBacktest.symbol}</td>
 							<td>${currentBacktest.startDate}</td>
 							<td>${currentBacktest.endDate}</td>
@@ -67,17 +80,10 @@
 							<td>${currentBacktest.numberOfTrades}</td>
 							<td>${currentBacktest.numberOfProfitableTrades}</td>
 						</tr>
-						</c:forEach>
 					</table>
 				</div>
 				<div id="backtest">
-					<p>Select the index to backtest.</p>
-					<form:form method="POST" commandName="backtestObject" action="backtest/" id="backtestForm">
-					<div id="backtestIndexPicker">
-						<ul>
-							<form:radiobuttons element="li" path="symbol" items="${indexList}" />
-						</ul>
-					</div>
+					<form:form method="POST" commandName="currentBacktest" action="backtest/" id="backtestForm">
 					<p>The model parameters for the selected index are:</p>
 					<div id="backtestModelParameters">
 						<ul>

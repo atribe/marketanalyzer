@@ -109,6 +109,10 @@
 					.singleBacktestStats ul li h4, .singleBacktestStats ul li p{
 						margin: 5px 0;
 					}
+					
+					.daterange{
+						font-size:13px;
+					}
 	.singleBacktestPlot{
 		float: right;
 		clear: none;

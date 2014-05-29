@@ -69,35 +69,17 @@ public class BacktestController {
 
         	//Creating a backtest service
         	BacktestService backtestService = new BacktestService();
-        	
-        	BacktestResult b = backtestService.getCurrent(symbol);
-        	m.addAttribute("backtestObject", b);
         	/*
         	 * Setting up the results of the baseline and the current model.
         	 * However, it is super clunky and not good or even robust
         	 */
-        	List<BacktestResult> baselineList = new ArrayList<BacktestResult>();
-        	baselineList.add(backtestService.getBaseline("^IXIC"));
-        	baselineList.add(backtestService.getBaseline("^GSPC"));
-        	baselineList.add(backtestService.getBaseline("^SML"));
-        	m.addAttribute("baselineList", baselineList);
+        	m.addAttribute("baseline", backtestService.getBaseline(symbol));
         	
-        	List<BacktestResult> currentBacktestList = new ArrayList<BacktestResult>();
-        	currentBacktestList.add(backtestService.getCurrent("^IXIC"));
-        	currentBacktestList.add(backtestService.getCurrent("^GSPC"));
-        	currentBacktestList.add(backtestService.getCurrent("^SML"));
-        	m.addAttribute("currentBacktestList", currentBacktestList);
+        	m.addAttribute("currentBacktest", backtestService.getCurrent(symbol));
         	
-    		/*
-    		 * Filling the fields for the next run
-    		 */
-    		//Getting the list of indexs
-            List<String> indexList = backtestService.getIndexList();
-            m.addAttribute("indexList", indexList);
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
-        	
         }
     
         
