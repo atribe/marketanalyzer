@@ -45,7 +45,7 @@
 							</div> <!-- End singleBacktestStats div -->
 						</div> <!-- End singleBacktestInfoBlock div -->
 					<div id="ResultChart" class="chart">
-						<c:if test="${not empty ${currentBacktest.symbol}}">
+						<c:if test="${not empty currentBacktest.symbol}">
 							<img src="<c:url value="charts/backtest/${currentBacktest.symbol}" />" />
 						</c:if>
 					</div>
