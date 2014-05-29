@@ -19,9 +19,47 @@ import com.atomrockets.marketanalyzer.threads.marketAnalyzerListener;
 public class BacktestController {
 	/* Get actual class name to be printed on */
 	static Logger log = Logger.getLogger(BacktestController.class.getName());
-	private final String viewName = "backtest";
+	private final String BASEURL = "backtest";
 
-	@RequestMapping(value="/backtest/{symbol}", method = RequestMethod.GET)
+	
+	/*
+	 * base backtest page controller
+	 * Renders a summary of all indices.
+	 * Displays charts for each as well as basic return and date range info 
+	 */
+	@RequestMapping(value = {"/" + BASEURL, "/" + BASEURL + "/"}, method = RequestMethod.GET)
+	public String backtestPage(ModelMap m) {
+		
+		if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
+
+        	//Creating a backtest service
+        	BacktestService backtestService = new BacktestService();
+			/*
+	    	 * Setting up the results of the baseline and the current model.
+	    	 * However, it is super clunky and not good or even robust
+	    	 */
+	    	List<BacktestResult> baselineList = new ArrayList<BacktestResult>();
+	    	baselineList.add(backtestService.getBaseline("^IXIC"));
+	    	baselineList.add(backtestService.getBaseline("^GSPC"));
+	    	baselineList.add(backtestService.getBaseline("^SML"));
+	    	m.addAttribute("baselineList", baselineList);
+	    	
+	    	List<BacktestResult> backtests = new ArrayList<BacktestResult>();
+	    	backtests.add(backtestService.getCurrent("^IXIC"));
+	    	backtests.add(backtestService.getCurrent("^GSPC"));
+	    	backtests.add(backtestService.getCurrent("^SML"));
+	    	m.addAttribute("backtests", backtests);
+		} else {
+        	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
+        	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
+        }
+		
+		return "backtest";
+	}
+	
+	
+	@RequestMapping(value="/" + BASEURL + "/{symbol}", method = RequestMethod.GET)
     public String backtestPage(ModelMap m, @PathVariable String symbol) {
         if(symbol == "IXIC" || symbol == "GSPC" || symbol == "SML") {
         	symbol = "^" + symbol;
@@ -31,35 +69,17 @@ public class BacktestController {
 
         	//Creating a backtest service
         	BacktestService backtestService = new BacktestService();
-        	
-        	BacktestResult b = backtestService.getCurrent(symbol);
-        	m.addAttribute("backtestObject", b);
         	/*
         	 * Setting up the results of the baseline and the current model.
         	 * However, it is super clunky and not good or even robust
         	 */
-        	List<BacktestResult> baselineList = new ArrayList<BacktestResult>();
-        	baselineList.add(backtestService.getBaseline("^IXIC"));
-        	baselineList.add(backtestService.getBaseline("^GSPC"));
-        	baselineList.add(backtestService.getBaseline("^SML"));
-        	m.addAttribute("baselineList", baselineList);
+        	m.addAttribute("baseline", backtestService.getBaseline(symbol));
         	
-        	List<BacktestResult> currentBacktestList = new ArrayList<BacktestResult>();
-        	currentBacktestList.add(backtestService.getCurrent("^IXIC"));
-        	currentBacktestList.add(backtestService.getCurrent("^GSPC"));
-        	currentBacktestList.add(backtestService.getCurrent("^SML"));
-        	m.addAttribute("currentBacktestList", currentBacktestList);
+        	m.addAttribute("currentBacktest", backtestService.getCurrent(symbol));
         	
-    		/*
-    		 * Filling the fields for the next run
-    		 */
-    		//Getting the list of indexs
-            List<String> indexList = backtestService.getIndexList();
-            m.addAttribute("indexList", indexList);
         } else {
         	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
-        	
         }
     
         
@@ -70,22 +90,10 @@ public class BacktestController {
          * 4. Run Model
          * 5. View Results
          */
-        return viewName;
+        return "backtestIndex";
     }
-    
-	@RequestMapping(value = "/backtest", method = RequestMethod.GET)
-	public String backtestPage(ModelMap m) {
-		
-		String defaultSymbol = "^IXIC";
-		return "redirect:" + viewName + "/" + defaultSymbol;
-	}
-	@RequestMapping(value = "/backtest/", method = RequestMethod.GET)
-	public String backtestPageWithForwardSlash(ModelMap m) {
-		
-		String defaultSymbol = "^IXIC";
-		return "redirect:" + defaultSymbol;
-	}
 	
+	/*This is the updating method, this will have to change
 	@RequestMapping(value = "/backtest/", method = RequestMethod.POST)
     private String processBacktest(ModelMap m, @ModelAttribute BacktestResult bt) {
 		BacktestService bs = new BacktestService();
@@ -94,4 +102,5 @@ public class BacktestController {
     	
     	return "redirect:" + bt.getSymbol();
     }
+    */
 }

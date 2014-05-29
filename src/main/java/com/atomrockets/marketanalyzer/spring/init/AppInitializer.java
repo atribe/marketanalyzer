@@ -1,10 +1,12 @@
 package com.atomrockets.marketanalyzer.spring.init;
 
+import java.util.HashSet;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import javax.servlet.SessionTrackingMode;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.WebApplicationInitializer;
@@ -36,6 +38,11 @@ public class AppInitializer implements WebApplicationInitializer {
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(MAPPING_URL);
+        
+        //This block removes the jsessionid tag from URLs
+        HashSet<SessionTrackingMode> set = new HashSet<SessionTrackingMode>();
+        set.add(SessionTrackingMode.COOKIE);
+        servletContext.setSessionTrackingModes(set);
         
     }
 
