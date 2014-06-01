@@ -26,7 +26,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 	private MarketsDBInitRunnable maBean;
 	
 	@Autowired
-	private IBD50Runnable i50Bean;
+	private IBD50InitRunnable i50Bean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	protected static Logger staticLog = Logger.getLogger(marketAnalyzerListener.class.getName());

@@ -1,4 +1,4 @@
-package com.atomrockets.marketanalyzer.dbManagers;
+package com.atomrockets.marketanalyzer.dbManagers.init;
 
 import java.util.Date;
 
@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.atomrockets.marketanalyzer.dbManagers.MarketPredDataSource;
+import com.atomrockets.marketanalyzer.dbManagers.OHLCVDao;
 import com.atomrockets.marketanalyzer.services.BacktestService;
 import com.atomrockets.marketanalyzer.services.IndexCalcsService;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;

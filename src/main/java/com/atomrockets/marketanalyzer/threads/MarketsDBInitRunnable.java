@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.atomrockets.marketanalyzer.dbManagers.DatabaseInitialization;
+import com.atomrockets.marketanalyzer.dbManagers.init.DatabaseInitialization;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 @Component
