@@ -14,10 +14,9 @@ public class MarketsDBInitRunnable implements Runnable {
 	
 	Logger log = Logger.getLogger(this.getClass().getName());
 	
-	String thread_name;
+	private final String thread_name = PropCache.getCachedProps("threads.dbinit");
 	
 	public String getThread_name() {
-		thread_name = PropCache.getCachedProps("threads.dbinit");
 		return thread_name;
 	}
 
