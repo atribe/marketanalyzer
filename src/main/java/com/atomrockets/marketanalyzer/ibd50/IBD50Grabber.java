@@ -1,6 +1,5 @@
 package com.atomrockets.marketanalyzer.ibd50;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,7 +11,6 @@ import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
@@ -35,7 +33,24 @@ public class IBD50Grabber{
 	private final static String username = "teedit@gmail.com";
 	private final static String password = "aaronnhugh";
 	
-	public static void main() throws ClientProtocolException, IOException {
+	public static void grabIbd50() {
+		InputStream downloadedTextFile = null;
+		
+		try {
+			downloadedTextFile = authenticatedIbd50Download();
+			
+			List<IBD50Bean> rowsFromIBD50 = parseIBD50toBean(downloadedTextFile);
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static InputStream authenticatedIbd50Download() throws ClientProtocolException, IOException {
 		//Cookie setup
 		RequestConfig globalConfig = RequestConfig.custom()
 							.setCookieSpec(CookieSpecs.BEST_MATCH)
@@ -111,12 +126,7 @@ public class IBD50Grabber{
 		}
 		System.out.println(response.toString());
 		
-		InputStream responseBody = response.getEntity().getContent();
-		System.out.println(responseBody.toString());
-
-		List<IBD50Bean> rowsFromIBD50 = parseIBD50toBean(responseBody);
-		
-		System.out.println("File get: " + response.getStatusLine());
+		return response.getEntity().getContent();
 	}
 	
 	private static List<IBD50Bean> parseIBD50toBean(InputStream is) throws IOException {
