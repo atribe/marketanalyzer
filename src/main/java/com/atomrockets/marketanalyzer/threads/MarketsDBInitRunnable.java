@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.atomrockets.marketanalyzer.dbManagers.DatabaseInitialization;
+import com.atomrockets.marketanalyzer.dbManagers.init.DatabaseInitialization;
 import com.atomrockets.marketanalyzer.spring.init.PropCache;
 
 @Component
@@ -14,10 +14,9 @@ public class MarketsDBInitRunnable implements Runnable {
 	
 	Logger log = Logger.getLogger(this.getClass().getName());
 	
-	String thread_name;
+	private final String thread_name = PropCache.getCachedProps("threads.dbinit");
 	
 	public String getThread_name() {
-		thread_name = PropCache.getCachedProps("threads.dbinit");
 		return thread_name;
 	}
 
