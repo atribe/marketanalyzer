@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.atomrockets.marketanalyzer.services.IndexCalcsService;
+import com.ar.marketanalyzer.indexbacktest.services.IndexCalcsService;
 
 public class FollowThruTest {
 
