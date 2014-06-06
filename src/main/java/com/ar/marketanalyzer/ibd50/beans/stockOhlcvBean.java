@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.ar.marketanalyzer.indexbacktest.beans;
+package com.ar.marketanalyzer.ibd50.beans;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -14,16 +11,10 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.indexbacktest.beans.interfaces.OHLCVInterface;
+import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
-/**
- * @author Allan
- * This stands for each column heading in the download for each index
- * Date, Open, High, Low, Close, Volume, Adjusted Close
- */
-public class OHLCVData implements OHLCVInterface{
-
-	private final static String tableName = "OHLCVData";
+public class stockOhlcvBean {
+	private final static String tableName = "stockOhlcv";
 	
 	private long id;
 	private String symbol;
@@ -39,9 +30,9 @@ public class OHLCVData implements OHLCVInterface{
 	 * Constructors
 	 */
 	//Empty constructed required to be a Java Bean
-	public OHLCVData() {}
+	public stockOhlcvBean() {}
 	
-	public OHLCVData(YahooOHLCV y) {
+	public stockOhlcvBean(YahooOHLCV y) {
 		setSymbol(y.getSymbol());
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    java.util.Date parsed=null;
@@ -60,7 +51,7 @@ public class OHLCVData implements OHLCVInterface{
 		setAdjClose(new BigDecimal(y.getAdjClose()));
 	}
 	
-	public OHLCVData(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
+	public stockOhlcvBean(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
 		setSymbol(symbol);
 		setDate(date);
 		setOpen(open);
@@ -195,32 +186,32 @@ public class OHLCVData implements OHLCVInterface{
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	@Override
+	
 	public long getId() {
 		return id;
 	}
-	@Override
+	
 	public void setId(long id) {
 		this.id = id;		
 	}
-	@Override
+	
 	public void setId(int id) {
 		this.id = id;
 	}
-	@Override
+	
 	public String getSymbol() {
 		return symbol;
 	}
-	@Override
+	
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
 
-	@Override
+	
 	public Date getDate() {
 		return date;
 	}
-	@Override
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -231,62 +222,63 @@ public class OHLCVData implements OHLCVInterface{
 		return new LocalDate(this.date);
 	}
 	
-	@Override
+	
 	public BigDecimal getOpen() {
 		return open;
 	}
-	@Override
+	
 	public void setOpen(BigDecimal open) {
 		this.open = open;
 	}
 	
-	@Override
+	
 	public BigDecimal getHigh() {
 		return high;
 	}
-	@Override
+	
 	public void setHigh(BigDecimal high) {
 		this.high = high;
 	}
 	
-	@Override
+	
 	public BigDecimal getLow() {
 		return low;
 	}
-	@Override
+	
 	public void setLow(BigDecimal low) {
 		this.low = low;
 	}
 	
-	@Override
+	
 	public BigDecimal getClose() {
 		return close;
 	}
-	@Override
+	
 	public void setClose(BigDecimal close) {
 		this.close = close;
 	}
 	
-	@Override
+	
 	public long getVolume() {
 		return volume;
 	}
-	@Override
+	
 	public void setVolume(long volume) {
 		this.volume = volume;
 	}
-	@Override
+	
 	public void setVolume(double volume) {
 		volume = Math.round(volume);
 	}
 	
-	@Override
+	
 	public BigDecimal getAdjClose() {
 		return adjClose;
 	}
-	@Override
+	
 	public void setAdjClose(BigDecimal adjClose) {
 		this.adjClose = adjClose;
 	}
 	//End Getters and Setters
+
 }

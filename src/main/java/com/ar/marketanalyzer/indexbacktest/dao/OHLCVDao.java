@@ -19,7 +19,7 @@ import org.joda.time.LocalDate;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
-import com.ar.marketanalyzer.indexbacktest.beans.OHLCVData;
+import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.spring.init.PropCache;
 
 public class OHLCVDao extends GenericDBSuperclass {
@@ -53,9 +53,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		 */
 		
 		
-		OHLCVData a = new OHLCVData();
+		IndexOHLCVData a = new IndexOHLCVData();
 		
-		String tableName = OHLCVData.getTablename();
+		String tableName = IndexOHLCVData.getTablename();
 		
 		log.trace("IY.1.1 Checking if table " + tableName + " exists.");
 		if(!tableExists(tableName)) {
@@ -103,16 +103,16 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//java.sql.Date newestDateInDB=null;
 		LocalDate newestDate=null;
 
-		String getNewestDateInDBQuery = "SELECT Date FROM `" + OHLCVData.getTablename() + "` "
+		String getNewestDateInDBQuery = "SELECT Date FROM `" + IndexOHLCVData.getTablename() + "` "
 				+ "WHERE `symbol` = ?"
 				+ "ORDER BY date "
 				+ "DESC LIMIT 1";
 	
-		OHLCVData a = new OHLCVData();
+		IndexOHLCVData a = new IndexOHLCVData();
 
 		try {
 			QueryRunner runner = new QueryRunner(m_ds);
-			ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
+			ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
 			
 			a = runner.query(
 					getNewestDateInDBQuery,
@@ -156,7 +156,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			log.info("     -Populating Table with data for " + index);		
 		
 			//Container to hold the downloaded data
-			List<OHLCVData> rowsFromYahoo = null;
+			List<IndexOHLCVData> rowsFromYahoo = null;
 			//This date represents the beginning of time as far as any of the indexes go
 			LocalDate beginningDate = new LocalDate(PropCache.getCachedProps("yahoo.startdate"));
 	
@@ -183,7 +183,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 
 	public void updateIndexDB(String index,int indexDaysBehind) {
 		//Container to hold the downloaded data
-		List<OHLCVData> rowsFromYahoo = null;
+		List<IndexOHLCVData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = YahooDataRetriever.getYahooURL(index, indexDaysBehind);
 
@@ -198,9 +198,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		}
 	}
 	
-	public void initialAddRecordsFromData(List<OHLCVData> rowsFromYahoo) {
+	public void initialAddRecordsFromData(List<IndexOHLCVData> rowsFromYahoo) {
 		//This query ignores duplicate dates
-		String insertQuery = "INSERT INTO `" + OHLCVData.getTablename() + "` "
+		String insertQuery = "INSERT INTO `" + IndexOHLCVData.getTablename() + "` "
 				+ "(symbol,date,open,high,low,close,volume) VALUES"
 				+ "(?,?,?,?,?,?,?)";
 		String [] columnNames = {"symbol","date","open","high","low","close","volume"};
@@ -247,9 +247,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		}
 	}
 	
-	public void addRecordsFromData(List<OHLCVData> rowsFromYahoo) {
+	public void addRecordsFromData(List<IndexOHLCVData> rowsFromYahoo) {
 
-		OHLCVData a = new OHLCVData();
+		IndexOHLCVData a = new IndexOHLCVData();
 		
 		String insertQuery = a.getInsertOrUpdateQuery();
 		
@@ -268,7 +268,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			//creating DbUtils QueryRunner
 			QueryRunner runner = new QueryRunner();
 			
-			for(OHLCVData row : rowsFromYahoo) {
+			for(IndexOHLCVData row : rowsFromYahoo) {
 				
 				//Check to see if row is already in the DB
 				if(!isAlreadyInDB(row)) {
@@ -308,18 +308,18 @@ public class OHLCVDao extends GenericDBSuperclass {
 		}
 	}
 		
-	public boolean isAlreadyInDB(OHLCVData row) throws SQLException {
+	public boolean isAlreadyInDB(IndexOHLCVData row) throws SQLException {
 		
 		boolean alreadyExists = false;
 
-		String checkQuery = "SELECT `id` FROM `" + OHLCVData.getTablename() + "`"
+		String checkQuery = "SELECT `id` FROM `" + IndexOHLCVData.getTablename() + "`"
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
 		QueryRunner runner = new QueryRunner(m_ds);
-		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
+		ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
 		
-		OHLCVData result = runner.query(
+		IndexOHLCVData result = runner.query(
 							checkQuery,
 							h,
 							row.getDate(),
@@ -327,17 +327,17 @@ public class OHLCVDao extends GenericDBSuperclass {
 							);
 			
 		if(result != null) {
-			log.debug("Just tried to insert a duplicate row into table " + OHLCVData.getTablename() + ". The id of the entry already in the table is " + result.getId());
+			log.debug("Just tried to insert a duplicate row into table " + IndexOHLCVData.getTablename() + ". The id of the entry already in the table is " + result.getId());
 			alreadyExists = true;
 		}
 		
 		return alreadyExists;
 	}
 
-	public List<OHLCVData> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
-		List<OHLCVData> dDayList = new ArrayList<OHLCVData>();
+	public List<IndexOHLCVData> getRowsBetweenDatesBySymbol(String symbol, LocalDate startDate, LocalDate endDate) {
+		List<IndexOHLCVData> dDayList = new ArrayList<IndexOHLCVData>();
 		
-		String YahooTableName = OHLCVData.getTablename();
+		String YahooTableName = IndexOHLCVData.getTablename();
 		
 		String query = "SELECT *"
 				+ " FROM `" + YahooTableName + "`"
@@ -351,7 +351,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<List<OHLCVData>> h = new BeanListHandler<OHLCVData>(OHLCVData.class);
+		ResultSetHandler<List<IndexOHLCVData>> h = new BeanListHandler<IndexOHLCVData>(IndexOHLCVData.class);
 		try{		
 			dDayList = run.query(
 		    		query, //query (in the same form as for a prepared statement
@@ -374,7 +374,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		
 		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
+		String query = "SELECT * FROM `" + IndexOHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " ORDER BY `date` ASC"
 				+ " LIMIT 1";
@@ -404,7 +404,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		
 		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
+		String query = "SELECT * FROM `" + IndexOHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " ORDER BY `date` DESC"
 				+ " LIMIT 1";
@@ -430,10 +430,10 @@ public class OHLCVDao extends GenericDBSuperclass {
 		return dataPoint;
 	}
 
-	public OHLCVData getBySymbolAndDate(String symbol, LocalDate date) {
-		OHLCVData dataPoint=null;
+	public IndexOHLCVData getBySymbolAndDate(String symbol, LocalDate date) {
+		IndexOHLCVData dataPoint=null;
 		
-		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
+		String query = "SELECT * FROM `" + IndexOHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " AND `date` = ?";
 		/*
@@ -442,7 +442,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		QueryRunner run = new QueryRunner(m_ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
-		ResultSetHandler<OHLCVData> h = new BeanHandler<OHLCVData>(OHLCVData.class);
+		ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
 		
 		try{		
 			dataPoint = run.query(
@@ -462,7 +462,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 	public IndexOHLCVCalcs getBySymbolAndDateAsCalcs(String symbol, LocalDate date) {
 		IndexOHLCVCalcs dataPoint=null;
 		
-		String query = "SELECT * FROM `" + OHLCVData.getTablename() + "`"
+		String query = "SELECT * FROM `" + IndexOHLCVData.getTablename() + "`"
 				+ " WHERE `symbol` = ?"
 				+ " AND `date` = ?";
 		/*
@@ -489,7 +489,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		return dataPoint;
 	}
 	private boolean checkDate(String symbol, LocalDate date) {
-		OHLCVData a = getBySymbolAndDate(symbol, date);
+		IndexOHLCVData a = getBySymbolAndDate(symbol, date);
 		if(a!=null)
 			return true;
 		else
@@ -511,7 +511,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		
 		return a;
 	}
-	public OHLCVData getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
+	public IndexOHLCVData getValidDate(String symbol, LocalDate date, boolean futureSearchDirection) {
 		int counter=0;
 		
 		while(!checkDate(symbol, date) && counter < 7) {
@@ -522,7 +522,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 			counter++;
 		}
 		
-		OHLCVData a = getBySymbolAndDate(symbol, date);;
+		IndexOHLCVData a = getBySymbolAndDate(symbol, date);;
 		
 		return a;
 	}

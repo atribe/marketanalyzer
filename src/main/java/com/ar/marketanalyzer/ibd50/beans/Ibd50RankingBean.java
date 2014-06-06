@@ -8,11 +8,11 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-public class IBD50Bean {
+public class Ibd50RankingBean {
 	
 	private final static String tableName = "IBD50";
 	
-	private int id;
+	private int ranking_id;
 	private LocalDate rankDate;
 	private String symbol;
 	private String companyName;
@@ -42,7 +42,7 @@ public class IBD50Bean {
 	/*
 	 * Constructor
 	 */
-	public IBD50Bean() {
+	public Ibd50RankingBean() {
 		rankDate = new LocalDate(); //aka today
 	}
 	
@@ -158,23 +158,22 @@ public class IBD50Bean {
 	}
 	//End Database table methods
 	
-	/*
-	 * Getters and Setters
-	 */
-	public static String getTablename() {
-		return tableName;
-	}
 	
-
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-
+	
+	/*
+	 * Getters and Setters
+	 */
+	public static String getTableName() {
+		return tableName;
+	}
 	public int getId() {
-		return id;
+		return ranking_id;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.ranking_id = id;
 	}
 	public LocalDate getRankDate() {
 		return rankDate;

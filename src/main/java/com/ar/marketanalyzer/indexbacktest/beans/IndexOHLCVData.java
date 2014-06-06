@@ -1,58 +1,77 @@
+/**
+ * 
+ */
 package com.ar.marketanalyzer.indexbacktest.beans;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-public class StockTransaction {
-	//Table Names
-	private final static String tableName = "StockTransaction";
-	
-	//Table Columns
-	private long id;
-	private long backtestId;
-	private Date buyDate;
-	private Date sellDate;
-	private BigDecimal buyPrice;
-	private BigDecimal sellPrice;
-	private BigDecimal dollarReturn;
-	private double percentReturn;
-	private Boolean profitable;
-	
-	//Empty constructor
-	public StockTransaction() {
-		this.buyPrice = new BigDecimal(0);
-		this.sellPrice = new BigDecimal(0);
-		this.dollarReturn = new BigDecimal(0);
-		this.percentReturn = 0;
-	}
-	
-	public StockTransaction(long backtestID) {
-		setBacktestId(backtestID);
-		this.buyPrice = new BigDecimal(0);
-		this.sellPrice = new BigDecimal(0);
-		this.dollarReturn = new BigDecimal(0);
-		this.percentReturn = 0;
-	}
-	
-	public StockTransaction(long backtestID, IndexOHLCVData beginningDataPoint,
-			IndexOHLCVData endingDataPoint) {
-		setBacktestId(backtestID);
-		
-		setBuyDate(beginningDataPoint.getDate());
-		setBuyPrice(beginningDataPoint.getClose());
-		
-		setSellDate(endingDataPoint.getDate());
-		setSellPrice(endingDataPoint.getClose());
-		
-		calcStats();
-	}
+import com.ar.marketanalyzer.indexbacktest.beans.interfaces.OHLCVInterface;
 
+/**
+ * @author Allan
+ * This stands for each column heading in the download for each index
+ * Date, Open, High, Low, Close, Volume, Adjusted Close
+ */
+public class IndexOHLCVData implements OHLCVInterface{
+
+	private final static String tableName = "OHLCVData";
+	
+	private long id;
+	private String symbol;
+	private Date date;
+	private BigDecimal open;
+	private BigDecimal high;
+	private BigDecimal low;
+	private BigDecimal close;
+	private long volume;
+	private BigDecimal adjClose;
+	
+	/*
+	 * Constructors
+	 */
+	//Empty constructed required to be a Java Bean
+	public IndexOHLCVData() {}
+	
+	public IndexOHLCVData(YahooOHLCV y) {
+		setSymbol(y.getSymbol());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	    java.util.Date parsed=null;
+		try {
+			parsed = format.parse(y.getDate());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	setDate(new java.sql.Date(parsed.getTime()));
+		setOpen(new BigDecimal(y.getOpen()));
+		setHigh(new BigDecimal(y.getHigh()));
+		setLow(new BigDecimal(y.getLow()));
+		setClose(new BigDecimal(y.getClose()));
+		setVolume(y.getVolume());
+		setAdjClose(new BigDecimal(y.getAdjClose()));
+	}
+	
+	public IndexOHLCVData(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
+		setSymbol(symbol);
+		setDate(date);
+		setOpen(open);
+		setHigh(high);
+		setLow(low);
+		setClose(close);
+		setVolume(volume);
+		setAdjClose(adjClose);
+	}
+	//End Constructors
+	
 	/*
 	 * Database table methods
 	 */
@@ -64,7 +83,7 @@ public class StockTransaction {
 			String name = f.getName(); //Getting the name of the field
 			Class<?> type = f.getType(); //Getting the type of the field
 			String typeName=null;
-			if( name != "tableName") { //Don't add the tableName field to the hashmap, as it isn't a column in the table
+			if( name != "tableName" ) { //Don't add the tableName field to the hashmap, as it isn't a column in the table
 				//Match the field type to the MySQL equivalent
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
@@ -94,19 +113,16 @@ public class StockTransaction {
 		//Get the hashmap of class fields and types
 		LinkedHashMap<String, String> fieldMap = getColumnNames();
 		//Create the table create statement
-		String createTableSQL = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (" +
-				" id INT NOT NULL AUTO_INCREMENT," +
-				" backtestId INT NOT NULL,"; //Handle the id on its own because it has a bunch of stuff appended to it
-				
+		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
+				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			if(entry.getKey() != "id" && entry.getKey() != "backtestId") {	
+			if(entry.getKey() != "id" && entry.getKey() != "dateString") {	
 				createTableSQL += " " + entry.getKey() + " "+ entry.getValue() +",";
 			}
 		 }
 		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (id), " +
-		"FOREIGN KEY (backtestId) REFERENCES `" + BacktestBean.getTableName() + "`(id)) " +
+		createTableSQL += " PRIMARY KEY (id)) " +
 				"ENGINE = MyISAM";
 		
 		return createTableSQL;
@@ -169,115 +185,108 @@ public class StockTransaction {
 	//End Database table methods
 	
 	/*
-	 * Helper Methods
+	 * Getters and Setters
 	 */
+	public static String getTablename() {
+		return tableName;
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
-	private void calcStats() {
-		this.dollarReturn = this.sellPrice.subtract(this.buyPrice);
-		this.percentReturn = this.dollarReturn.doubleValue()/this.buyPrice.doubleValue();
-		if(this.dollarReturn.compareTo(BigDecimal.ZERO)>0) {
-			setProfitable(true);
-		} else {
-			setProfitable(false);
-		}
-	}
-	
-	public void OpenTransaction(IndexOHLCVCalcs c) {
-		setBuyDate(c.getDate());
-		setBuyPrice(c.getOpen());
-	}
-	public void CloseTransaction(IndexOHLCVCalcs c) {
-		setSellDate(c.getDate());
-		setSellPrice(c.getOpen());
-	}
-	public boolean isTransactionOpen() {
-		if(this.buyDate != null &&
-				this.buyPrice.compareTo(BigDecimal.ZERO) > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	public boolean isTransactionClosed() {
-		if(this.buyDate != null &&
-				this.buyPrice.compareTo(BigDecimal.ZERO) > 0 &&
-				this.sellDate != null &&
-				this.sellPrice.compareTo(BigDecimal.ZERO) > 0)
-		{
-			calcStats();
-			return true;
-		} else {
-			return false;
-		}
-	}
-	/*
-	 * Getters and Setters
-	 */
-	public static String getTableName() {
-		return tableName;
-	}
+	@Override
 	public long getId() {
 		return id;
 	}
+	@Override
 	public void setId(long id) {
+		this.id = id;		
+	}
+	@Override
+	public void setId(int id) {
 		this.id = id;
 	}
-	public long getBacktestId() {
-		return backtestId;
+	@Override
+	public String getSymbol() {
+		return symbol;
 	}
-	public void setBacktestId(long backtestId) {
-		this.backtestId = backtestId;
+	@Override
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
-	public Date getBuyDate() {
-		return buyDate;
+
+	@Override
+	public Date getDate() {
+		return date;
 	}
-	public void setBuyDate(Date buyDate) {
-		this.buyDate = buyDate;
+	@Override
+	public void setDate(Date date) {
+		this.date = date;
 	}
-	public void setBuyDate(LocalDate buyDate) {
-		this.buyDate = new java.sql.Date(buyDate.toDate().getTime());
+	public void setDate(String date) {
+		this.date = Date.valueOf(date);//Not the most elegant way to do it
 	}
-	public Date getSellDate() {
-		return sellDate;
+	public LocalDate getLocalDate() {
+		return new LocalDate(this.date);
 	}
-	public void setSellDate(LocalDate sellDate) {
-		this.sellDate = new java.sql.Date(sellDate.toDate().getTime());
+	
+	@Override
+	public BigDecimal getOpen() {
+		return open;
 	}
-	public void setSellDate(Date sellDate) {
-		this.sellDate = sellDate;
+	@Override
+	public void setOpen(BigDecimal open) {
+		this.open = open;
 	}
-	public BigDecimal getBuyPrice() {
-		return buyPrice;
+	
+	@Override
+	public BigDecimal getHigh() {
+		return high;
 	}
-	public void setBuyPrice(BigDecimal buyPrice) {
-		this.buyPrice = buyPrice;
+	@Override
+	public void setHigh(BigDecimal high) {
+		this.high = high;
 	}
-	public BigDecimal getSellPrice() {
-		return sellPrice;
+	
+	@Override
+	public BigDecimal getLow() {
+		return low;
 	}
-	public void setSellPrice(BigDecimal sellPrice) {
-		this.sellPrice = sellPrice;
+	@Override
+	public void setLow(BigDecimal low) {
+		this.low = low;
 	}
-	public BigDecimal getDollarReturn() {
-		return dollarReturn;
+	
+	@Override
+	public BigDecimal getClose() {
+		return close;
 	}
-	public void setDollarReturn(BigDecimal dollarReturn) {
-		this.dollarReturn = dollarReturn;
+	@Override
+	public void setClose(BigDecimal close) {
+		this.close = close;
 	}
-	public double getPercentReturn() {
-		return percentReturn;
+	
+	@Override
+	public long getVolume() {
+		return volume;
 	}
-	public void setPercentReturn(double percentReturn) {
-		this.percentReturn = percentReturn;
+	@Override
+	public void setVolume(long volume) {
+		this.volume = volume;
 	}
-	public Boolean getProfitable() {
-		return profitable;
+	@Override
+	public void setVolume(double volume) {
+		volume = Math.round(volume);
 	}
-	public void setProfitable(Boolean profitable) {
-		this.profitable = profitable;
+	
+	@Override
+	public BigDecimal getAdjClose() {
+		return adjClose;
 	}
+	@Override
+	public void setAdjClose(BigDecimal adjClose) {
+		this.adjClose = adjClose;
+	}
+	//End Getters and Setters
 }

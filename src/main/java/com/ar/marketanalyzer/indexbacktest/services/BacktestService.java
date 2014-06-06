@@ -13,7 +13,7 @@ import org.joda.time.LocalDate;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
-import com.ar.marketanalyzer.indexbacktest.beans.OHLCVData;
+import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.indexbacktest.beans.StockTransaction;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean.parametersTypeEnum;
 import com.ar.marketanalyzer.indexbacktest.dao.BacktestResultDAO;
@@ -90,8 +90,8 @@ public class BacktestService extends IndexBacktestServiceSuperclass{
 	}
 	private void runBaseline(String symbol, LocalDate startDate, LocalDate endDate, BacktestBean backtest) throws SQLException {
 		
-		OHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, startDate, true);
-		OHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, endDate, false);
+		IndexOHLCVData beginningDataPoint = m_OHLCVDao.getValidDate(symbol, startDate, true);
+		IndexOHLCVData endingDataPoint = m_OHLCVDao.getValidDate(symbol, endDate, false);
 		
 		StockTransaction d = new StockTransaction(backtest.getId(), beginningDataPoint, endingDataPoint);
 		

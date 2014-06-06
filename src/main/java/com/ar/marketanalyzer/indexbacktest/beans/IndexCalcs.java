@@ -94,7 +94,7 @@ public class IndexCalcs {
 		 }
 				
 		createTableSQL += " PRIMARY KEY (id)," +
-		"FOREIGN KEY (OHLCid) REFERENCES `" + OHLCVData.getTablename() + "`(id)) " +
+		"FOREIGN KEY (OHLCid) REFERENCES `" + IndexOHLCVData.getTablename() + "`(id)) " +
 				"ENGINE = MyISAM";
 		
 		return createTableSQL;

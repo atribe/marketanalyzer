@@ -26,6 +26,9 @@ public class GenericDBSuperclass {
 	//This variable only needs to be set once in the classes that inherit this class.
 	protected static DataSource m_ds;
 	
+	//used in the ibd50 stuff
+	protected final String SYMBOL_TABLE_NAME = "stock_symbols";
+	
 	public static DataSource getM_ds() {
 		return m_ds;
 	}
@@ -34,51 +37,6 @@ public class GenericDBSuperclass {
 		GenericDBSuperclass.m_ds = m_ds;
 	}
 
-	/**
-	 * Establishes a connection to the database
-	 * @return connection
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
-	 */
-	/*
-	public static Connection getConnection() throws SQLException, ClassNotFoundException {
-		//if connection is null, make a connection, if not just return the valid connection
-		if(m_connection == null) {
-			m_connection = null;
-			String host, port, dbURL, username, password, DBName;
-			
-		
-			//Loading the JDBC MySQL drivers that are used by java.sql.Connection
-			//Class.forName(PropCache.getCachedProps("db.driver"));//loads the mysql driver from the property file
-			DbUtils.loadDriver(PropCache.getCachedProps("db.driver"));
-			
-			// ************For Open Shift Account************	  
-			if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
-				staticLog.trace("-----Preparing to connect to OpenShift DB");
-				host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");//$OPENSHIFT_MYSQL_DB_HOST is a OpenShift system variable
-				port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");//$OPENSHIFT_MYSQL_DB_PORT is also an OpenShift variable
-				username = PropCache.getCachedProps("OpenShiftDB.username");
-				password = PropCache.getCachedProps("OpenShiftDB.password");
-			}else{
-				// ************For Local Account************
-				staticLog.trace("-----Preparing to connect to Local Xampp DB");
-				host = PropCache.getCachedProps("localhostdb.host");
-				port = PropCache.getCachedProps("localhostdb.port");
-				username = PropCache.getCachedProps("localhostdb.username");
-				password = PropCache.getCachedProps("localhostdb.password");
-			}
-			
-			DBName = PropCache.getCachedProps("db.dbname");
-			dbURL = String.format("jdbc:mysql://%s:%s/%s", host, port, DBName);
-			
-			
-				
-			m_connection = DriverManager.getConnection(dbURL, username, password);
-			staticLog.info("Connection established to " + DBName);
-		}
-		return m_connection;
-	}
-*/
 	public boolean tableExists(String tableName){
 		boolean tableExists = false;
 

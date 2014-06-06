@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50;
+package com.ar.marketanalyzer.ibd50.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,19 +27,20 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
-import com.ar.marketanalyzer.ibd50.beans.IBD50Bean;
+import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
 
-public class IBD50Grabber{
+public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
 	private final static String password = "aaronnhugh";
 	
-	public static void grabIbd50() {
+	public static List<Ibd50RankingBean> grabIbd50() {
 		InputStream downloadedTextFile = null;
+		List<Ibd50RankingBean> rowsFromIBD50 = null;
 		
 		try {
 			downloadedTextFile = authenticatedIbd50Download();
 			
-			List<IBD50Bean> rowsFromIBD50 = parseIBD50toBean(downloadedTextFile);
+			rowsFromIBD50 = parseIBD50toBeanList(downloadedTextFile);
 			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -48,6 +49,8 @@ public class IBD50Grabber{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return rowsFromIBD50;
 	}
 	
 	private static InputStream authenticatedIbd50Download() throws ClientProtocolException, IOException {
@@ -129,9 +132,9 @@ public class IBD50Grabber{
 		return response.getEntity().getContent();
 	}
 	
-	private static List<IBD50Bean> parseIBD50toBean(InputStream is) throws IOException {
-		List<IBD50Bean> rowsFromIBD50 = new ArrayList<IBD50Bean>();
-		IBD50Bean ibdRow = new IBD50Bean();
+	private static List<Ibd50RankingBean> parseIBD50toBeanList(InputStream is) throws IOException {
+		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
+		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
 		
 		WhitespaceToCSVReader reader = new WhitespaceToCSVReader(new InputStreamReader(is));
 		
@@ -169,8 +172,8 @@ public class IBD50Grabber{
 		return rowsFromIBD50;
 	}
 	
-	private static IBD50Bean parseListToBean(List<String> ibd50tokenizedList) {
-		IBD50Bean ibdRow = new IBD50Bean();
+	private static Ibd50RankingBean parseListToBean(List<String> ibd50tokenizedList) {
+		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
 		
 		ibdRow.setSymbol(ibd50tokenizedList.get(0));
 		ibdRow.setCompanyName(ibd50tokenizedList.get(1));

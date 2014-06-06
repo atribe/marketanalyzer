@@ -21,7 +21,7 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
-import com.ar.marketanalyzer.indexbacktest.beans.OHLCVData;
+import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 /**
@@ -31,7 +31,7 @@ public class YahooDataRetriever {
 	
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<OHLCVData> yahooDataParser(String url, String index) throws IOException {
+	public static List<IndexOHLCVData> yahooDataParser(String url, String index) throws IOException {
 		List<YahooOHLCV> rowsFromYahooURL = null;
 		
 		URL ur = new URL(url);
@@ -53,7 +53,7 @@ public class YahooDataRetriever {
 		 * Because the symbol is not downloaded in the CSV I add it, in the following
 		 * method, to the row data.
 		 */
-	    List<OHLCVData> convertedRowsFromYahooURL = addSymbolAndConvertToOHLCVData(rowsFromYahooURL, index);
+	    List<IndexOHLCVData> convertedRowsFromYahooURL = addSymbolAndConvertToOHLCVData(rowsFromYahooURL, index);
 		
 		return convertedRowsFromYahooURL;
 	}
@@ -104,12 +104,12 @@ public class YahooDataRetriever {
 		return Days.daysBetween(date, today).getDays();
 	}
 	
-	private static List<OHLCVData> addSymbolAndConvertToOHLCVData(
+	private static List<IndexOHLCVData> addSymbolAndConvertToOHLCVData(
 			List<YahooOHLCV> rowsFromYahooURL, String index) {
-		List<OHLCVData> convertedList = new ArrayList<OHLCVData>();
+		List<IndexOHLCVData> convertedList = new ArrayList<IndexOHLCVData>();
 		for(YahooOHLCV rowFromYahooURL:rowsFromYahooURL) {
 			rowFromYahooURL.setSymbol(index);
-			convertedList.add(new OHLCVData(rowFromYahooURL));
+			convertedList.add(new IndexOHLCVData(rowFromYahooURL));
 		}
 		
 		return convertedList;

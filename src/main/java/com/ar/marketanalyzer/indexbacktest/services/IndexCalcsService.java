@@ -4,7 +4,7 @@ import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexCalcs;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
-import com.ar.marketanalyzer.indexbacktest.beans.OHLCVData;
+import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean.parametersTypeEnum;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexCalcs.dayActionType;
 import com.ar.marketanalyzer.indexbacktest.dao.BacktestResultDAO;
@@ -47,7 +47,7 @@ public class IndexCalcsService extends IndexBacktestServiceSuperclass{
 	private LocalDate m_endDate;
 	
 	//member variable for holding all the information for analysis
-	private List<OHLCVData> m_yahooIndexDataList;
+	private List<IndexOHLCVData> m_yahooIndexDataList;
 	private List<IndexOHLCVCalcs> m_IndexCalcList;
 
 	public List<IndexOHLCVCalcs> getM_IndexCalcList() {
@@ -57,9 +57,9 @@ public class IndexCalcsService extends IndexBacktestServiceSuperclass{
 	/*
 	 * Converts the YahooIndexData object list into IndexOHLCVCalcs object list
 	 */
-	public void setM_IndexCalcList(List<OHLCVData> yahooIndexDataList) {
+	public void setM_IndexCalcList(List<IndexOHLCVData> yahooIndexDataList) {
 		m_IndexCalcList = new ArrayList<IndexOHLCVCalcs>();
-		for(OHLCVData A:yahooIndexDataList)
+		for(IndexOHLCVData A:yahooIndexDataList)
 		{
 			IndexOHLCVCalcs B = new IndexOHLCVCalcs();
 			B.setOHLCid(A.getId());
@@ -119,7 +119,7 @@ public class IndexCalcsService extends IndexBacktestServiceSuperclass{
 		try {
 			String getParametersQuery = 
 					"DELETE i.* FROM `" + IndexCalcs.getTableName() + "` i" +
-					" INNER JOIN `" + OHLCVData.getTablename() + "` o ON o.id=i.OHLCid" +
+					" INNER JOIN `" + IndexOHLCVData.getTablename() + "` o ON o.id=i.OHLCid" +
 					" WHERE o.symbol = ?";
 			QueryRunner runner = new QueryRunner(m_ds);
 
@@ -683,7 +683,7 @@ public class IndexCalcsService extends IndexBacktestServiceSuperclass{
 		if(last==null) {
 			last = m_OHLCVDao.getLastBySymbol(symbol);
 		}
-		String YahooTableName = OHLCVData.getTablename();
+		String YahooTableName = IndexOHLCVData.getTablename();
 		String IndexCalcTableName = IndexCalcs.getTableName();
 		
 		String query = "SELECT *"
