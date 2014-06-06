@@ -2,13 +2,10 @@ package com.ar.marketanalyzer.indexbacktest.plotting;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Shape;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,14 +18,12 @@ import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.TextAnchor;
-import org.jfree.util.ShapeUtilities;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;

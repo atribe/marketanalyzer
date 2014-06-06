@@ -16,7 +16,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
-import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.beans.StockTransaction;
 
 public class StockTransactionDAO extends GenericDBSuperclass{

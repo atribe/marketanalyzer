@@ -2,7 +2,6 @@ package com.ar.marketanalyzer.database;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
 import com.ar.marketanalyzer.spring.init.PropCache;
