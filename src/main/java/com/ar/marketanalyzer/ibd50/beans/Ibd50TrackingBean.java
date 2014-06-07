@@ -8,16 +8,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.ar.marketanalyzer.database.GenericDBSuperclass;
+
 public class Ibd50TrackingBean {
 
 	private static String tableName = "ibd50_tracking";
 	
 	private int tracking_id;
-	private int symbol_id;
+	private int symbol;
 	private Date join_date;
 	private Date leave_date;
 	private BigDecimal join_price;
-	private BigDecimal leave_price;
+	private BigDecimal last_price;
 	private double percent_return; //% return while on the list
 	
 	/*
@@ -62,16 +64,18 @@ public class Ibd50TrackingBean {
 		LinkedHashMap<String, String> fieldMap = getColumnNames();
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
-				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
+				" tracking_id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
+		createTableSQL += " symbol_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			if(entry.getKey() != "id" && entry.getKey() != "dateString") {	
+			if(entry.getKey() != "tracking_id" && entry.getKey() != "symbol") {	
 				createTableSQL += " " + entry.getKey() + " "+ entry.getValue() +",";
 			}
 		 }
 		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (id)) " +
-				"ENGINE = MyISAM";
+		createTableSQL += " PRIMARY KEY (tracking_id), " +
+				" FOREIGN KEY (symbol_id) REFERENCES " + GenericDBSuperclass.SYMBOL_TABLE_NAME +"(symbol_id)" +
+				" ) ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}
@@ -142,20 +146,17 @@ public class Ibd50TrackingBean {
 	public static String getTableName() {
 		return tableName;
 	}
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
 	public int getId() {
 		return tracking_id;
 	}
 	public void setId(int id) {
 		this.tracking_id = id;
 	}
-	public int getSymbol_id() {
-		return symbol_id;
+	public int getSymbol() {
+		return symbol;
 	}
-	public void setSymbol_id(int symbol_id) {
-		this.symbol_id = symbol_id;
+	public void setSymbol(int symbol) {
+		this.symbol = symbol;
 	}
 	public Date getJoin_date() {
 		return join_date;
@@ -176,10 +177,10 @@ public class Ibd50TrackingBean {
 		this.join_price = join_price;
 	}
 	public BigDecimal getLeave_price() {
-		return leave_price;
+		return last_price;
 	}
 	public void setLeave_price(BigDecimal leave_price) {
-		this.leave_price = leave_price;
+		this.last_price = leave_price;
 	}
 	public double getPercent_return() {
 		return percent_return;

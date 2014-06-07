@@ -27,7 +27,7 @@ public class GenericDBSuperclass {
 	protected static DataSource m_ds;
 	
 	//used in the ibd50 stuff
-	protected final String SYMBOL_TABLE_NAME = "stock_symbols";
+	public final static String SYMBOL_TABLE_NAME = "stock_symbols";
 	
 	public static DataSource getM_ds() {
 		return m_ds;

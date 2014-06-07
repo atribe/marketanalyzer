@@ -26,6 +26,18 @@ public class Ibd50TrackingDao extends GenericDBSuperclass {
 		if(!tableExists(tableName)) {
 			// Table does not exist, so create it
 			String createTableSQL = ibd50Tracking.tableCreationString();
+			/*
+			String createTableSQL = "create table `" + tableName + "` ( "
+				      + "   " + tableName + "_id INT PRIMARY KEY, "
+				      + "   symbol_id INT, " 
+				      + "   join_date DATE, "
+				      + "   leave_date DATE, "
+				      + "   join_price DECIMAL, "
+				      + "   last_price DECIMAL, "
+				      + "   percent_return DOUBLE, "
+				      + "   FOREIGN KEY (symbol_id) REFERENCES " + SYMBOL_TABLE_NAME +"(symbol_id)"
+				      + " ) ENGINE = MyISAM";
+			*/
 			createTable(createTableSQL, tableName);
 		}
 	}

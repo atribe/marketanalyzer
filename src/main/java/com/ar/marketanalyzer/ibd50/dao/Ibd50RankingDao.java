@@ -41,9 +41,9 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 		if(!tableExists(SYMBOL_TABLE_NAME)) {		// Table does not exist, so create it
 			
 			String createTableSQL = "CREATE TABLE `" + SYMBOL_TABLE_NAME + "` (" +
-					" " + SYMBOL_TABLE_NAME + "_id LONG NOT NULL AUTO_INCREMENT," +
+					" symbol_id INT NOT NULL AUTO_INCREMENT," +
 					" symbol char(10) NOT NULL," +
-					" PRIMARY KEY (" + SYMBOL_TABLE_NAME + "_id))";
+					" PRIMARY KEY (symbol_id))";
 			
 			createTable(createTableSQL, SYMBOL_TABLE_NAME);
 		}		

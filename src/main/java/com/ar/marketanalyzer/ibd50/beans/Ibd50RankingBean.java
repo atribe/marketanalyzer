@@ -2,18 +2,21 @@ package com.ar.marketanalyzer.ibd50.beans;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.database.GenericDBSuperclass;
+
 public class Ibd50RankingBean {
 	
 	private final static String tableName = "IBD50";
 	
 	private int ranking_id;
-	private LocalDate rankDate;
+	private Date rankDate;
 	private String symbol;
 	private String companyName;
 	private int rank;
@@ -43,7 +46,7 @@ public class Ibd50RankingBean {
 	 * Constructor
 	 */
 	public Ibd50RankingBean() {
-		rankDate = new LocalDate(); //aka today
+		rankDate =  new Date(new LocalDate().toDate().getTime()); //aka today
 	}
 	
 	/*
@@ -88,16 +91,20 @@ public class Ibd50RankingBean {
 		LinkedHashMap<String, String> fieldMap = getColumnNames();
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
-				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
+				" ranking_id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
+		createTableSQL += " symbol_id INT,";
+		createTableSQL += " tracking_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			if(entry.getKey() != "id" && entry.getKey() != "dateString") {	
+			if(entry.getKey() != "ranking_id" && entry.getKey() != "symbol") {	
 				createTableSQL += " " + entry.getKey() + " "+ entry.getValue() +",";
 			}
 		 }
 		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (id)) " +
-				"ENGINE = MyISAM";
+		createTableSQL += " PRIMARY KEY (ranking_id), " +
+				" FOREIGN KEY (symbol_id) REFERENCES `" + GenericDBSuperclass.SYMBOL_TABLE_NAME +"`(symbol_id)," +
+				" FOREIGN KEY (tracking_id) REFERENCES ibd50_tracking(tracking_id)" +
+				" ) ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}
@@ -175,10 +182,10 @@ public class Ibd50RankingBean {
 	public void setId(int id) {
 		this.ranking_id = id;
 	}
-	public LocalDate getRankDate() {
+	public Date getRankDate() {
 		return rankDate;
 	}
-	public void setRankDate(LocalDate rankDate) {
+	public void setRankDate(Date rankDate) {
 		this.rankDate = rankDate;
 	}
 	public String getSymbol() {

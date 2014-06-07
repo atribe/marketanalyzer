@@ -43,7 +43,8 @@ public class IBD50Service {
 	}
 
 	public void pullWebIbd50() {
-		List<Ibd50RankingBean> webIbd50= webDao.grabIbd50();
+		List<Ibd50RankingBean> webIbd50 = webDao.grabIbd50();
+		
 		
 	}
 }

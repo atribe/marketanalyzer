@@ -21,7 +21,7 @@ import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */
 	static Logger log = Logger.getLogger(AppInitializer.class.getName());
-	private static final String CONFIG_LOCATION = "com.atomrockets.marketanalyzer.spring.config";
+	private static final String CONFIG_LOCATION = "com.ar.marketanalyzer.spring.config";
 	private static final String MAPPING_URL = "/";
     
     private static final String SPRING_PROPERTIES_FILE_NAME = "spring.properties";

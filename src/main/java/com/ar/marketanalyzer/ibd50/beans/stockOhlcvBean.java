@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 public class stockOhlcvBean {
@@ -106,6 +107,7 @@ public class stockOhlcvBean {
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
 				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
+		createTableSQL += " symbol_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
 			if(entry.getKey() != "id" && entry.getKey() != "dateString") {	
@@ -113,8 +115,9 @@ public class stockOhlcvBean {
 			}
 		 }
 		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (id)) " +
-				"ENGINE = MyISAM";
+		createTableSQL += " PRIMARY KEY (id), " +
+				" FOREIGN KEY (symbol_id) REFERENCES " + GenericDBSuperclass.SYMBOL_TABLE_NAME +"(symbol_id)" +
+				" ) ENGINE = MyISAM";
 		
 		return createTableSQL;
 	}
