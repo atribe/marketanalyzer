@@ -11,11 +11,11 @@ import com.ar.marketanalyzer.ibd50.beans.stockOhlcvBean;
 public class stockOhlcvDao extends GenericDBSuperclass {
 	
 	public stockOhlcvDao() throws ClassNotFoundException, SQLException {
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 	
 	public stockOhlcvDao(DataSource ds) {
-		setM_ds(ds);
+		setDs(ds);
 	}
 	
 	public synchronized void tableInit() {

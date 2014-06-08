@@ -42,8 +42,13 @@ public class IBD50Service {
 		ohlcvDao.tableInit();
 	}
 
-	public void pullWebIbd50() {
+	public void updateFromIbd50Web() {
 		List<Ibd50RankingBean> webIbd50 = webDao.grabIbd50();
+		
+		addWeeklyListToDB(webIbd50);
+	}
+
+	private void addWeeklyListToDB(List<Ibd50RankingBean> webIbd50) {
 		
 		
 	}

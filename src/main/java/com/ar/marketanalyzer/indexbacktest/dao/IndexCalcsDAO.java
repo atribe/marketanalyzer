@@ -26,14 +26,14 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 	 */
 	
 	public IndexCalcsDAO() {
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 			
-	public IndexCalcsDAO(DataSource ds) {
+	public IndexCalcsDAO(DataSource newDs) {
 		log.debug("------------------------------Index Analysis Table Manager Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_ds = ds;
+		ds = newDs;
 	}
 
 	public void tableInitialization(String[] indexList) {
@@ -73,7 +73,7 @@ public class IndexCalcsDAO extends GenericDBSuperclass{
 		try {
 			long counter = 0;
 			//preparing the MySQL statement
-			Connection con = m_ds.getConnection();
+			Connection con = ds.getConnection();
 			ps = con.prepareStatement(insertQuery);
 			//creating DbUtils QueryRunner
 			QueryRunner runner = new QueryRunner();

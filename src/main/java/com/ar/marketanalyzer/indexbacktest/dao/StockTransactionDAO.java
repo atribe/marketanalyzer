@@ -29,14 +29,14 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 	 */
 	
 	public StockTransactionDAO() {
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 	
-	public StockTransactionDAO(DataSource ds) {
+	public StockTransactionDAO(DataSource newDs) {
 		log.debug("------------------------------StockTransactionDAO Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_ds = ds;
+		ds = newDs;
 	}
 	
 	public void tableInitialization(String[] indexList) {
@@ -76,7 +76,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		String[] columnNames = d.getColumnNameList();
 		
 		PreparedStatement ps = null;
-		Connection con = m_ds.getConnection();
+		Connection con = ds.getConnection();
 		ps = con.prepareStatement(insertQuery);
 		
 		QueryRunner runner = new QueryRunner();
@@ -96,7 +96,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 				+ " AND buyDate = ?"
 				+ " AND sellDate = ?";
 		
-		QueryRunner runner = new QueryRunner(m_ds);
+		QueryRunner runner = new QueryRunner(ds);
 		ResultSetHandler<StockTransaction> h = new BeanHandler<StockTransaction>(StockTransaction.class);
 		
 		inDBAlready = runner.query(
@@ -127,7 +127,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		ResultSetHandler<List<StockTransaction>> h = new BeanListHandler<StockTransaction>(StockTransaction.class);
 		
 		try{
-			Connection con = m_ds.getConnection();
+			Connection con = ds.getConnection();
 			transactionList = run.query(
 		    		con, //connection
 		    		query, //query (in the same form as for a prepared statement
@@ -156,7 +156,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		
 		try {
 			QueryRunner runner = new QueryRunner();
-			con = m_ds.getConnection();
+			con = ds.getConnection();
 			ps = con.prepareStatement(insertQuery);
 			for(StockTransaction s:transactionList) {
 				/*

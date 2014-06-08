@@ -36,14 +36,14 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 	
 	//Constructor
 	public BacktestResultDAO() {
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 	
-	public BacktestResultDAO(DataSource ds) {
+	public BacktestResultDAO(DataSource newDs) {
 		log.debug("------------------------------Index Parameter Table Manager Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		m_ds = ds;
+		ds = newDs;
 	}
 	
 	/**
@@ -98,8 +98,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		PreparedStatement ps = null;
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
-		QueryRunner runner = new QueryRunner(m_ds);
-		Connection con = m_ds.getConnection();
+		QueryRunner runner = new QueryRunner(ds);
+		Connection con = ds.getConnection();
 		ps = con.prepareStatement(insertQuery);
 		
 		for(String index:indexList)
@@ -270,7 +270,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		BacktestBean b = new BacktestBean(symbol);
 		
 		String getParametersQuery = b.getParameterQuery();
-		QueryRunner runner = new QueryRunner(m_ds);
+		QueryRunner runner = new QueryRunner(ds);
 		ResultSetHandler<BacktestBean> h = new BeanHandler<BacktestBean>(BacktestBean.class);
 		
 		b = runner.query(
@@ -309,8 +309,8 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		 */
 		String[] columnNames = b.getColumnNameList();
 		String insertQuery = b.getInsertOrUpdateQuery();
-		QueryRunner runner = new QueryRunner(m_ds);
-		Connection con = m_ds.getConnection();
+		QueryRunner runner = new QueryRunner(ds);
+		Connection con = ds.getConnection();
 		PreparedStatement ps = con.prepareStatement(insertQuery);
 
 		runner.fillStatementWithBean(ps, b, columnNames);

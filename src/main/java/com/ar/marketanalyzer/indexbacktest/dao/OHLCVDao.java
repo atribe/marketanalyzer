@@ -34,13 +34,13 @@ public class OHLCVDao extends GenericDBSuperclass {
 	public OHLCVDao() throws ClassNotFoundException, SQLException {
 		log.trace("IY.0 Yahoo Table Manager Created");
 		
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 
-	public OHLCVDao(DataSource ds) {
+	public OHLCVDao(DataSource newDs) {
 		log.trace("IY.0 Yahoo Table Manager Created");
 			
-		m_ds = ds;
+		ds = newDs;
 	}
 
 	public synchronized void tableInitialization(String[] indexList) {
@@ -111,7 +111,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		IndexOHLCVData a = new IndexOHLCVData();
 
 		try {
-			QueryRunner runner = new QueryRunner(m_ds);
+			QueryRunner runner = new QueryRunner(ds);
 			ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
 			
 			a = runner.query(
@@ -207,7 +207,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		PreparedStatement ps=null;
 		int batchSize = 1000;
 		try {
-			Connection con = m_ds.getConnection();
+			Connection con = ds.getConnection();
 			//preparing the MySQL statement
 			ps = con.prepareStatement(insertQuery);
 			//creating DbUtils QueryRunner
@@ -261,7 +261,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		try {
 			long counter = 0;
 			
-			Connection con = m_ds.getConnection();
+			Connection con = ds.getConnection();
 			//prepare the statement
 			ps = con.prepareStatement(insertQuery);
 			
@@ -316,7 +316,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 				+ " WHERE `date` = ?"
 				+ " AND `symbol` = ?";
 		
-		QueryRunner runner = new QueryRunner(m_ds);
+		QueryRunner runner = new QueryRunner(ds);
 		ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
 		
 		IndexOHLCVData result = runner.query(
@@ -348,7 +348,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner(m_ds);
+		QueryRunner run = new QueryRunner(ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<List<IndexOHLCVData>> h = new BeanListHandler<IndexOHLCVData>(IndexOHLCVData.class);
@@ -381,7 +381,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner(m_ds);
+		QueryRunner run = new QueryRunner(ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
@@ -411,7 +411,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner(m_ds);
+		QueryRunner run = new QueryRunner(ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);
@@ -439,7 +439,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner(m_ds);
+		QueryRunner run = new QueryRunner(ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVData> h = new BeanHandler<IndexOHLCVData>(IndexOHLCVData.class);
@@ -468,7 +468,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		/*
 		 * Beginning of DbUtils code
 		 */
-		QueryRunner run = new QueryRunner(m_ds);
+		QueryRunner run = new QueryRunner(ds);
 		// Use the BeanListHandler implementation to convert all
 		// ResultSet rows into a List of Person JavaBeans.
 		ResultSetHandler<IndexOHLCVCalcs> h = new BeanHandler<IndexOHLCVCalcs>(IndexOHLCVCalcs.class);

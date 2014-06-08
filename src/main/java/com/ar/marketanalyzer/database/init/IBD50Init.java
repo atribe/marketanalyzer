@@ -19,6 +19,7 @@ public class IBD50Init {
 		
 		IBD50Service ibd50Service = new IBD50Service(ds);
 		ibd50Service.tableInit();
-		ibd50Service.pullWebIbd50();
+		
+		ibd50Service.updateFromIbd50Web();
 	}
 }
