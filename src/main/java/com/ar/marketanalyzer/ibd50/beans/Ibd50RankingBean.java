@@ -13,7 +13,7 @@ import com.ar.marketanalyzer.database.GenericDBSuperclass;
 
 public class Ibd50RankingBean {
 	
-	private final static String tableName = "IBD50";
+	private final static String tableName = "ibd50_ranking";
 	
 	private int ranking_id;
 	private Date rankDate;

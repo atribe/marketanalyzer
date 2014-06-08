@@ -15,7 +15,7 @@ import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 public class stockOhlcvBean {
-	private final static String tableName = "stockOhlcv";
+	private final static String tableName = "stock_ohlcv";
 	
 	private long id;
 	private String symbol;

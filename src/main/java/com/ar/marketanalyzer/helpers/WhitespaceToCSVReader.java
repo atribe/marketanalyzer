@@ -6,12 +6,28 @@ import java.io.Reader;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Custom BufferedReader to override the readline() method.
+ * <p>
+ * This is done to replace multiple whitespace in the line being read by a comma.
+ * It ignores single spaces.
+ * 
+ * @author Allan
+ *
+ */
 public class WhitespaceToCSVReader extends BufferedReader{
 
 	public WhitespaceToCSVReader(Reader in) {
 		super(in);
 	}
 
+	/**
+	 * This replaces the standard readline() with a custom one. The customization replaces
+	 * 2 or more whitespaces with a comma, in effect converting a whitespace delimited file
+	 * to a comma delimited file
+	 * 
+	 * @see java.io.BufferedReader#readLine()
+	 */
 	@Override
 	public String readLine() throws IOException {
 		String lBuf = super.readLine();

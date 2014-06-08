@@ -18,11 +18,11 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 	 * 
 	 */	
 	public Ibd50RankingDao() throws ClassNotFoundException, SQLException {
-		setM_ds(MarketPredDataSource.setDataSource());
+		setDs(MarketPredDataSource.setDataSource());
 	}
 	
 	public Ibd50RankingDao(DataSource ds) {
-		setM_ds(ds);
+		setDs(ds);
 	}
 	
 	public synchronized void tableInit() {

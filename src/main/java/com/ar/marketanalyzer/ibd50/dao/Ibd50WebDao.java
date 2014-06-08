@@ -33,7 +33,12 @@ public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
 	private final static String password = "aaronnhugh";
 	
-	public static List<Ibd50RankingBean> grabIbd50() {
+	/**
+	 * Main method for getting the Ibd 50 from the website.
+	 * 
+	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
+	 */
+	public List<Ibd50RankingBean> grabIbd50() {
 		InputStream downloadedTextFile = null;
 		List<Ibd50RankingBean> rowsFromIBD50 = null;
 		
@@ -53,7 +58,15 @@ public class Ibd50WebDao{
 		return rowsFromIBD50;
 	}
 	
-	private static InputStream authenticatedIbd50Download() throws ClientProtocolException, IOException {
+	/**
+	 * This method signs into research.investors.com and requests a text file
+	 * that contains the current IBD 50 in a whitespace delimited txt file.
+	 * 
+	 * @return InputStream that contains the ibd 50 text file that is whitespace deliminated
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	private InputStream authenticatedIbd50Download() throws ClientProtocolException, IOException {
 		//Cookie setup
 		RequestConfig globalConfig = RequestConfig.custom()
 							.setCookieSpec(CookieSpecs.BEST_MATCH)
@@ -132,7 +145,14 @@ public class Ibd50WebDao{
 		return response.getEntity().getContent();
 	}
 	
-	private static List<Ibd50RankingBean> parseIBD50toBeanList(InputStream is) throws IOException {
+	/**
+	 * Parses the whitespace delimited InputStream into a List of Beans 
+	 * 
+	 * @param is - whitespace delimited InputStream that should be the current IBD 50
+	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
+	 * @throws IOException
+	 */
+	private List<Ibd50RankingBean> parseIBD50toBeanList(InputStream is) throws IOException {
 		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
 		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
 		
@@ -172,7 +192,13 @@ public class Ibd50WebDao{
 		return rowsFromIBD50;
 	}
 	
-	private static Ibd50RankingBean parseListToBean(List<String> ibd50tokenizedList) {
+	/**
+	 * Turns a IBD50 List of Strings into a IBD50 Ranking Bean
+	 * 
+	 * @param ibd50tokenizedList
+	 * @return IBD50 Ranking Bean
+	 */
+	private Ibd50RankingBean parseListToBean(List<String> ibd50tokenizedList) {
 		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
 		
 		ibdRow.setSymbol(ibd50tokenizedList.get(0));
