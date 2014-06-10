@@ -23,6 +23,8 @@ public class IBD50Init {
 		
 		if(dropTables) {
 			ibd50Service.dropAllTables();
+			
+			log.debug("All ibd50 tables have been dropped");
 		}
 		
 		ibd50Service.tableInit();

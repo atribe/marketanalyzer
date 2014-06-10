@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -25,6 +26,10 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
@@ -39,13 +44,14 @@ public class Ibd50WebDao{
 	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
 	 */
 	public List<Ibd50RankingBean> grabIbd50() {
-		InputStream downloadedTextFile = null;
+		InputStream downloadedFileInputStream = null;
 		List<Ibd50RankingBean> rowsFromIBD50 = null;
 		
 		try {
-			downloadedTextFile = authenticatedIbd50Download();
+			downloadedFileInputStream = authenticatedIbd50Download();
 			
-			rowsFromIBD50 = parseIBD50toBeanList(downloadedTextFile);
+			rowsFromIBD50 = parseIbd50ExcelToBeanList(downloadedFileInputStream);
+			//rowsFromIBD50 = parseIBD50toBeanList(downloadedTextFile);
 			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -57,6 +63,7 @@ public class Ibd50WebDao{
 		
 		return rowsFromIBD50;
 	}
+	
 	
 	/**
 	 * This method signs into research.investors.com and requests a text file
@@ -134,7 +141,10 @@ public class Ibd50WebDao{
 		}
 		
 		// URL from http://news.investors.com/otheribddata.aspx
-		httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd&exportType=text");
+		// Text file version of the list
+		//httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd&exportType=text");
+		// Excel file version of the list
+		httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd");
 		response = httpclient.execute(httpget);
 		Header[] headers = response.getAllHeaders();
 		for(int i=0;i<headers.length;i++){
@@ -145,6 +155,70 @@ public class Ibd50WebDao{
 		return response.getEntity().getContent();
 	}
 	
+	/**
+	 * Parses through an excel file that is in the input stream from 
+	 * ibd.com.
+	 * <p>
+	 * Uses Apache POI to read the excel file.
+	 * <p>
+	 * Cycles through each row pulling each cell of the row into a List<String>
+	 * then parses the List<String> into a bean.
+	 * 
+	 * @param downloadedFileInputStream
+	 * @return List of Ibd50Ranking Beans ready to be added to the db
+	 * @throws IOException
+	 */
+	private List<Ibd50RankingBean> parseIbd50ExcelToBeanList(
+			InputStream downloadedFileInputStream) throws IOException {
+		
+		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
+		
+		//Get the workbook instance for XLS file 
+		HSSFWorkbook workbook = new HSSFWorkbook(downloadedFileInputStream);
+		 
+		//Get first sheet from the workbook
+		HSSFSheet sheet = workbook.getSheetAt(0);
+		 
+		//Get iterator to all the rows in current sheet
+		Iterator<Row> rowIterator = sheet.iterator();
+		 
+		//Helper stuff
+		int rowCounter = 0;
+		List<String> rowOfStrings = new ArrayList<String>();
+		
+		//Skip past the garbage and column heading label rows
+		while(rowIterator.hasNext())
+		{
+			if(rowCounter < 10) {
+				rowIterator.next();
+			} else {
+				Row row = rowIterator.next();
+				//For each row, iterate through all the columns
+				Iterator<Cell> cellIterator = row.cellIterator();
+				
+				while(cellIterator.hasNext()) {
+					Cell cell = cellIterator.next();
+					
+					//Converting the contents of the cell to a string
+					String cellContents = cell.getStringCellValue();
+					
+					//Adding the contents of the cell to the list of strings
+					if(cellContents == "N/A") {
+						//no data to add, most type safe way is by having nothing entered, but still having that nothing be entered into the bean
+						rowOfStrings.add("");
+					} else {
+						rowOfStrings.add(cellContents);
+					}
+				}
+				
+				rowsFromIBD50.add(parseListToBean(rowOfStrings));
+				rowOfStrings = new ArrayList<String>();
+			}
+		}
+		
+		return rowsFromIBD50;
+	}
+
 	/**
 	 * Parses the whitespace delimited InputStream into a List of Beans 
 	 * 
