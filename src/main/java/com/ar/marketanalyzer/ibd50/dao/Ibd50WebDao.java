@@ -26,10 +26,10 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
@@ -50,7 +50,7 @@ public class Ibd50WebDao{
 		try {
 			downloadedFileInputStream = authenticatedIbd50Download();
 			
-			rowsFromIBD50 = parseIbd50ExcelToBeanList(downloadedFileInputStream);
+			rowsFromIBD50 = parseIbd50HTMLToBeanList(downloadedFileInputStream);
 			//rowsFromIBD50 = parseIBD50toBeanList(downloadedTextFile);
 			
 		} catch (ClientProtocolException e) {
@@ -64,7 +64,8 @@ public class Ibd50WebDao{
 		return rowsFromIBD50;
 	}
 	
-	
+
+
 	/**
 	 * This method signs into research.investors.com and requests a text file
 	 * that contains the current IBD 50 in a whitespace delimited txt file.
@@ -156,70 +157,6 @@ public class Ibd50WebDao{
 	}
 	
 	/**
-	 * Parses through an excel file that is in the input stream from 
-	 * ibd.com.
-	 * <p>
-	 * Uses Apache POI to read the excel file.
-	 * <p>
-	 * Cycles through each row pulling each cell of the row into a List<String>
-	 * then parses the List<String> into a bean.
-	 * 
-	 * @param downloadedFileInputStream
-	 * @return List of Ibd50Ranking Beans ready to be added to the db
-	 * @throws IOException
-	 */
-	private List<Ibd50RankingBean> parseIbd50ExcelToBeanList(
-			InputStream downloadedFileInputStream) throws IOException {
-		
-		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
-		
-		//Get the workbook instance for XLS file 
-		HSSFWorkbook workbook = new HSSFWorkbook(downloadedFileInputStream);
-		 
-		//Get first sheet from the workbook
-		HSSFSheet sheet = workbook.getSheetAt(0);
-		 
-		//Get iterator to all the rows in current sheet
-		Iterator<Row> rowIterator = sheet.iterator();
-		 
-		//Helper stuff
-		int rowCounter = 0;
-		List<String> rowOfStrings = new ArrayList<String>();
-		
-		//Skip past the garbage and column heading label rows
-		while(rowIterator.hasNext())
-		{
-			if(rowCounter < 10) {
-				rowIterator.next();
-			} else {
-				Row row = rowIterator.next();
-				//For each row, iterate through all the columns
-				Iterator<Cell> cellIterator = row.cellIterator();
-				
-				while(cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
-					
-					//Converting the contents of the cell to a string
-					String cellContents = cell.getStringCellValue();
-					
-					//Adding the contents of the cell to the list of strings
-					if(cellContents == "N/A") {
-						//no data to add, most type safe way is by having nothing entered, but still having that nothing be entered into the bean
-						rowOfStrings.add("");
-					} else {
-						rowOfStrings.add(cellContents);
-					}
-				}
-				
-				rowsFromIBD50.add(parseListToBean(rowOfStrings));
-				rowOfStrings = new ArrayList<String>();
-			}
-		}
-		
-		return rowsFromIBD50;
-	}
-
-	/**
 	 * Parses the whitespace delimited InputStream into a List of Beans 
 	 * 
 	 * @param is - whitespace delimited InputStream that should be the current IBD 50
@@ -266,6 +203,38 @@ public class Ibd50WebDao{
 		return rowsFromIBD50;
 	}
 	
+	private List<Ibd50RankingBean> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
+		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
+		
+		Document doc = Jsoup.parse(downloadedFileInputStream, "UTF-8", "");
+		Elements rows = doc.getElementsByTag("table").get(0).getElementsByTag("tr");
+		
+		//loop throw all the rows of the table
+		for(Element row : rows) {
+			//Get all the cells in the row
+			Elements cells = row.getElementsByTag("td");
+			List<String> rowOfStrings = new ArrayList<String>();
+			
+			if( cells.hasText()) {			//if the list cells is not empty (aka it isn't the header row)
+				//Loop through all the cells in the row
+				for(Element cell : cells) {
+					//Add every cell of the row to a List<String>
+					String cellContents = cell.getElementsByTag("td").text();
+					if( !cellContents.equalsIgnoreCase("N/A") ) {
+						rowOfStrings.add(cellContents);
+					} else {
+						rowOfStrings.add(null);
+					}
+				}
+				//parse the List<String> into a bean and then add it to the list<bean>
+				rowsFromIBD50.add(parseListToBean(rowOfStrings));
+			}
+		}
+		
+		//return the list of beans
+		return rowsFromIBD50;
+	}
+	
 	/**
 	 * Turns a IBD50 List of Strings into a IBD50 Ranking Bean
 	 * 
@@ -277,29 +246,41 @@ public class Ibd50WebDao{
 		
 		ibdRow.setSymbol(ibd50tokenizedList.get(0));
 		ibdRow.setCompanyName(ibd50tokenizedList.get(1));
-		ibdRow.setRank(Integer.parseInt(ibd50tokenizedList.get(2)));
+		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));
 		ibdRow.setCurrentPrice(new BigDecimal(ibd50tokenizedList.get(3)));
 		ibdRow.setPriceChange(new BigDecimal(ibd50tokenizedList.get(4)));
-		ibdRow.setPricePercentChange(Double.parseDouble(ibd50tokenizedList.get(5)));
-		ibdRow.setPercentOffHigh(Double.parseDouble(ibd50tokenizedList.get(6)));
-		ibdRow.setVolume(Long.parseLong(ibd50tokenizedList.get(7)));
-		ibdRow.setVolumePercentChange(Double.parseDouble(ibd50tokenizedList.get(8)));
-		ibdRow.setCompositeRating(Double.parseDouble(ibd50tokenizedList.get(9)));
-		ibdRow.setEpsRating(Double.parseDouble(ibd50tokenizedList.get(10)));
-		ibdRow.setRsRating(Double.parseDouble(ibd50tokenizedList.get(11)));
+		ibdRow.setPricePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(5)));
+		ibdRow.setPercentOffHigh(parseDoubleOrNull(ibd50tokenizedList.get(6)));
+		ibdRow.setVolume(parseLongOrNull(ibd50tokenizedList.get(7)));
+		ibdRow.setVolumePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(8)));
+		ibdRow.setCompositeRating(parseDoubleOrNull(ibd50tokenizedList.get(9)));
+		ibdRow.setEpsRating(parseDoubleOrNull(ibd50tokenizedList.get(10)));
+		ibdRow.setRsRating(parseDoubleOrNull(ibd50tokenizedList.get(11)));
 		ibdRow.setSmrRating(ibd50tokenizedList.get(12));
-		ibdRow.setAccDisRating(Integer.parseInt(ibd50tokenizedList.get(13)));
-		ibdRow.setGroupRelStrRating(Integer.parseInt(ibd50tokenizedList.get(14)));
-		ibdRow.setEpsPercentChangeLastQtr(Double.parseDouble(ibd50tokenizedList.get(15)));
-		ibdRow.setEpsPercentChangePriorQtr(Double.parseDouble(ibd50tokenizedList.get(16)));
-		ibdRow.setEpsPercentChangeCurrentQtr(Double.parseDouble(ibd50tokenizedList.get(17)));
-		ibdRow.setEpsEstPercentChangeCurrentYear(Double.parseDouble(ibd50tokenizedList.get(18)));
-		ibdRow.setSalesPercentChangeLastQtr(Double.parseDouble(ibd50tokenizedList.get(19)));
-		ibdRow.setAnnualROELastYear(Double.parseDouble(ibd50tokenizedList.get(20)));
-		ibdRow.setAnnualProfitMarginLatestYear(Double.parseDouble(ibd50tokenizedList.get(21)));
-		ibdRow.setManagmentOwnPercent(Double.parseDouble(ibd50tokenizedList.get(22)));
-		ibdRow.setQtrsRisingSponsorship(Integer.parseInt(ibd50tokenizedList.get(23)));
+		ibdRow.setAccDisRating(ibd50tokenizedList.get(13));
+		ibdRow.setGroupRelStrRating(ibd50tokenizedList.get(14));
+		ibdRow.setEpsPercentChangeLastQtr(parseDoubleOrNull(ibd50tokenizedList.get(15)));
+		ibdRow.setEpsPercentChangePriorQtr(parseDoubleOrNull(ibd50tokenizedList.get(16)));
+		ibdRow.setEpsPercentChangeCurrentQtr(parseDoubleOrNull(ibd50tokenizedList.get(17)));
+		ibdRow.setEpsEstPercentChangeCurrentYear(parseDoubleOrNull(ibd50tokenizedList.get(18)));
+		ibdRow.setSalesPercentChangeLastQtr(parseDoubleOrNull(ibd50tokenizedList.get(19)));
+		ibdRow.setAnnualROELastYear(parseDoubleOrNull(ibd50tokenizedList.get(20)));
+		ibdRow.setAnnualProfitMarginLatestYear(parseDoubleOrNull(ibd50tokenizedList.get(21)));
+		ibdRow.setManagmentOwnPercent(parseDoubleOrNull(ibd50tokenizedList.get(22)));
+		ibdRow.setQtrsRisingSponsorship(parseIntOrNull(ibd50tokenizedList.get(23)));
 		
 		return ibdRow;
+	}
+	
+	private Double parseDoubleOrNull(String str) {
+		return str != null ? Double.parseDouble(str) : null;
+	}
+	
+	private Integer parseIntOrNull(String str) {
+		return str != null ? Integer.parseInt(str) : null;
+	}
+	
+	private Long parseLongOrNull(String str) {
+		return str != null ? Long.parseLong(str) : null;
 	}
 }

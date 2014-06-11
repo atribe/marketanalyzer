@@ -87,13 +87,6 @@
 			<version>0.8.0.RELEASE</version>
 		</dependency>
 
-		<!-- For reading Excel files (mostly for the ibd 50 -->
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.10-FINAL</version>
-		</dependency>
-
 		<!-- Used in toString() for classes -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

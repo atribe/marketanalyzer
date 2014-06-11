@@ -15,32 +15,32 @@ public class Ibd50RankingBean {
 	
 	private final static String tableName = "ibd50_ranking";
 	
-	private int ranking_id;
+	private Integer ranking_id;
 	private Date rankDate;
 	private String symbol;
 	private String companyName;
-	private int rank;
+	private Integer rank;
 	private BigDecimal currentPrice;
 	private BigDecimal priceChange;
-	private double pricePercentChange;
-	private double percentOffHigh;
-	private long volume; //need to add 000 to this number
-	private double volumePercentChange;
-	private double compositeRating;
-	private double epsRating;
-	private double rsRating;
+	private Double pricePercentChange;
+	private Double percentOffHigh;
+	private Long volume; //need to add 000 to this number
+	private Double volumePercentChange;
+	private Double compositeRating;
+	private Double epsRating;
+	private Double rsRating;
 	private String smrRating;
-	private int accDisRating;
-	private int groupRelStrRating;
-	private double epsPercentChangeLastQtr;
-	private double epsPercentChangePriorQtr;
-	private double epsPercentChangeCurrentQtr;
-	private double epsEstPercentChangeCurrentYear;
-	private double salesPercentChangeLastQtr;
-	private double annualROELastYear;
-	private double annualProfitMarginLatestYear;
-	private double managmentOwnPercent;
-	private int qtrsRisingSponsorship;
+	private String accDisRating;
+	private String groupRelStrRating;
+	private Double epsPercentChangeLastQtr;
+	private Double epsPercentChangePriorQtr;
+	private Double epsPercentChangeCurrentQtr;
+	private Double epsEstPercentChangeCurrentYear;
+	private Double salesPercentChangeLastQtr;
+	private Double annualROELastYear;
+	private Double annualProfitMarginLatestYear;
+	private Double managmentOwnPercent;
+	private Integer qtrsRisingSponsorship;
 	
 	/*
 	 * Constructor
@@ -64,11 +64,11 @@ public class Ibd50RankingBean {
 				//Match the field type to the MySQL equivalent
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
-				} else if (type.equals(double.class)){
+				} else if (type.equals(Double.class)){
 					typeName = "DOUBLE";
-				} else if (type.equals(int.class)){
+				} else if (type.equals(Integer.class)){
 					typeName = "INT";
-				} else if (type.equals(long.class)){
+				} else if (type.equals(Long.class)){
 					typeName = "BIGINT";
 				} else if (type.equals(String.class)){
 					typeName = "VARCHAR(10)";
@@ -176,11 +176,14 @@ public class Ibd50RankingBean {
 	public static String getTableName() {
 		return tableName;
 	}
-	public int getId() {
+	public Integer getId() {
 		return ranking_id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.ranking_id = id;
+	}
+	public void setId(int id) {
+		this.ranking_id = new Integer(id);
 	}
 	public Date getRankDate() {
 		return rankDate;
@@ -200,11 +203,14 @@ public class Ibd50RankingBean {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	public int getRank() {
+	public Integer getRank() {
 		return rank;
 	}
-	public void setRank(int rank) {
+	public void setRank(Integer rank) {
 		this.rank = rank;
+	}
+	public void setRank(int rank) {
+		this.rank = new Integer(rank);
 	}
 	public BigDecimal getCurrentPrice() {
 		return currentPrice;
@@ -218,47 +224,68 @@ public class Ibd50RankingBean {
 	public void setPriceChange(BigDecimal priceChange) {
 		this.priceChange = priceChange;
 	}
-	public double getPricePercentChange() {
+	public Double getPricePercentChange() {
 		return pricePercentChange;
 	}
-	public void setPricePercentChange(double pricePercentChange) {
+	public void setPricePercentChange(Double pricePercentChange) {
 		this.pricePercentChange = pricePercentChange;
 	}
-	public double getPercentOffHigh() {
+	public void setPricePercentChange(double pricePercentChange) {
+		this.pricePercentChange = new Double(pricePercentChange);
+	}
+	public Double getPercentOffHigh() {
 		return percentOffHigh;
 	}
-	public void setPercentOffHigh(double percentOffHigh) {
+	public void setPercentOffHigh(Double percentOffHigh) {
 		this.percentOffHigh = percentOffHigh;
 	}
-	public long getVolume() {
+	public void setPercentOffHigh(double percentOffHigh) {
+		this.percentOffHigh = new Double(percentOffHigh);
+	}
+	public Long getVolume() {
 		return volume;
 	}
-	public void setVolume(long volume) {
+	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
-	public double getVolumePercentChange() {
+	public void setVolume(long volume) {
+		this.volume = new Long(volume);
+	}
+	public Double getVolumePercentChange() {
 		return volumePercentChange;
 	}
-	public void setVolumePercentChange(double volumePercentChange) {
+	public void setVolumePercentChange(Double volumePercentChange) {
 		this.volumePercentChange = volumePercentChange;
 	}
-	public double getCompositeRating() {
+	public void setVolumePercentChange(double volumePercentChange) {
+		this.volumePercentChange = new Double(volumePercentChange);
+	}
+	public Double getCompositeRating() {
 		return compositeRating;
 	}
-	public void setCompositeRating(double compositeRating) {
+	public void setCompositeRating(Double compositeRating) {
 		this.compositeRating = compositeRating;
 	}
-	public double getEpsRating() {
+	public void setCompositeRating(double compositeRating) {
+		this.compositeRating = new Double(compositeRating);
+	}
+	public Double getEpsRating() {
 		return epsRating;
 	}
-	public void setEpsRating(double epsRating) {
+	public void setEpsRating(Double epsRating) {
 		this.epsRating = epsRating;
 	}
-	public double getRsRating() {
+	public void setEpsRating(double epsRating) {
+		this.epsRating = new Double(epsRating);
+	}
+	public Double getRsRating() {
 		return rsRating;
 	}
-	public void setRsRating(double rsRating) {
+	public void setRsRating(Double rsRating) {
 		this.rsRating = rsRating;
+	}
+	public void setRsRating(double rsRating) {
+		this.rsRating = new Double(rsRating);
 	}
 	public String getSmrRating() {
 		return smrRating;
@@ -266,72 +293,98 @@ public class Ibd50RankingBean {
 	public void setSmrRating(String smrRating) {
 		this.smrRating = smrRating;
 	}
-	public int getAccDisRating() {
+	public String getAccDisRating() {
 		return accDisRating;
 	}
-	public void setAccDisRating(int accDisRating) {
+	public void setAccDisRating(String accDisRating) {
 		this.accDisRating = accDisRating;
 	}
-	public int getGroupRelStrRating() {
+	public String getGroupRelStrRating() {
 		return groupRelStrRating;
 	}
-	public void setGroupRelStrRating(int groupRelStrRating) {
+	public void setGroupRelStrRating(String groupRelStrRating) {
 		this.groupRelStrRating = groupRelStrRating;
 	}
-	public double getEpsPercentChangeLastQtr() {
+	public Double getEpsPercentChangeLastQtr() {
 		return epsPercentChangeLastQtr;
 	}
-	public void setEpsPercentChangeLastQtr(double epsPercentChangeLastQtr) {
+	public void setEpsPercentChangeLastQtr(Double epsPercentChangeLastQtr) {
 		this.epsPercentChangeLastQtr = epsPercentChangeLastQtr;
 	}
-	public double getEpsPercentChangePriorQtr() {
+	public void setEpsPercentChangeLastQtr(double epsPercentChangeLastQtr) {
+		this.epsPercentChangeLastQtr = new Double(epsPercentChangeLastQtr);
+	}
+	public Double getEpsPercentChangePriorQtr() {
 		return epsPercentChangePriorQtr;
 	}
-	public void setEpsPercentChangePriorQtr(double epsPercentChangePriorQtr) {
+	public void setEpsPercentChangePriorQtr(Double epsPercentChangePriorQtr) {
 		this.epsPercentChangePriorQtr = epsPercentChangePriorQtr;
 	}
-	public double getEpsPercentChangeCurrentQtr() {
+	public void setEpsPercentChangePriorQtr(double epsPercentChangePriorQtr) {
+		this.epsPercentChangePriorQtr = new Double(epsPercentChangePriorQtr);
+	}
+	public Double getEpsPercentChangeCurrentQtr() {
 		return epsPercentChangeCurrentQtr;
 	}
-	public void setEpsPercentChangeCurrentQtr(double epsPercentChangeCurrentQtr) {
+	public void setEpsPercentChangeCurrentQtr(Double epsPercentChangeCurrentQtr) {
 		this.epsPercentChangeCurrentQtr = epsPercentChangeCurrentQtr;
 	}
-	public double getEpsEstPercentChangeCurrentYear() {
+	public void setEpsPercentChangeCurrentQtr(double epsPercentChangeCurrentQtr) {
+		this.epsPercentChangeCurrentQtr = new Double(epsPercentChangeCurrentQtr);
+	}
+	public Double getEpsEstPercentChangeCurrentYear() {
 		return epsEstPercentChangeCurrentYear;
 	}
-	public void setEpsEstPercentChangeCurrentYear(
-			double epsEstPercentChangeCurrentYear) {
+	public void setEpsEstPercentChangeCurrentYear(Double epsEstPercentChangeCurrentYear) {
 		this.epsEstPercentChangeCurrentYear = epsEstPercentChangeCurrentYear;
 	}
-	public double getSalesPercentChangeLastQtr() {
+	public void setEpsEstPercentChangeCurrentYear(double epsEstPercentChangeCurrentYear) {
+		this.epsEstPercentChangeCurrentYear = new Double(epsEstPercentChangeCurrentYear);
+	}
+	public Double getSalesPercentChangeLastQtr() {
 		return salesPercentChangeLastQtr;
 	}
-	public void setSalesPercentChangeLastQtr(double salesPercentChangeLastQtr) {
+	public void setSalesPercentChangeLastQtr(Double salesPercentChangeLastQtr) {
 		this.salesPercentChangeLastQtr = salesPercentChangeLastQtr;
 	}
-	public double getAnnualROELastYear() {
+	public void setSalesPercentChangeLastQtr(double salesPercentChangeLastQtr) {
+		this.salesPercentChangeLastQtr = new Double(salesPercentChangeLastQtr);
+	}
+	public Double getAnnualROELastYear() {
 		return annualROELastYear;
 	}
-	public void setAnnualROELastYear(double annualROELastYear) {
+	public void setAnnualROELastYear(Double annualROELastYear) {
 		this.annualROELastYear = annualROELastYear;
 	}
-	public double getAnnualProfitMarginLatestYear() {
+	public void setAnnualROELastYear(double annualROELastYear) {
+		this.annualROELastYear = new Double(annualROELastYear);
+	}
+	public Double getAnnualProfitMarginLatestYear() {
 		return annualProfitMarginLatestYear;
 	}
-	public void setAnnualProfitMarginLatestYear(double annualProfitMarginLatestYear) {
+	public void setAnnualProfitMarginLatestYear(Double annualProfitMarginLatestYear) {
 		this.annualProfitMarginLatestYear = annualProfitMarginLatestYear;
 	}
-	public double getManagmentOwnPercent() {
+	public void setAnnualProfitMarginLatestYear(double annualProfitMarginLatestYear) {
+		this.annualProfitMarginLatestYear = new Double(annualProfitMarginLatestYear);
+	}
+	public Double getManagmentOwnPercent() {
 		return managmentOwnPercent;
 	}
-	public void setManagmentOwnPercent(double managmentOwnPercent) {
+	public void setManagmentOwnPercent(Double managmentOwnPercent) {
 		this.managmentOwnPercent = managmentOwnPercent;
 	}
-	public int getQtrsRisingSponsorship() {
+	public void setManagmentOwnPercent(double managmentOwnPercent) {
+		this.managmentOwnPercent = new Double(managmentOwnPercent);
+	}
+	public Integer getQtrsRisingSponsorship() {
 		return qtrsRisingSponsorship;
 	}
-	public void setQtrsRisingSponsorship(int qtrsRisingSponsorship) {
+	public void setQtrsRisingSponsorship(Integer qtrsRisingSponsorship) {
 		this.qtrsRisingSponsorship = qtrsRisingSponsorship;
+	}
+	public void setQtrsRisingSponsorship(int qtrsRisingSponsorship) {
+		this.qtrsRisingSponsorship = new Integer(qtrsRisingSponsorship);
 	}
 	
 }
