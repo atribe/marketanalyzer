@@ -43,24 +43,4 @@ public class Ibd50TrackingDao extends GenericDBSuperclass {
 			createTable(createTableSQL, tableName);
 		}
 	}
-
-	/**
-	 * This should check and see if the rankDate of the first bean in the list 
-	 * is before the next Monday(when the new list comes out) [not a new entry]
-	 * or after it [new entry] 
-	 * 
-	 * @param webIbd50
-	 * @return
-	 */
-	public boolean checkIfIbdUpToDate(List<Ibd50RankingBean> webIbd50) {
-		boolean upToDate = false;
-		String tableName = Ibd50TrackingBean.getTableName();
-		
-		String query = "Select " + tableName + "_id"
-						+ " FROM `" + tableName + "`"
-						+ " WHERE ";
-		
-		
-		return upToDate;
-	}
 }

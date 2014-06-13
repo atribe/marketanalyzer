@@ -188,6 +188,9 @@ public class Ibd50RankingBean {
 	public Date getRankDate() {
 		return rankDate;
 	}
+	public LocalDate getLocalDateRankDate() {
+		return new LocalDate(rankDate);
+	}
 	public void setRankDate(Date rankDate) {
 		this.rankDate = rankDate;
 	}
