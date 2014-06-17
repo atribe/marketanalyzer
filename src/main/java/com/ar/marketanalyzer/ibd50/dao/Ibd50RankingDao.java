@@ -1,6 +1,10 @@
 package com.ar.marketanalyzer.ibd50.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -14,6 +18,7 @@ import org.joda.time.LocalDate;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.beans.Ibd50TrackingBean;
 
 public class Ibd50RankingDao extends GenericDBSuperclass{
 
@@ -96,5 +101,34 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 		} else {
 			return downloadedDate.withDayOfWeek(DateTimeConstants.MONDAY);
 		}
+	}
+
+	public int addRowToDb(Ibd50RankingBean row) throws SQLException {
+				
+		String insertQuery = row.getInsertOrUpdateQuery();
+		
+		String[] columnNames = row.getColumnNameList();
+		
+		PreparedStatement ps = null;
+		Connection con = ds.getConnection();
+		ps = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+		
+		QueryRunner runner = new QueryRunner();
+		
+		runner.fillStatementWithBean(ps, row, columnNames);
+		
+		ps.execute();
+		
+		//Querying the new symbols id in the table
+		int insertedId = 0;
+		
+		ResultSet keys = ps.getGeneratedKeys();    
+		if( keys.next() ) { 
+			insertedId = keys.getInt(1);
+		}
+		 
+		con.close();
+		
+		return insertedId;
 	}
 }

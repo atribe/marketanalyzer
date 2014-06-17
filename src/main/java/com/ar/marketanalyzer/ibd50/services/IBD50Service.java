@@ -133,11 +133,31 @@ public class IBD50Service {
 				
 				int symbol_id;
 			
-				if(isSymbolInDb(row.getSymbol())) { //if the symbol is already in the db, find the id
-					symbol_id = getSymbolId(row.getSymbol());
-				} else {
-					symbol_id = addSymbolToDb(row.getSymbol());
+				
+				if( isSymbolInDb( row.getSymbol() ) ) { 			//if the symbol is already in the db, 
+					symbol_id = getSymbolId( row.getSymbol() ); 	//find the id
+				} else {										//if not
+					symbol_id = addSymbolToDb( row.getSymbol(), row.getCompanyName() );	//add it, return the id
 				}
+				
+				int tracking_id;
+				//see if a that symbol id is actively being tracked in the tracking db
+				if( isSymbolIdActivelyTracked( symbol_id) ) {
+					tracking_id = getTrackingIdBySymbolId(symbol_id);
+				} else {
+					tracking_id = addTrackingToDb( symbol_id );
+				}
+				
+				//add symbol and tracking id to the row's info
+				row.setSymbol_id(symbol_id);
+				row.setTracking_id(tracking_id);
+				
+				// this method only runs when the database is not up to date, so I don't need to check
+				// if the symbol is in the ranking db, I just need to add it
+				addRowToRankingDb(row);
+				
+				//Check to see if the OHLCV data is up to date for this stock symbol
+				//TODO this. See if the stock is up to date in the db
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -149,12 +169,24 @@ public class IBD50Service {
 	private boolean isSymbolInDb(String symbol) throws SQLException {
 		return symbolDao.isSymbolInDb(symbol);
 	}
-
 	private int getSymbolId(String symbol) throws SQLException {
 		return symbolDao.getIdBySymbol(symbol);
 	}
+	private int addSymbolToDb(String symbol, String companyName) throws SQLException {
+		return symbolDao.addSymbolToDb(symbol,companyName);
+	}
 	
-	private int addSymbolToDb(String symbol) throws SQLException {
-		return symbolDao.addSymbolToDb(symbol);
+	private boolean isSymbolIdActivelyTracked(int symbol_id) throws SQLException {
+		return trackingDao.isSymbolIdActive(symbol_id);
+	}
+	private int getTrackingIdBySymbolId(int symbol_id) throws SQLException {
+		return trackingDao.getIdByActiveSymbolId( symbol_id );
+	}
+	private int addTrackingToDb(int symbol_id) throws SQLException {
+		return trackingDao.addSymbolToDb(symbol_id);
+	}
+	
+	private void addRowToRankingDb(Ibd50RankingBean row) throws SQLException {
+		rankingDao.addRowToDb(row);
 	}
 }

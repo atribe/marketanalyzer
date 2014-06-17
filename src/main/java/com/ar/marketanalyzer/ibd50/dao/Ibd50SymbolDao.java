@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -32,6 +33,7 @@ public class Ibd50SymbolDao extends GenericDBSuperclass {
 			String createTableSQL = "CREATE TABLE `" + SYMBOL_TABLE_NAME + "` (" +
 					" symbol_id INT NOT NULL AUTO_INCREMENT," +
 					" symbol char(10) NOT NULL," +
+					" companyName char(50)," +
 					" PRIMARY KEY (symbol_id))";
 			
 			createTable(createTableSQL, SYMBOL_TABLE_NAME);
@@ -59,7 +61,7 @@ public class Ibd50SymbolDao extends GenericDBSuperclass {
 	}
 	
 	private Object[] symbolQuery(String symbol) throws SQLException {
-		String checkQuery = "SELECT `id` FROM `" + SYMBOL_TABLE_NAME + "`"
+		String checkQuery = "SELECT `symbol_id` FROM `" + SYMBOL_TABLE_NAME + "`"
 				+ " WHERE `symbol` = ?";
 		
 		QueryRunner runner = new QueryRunner(ds);
@@ -98,27 +100,25 @@ public class Ibd50SymbolDao extends GenericDBSuperclass {
 	 * @return symbol_id column of newly inserted symbol
 	 * @throws SQLException
 	 */
-	public int addSymbolToDb(String symbol) throws SQLException {
+	public int addSymbolToDb(String symbol, String companyName) throws SQLException {
 		
 		//Inserting the new symbol
 		String insertQuery = "INSERT INTO `" + SYMBOL_TABLE_NAME + "`"
-				+ "(symbol) VALUES (?)";
+				+ "(symbol,companyName) VALUES (?,?)";
 		
-		QueryRunner runner = new QueryRunner(ds);
-		
-		runner.update(insertQuery, symbol);
-		
-		//Querying the new symbols id in the table
-		int insertedId = 0;
 		Connection con = ds.getConnection();
-		PreparedStatement ps = con.prepareStatement(insertQuery);
-		ps = con.prepareStatement("SELECT LAST_INSERT_ID();");
-		ResultSet rs = ps.executeQuery();
 		
-		if(rs != null && rs.next()) {
-			insertedId = rs.getInt(1);
+		PreparedStatement ps = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+		ps.setString(1, symbol);
+		ps.setString(2, companyName);
+		ps.executeUpdate(); 
+		
+		int insertedId = 0;
+		
+		ResultSet keys = ps.getGeneratedKeys();    
+		if( keys.next() ) { 
+			insertedId = keys.getInt(1);
 		}
-		 
 		con.close();
 		
 		return insertedId;

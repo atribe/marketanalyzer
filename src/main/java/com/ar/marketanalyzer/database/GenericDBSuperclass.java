@@ -35,7 +35,7 @@ public class GenericDBSuperclass {
 	/**
 	 * Constant that holds the name of the stock symbol table
 	 */
-	public final static String SYMBOL_TABLE_NAME = "stock_symbols";
+	public final static String SYMBOL_TABLE_NAME = "ibd50_stock_symbols";
 	
 	public static DataSource getDs() {
 		return ds;

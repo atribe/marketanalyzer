@@ -99,7 +99,7 @@ public class BacktestBean {
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
 				} else if (type.equals(java.math.BigDecimal.class)){
-					typeName = "DECIMAL";
+					typeName = "DECIMAL(10,2)";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}

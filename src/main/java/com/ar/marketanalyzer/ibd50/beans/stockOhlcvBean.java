@@ -15,7 +15,7 @@ import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 public class stockOhlcvBean {
-	private final static String tableName = "stock_ohlcv";
+	private final static String tableName = "ibd50_stock_ohlcv";
 	
 	private long id;
 	private String symbol;
@@ -90,7 +90,7 @@ public class stockOhlcvBean {
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
 				} else if (type.equals(java.math.BigDecimal.class)){
-					typeName = "DECIMAL";
+					typeName = "DECIMAL(10,2)";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}

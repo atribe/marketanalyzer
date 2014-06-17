@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 
@@ -15,13 +17,26 @@ public class Ibd50TrackingBean {
 	private static String tableName = "ibd50_tracking";
 	
 	private int tracking_id;
-	private int symbol;
+	private int symbol_id;
+	private Boolean active;
 	private Date join_date;
 	private Date leave_date;
 	private BigDecimal join_price;
 	private BigDecimal last_price;
 	private double percent_return; //% return while on the list
 	
+	/*
+	 * Constructors
+	 */
+	public Ibd50TrackingBean() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Ibd50TrackingBean(int symbol_id) {
+		setSymbol_id( symbol_id );
+		setJoin_date( newMonday() );
+	}
+
 	/*
 	 * Database table methods
 	 */
@@ -48,7 +63,7 @@ public class Ibd50TrackingBean {
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
 				} else if (type.equals(java.math.BigDecimal.class)){
-					typeName = "DECIMAL";
+					typeName = "DECIMAL(10,2)";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -65,10 +80,9 @@ public class Ibd50TrackingBean {
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
 				" tracking_id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
-		createTableSQL += " symbol_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			if(entry.getKey() != "tracking_id" && entry.getKey() != "symbol") {	
+			if(entry.getKey() != "tracking_id") {	
 				createTableSQL += " " + entry.getKey() + " "+ entry.getValue() +",";
 			}
 		 }
@@ -136,33 +150,60 @@ public class Ibd50TrackingBean {
 	}
 	//End Database table methods
 	
+	/*
+	 * Helper Methods
+	 */
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
 	
+	private LocalDate newMonday() {
+		LocalDate today = new LocalDate();
+		if(today.getDayOfWeek() == DateTimeConstants.MONDAY) {
+			return today;
+		} else {
+			return today.withDayOfWeek(DateTimeConstants.MONDAY);
+		}
+	}
 	/*
 	 * Getters and Setters
 	 */
 	public static String getTableName() {
 		return tableName;
 	}
-	public int getId() {
+	
+	public int getTracking_id() {
 		return tracking_id;
 	}
-	public void setId(int id) {
-		this.tracking_id = id;
+
+	public void setTracking_id(int tracking_id) {
+		this.tracking_id = tracking_id;
 	}
-	public int getSymbol() {
-		return symbol;
+
+	public int getSymbol_id() {
+		return symbol_id;
 	}
-	public void setSymbol(int symbol) {
-		this.symbol = symbol;
+
+	public void setSymbol_id(int symbol_id) {
+		this.symbol_id = symbol_id;
 	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public Date getJoin_date() {
 		return join_date;
 	}
 	public void setJoin_date(Date join_date) {
 		this.join_date = join_date;
+	}
+	public void setJoin_date(LocalDate join_date) {
+		setJoin_date( new Date(join_date.toDate().getTime()) );
 	}
 	public Date getLeave_date() {
 		return leave_date;
@@ -176,10 +217,10 @@ public class Ibd50TrackingBean {
 	public void setJoin_price(BigDecimal join_price) {
 		this.join_price = join_price;
 	}
-	public BigDecimal getLeave_price() {
+	public BigDecimal getLast_price() {
 		return last_price;
 	}
-	public void setLeave_price(BigDecimal leave_price) {
+	public void setLast_price(BigDecimal leave_price) {
 		this.last_price = leave_price;
 	}
 	public double getPercent_return() {

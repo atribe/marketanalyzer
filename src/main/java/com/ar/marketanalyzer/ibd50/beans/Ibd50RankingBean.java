@@ -16,6 +16,8 @@ public class Ibd50RankingBean {
 	private final static String tableName = "ibd50_ranking";
 	
 	private Integer ranking_id;
+	private Integer symbol_id;
+	private Integer tracking_id;
 	private Date rankDate;
 	private String symbol;
 	private String companyName;
@@ -60,7 +62,7 @@ public class Ibd50RankingBean {
 			String name = f.getName(); //Getting the name of the field
 			Class<?> type = f.getType(); //Getting the type of the field
 			String typeName=null;
-			if( name != "tableName" ) { //Don't add the tableName field to the hashmap, as it isn't a column in the table
+			if( name != "tableName" && name != "symbol" && name != "companyName") { //Don't add the tableName field to the hashmap, as it isn't a column in the table
 				//Match the field type to the MySQL equivalent
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
@@ -75,7 +77,7 @@ public class Ibd50RankingBean {
 				} else if (type.equals(java.sql.Date.class)){
 					typeName = "DATE";
 				} else if (type.equals(java.math.BigDecimal.class)){
-					typeName = "DECIMAL";
+					typeName = "DECIMAL(10,2)";
 				} else if (type.equals(java.sql.Timestamp.class)){
 					typeName = "TIMESTAMP";
 				}
@@ -92,8 +94,6 @@ public class Ibd50RankingBean {
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
 				" ranking_id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
-		createTableSQL += " symbol_id INT,";
-		createTableSQL += " tracking_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
 			if(entry.getKey() != "ranking_id" && entry.getKey() != "symbol") {	
@@ -176,11 +176,23 @@ public class Ibd50RankingBean {
 	public static String getTableName() {
 		return tableName;
 	}
-	public Integer getId() {
+	public Integer getRanking_id() {
 		return ranking_id;
 	}
-	public void setId(Integer id) {
-		this.ranking_id = id;
+	public void setRanking_id(Integer ranking_id) {
+		this.ranking_id = ranking_id;
+	}
+	public Integer getSymbol_id() {
+		return symbol_id;
+	}
+	public void setSymbol_id(Integer symbol_id) {
+		this.symbol_id = symbol_id;
+	}
+	public Integer getTracking_id() {
+		return tracking_id;
+	}
+	public void setTracking_id(Integer tracking_id) {
+		this.tracking_id = tracking_id;
 	}
 	public void setId(int id) {
 		this.ranking_id = new Integer(id);
