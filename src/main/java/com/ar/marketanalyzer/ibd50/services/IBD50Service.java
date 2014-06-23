@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.joda.time.LocalDate;
+
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
@@ -15,6 +17,7 @@ import com.ar.marketanalyzer.ibd50.dao.Ibd50SymbolDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50TrackingDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.dao.stockOhlcvDao;
+import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
 
 /**
  * @author Allan
@@ -132,32 +135,31 @@ public class IBD50Service {
 			try {
 				
 				int symbol_id;
-			
-				
-				if( isSymbolInDb( row.getSymbol() ) ) { 			//if the symbol is already in the db, 
-					symbol_id = getSymbolId( row.getSymbol() ); 	//find the id
-				} else {										//if not
+
+				if( isSymbolInDb( row.getSymbol() ) ) { 								//if the symbol is already in the db, 
+					symbol_id = getSymbolId( row.getSymbol() ); 						//find the id
+				} else {																//if not
 					symbol_id = addSymbolToDb( row.getSymbol(), row.getCompanyName() );	//add it, return the id
 				}
 				
 				int tracking_id;
-				//see if a that symbol id is actively being tracked in the tracking db
-				if( isSymbolIdActivelyTracked( symbol_id) ) {
-					tracking_id = getTrackingIdBySymbolId(symbol_id);
-				} else {
-					tracking_id = addTrackingToDb( symbol_id );
+				
+				if( isSymbolIdActivelyTracked( symbol_id) ) {							//if the symbol id is already in the tracking db
+					tracking_id = getTrackingIdBySymbolId(symbol_id);					//find the id
+				} else {																//if not
+					tracking_id = addTrackingToDb( symbol_id );							//add it, return the id
 				}
 				
-				//add symbol and tracking id to the row's info
-				row.setSymbol_id(symbol_id);
-				row.setTracking_id(tracking_id);
+				row.setSymbol_id(symbol_id);											//add the symbol id to the row
+				row.setTracking_id(tracking_id);										//add the tracking id to the row
 				
 				// this method only runs when the database is not up to date, so I don't need to check
 				// if the symbol is in the ranking db, I just need to add it
-				addRowToRankingDb(row);
+				addRowToRankingDb(row);													//add the row to the db
 				
 				//Check to see if the OHLCV data is up to date for this stock symbol
-				//TODO this. See if the stock is up to date in the db
+				runOhlcv(row);															//add the last 6 months of OHLCV data to the db
+				
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -188,5 +190,33 @@ public class IBD50Service {
 	
 	private void addRowToRankingDb(Ibd50RankingBean row) throws SQLException {
 		rankingDao.addRowToDb(row);
+	}
+	
+	/**
+	 * Check to see if the symbol is already in the db.
+	 * If so then get the last date
+	 * 		if that date is within six months of today
+	 * 			use that date as the start date and today as the end date
+	 *	if not in the db
+	 *		use six months ago as the start date and today as the end date
+	 *  	
+	 * 
+	 * @param row
+	 * @throws SQLException 
+	 */
+	private void runOhlcv(Ibd50RankingBean row) throws SQLException {
+		final int monthsOfData = 6; 
+		
+		LocalDate latestDate = ohlcvDao.getLatestDate(row.getSymbol_id());
+		LocalDate today = new LocalDate();
+		LocalDate startDate = today.minusMonths(monthsOfData);
+		
+		if(latestDate.isAfter(startDate)) { 		//if the date in the db is after the proposed start date
+			startDate = latestDate;					//then use the date from the db
+		}											//else keep original start date
+		
+		List<stockOhlcvBean> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getSymbol(), startDate, today);
+		
+		ohlcvDao.addOhlcvDataToDb(ohlcvData);
 	}
 }

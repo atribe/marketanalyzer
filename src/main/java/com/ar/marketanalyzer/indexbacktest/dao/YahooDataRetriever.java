@@ -5,6 +5,7 @@
 package com.ar.marketanalyzer.indexbacktest.dao;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,6 +22,7 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
+import com.ar.marketanalyzer.ibd50.beans.stockOhlcvBean;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
@@ -31,9 +33,30 @@ public class YahooDataRetriever {
 	
 	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
 
-	public static List<IndexOHLCVData> yahooDataParser(String url, String index) throws IOException {
-		List<YahooOHLCV> rowsFromYahooURL = null;
+	public static List<IndexOHLCVData> getIndexFromYahoo(String url, String index) {
 		
+		List<YahooOHLCV> rowsFromYahooURL = null;
+		try {
+			
+			rowsFromYahooURL = getAndParseYahooData(index, url);
+		
+		} catch (FileNotFoundException fe) {
+			log.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		/*
+		 * Because the symbol is not downloaded in the CSV I add it, in the following
+		 * method, to the row data.
+		 */
+	    List<IndexOHLCVData> convertedRowsFromYahooURL = addSymbolAndConvertToOHLCVData(rowsFromYahooURL, index);
+		
+		return convertedRowsFromYahooURL;
+	}
+	
+	private static List<YahooOHLCV> getAndParseYahooData(String symbol, String url) throws IOException {
 		URL ur = new URL(url);
 		HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(HUC.getInputStream()));
@@ -47,15 +70,9 @@ public class YahooDataRetriever {
 	    strategy.setColumnMapping(new String[]{"date","open","high","low","close","volume","adjClose"});
 
 	    CsvToBean<YahooOHLCV> csv = new CsvToBean<YahooOHLCV>();
-	    rowsFromYahooURL = csv.parse(strategy, csvReader);
-		
-		/*
-		 * Because the symbol is not downloaded in the CSV I add it, in the following
-		 * method, to the row data.
-		 */
-	    List<IndexOHLCVData> convertedRowsFromYahooURL = addSymbolAndConvertToOHLCVData(rowsFromYahooURL, index);
-		
-		return convertedRowsFromYahooURL;
+	    List<YahooOHLCV> rowsFromYahooURL = csv.parse(strategy, csvReader);
+	    
+	    return rowsFromYahooURL;
 	}
 
 	/**
@@ -106,10 +123,45 @@ public class YahooDataRetriever {
 	
 	private static List<IndexOHLCVData> addSymbolAndConvertToOHLCVData(
 			List<YahooOHLCV> rowsFromYahooURL, String index) {
+		
 		List<IndexOHLCVData> convertedList = new ArrayList<IndexOHLCVData>();
 		for(YahooOHLCV rowFromYahooURL:rowsFromYahooURL) {
 			rowFromYahooURL.setSymbol(index);
 			convertedList.add(new IndexOHLCVData(rowFromYahooURL));
+		}
+		
+		return convertedList;
+	}
+	
+	public static List<stockOhlcvBean> getStockFromYahoo(String symbol, LocalDate startDate, LocalDate endDate) {
+		int daysAgo = getNumberOfDaysFromNow(startDate);
+		
+		String url = getYahooURL(symbol, daysAgo);		
+		
+		List<YahooOHLCV> rawList = null;
+		List<stockOhlcvBean> convertedList = null;
+		
+		try {
+			rawList = getAndParseYahooData(url, symbol);
+		} catch (FileNotFoundException fe) {
+			log.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		convertedList = YahooOhlcvToStockOhlcvBean(rawList, symbol);
+		
+		return convertedList;
+	}
+
+	private static List<stockOhlcvBean> YahooOhlcvToStockOhlcvBean(
+			List<YahooOHLCV> rawList, String symbol) {
+		
+		List<stockOhlcvBean> convertedList = new ArrayList<stockOhlcvBean>();
+		for(YahooOHLCV rowFromYahooURL:rawList) {
+			rowFromYahooURL.setSymbol(symbol);
+			convertedList.add(new stockOhlcvBean(rowFromYahooURL));
 		}
 		
 		return convertedList;

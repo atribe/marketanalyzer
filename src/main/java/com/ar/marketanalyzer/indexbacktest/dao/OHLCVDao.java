@@ -1,7 +1,5 @@
 package com.ar.marketanalyzer.indexbacktest.dao;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -166,14 +164,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 			//Creates a yahoo URL given the index symbol from now back a given number of days
 			String URL = YahooDataRetriever.getYahooURL(index, numDays);
 	
-			try {
-				rowsFromYahoo = YahooDataRetriever.yahooDataParser(URL, index);
-			} catch (FileNotFoundException fe) {
-				log.error("the yahoo URL: " + URL + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			rowsFromYahoo = YahooDataRetriever.getIndexFromYahoo(URL, index);
+
 	
 			if(rowsFromYahoo != null) {
 				initialAddRecordsFromData(rowsFromYahoo);
@@ -187,15 +180,11 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//Creates a yahoo URL given the index symbol from now back a given number of days
 		String URL = YahooDataRetriever.getYahooURL(index, indexDaysBehind);
 
-		try {
-			rowsFromYahoo = YahooDataRetriever.yahooDataParser(URL, index);
+		rowsFromYahoo = YahooDataRetriever.getIndexFromYahoo(URL, index);
 			
-			// extract price and volume data for URL, # of yahoo days
-			addRecordsFromData(rowsFromYahoo);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// extract price and volume data for URL, # of yahoo days
+		addRecordsFromData(rowsFromYahoo);
+
 	}
 	
 	public void initialAddRecordsFromData(List<IndexOHLCVData> rowsFromYahoo) {
