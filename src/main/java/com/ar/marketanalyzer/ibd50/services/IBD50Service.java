@@ -210,12 +210,12 @@ public class IBD50Service {
 		LocalDate latestDate = ohlcvDao.getLatestDate(row.getSymbol_id());
 		LocalDate today = new LocalDate();
 		LocalDate startDate = today.minusMonths(monthsOfData);
-		
-		if(latestDate.isAfter(startDate)) { 		//if the date in the db is after the proposed start date
-			startDate = latestDate;					//then use the date from the db
-		}											//else keep original start date
-		
-		List<stockOhlcvBean> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getSymbol(), startDate, today);
+		if(latestDate!=null) {
+			if( latestDate.isAfter(startDate) ) { 		//if the date in the db is after the proposed start date
+				startDate = latestDate;					//then use the date from the db
+			}											//else keep original start date
+		}
+		List<stockOhlcvBean> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getSymbol(), startDate, today, row.getSymbol_id());
 		
 		ohlcvDao.addOhlcvDataToDb(ohlcvData);
 	}

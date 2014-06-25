@@ -133,7 +133,7 @@ public class YahooDataRetriever {
 		return convertedList;
 	}
 	
-	public static List<stockOhlcvBean> getStockFromYahoo(String symbol, LocalDate startDate, LocalDate endDate) {
+	public static List<stockOhlcvBean> getStockFromYahoo(String symbol, LocalDate startDate, LocalDate endDate, int symbol_id) {
 		int daysAgo = getNumberOfDaysFromNow(startDate);
 		
 		String url = getYahooURL(symbol, daysAgo);		
@@ -142,7 +142,7 @@ public class YahooDataRetriever {
 		List<stockOhlcvBean> convertedList = null;
 		
 		try {
-			rawList = getAndParseYahooData(url, symbol);
+			rawList = getAndParseYahooData(symbol, url);
 		} catch (FileNotFoundException fe) {
 			log.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
 		} catch (IOException e) {
@@ -150,18 +150,18 @@ public class YahooDataRetriever {
 			e.printStackTrace();
 		}
 
-		convertedList = YahooOhlcvToStockOhlcvBean(rawList, symbol);
+		convertedList = YahooOhlcvToStockOhlcvBean(rawList, symbol, symbol_id);
 		
 		return convertedList;
 	}
 
 	private static List<stockOhlcvBean> YahooOhlcvToStockOhlcvBean(
-			List<YahooOHLCV> rawList, String symbol) {
+			List<YahooOHLCV> rawList, String symbol, int symbol_id) {
 		
 		List<stockOhlcvBean> convertedList = new ArrayList<stockOhlcvBean>();
 		for(YahooOHLCV rowFromYahooURL:rawList) {
 			rowFromYahooURL.setSymbol(symbol);
-			convertedList.add(new stockOhlcvBean(rowFromYahooURL));
+			convertedList.add(new stockOhlcvBean(rowFromYahooURL, symbol_id));
 		}
 		
 		return convertedList;

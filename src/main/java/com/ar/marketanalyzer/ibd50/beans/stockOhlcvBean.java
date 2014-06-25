@@ -18,6 +18,7 @@ public class stockOhlcvBean {
 	private final static String tableName = "ibd50_stock_ohlcv";
 	
 	private long id;
+	private long symbol_id;
 	private String symbol;
 	private Date date;
 	private BigDecimal open;
@@ -33,8 +34,9 @@ public class stockOhlcvBean {
 	//Empty constructed required to be a Java Bean
 	public stockOhlcvBean() {}
 	
-	public stockOhlcvBean(YahooOHLCV y) {
+	public stockOhlcvBean(YahooOHLCV y, int symbol_id) {
 		setSymbol(y.getSymbol());
+		setSymbol_id(symbol_id);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    java.util.Date parsed=null;
 		try {
@@ -75,7 +77,7 @@ public class stockOhlcvBean {
 			String name = f.getName(); //Getting the name of the field
 			Class<?> type = f.getType(); //Getting the type of the field
 			String typeName=null;
-			if( name != "tableName" ) { //Don't add the tableName field to the hashmap, as it isn't a column in the table
+			if( name != "tableName" && name != "symbol" ) { //Don't add the tableName field to the hashmap, as it isn't a column in the table
 				//Match the field type to the MySQL equivalent
 				if(type.equals(Boolean.class)) {
 					typeName = "TINYINT(1)";
@@ -107,7 +109,6 @@ public class stockOhlcvBean {
 		//Create the table create statement
 		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
 				" id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
-		createTableSQL += " symbol_id INT,";
 		//Cycle through the hashmap and create a column for each
 		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
 			if(entry.getKey() != "id" && entry.getKey() != "dateString") {	
@@ -193,13 +194,21 @@ public class stockOhlcvBean {
 	public long getId() {
 		return id;
 	}
-	
+
 	public void setId(long id) {
-		this.id = id;		
+		this.id = id;
+	}
+
+	public long getSymbol_id() {
+		return symbol_id;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
+	public void setSymbol_id(long symbol_id) {
+		this.symbol_id = symbol_id;		
+	}
+	
+	public void setSymbol_id(int symbol_id) {
+		this.symbol_id = symbol_id;
 	}
 	
 	public String getSymbol() {
