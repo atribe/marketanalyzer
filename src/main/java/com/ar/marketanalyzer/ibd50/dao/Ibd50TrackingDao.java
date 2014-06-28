@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -15,7 +14,6 @@ import org.apache.commons.dbutils.ResultSetHandler;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50TrackingBean;
 
 public class Ibd50TrackingDao extends GenericDBSuperclass {

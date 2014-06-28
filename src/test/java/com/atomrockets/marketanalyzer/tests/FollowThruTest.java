@@ -1,11 +1,7 @@
 package com.atomrockets.marketanalyzer.tests;
 
-import static org.junit.Assert.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.ar.marketanalyzer.indexbacktest.services.IndexCalcsService;
 
 public class FollowThruTest {
 
@@ -15,7 +11,7 @@ public class FollowThruTest {
 
 	@Test
 	public void testRunIndexAnalysis() {
-		IndexCalcsService a = new IndexCalcsService();
+		//IndexCalcsService a = new IndexCalcsService();
 		
 		//assertTrue("FollowThru Didn't Calc Correctly", a.runIndexAnalysis("^IXIC"));    // If checkOut fails, display message
 	}

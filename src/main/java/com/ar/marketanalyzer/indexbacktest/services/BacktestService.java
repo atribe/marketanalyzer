@@ -83,6 +83,7 @@ public class BacktestService extends IndexBacktestServiceSuperclass{
 		
 		runBaseline(symbol, new LocalDate(backtest.getStartDate()), new LocalDate(backtest.getEndDate()), backtest);
 	}
+	@SuppressWarnings("unused")
 	private void runBaseline(String symbol, LocalDate startDate, LocalDate endDate) throws SQLException {
 		BacktestBean backtest = getBaseline(symbol);
 		

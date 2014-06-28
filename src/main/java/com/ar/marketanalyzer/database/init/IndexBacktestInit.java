@@ -81,10 +81,9 @@ public class IndexBacktestInit{
 		m_BacktestService.runAllIndexModels(indexList);
 	}
 	
-	//Scheduled to run every weekday at 5 pm
-	@Scheduled(cron="0 0 18 * * MON-FRI")
-    public void dataBaseUpdate()
-    {
+	//Scheduled to run every weekday at 7 pm
+	@Scheduled(cron="0 0 19 * * MON-FRI")
+    public void dataBaseUpdate() {
         log.debug("Method executed every weekday at 5 pm. Current time is :: "+ new Date());
         
         indexList = PropCache.getCachedProps("index.names").split(",");

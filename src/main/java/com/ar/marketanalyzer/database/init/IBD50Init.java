@@ -3,6 +3,7 @@ package com.ar.marketanalyzer.database.init;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.ibd50.services.IBD50Service;
@@ -28,6 +29,14 @@ public class IBD50Init {
 		}
 		
 		ibd50Service.tableInit();
+		
+		ibd50Service.updateFromIbd50Web();
+	}
+	
+	//Scheduled to run every Monday at 5 am
+	@Scheduled(cron="0 0 5 * * MON-FRI")
+	public void weeklyUpdateIbd50() {
+		IBD50Service ibd50Service = new IBD50Service();
 		
 		ibd50Service.updateFromIbd50Web();
 	}

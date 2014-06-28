@@ -11,11 +11,9 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 
 public class Ibd50SymbolDao extends GenericDBSuperclass {
 
