@@ -31,6 +31,8 @@ public class IBD50Init {
 		ibd50Service.tableInit();
 		
 		ibd50Service.updateFromIbd50Web();
+		
+		ibd50Service.calcIbd50Stats();
 	}
 	
 	//Scheduled to run every Monday at 5 am

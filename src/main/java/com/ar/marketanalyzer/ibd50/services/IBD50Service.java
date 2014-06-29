@@ -93,6 +93,21 @@ public class IBD50Service {
 		addWeeklyListToDB(webIbd50);
 	}
 
+	public void calcIbd50Stats(){ 
+		/*
+		 * What stats do I need to calculate
+		 * 
+		 * ibd50 index - how well the whole list has done
+		 * ibd50 top 10, 10-20, 20-30, 30-40, 40-50, 1-25, 26-50 index
+		 * 		each custom index could be handled through one method, simply takes
+		 * 		in the numbers of the stocks to be put in the index, then outputs new value of the index
+		 * 		I guess I need a custom index table for this.
+		 * 
+		 * return since added to the list
+		 * 
+		 */
+	}
+	
 	/**
 	 * Adds weekly list to the database
 	 * <p>
@@ -158,7 +173,7 @@ public class IBD50Service {
 				addRowToRankingDb(row);													//add the row to the db
 				
 				//Check to see if the OHLCV data is up to date for this stock symbol
-				runOhlcv(row);															//add the last 6 months of OHLCV data to the db
+				runOhlcvUpdate(row);															//add the last 6 months of OHLCV data to the db
 				
 				
 			} catch (SQLException e) {
@@ -204,7 +219,7 @@ public class IBD50Service {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcv(Ibd50RankingBean row) throws SQLException {
+	private void runOhlcvUpdate(Ibd50RankingBean row) throws SQLException {
 		final int monthsOfData = 6; 
 		
 		LocalDate latestDate = ohlcvDao.getLatestDate(row.getSymbol_id());
