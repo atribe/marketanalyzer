@@ -6,7 +6,8 @@ import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.services.IBD50Service;
+import com.ar.marketanalyzer.ibd50.services.IBD50DBService;
+import com.ar.marketanalyzer.ibd50.services.IBD50StatService;
 
 public class IBD50Init {
 
@@ -20,7 +21,7 @@ public class IBD50Init {
 		
 		DataSource ds = MarketPredDataSource.setDataSource();
 		
-		IBD50Service ibd50Service = new IBD50Service(ds);
+		IBD50DBService ibd50Service = new IBD50DBService(ds);
 		
 		if(dropTables) {
 			ibd50Service.dropAllTables();
@@ -32,13 +33,15 @@ public class IBD50Init {
 		
 		ibd50Service.updateFromIbd50Web();
 		
-		ibd50Service.calcIbd50Stats();
+		IBD50StatService ibd50StatService = new IBD50StatService();
+		
+		ibd50StatService.calcIbd50Stats();
 	}
 	
 	//Scheduled to run every Monday at 5 am
 	@Scheduled(cron="0 0 5 * * MON-FRI")
 	public void weeklyUpdateIbd50() {
-		IBD50Service ibd50Service = new IBD50Service();
+		IBD50DBService ibd50Service = new IBD50DBService();
 		
 		ibd50Service.updateFromIbd50Web();
 	}

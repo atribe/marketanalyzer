@@ -23,7 +23,7 @@ import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
  * @author Allan
  *
  */
-public class IBD50Service {
+public class IBD50DBService {
 	private DataSource ds;
 	
 	private Ibd50WebDao webDao;
@@ -36,7 +36,7 @@ public class IBD50Service {
 	 * Constructor that gets a new DataSource and then creates all 
 	 * required DAOs with the DataSource
 	 */
-	public IBD50Service() {
+	public IBD50DBService() {
 		ds = MarketPredDataSource.setDataSource();
 		webDao = new Ibd50WebDao();
 		symbolDao = new Ibd50SymbolDao();
@@ -49,7 +49,7 @@ public class IBD50Service {
 	 * Constructor that uses the passed DataSource and then creates all 
 	 * required DAOs with the DataSource
 	 */
-	public IBD50Service(DataSource passedds) {
+	public IBD50DBService(DataSource passedds) {
 		this.ds = passedds;
 		webDao = new Ibd50WebDao();
 		symbolDao = new Ibd50SymbolDao(ds);
@@ -91,21 +91,6 @@ public class IBD50Service {
 		List<Ibd50RankingBean> webIbd50 = webDao.grabIbd50();
 		
 		addWeeklyListToDB(webIbd50);
-	}
-
-	public void calcIbd50Stats(){ 
-		/*
-		 * What stats do I need to calculate
-		 * 
-		 * ibd50 index - how well the whole list has done
-		 * ibd50 top 10, 10-20, 20-30, 30-40, 40-50, 1-25, 26-50 index
-		 * 		each custom index could be handled through one method, simply takes
-		 * 		in the numbers of the stocks to be put in the index, then outputs new value of the index
-		 * 		I guess I need a custom index table for this.
-		 * 
-		 * return since added to the list
-		 * 
-		 */
 	}
 	
 	/**
