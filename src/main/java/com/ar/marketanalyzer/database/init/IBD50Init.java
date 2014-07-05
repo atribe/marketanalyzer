@@ -3,12 +3,17 @@ package com.ar.marketanalyzer.database.init;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.database.MarketPredDataSource;
+import com.ar.marketanalyzer.ibd50.beans.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.services.IBD50DBService;
 import com.ar.marketanalyzer.ibd50.services.IBD50StatService;
+import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 
+@Component
 public class IBD50Init {
 
 	/* Get actual class name to be printed on */
@@ -16,8 +21,20 @@ public class IBD50Init {
 	
 	private static boolean dropTables = true; 
 	
-	public static void main() {
+	@Autowired
+	private TickerSymbolService tsService;
+	
+	public void main() {
 		log.trace("Starting IBD50 DB init method");
+		
+		TickerSymbol a = new TickerSymbol();
+		a.setName("General Electric");
+		a.setSymbol("GE");
+		a.setType("ETF");
+		
+		tsService.create(a);
+		
+		TickerSymbol b = tsService.findById(1);
 		
 		DataSource ds = MarketPredDataSource.setDataSource();
 		

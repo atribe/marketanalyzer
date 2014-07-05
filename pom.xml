@@ -15,15 +15,8 @@
     </properties>
 
     <dependencies>
-    	<!-- Testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
-            
+ 
     	<!-- Spring -->
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -178,7 +171,53 @@
 		  <artifactId>jsoup</artifactId>
 		  <version>1.7.2</version>
 		</dependency>
-                   
+
+		<!-- Start Testing -->
+		<!-- Spring Data JPA Testing based on: http://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-integration-testing/ -->
+		<dependency> <!-- We use Hamcrest to write assertions against the data returned by our repository. -->
+		    <groupId>org.hamcrest</groupId>
+		    <artifactId>hamcrest-all</artifactId>
+		    <version>1.3</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>junit</groupId> <!-- Exclude the Hamcrest core dependency. -->
+		    <artifactId>junit</artifactId>
+		    <version>4.11</version>
+		    <scope>test</scope>
+		    <exclusions>
+		        <exclusion>
+		            <artifactId>hamcrest-core</artifactId>
+		            <groupId>org.hamcrest</groupId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>${spring.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency> <!-- It is used to integrate DBUnit with the Spring Test framework. -->
+		    <groupId>com.github.springtestdbunit</groupId>
+		    <artifactId>spring-test-dbunit</artifactId>
+		    <version>1.0.0</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency> <!-- Exclude the JUnit dependency. DBUnit is used to initialize our database to a known state before our tests are executed. -->
+		    <groupId>org.dbunit</groupId>
+		    <artifactId>dbunit</artifactId>
+		    <version>2.4.9</version>
+		    <scope>test</scope>
+		    <exclusions>
+		        <exclusion>
+		            <artifactId>junit</artifactId>
+		            <groupId>junit</groupId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
+		<!-- End Testing -->
+		
     </dependencies>
   
     <build>

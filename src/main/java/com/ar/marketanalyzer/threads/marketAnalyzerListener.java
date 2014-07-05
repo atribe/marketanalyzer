@@ -26,7 +26,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 	@Autowired @Qualifier("IndexBacktestInit")
 	private Runnable maBean;
 	
-	@Autowired @Qualifier("IBD50Init")
+	@Autowired @Qualifier("IBD50InitRunnable")
 	private Runnable i50Bean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
