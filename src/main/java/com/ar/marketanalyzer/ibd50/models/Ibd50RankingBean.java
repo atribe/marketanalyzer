@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.beans;
+package com.ar.marketanalyzer.ibd50.models;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -6,42 +6,106 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 
+@Entity
+@Table(name = "IBD50_RANKING")
 public class Ibd50RankingBean {
 	
-	private final static String tableName = "ibd50_ranking";
-	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ranking_id", nullable=false, unique=true, length=8)
 	private Integer ranking_id;
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="symbol", referencedColumnName="ticker_symbol_id")
 	private Integer symbol_id;
+	
 	private Integer tracking_id;
+	
+	@Column(name="rank_date", nullable=false)
 	private Date rankDate;
+
+	
 	private String symbol;
 	private String companyName;
+	
+	@Column(name="rank", nullable=false)
 	private Integer rank;
+	
+	@Column(name="current_price", nullable=false, precision=10, scale=2)
 	private BigDecimal currentPrice;
+	
+	@Column(name="price_change", nullable=false, precision=10, scale=2)
 	private BigDecimal priceChange;
+	
+	@Column(name="price_percent_change")
 	private Double pricePercentChange;
+	
+	@Column(name="percent_off_high")
 	private Double percentOffHigh;
+	
+	@Column
 	private Long volume; //need to add 000 to this number
+	
+	@Column(name="volume_percent_change")
 	private Double volumePercentChange;
+	
+	@Column(name="composite_rating")
 	private Double compositeRating;
+	
+	@Column(name="eps_rating")
 	private Double epsRating;
+	
+	@Column(name="rs_rating")
 	private Double rsRating;
+	
+	@Column(name="smr_rating")
 	private String smrRating;
+	
+	@Column(name="acc_dis_rating")
 	private String accDisRating;
+	
+	@Column(name="group_relative_strength_rating")
 	private String groupRelStrRating;
+	
+	@Column(name="eps_percent_change_last_qtr")
 	private Double epsPercentChangeLastQtr;
+	
+	@Column(name="eps_percent_change_prior_qtr")
 	private Double epsPercentChangePriorQtr;
+	
+	@Column(name="eps_percent_change_current_qtr")
 	private Double epsPercentChangeCurrentQtr;
+	
+	@Column(name="eps_estimated_percent_change_current_year")
 	private Double epsEstPercentChangeCurrentYear;
+	
+	@Column(name="sale_percent_change_last_qtr")
 	private Double salesPercentChangeLastQtr;
+	
+	@Column(name="annual_roe_last_year")
 	private Double annualROELastYear;
+	
+	@Column(name="annual_profit_margin_latest_year")
 	private Double annualProfitMarginLatestYear;
+	
+	@Column(name="management_own_percent")
 	private Double managmentOwnPercent;
+	
+	@Column(name="qtrs_rising_sponsorship")
 	private Integer qtrsRisingSponsorship;
 	
 	/*
@@ -51,121 +115,6 @@ public class Ibd50RankingBean {
 		rankDate =  new Date(new LocalDate().toDate().getTime()); //aka today
 	}
 	
-	/*
-	 * Database table methods
-	 */
-	private LinkedHashMap<String, String> getColumnNames() {
-		//Creating a hashmap to store the name and type of field
-		LinkedHashMap<String, String> mySQLColumnList = new LinkedHashMap<String, String>();
-		//Iterating through the fields in the class to populate the hashmap
-		for( Field f : getClass().getDeclaredFields()) {
-			String name = f.getName(); //Getting the name of the field
-			Class<?> type = f.getType(); //Getting the type of the field
-			String typeName=null;
-			if( name != "tableName" && name != "symbol" && name != "companyName") { //Don't add the tableName field to the hashmap, as it isn't a column in the table
-				//Match the field type to the MySQL equivalent
-				if(type.equals(Boolean.class)) {
-					typeName = "TINYINT(1)";
-				} else if (type.equals(Double.class)){
-					typeName = "DOUBLE";
-				} else if (type.equals(Integer.class)){
-					typeName = "INT";
-				} else if (type.equals(Long.class)){
-					typeName = "BIGINT";
-				} else if (type.equals(String.class)){
-					typeName = "VARCHAR(10)";
-				} else if (type.equals(java.sql.Date.class)){
-					typeName = "DATE";
-				} else if (type.equals(java.math.BigDecimal.class)){
-					typeName = "DECIMAL(10,2)";
-				} else if (type.equals(java.sql.Timestamp.class)){
-					typeName = "TIMESTAMP";
-				}
-				//Add that field to the hashmap
-				mySQLColumnList.put(f.getName(), typeName);
-			}
-		}
-		return mySQLColumnList;//return the hashmap
-	}
-	
-	public String tableCreationString(){
-		//Get the hashmap of class fields and types
-		LinkedHashMap<String, String> fieldMap = getColumnNames();
-		//Create the table create statement
-		String createTableSQL = "CREATE TABLE `" + tableName + "` (" +
-				" ranking_id INT NOT NULL AUTO_INCREMENT,"; //Handle the id on its own because it has a bunch of stuff appended to it
-		//Cycle through the hashmap and create a column for each
-		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			if(entry.getKey() != "ranking_id" && entry.getKey() != "symbol") {	
-				createTableSQL += " " + entry.getKey() + " "+ entry.getValue() +",";
-			}
-		 }
-		//Set stuff like primary key and foriegn key at the end
-		createTableSQL += " PRIMARY KEY (ranking_id), " +
-				" FOREIGN KEY (symbol_id) REFERENCES `" + GenericDBSuperclass.SYMBOL_TABLE_NAME +"`(symbol_id)," +
-				" FOREIGN KEY (tracking_id) REFERENCES ibd50_tracking(tracking_id)" +
-				" ) ENGINE = MyISAM";
-		
-		return createTableSQL;
-	}
-	
-	public String[] getColumnNameList() {
-		//Get the hashmap of class fields and types
-		LinkedHashMap<String, String> fieldMap = getColumnNames();
-		String [] columnNames = new String[fieldMap.size()];
-		int counter = 0;
-		
-		/*
-		 * Cycle through the hashmap and pull out every field name (tableName
-		 *  is not in the hashmap, so it isn't in this list)
-		 */
-		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			columnNames[counter] = entry.getKey();
-			counter++;
-		 }
-		
-		return columnNames;
-	}
-	
-	@SuppressWarnings("unused") //entry is not used at some point (on purpose), and the warning was annoying
-	public String getInsertOrUpdateQuery() {
-		LinkedHashMap<String, String> fieldMap = getColumnNames();
-		
-		//******Start add string builder******
-		String insertQuery = "INSERT INTO `" + tableName + "` "
-				+ "(";
-		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			insertQuery += entry.getKey() + ",";
-		 }
-		
-		//This line is to clean off the last "," added by the previous loop.
-		//So my code isn't perfect, but it is still pretty cool.
-		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
-		
-		insertQuery += ") VALUES"
-				+ "(";
-		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			insertQuery += "?,";
-		 }
-		
-		//Another last comma removal
-		insertQuery = insertQuery.substring(0, insertQuery.length()-1);
-		
-		insertQuery += ") ON DUPLICATE KEY UPDATE ";
-		
-		for(Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			insertQuery += entry.getKey() + "=VALUES(" + entry.getKey() + "), ";
-		}
-		
-		//Another last comma removal
-		insertQuery = insertQuery.substring(0, insertQuery.length()-2);
-		//******End add string builder******
-		
-		return insertQuery;
-	}
-	//End Database table methods
-	
-	
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
@@ -173,9 +122,6 @@ public class Ibd50RankingBean {
 	/*
 	 * Getters and Setters
 	 */
-	public static String getTableName() {
-		return tableName;
-	}
 	public Integer getRanking_id() {
 		return ranking_id;
 	}

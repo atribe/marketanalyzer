@@ -17,7 +17,7 @@ import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
 
 public class Ibd50RankingDao extends GenericDBSuperclass{
 

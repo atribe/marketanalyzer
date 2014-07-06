@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.ibd50.beans.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.exceptions.TickerSymbolNotFound;
+import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.repositories.TickerSymbolRepository;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 

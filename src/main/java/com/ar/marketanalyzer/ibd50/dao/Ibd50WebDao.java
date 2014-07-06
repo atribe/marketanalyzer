@@ -31,7 +31,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
-import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";

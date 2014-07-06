@@ -9,7 +9,6 @@ import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.beans.Ibd50RankingBean;
 import com.ar.marketanalyzer.ibd50.beans.Ibd50TrackingBean;
 import com.ar.marketanalyzer.ibd50.beans.stockOhlcvBean;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50RankingDao;
@@ -17,6 +16,7 @@ import com.ar.marketanalyzer.ibd50.dao.Ibd50SymbolDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50TrackingDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.dao.stockOhlcvDao;
+import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
 
 /**

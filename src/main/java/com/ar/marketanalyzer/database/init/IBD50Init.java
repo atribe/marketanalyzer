@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.beans.TickerSymbol;
+import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.services.IBD50DBService;
 import com.ar.marketanalyzer.ibd50.services.IBD50StatService;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
@@ -24,29 +24,15 @@ public class IBD50Init {
 	@Autowired
 	private TickerSymbolService tsService;
 	
+	@Autowired
+	
+	
 	public void main() {
 		log.trace("Starting IBD50 DB init method");
-		
-		TickerSymbol a = new TickerSymbol();
-		a.setName("General Electric");
-		a.setSymbol("GE");
-		a.setType("ETF");
-		
-		tsService.create(a);
-		
-		TickerSymbol b = tsService.findById(1);
 		
 		DataSource ds = MarketPredDataSource.setDataSource();
 		
 		IBD50DBService ibd50Service = new IBD50DBService(ds);
-		
-		if(dropTables) {
-			ibd50Service.dropAllTables();
-			
-			log.debug("All ibd50 tables have been dropped");
-		}
-		
-		ibd50Service.tableInit();
 		
 		ibd50Service.updateFromIbd50Web();
 		

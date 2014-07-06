@@ -2,8 +2,8 @@ package com.ar.marketanalyzer.ibd50.services;
 
 import java.util.List;
 
-import com.ar.marketanalyzer.ibd50.beans.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.exceptions.TickerSymbolNotFound;
+import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 
 public interface TickerSymbolService {
 

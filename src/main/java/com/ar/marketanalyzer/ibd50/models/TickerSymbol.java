@@ -1,30 +1,37 @@
-package com.ar.marketanalyzer.ibd50.beans;
+package com.ar.marketanalyzer.ibd50.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TICKER_SYMBOLS")
+@Table(name = "IBD50_TICKER_SYMBOLS")
 public class TickerSymbol {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="TICKER_SYMBOL_ID", nullable=false, unique=true, length=6)
+	@Column(name="ticker_symbol_id", nullable=false, unique=true, length=6)
 	private int id;
 
-	@Column(name="SYMBOL", length=15, nullable=true)
+	@Column(name="symbol", length=15, nullable=false)
 	private String symbol;
 
-	@Column(name="NAME", length=50, nullable=true)
+	@Column(name="name", length=50, nullable=false)
 	private String name;
 
-	@Column(name="TYPE", length=10, nullable=true)
+	@Column(name="type", length=10, nullable=false)
 	private String type; //stock, ETF, Mutual Fund, Index
-
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "")
+	private List<Ibd50RankingBean> rankingCollection;
+	
 	public int getId() {
 		return id;
 	}
