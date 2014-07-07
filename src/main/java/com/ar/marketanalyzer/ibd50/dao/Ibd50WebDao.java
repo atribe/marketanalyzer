@@ -31,7 +31,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
-import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
@@ -42,9 +42,9 @@ public class Ibd50WebDao{
 	 * 
 	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
 	 */
-	public List<Ibd50RankingBean> grabIbd50() {
+	public List<Ibd50Ranking> grabIbd50() {
 		InputStream downloadedFileInputStream = null;
-		List<Ibd50RankingBean> rowsFromIBD50 = null;
+		List<Ibd50Ranking> rowsFromIBD50 = null;
 		
 		try {
 			downloadedFileInputStream = authenticatedIbd50Download();
@@ -162,9 +162,9 @@ public class Ibd50WebDao{
 	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
 	 * @throws IOException
 	 */
-	private List<Ibd50RankingBean> parseIBD50toBeanList(InputStream is) throws IOException {
-		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
-		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
+	private List<Ibd50Ranking> parseIBD50toBeanList(InputStream is) throws IOException {
+		List<Ibd50Ranking> rowsFromIBD50 = new ArrayList<Ibd50Ranking>();
+		Ibd50Ranking ibdRow = new Ibd50Ranking();
 		
 		WhitespaceToCSVReader reader = new WhitespaceToCSVReader(new InputStreamReader(is));
 		
@@ -202,8 +202,8 @@ public class Ibd50WebDao{
 		return rowsFromIBD50;
 	}
 	
-	private List<Ibd50RankingBean> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
-		List<Ibd50RankingBean> rowsFromIBD50 = new ArrayList<Ibd50RankingBean>();
+	private List<Ibd50Ranking> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
+		List<Ibd50Ranking> rowsFromIBD50 = new ArrayList<Ibd50Ranking>();
 		
 		Document doc = Jsoup.parse(downloadedFileInputStream, "UTF-8", "");
 		Elements rows = doc.getElementsByTag("table").get(0).getElementsByTag("tr");
@@ -240,8 +240,8 @@ public class Ibd50WebDao{
 	 * @param ibd50tokenizedList
 	 * @return IBD50 Ranking Bean
 	 */
-	private Ibd50RankingBean parseListToBean(List<String> ibd50tokenizedList) {
-		Ibd50RankingBean ibdRow = new Ibd50RankingBean();
+	private Ibd50Ranking parseListToBean(List<String> ibd50tokenizedList) {
+		Ibd50Ranking ibdRow = new Ibd50Ranking();
 		
 		ibdRow.setSymbol(ibd50tokenizedList.get(0));
 		ibdRow.setCompanyName(ibd50tokenizedList.get(1));

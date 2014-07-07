@@ -17,7 +17,7 @@ import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
 
 public class Ibd50RankingDao extends GenericDBSuperclass{
 
@@ -36,18 +36,6 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 		setDs(ds);
 	}
 	
-	public synchronized void tableInit() {
-		Ibd50RankingBean ibd = new Ibd50RankingBean();
-		
-		String tableName = Ibd50RankingBean.getTableName();
-		
-		if(!tableExists(tableName)) {
-			// Table does not exist, so create it
-			String createTableSQL = ibd.tableCreationString();
-			createTable(createTableSQL, tableName);
-		}
-	}
-
 	/**
 	 * This should check and see if the rankDate of the first bean in the list 
 	 * is before the next Monday(when the new list comes out) [not a new entry]
@@ -57,9 +45,11 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 	 * @return
 	 * @throws SQLException 
 	 */
-	public boolean checkIfIbdUpToDate(List<Ibd50RankingBean> webIbd50) throws SQLException {
+	public boolean checkIfIbdUpToDate(List<Ibd50Ranking> webIbd50) throws SQLException {
+		
+		/*
 		Ibd50RankingBean b;
-		String tableName = Ibd50RankingBean.getTableName();
+		
 		String symbol = webIbd50.get(0).getSymbol();
 		LocalDate downloadedDate =  webIbd50.get(0).getLocalDateRankDate();
 		
@@ -91,6 +81,8 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 		} else {
 			return true;
 		}
+		*/
+		return true;
 	}
 
 	private LocalDate adjustDateToMonday(LocalDate downloadedDate) {
@@ -102,19 +94,19 @@ public class Ibd50RankingDao extends GenericDBSuperclass{
 		}
 	}
 
-	public int addRowToDb(Ibd50RankingBean row) throws SQLException {
+	public int addRowToDb(Ibd50Ranking row) throws SQLException {
 				
-		String insertQuery = row.getInsertOrUpdateQuery();
+		//String insertQuery = row.getInsertOrUpdateQuery();
 		
-		String[] columnNames = row.getColumnNameList();
+		//String[] columnNames = row.getColumnNameList();
 		
 		PreparedStatement ps = null;
 		Connection con = ds.getConnection();
-		ps = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+		//ps = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
 		
 		QueryRunner runner = new QueryRunner();
 		
-		runner.fillStatementWithBean(ps, row, columnNames);
+		//runner.fillStatementWithBean(ps, row, columnNames);
 		
 		ps.execute();
 		

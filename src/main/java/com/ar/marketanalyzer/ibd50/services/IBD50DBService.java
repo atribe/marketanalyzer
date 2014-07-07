@@ -16,7 +16,7 @@ import com.ar.marketanalyzer.ibd50.dao.Ibd50SymbolDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50TrackingDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.dao.stockOhlcvDao;
-import com.ar.marketanalyzer.ibd50.models.Ibd50RankingBean;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
 
 /**
@@ -64,7 +64,7 @@ public class IBD50DBService {
 	public void tableInit() {
 		symbolDao.tableInit();
 		trackingDao.tableInit();
-		rankingDao.tableInit();
+		//rankingDao.tableInit();
 		ohlcvDao.tableInit();
 	}
 
@@ -74,7 +74,7 @@ public class IBD50DBService {
 	 */
 	public void dropAllTables() {
 		try {
-			rankingDao.dropTable(Ibd50RankingBean.getTableName());
+			//rankingDao.dropTable(Ibd50RankingBean.getTableName());
 			rankingDao.dropTable(GenericDBSuperclass.SYMBOL_TABLE_NAME);
 			trackingDao.dropTable(Ibd50TrackingBean.getTableName());
 			ohlcvDao.dropTable(stockOhlcvBean.getTablename());
@@ -88,7 +88,7 @@ public class IBD50DBService {
 	 * Pulls the current top 50 from investors.com and adds them to the database 
 	 */
 	public void updateFromIbd50Web() {
-		List<Ibd50RankingBean> webIbd50 = webDao.grabIbd50();
+		List<Ibd50Ranking> webIbd50 = webDao.grabIbd50();
 		
 		addWeeklyListToDB(webIbd50);
 	}
@@ -113,14 +113,14 @@ public class IBD50DBService {
 	 * </ol>
 	 * @param webIbd50
 	 */
-	private void addWeeklyListToDB(List<Ibd50RankingBean> webIbd50) {
+	private void addWeeklyListToDB(List<Ibd50Ranking> webIbd50) {
 		
 		if(!isDbUpToDate(webIbd50)) { //if db not up to date
 			addThisWeeksListToDB(webIbd50);
 		}
 	}
 
-	private boolean isDbUpToDate(List<Ibd50RankingBean>	webIbd50) {
+	private boolean isDbUpToDate(List<Ibd50Ranking>	webIbd50) {
 		try {
 			return rankingDao.checkIfIbdUpToDate(webIbd50);
 		} catch (SQLException e) {
@@ -130,8 +130,8 @@ public class IBD50DBService {
 		}
 	}
 	
-	private void addThisWeeksListToDB(List<Ibd50RankingBean> webIbd50) {
-		for(Ibd50RankingBean row : webIbd50) {
+	private void addThisWeeksListToDB(List<Ibd50Ranking> webIbd50) {
+		for(Ibd50Ranking row : webIbd50) {
 			try {
 				
 				int symbol_id;
@@ -150,7 +150,7 @@ public class IBD50DBService {
 					tracking_id = addTrackingToDb( symbol_id );							//add it, return the id
 				}
 				
-				row.setSymbol_id(symbol_id);											//add the symbol id to the row
+				//row.setSymbol_id(symbol_id);											//add the symbol id to the row
 				row.setTracking_id(tracking_id);										//add the tracking id to the row
 				
 				// this method only runs when the database is not up to date, so I don't need to check
@@ -188,7 +188,7 @@ public class IBD50DBService {
 		return trackingDao.addSymbolToDb(symbol_id);
 	}
 	
-	private void addRowToRankingDb(Ibd50RankingBean row) throws SQLException {
+	private void addRowToRankingDb(Ibd50Ranking row) throws SQLException {
 		rankingDao.addRowToDb(row);
 	}
 	
@@ -204,9 +204,9 @@ public class IBD50DBService {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(Ibd50RankingBean row) throws SQLException {
+	private void runOhlcvUpdate(Ibd50Ranking row) throws SQLException {
 		final int monthsOfData = 6; 
-		
+		/*
 		LocalDate latestDate = ohlcvDao.getLatestDate(row.getSymbol_id());
 		LocalDate today = new LocalDate();
 		LocalDate startDate = today.minusMonths(monthsOfData);
@@ -218,5 +218,6 @@ public class IBD50DBService {
 		List<stockOhlcvBean> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getSymbol(), startDate, today, row.getSymbol_id());
 		
 		ohlcvDao.addOhlcvDataToDb(ohlcvData);
+		*/
 	}
 }

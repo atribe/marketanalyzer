@@ -1,10 +1,7 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,26 +15,25 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.database.GenericDBSuperclass;
-
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50RankingBean {
+public class Ibd50Ranking {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ranking_id", nullable=false, unique=true, length=8)
 	private Integer ranking_id;
 	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="symbol", referencedColumnName="ticker_symbol_id")
-	private Integer symbol_id;
-	
+	@Column(name="tracking_id")
 	private Integer tracking_id;
 	
 	@Column(name="rank_date", nullable=false)
 	private Date rankDate;
 
+	
+	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
+	@JoinColumn(name="symbol_id", referencedColumnName="ticker_symbol_id")
+	private TickerSymbol ticker;
 	
 	private String symbol;
 	private String companyName;
@@ -111,7 +107,7 @@ public class Ibd50RankingBean {
 	/*
 	 * Constructor
 	 */
-	public Ibd50RankingBean() {
+	public Ibd50Ranking() {
 		rankDate =  new Date(new LocalDate().toDate().getTime()); //aka today
 	}
 	
@@ -127,12 +123,6 @@ public class Ibd50RankingBean {
 	}
 	public void setRanking_id(Integer ranking_id) {
 		this.ranking_id = ranking_id;
-	}
-	public Integer getSymbol_id() {
-		return symbol_id;
-	}
-	public void setSymbol_id(Integer symbol_id) {
-		this.symbol_id = symbol_id;
 	}
 	public Integer getTracking_id() {
 		return tracking_id;
@@ -151,6 +141,12 @@ public class Ibd50RankingBean {
 	}
 	public void setRankDate(Date rankDate) {
 		this.rankDate = rankDate;
+	}
+	public TickerSymbol getTicker() {
+		return ticker;
+	}
+	public void setTicker(TickerSymbol ticker) {
+		this.ticker = ticker;
 	}
 	public String getSymbol() {
 		return symbol;
