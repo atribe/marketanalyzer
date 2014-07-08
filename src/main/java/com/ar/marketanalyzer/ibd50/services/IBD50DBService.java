@@ -9,14 +9,14 @@ import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
-import com.ar.marketanalyzer.ibd50.beans.Ibd50TrackingBean;
-import com.ar.marketanalyzer.ibd50.beans.stockOhlcvBean;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50RankingDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50SymbolDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50TrackingDao;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.dao.stockOhlcvDao;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
+import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
 
 /**
@@ -39,9 +39,9 @@ public class IBD50DBService {
 	public IBD50DBService() {
 		ds = MarketPredDataSource.setDataSource();
 		webDao = new Ibd50WebDao();
-		symbolDao = new Ibd50SymbolDao();
-		rankingDao = new Ibd50RankingDao(ds);
-		trackingDao = new Ibd50TrackingDao(ds);
+		//symbolDao = new Ibd50SymbolDao();
+		//rankingDao = new Ibd50RankingDao(ds);
+		//trackingDao = new Ibd50TrackingDao(ds);
 		ohlcvDao = new stockOhlcvDao(ds);
 	}
 	
@@ -52,9 +52,9 @@ public class IBD50DBService {
 	public IBD50DBService(DataSource passedds) {
 		this.ds = passedds;
 		webDao = new Ibd50WebDao();
-		symbolDao = new Ibd50SymbolDao(ds);
-		rankingDao = new Ibd50RankingDao(ds);
-		trackingDao = new Ibd50TrackingDao(ds);
+		//symbolDao = new Ibd50SymbolDao(ds);
+		//rankingDao = new Ibd50RankingDao(ds);
+		//trackingDao = new Ibd50TrackingDao(ds);
 		ohlcvDao = new stockOhlcvDao(ds);
 	}
 	
@@ -63,7 +63,7 @@ public class IBD50DBService {
 	 */
 	public void tableInit() {
 		symbolDao.tableInit();
-		trackingDao.tableInit();
+		//trackingDao.tableInit();
 		//rankingDao.tableInit();
 		ohlcvDao.tableInit();
 	}
@@ -73,15 +73,6 @@ public class IBD50DBService {
 	 * in the early development phase.
 	 */
 	public void dropAllTables() {
-		try {
-			//rankingDao.dropTable(Ibd50RankingBean.getTableName());
-			rankingDao.dropTable(GenericDBSuperclass.SYMBOL_TABLE_NAME);
-			trackingDao.dropTable(Ibd50TrackingBean.getTableName());
-			ohlcvDao.dropTable(stockOhlcvBean.getTablename());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -151,7 +142,7 @@ public class IBD50DBService {
 				}
 				
 				//row.setSymbol_id(symbol_id);											//add the symbol id to the row
-				row.setTracking_id(tracking_id);										//add the tracking id to the row
+				//row.setTrackingId(tracking_id);										//add the tracking id to the row
 				
 				// this method only runs when the database is not up to date, so I don't need to check
 				// if the symbol is in the ranking db, I just need to add it

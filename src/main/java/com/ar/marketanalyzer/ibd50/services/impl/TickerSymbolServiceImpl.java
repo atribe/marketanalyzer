@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.exceptions.TickerSymbolNotFound;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.repositories.TickerSymbolRepository;
@@ -33,11 +34,11 @@ public class TickerSymbolServiceImpl implements TickerSymbolService{
 
 	@Override
 	@Transactional(rollbackFor=TickerSymbolNotFound.class)
-	public TickerSymbol delete(int id) throws TickerSymbolNotFound {
+	public TickerSymbol delete(int id) throws GenericIbd50NotFound {
 		TickerSymbol deletedTickerSymbol = tickerSymbolRepository.findOne(id);
 		
 		if(deletedTickerSymbol == null) {
-			throw new TickerSymbolNotFound();
+			throw new GenericIbd50NotFound();
 		} 
 
 		tickerSymbolRepository.delete(id);
@@ -51,11 +52,11 @@ public class TickerSymbolServiceImpl implements TickerSymbolService{
 	}
 
 	@Override
-	public TickerSymbol update(TickerSymbol tickerSymbol) throws TickerSymbolNotFound {
+	public TickerSymbol update(TickerSymbol tickerSymbol) throws GenericIbd50NotFound {
 		TickerSymbol updatedTickerSymbol = tickerSymbolRepository.findOne(tickerSymbol.getId());
 		
 		if( updatedTickerSymbol == null) {
-			throw new TickerSymbolNotFound();
+			throw new GenericIbd50NotFound();
 		}
 		
 		updatedTickerSymbol.setName(tickerSymbol.getName());

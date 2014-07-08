@@ -22,7 +22,7 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
-import com.ar.marketanalyzer.ibd50.beans.stockOhlcvBean;
+import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
@@ -133,13 +133,13 @@ public class YahooDataRetriever {
 		return convertedList;
 	}
 	
-	public static List<stockOhlcvBean> getStockFromYahoo(String symbol, LocalDate startDate, LocalDate endDate, int symbol_id) {
+	public static List<StockOhlcv> getStockFromYahoo(String symbol, LocalDate startDate, LocalDate endDate, int symbol_id) {
 		int daysAgo = getNumberOfDaysFromNow(startDate);
 		
 		String url = getYahooURL(symbol, daysAgo);		
 		
 		List<YahooOHLCV> rawList = null;
-		List<stockOhlcvBean> convertedList = null;
+		List<StockOhlcv> convertedList = null;
 		
 		try {
 			rawList = getAndParseYahooData(symbol, url);
@@ -155,13 +155,13 @@ public class YahooDataRetriever {
 		return convertedList;
 	}
 
-	private static List<stockOhlcvBean> YahooOhlcvToStockOhlcvBean(
+	private static List<StockOhlcv> YahooOhlcvToStockOhlcvBean(
 			List<YahooOHLCV> rawList, String symbol, int symbol_id) {
 		
-		List<stockOhlcvBean> convertedList = new ArrayList<stockOhlcvBean>();
+		List<StockOhlcv> convertedList = new ArrayList<StockOhlcv>();
 		for(YahooOHLCV rowFromYahooURL:rawList) {
 			rowFromYahooURL.setSymbol(symbol);
-			convertedList.add(new stockOhlcvBean(rowFromYahooURL, symbol_id));
+			convertedList.add(new StockOhlcv(rowFromYahooURL, symbol_id));
 		}
 		
 		return convertedList;

@@ -22,18 +22,18 @@ public class Ibd50Ranking {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="ranking_id", nullable=false, unique=true, length=8)
-	private Integer ranking_id;
-	
-	@Column(name="tracking_id")
-	private Integer tracking_id;
+	private Integer rankingId;
 	
 	@Column(name="rank_date", nullable=false)
 	private Date rankDate;
 
-	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="ticker_symbol_id")
 	private TickerSymbol ticker;
+	
+	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
+	@JoinColumn(name="tracking_id", referencedColumnName="tracking_id")
+	private Ibd50Tracking tracker;
 	
 	private String symbol;
 	private String companyName;
@@ -118,20 +118,11 @@ public class Ibd50Ranking {
 	/*
 	 * Getters and Setters
 	 */
-	public Integer getRanking_id() {
-		return ranking_id;
+	public Integer getRankingId() {
+		return rankingId;
 	}
-	public void setRanking_id(Integer ranking_id) {
-		this.ranking_id = ranking_id;
-	}
-	public Integer getTracking_id() {
-		return tracking_id;
-	}
-	public void setTracking_id(Integer tracking_id) {
-		this.tracking_id = tracking_id;
-	}
-	public void setId(int id) {
-		this.ranking_id = new Integer(id);
+	public void setRankingId(Integer rankingId) {
+		this.rankingId = rankingId;
 	}
 	public Date getRankDate() {
 		return rankDate;
@@ -141,6 +132,12 @@ public class Ibd50Ranking {
 	}
 	public void setRankDate(Date rankDate) {
 		this.rankDate = rankDate;
+	}
+	public Ibd50Tracking getTracker() {
+		return tracker;
+	}
+	public void setTracker(Ibd50Tracking tracker) {
+		this.tracker = tracker;
 	}
 	public TickerSymbol getTicker() {
 		return ticker;

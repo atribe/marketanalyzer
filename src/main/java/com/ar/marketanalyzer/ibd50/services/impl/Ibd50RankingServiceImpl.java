@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.ibd50.exceptions.Ibd50RankingNotFound;
+import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50RankingRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
@@ -32,12 +32,12 @@ public class Ibd50RankingServiceImpl implements Ibd50RankingService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=Ibd50RankingNotFound.class)
-	public Ibd50Ranking delete(int id) throws Ibd50RankingNotFound {
+	@Transactional(rollbackFor=GenericIbd50NotFound.class)
+	public Ibd50Ranking delete(int id) throws GenericIbd50NotFound {
 		Ibd50Ranking deletedIbd50Ranking = ibd50RankingRepository.findOne(id);
 		
 		if(deletedIbd50Ranking == null) {
-			throw new Ibd50RankingNotFound();
+			throw new GenericIbd50NotFound();
 		} 
 
 		ibd50RankingRepository.delete(id);
@@ -51,13 +51,14 @@ public class Ibd50RankingServiceImpl implements Ibd50RankingService{
 	}
 
 	@Override
-	public Ibd50Ranking update(Ibd50Ranking ibd50Ranking) throws Ibd50RankingNotFound {
-		Ibd50Ranking updatedIbd50Ranking = ibd50RankingRepository.findOne(ibd50Ranking.getRanking_id());
+	public Ibd50Ranking update(Ibd50Ranking ibd50Ranking) throws GenericIbd50NotFound {
+		Ibd50Ranking updatedIbd50Ranking = ibd50RankingRepository.findOne(ibd50Ranking.getRankingId());
 		
 		if( updatedIbd50Ranking == null) {
-			throw new Ibd50RankingNotFound();
+			throw new GenericIbd50NotFound();
 		}
 		
+		//TODO Filler until I really write this code
 		updatedIbd50Ranking.setRank(ibd50Ranking.getRank());
 		
 		return updatedIbd50Ranking;

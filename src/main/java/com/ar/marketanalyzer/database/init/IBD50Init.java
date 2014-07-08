@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.services.IBD50DBService;
 import com.ar.marketanalyzer.ibd50.services.IBD50StatService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 
 @Component
@@ -31,6 +33,9 @@ public class IBD50Init {
 	@Autowired
 	private Ibd50RankingService rankingService;
 	
+	@Autowired
+	private Ibd50TrackingService trackingService;
+	
 	public void main() {
 		log.trace("Starting IBD50 DB init method");
 		
@@ -40,14 +45,24 @@ public class IBD50Init {
 		s.setSymbol("NOV");
 		s.setName("National Oilwell Varco");
 		s.setType("Stock");
-		a.setTicker(s);
+		tsService.create(s);
 		
+		Ibd50Tracking t = new Ibd50Tracking();
+		t.setActive(Boolean.TRUE);
+		t.setTicker(s);
+		trackingService.create(t);
+		
+		a.setTicker(s);
+		a.setTracker(t);
 		a.setRank(1);
 		a.setCurrentPrice(new BigDecimal(55.32));
 		a.setPriceChange(new BigDecimal(5.20));
 		a.setPricePercentChange(.23);
-		tsService.create(s);
+		
 		rankingService.create(a);
+		
+		
+		
 		
 		
 		

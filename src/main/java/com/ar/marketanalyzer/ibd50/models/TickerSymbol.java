@@ -33,6 +33,12 @@ public class TickerSymbol {
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
 	private Collection<Ibd50Ranking> rankings;
 	
+	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
+	private Collection<Ibd50Ranking> trackings;
+	
+	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
+	private Collection<Ibd50Ranking> ohlcvData;
+	
 	public int getId() {
 		return id;
 	}
