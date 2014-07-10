@@ -60,9 +60,10 @@ public class StockOhlcv {
 	//Empty constructed required to be a Java Bean
 	public StockOhlcv() {}
 	
-	public StockOhlcv(YahooOHLCV y, int symbol_id) {
-		//setSymbol(y.getSymbol());
-		//setSymbol_id(symbol_id);
+	public StockOhlcv(YahooOHLCV y, TickerSymbol ticker) {
+		
+		this.ticker = ticker;												//Setting the ticker to the passed ticker
+		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	    java.util.Date parsed=null;
 		try {

@@ -35,9 +35,6 @@ public class Ibd50Ranking {
 	@JoinColumn(name="tracking_id", referencedColumnName="tracking_id")
 	private Ibd50Tracking tracker;
 	
-	private String symbol;
-	private String companyName;
-	
 	@Column(name="rank", nullable=false)
 	private Integer rank;
 	
@@ -146,16 +143,16 @@ public class Ibd50Ranking {
 		this.ticker = ticker;
 	}
 	public String getSymbol() {
-		return symbol;
+		return ticker.getSymbol();
 	}
 	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+		ticker.setSymbol(symbol);
 	}
 	public String getCompanyName() {
-		return companyName;
+		return ticker.getName();
 	}
 	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+		ticker.setName(companyName);
 	}
 	public Integer getRank() {
 		return rank;

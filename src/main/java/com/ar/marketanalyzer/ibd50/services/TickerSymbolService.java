@@ -7,10 +7,10 @@ import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 
 public interface TickerSymbolService {
 
-public TickerSymbol create(TickerSymbol tickerSymbol);
-public TickerSymbol delete(int id) throws GenericIbd50NotFound;
-public List<TickerSymbol> findAll();
-public TickerSymbol update(TickerSymbol tickerSymbol) throws GenericIbd50NotFound;
-public TickerSymbol findById(int id);
-
+	public TickerSymbol create(TickerSymbol tickerSymbol);
+	public TickerSymbol delete(int id) throws GenericIbd50NotFound;
+	public List<TickerSymbol> findAll();
+	public TickerSymbol update(TickerSymbol tickerSymbol) throws GenericIbd50NotFound;
+	public TickerSymbol findById(int id);
+	public TickerSymbol findBySymbol(String symbol) throws GenericIbd50NotFound;
 }

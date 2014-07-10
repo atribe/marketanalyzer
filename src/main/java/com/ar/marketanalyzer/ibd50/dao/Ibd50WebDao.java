@@ -2,10 +2,8 @@ package com.ar.marketanalyzer.ibd50.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -30,8 +28,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ar.marketanalyzer.helpers.WhitespaceToCSVReader;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
@@ -155,53 +153,6 @@ public class Ibd50WebDao{
 		return response.getEntity().getContent();
 	}
 	
-	/**
-	 * Parses the whitespace delimited InputStream into a List of Beans 
-	 * 
-	 * @param is - whitespace delimited InputStream that should be the current IBD 50
-	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
-	 * @throws IOException
-	 */
-	private List<Ibd50Ranking> parseIBD50toBeanList(InputStream is) throws IOException {
-		List<Ibd50Ranking> rowsFromIBD50 = new ArrayList<Ibd50Ranking>();
-		Ibd50Ranking ibdRow = new Ibd50Ranking();
-		
-		WhitespaceToCSVReader reader = new WhitespaceToCSVReader(new InputStreamReader(is));
-		
-		//reads the first 6 lines, it's just headers
-		for(int i = 0; i<6 ; i++) {
-			reader.readLine();
-		}
-		
-		/*
-		 * Manually convert this to a bean because OpenCSV only works for comma separated, which this isn't
-		 * 1. Read a line
-		 * 2. tokenize on comma
-		 * 3. create a new bean
-		 * 4. throw each part of the list into the correct field of the bean
-		 * 5. add bean to bean list
-		 * 6. Repeat
-		 */
-		String line = reader.readLine();
-		
-		while (line != null) {
-			//splitting the line into an array
-			List<String> ibd50tokenizedList = Arrays.asList(line.split(","));
-			
-			ibdRow = parseListToBean(ibd50tokenizedList);
-			
-			//adding the bean to the bean list
-			rowsFromIBD50.add(ibdRow);
-
-			//reading a new line for the next loop
-			line = reader.readLine();
-		}
-		
-		reader.close();
-
-		return rowsFromIBD50;
-	}
-	
 	private List<Ibd50Ranking> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
 		List<Ibd50Ranking> rowsFromIBD50 = new ArrayList<Ibd50Ranking>();
 		
@@ -243,8 +194,13 @@ public class Ibd50WebDao{
 	private Ibd50Ranking parseListToBean(List<String> ibd50tokenizedList) {
 		Ibd50Ranking ibdRow = new Ibd50Ranking();
 		
-		ibdRow.setSymbol(ibd50tokenizedList.get(0));
-		ibdRow.setCompanyName(ibd50tokenizedList.get(1));
+		TickerSymbol company = new TickerSymbol();
+		
+		company.setSymbol(ibd50tokenizedList.get(0));
+		company.setName(ibd50tokenizedList.get(1));
+		company.setType("Stock");
+		ibdRow.setTicker(company);
+		
 		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));
 		ibdRow.setCurrentPrice(new BigDecimal(ibd50tokenizedList.get(3)));
 		ibdRow.setPriceChange(new BigDecimal(ibd50tokenizedList.get(4)));

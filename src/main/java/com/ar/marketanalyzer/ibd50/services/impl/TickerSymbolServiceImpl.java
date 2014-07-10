@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
-import com.ar.marketanalyzer.ibd50.exceptions.TickerSymbolNotFound;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.repositories.TickerSymbolRepository;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
@@ -17,43 +16,45 @@ import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 public class TickerSymbolServiceImpl implements TickerSymbolService{
 
 	@Resource
-	private TickerSymbolRepository tickerSymbolRepository;
+	private TickerSymbolRepository tickerSymbolRepo;
 	
 	@Override
 	@Transactional
 	public TickerSymbol create(TickerSymbol tickerSymbol) {
 		TickerSymbol createdTickerSymbol = tickerSymbol;
-		return tickerSymbolRepository.save(createdTickerSymbol);
+		return tickerSymbolRepo.save(createdTickerSymbol);
 	}
 
 	@Override
 	@Transactional
 	public TickerSymbol findById(int id) {
-		return tickerSymbolRepository.findOne(id);
+		return tickerSymbolRepo.findOne(id);
 	}
 
 	@Override
-	@Transactional(rollbackFor=TickerSymbolNotFound.class)
+	@Transactional(rollbackFor=GenericIbd50NotFound.class)
 	public TickerSymbol delete(int id) throws GenericIbd50NotFound {
-		TickerSymbol deletedTickerSymbol = tickerSymbolRepository.findOne(id);
+		TickerSymbol deletedTickerSymbol = tickerSymbolRepo.findOne(id);
 		
 		if(deletedTickerSymbol == null) {
 			throw new GenericIbd50NotFound();
 		} 
 
-		tickerSymbolRepository.delete(id);
+		tickerSymbolRepo.delete(id);
 		
 		return deletedTickerSymbol;	
 	}
 
 	@Override
+	@Transactional
 	public List<TickerSymbol> findAll() {
-		return tickerSymbolRepository.findAll();
+		return tickerSymbolRepo.findAll();
 	}
 
 	@Override
+	@Transactional(rollbackFor=GenericIbd50NotFound.class)
 	public TickerSymbol update(TickerSymbol tickerSymbol) throws GenericIbd50NotFound {
-		TickerSymbol updatedTickerSymbol = tickerSymbolRepository.findOne(tickerSymbol.getId());
+		TickerSymbol updatedTickerSymbol = tickerSymbolRepo.findOne(tickerSymbol.getId());
 		
 		if( updatedTickerSymbol == null) {
 			throw new GenericIbd50NotFound();
@@ -64,5 +65,18 @@ public class TickerSymbolServiceImpl implements TickerSymbolService{
 		updatedTickerSymbol.setType(tickerSymbol.getType());
 		
 		return updatedTickerSymbol;
+	}
+
+	
+	@Override
+	@Transactional(rollbackFor=GenericIbd50NotFound.class)
+	public TickerSymbol findBySymbol(String symbol) throws GenericIbd50NotFound {
+		TickerSymbol foundTickerSymbol = tickerSymbolRepo.findBySymbol(symbol);
+		
+		if( foundTickerSymbol == null ) {
+			throw new GenericIbd50NotFound("A Ticker with the Symbol '" + symbol + "' was not found in the Ticker DB");
+		}
+		
+		return foundTickerSymbol;
 	}
 }
