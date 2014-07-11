@@ -187,7 +187,7 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 		LocalDate today = new LocalDate();										//get todays date
 		LocalDate startDate = today.minusMonths(monthsOfData);					//get monthsOfData (6) months agos date
 
-		if( oldestDate.isAfter(startDate) ) { 								//if the date in the db is after the proposed start date
+		if( oldestDate.isBefore(startDate) ) { 								//if the date in the db is after the proposed start date
 			startDate = oldestDate;											//then use the date from the db
 		}																	//else keep original start date
 		

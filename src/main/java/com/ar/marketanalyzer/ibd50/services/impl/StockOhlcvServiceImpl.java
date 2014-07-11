@@ -106,6 +106,12 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 			}
 		}
 		
+		//TODO This doesn't work
+		/*
+		for(StockOhlcv ohlcv: ohlcvList) {
+		 	stockOhlcvRepo.save(ohlcv);
+		}
+		*/
 		stockOhlcvRepo.save(ohlcvList);														//batch add
 		stockOhlcvRepo.flush();																//save the batch
 		
