@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.services;
+package com.ar.marketanalyzer.ibd50.services.impl;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,6 +15,11 @@ import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
+import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50UpdateService;
+import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
+import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
 
 /**
@@ -31,13 +36,10 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 	
 	@Autowired
 	private TickerSymbolService tsService;
-	
 	@Autowired
 	private Ibd50RankingService rankingService;
-	
 	@Autowired
 	private Ibd50TrackingService trackingService;
-	
 	@Autowired
 	private StockOhlcvService ohlcvService;
 	

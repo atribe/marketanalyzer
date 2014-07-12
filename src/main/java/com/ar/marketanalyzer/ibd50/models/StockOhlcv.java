@@ -36,22 +36,22 @@ public class StockOhlcv {
 	@Column
 	private Date date;
 	
-	@Column(precision=2)
+	@Column(precision=12, scale=2)
 	private BigDecimal open;
 	
-	@Column(precision=2)
+	@Column(precision=12, scale=2)
 	private BigDecimal high;
 	
-	@Column(precision=2)
+	@Column(precision=12, scale=2)
 	private BigDecimal low;
 	
-	@Column(precision=2)
+	@Column(precision=12, scale=2)
 	private BigDecimal close;
 	
 	@Column(precision=0)
 	private long volume;
 	
-	@Column(name="adjusted_close", precision=2)
+	@Column(name="adjusted_close", precision=12, scale=2)
 	private BigDecimal adjClose;
 	
 	/*
