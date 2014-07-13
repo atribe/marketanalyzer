@@ -1,11 +1,8 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,8 +18,6 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
-
-import com.ar.marketanalyzer.database.GenericDBSuperclass;
 
 @Entity
 @Table(name = "IBD50_TRACKING")
@@ -62,11 +57,6 @@ public class Ibd50Tracking {
 	 * Constructors
 	 */
 	public Ibd50Tracking() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public Ibd50Tracking(int symbol_id) {
-		//setSymbol_id( symbol_id );
 		setJoinDate( newMonday() );
 	}
 
@@ -121,7 +111,7 @@ public class Ibd50Tracking {
 		this.joinDate = joinDate;
 	}
 	public void setJoinDate(LocalDate join_date) {
-		setJoinDate( new Date(join_date.toDate().getTime()) );
+		setJoinDate( join_date.toDate() );
 	}
 	public Date getLeaveDate() {
 		return leaveDate;

@@ -1,7 +1,7 @@
 package com.ar.marketanalyzer.ibd50.models;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 @Entity
@@ -35,6 +40,14 @@ public class Ibd50Ranking {
 	@JoinColumn(name="tracking_id", referencedColumnName="tracking_id")
 	private Ibd50Tracking tracker;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "creation_time", nullable = false)
+	private Date creationTime;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modification_time", nullable = false)
+	private Date modificationTime;
+	 
 	@Column(name="rank", nullable=false)
 	private Integer rank;
 	
@@ -105,12 +118,37 @@ public class Ibd50Ranking {
 	 * Constructor
 	 */
 	public Ibd50Ranking() {
-		rankDate =  new Date(new LocalDate().toDate().getTime()); //aka today
+		rankDate =  findMondayRankDate(); //aka today
 	}
 	
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+	private Date findMondayRankDate() {
+		LocalDate today = new LocalDate();
+		
+		LocalDate dateToReturn = null;
+		
+		if(today.dayOfWeek().equals(DateTimeConstants.MONDAY)) {
+			dateToReturn = today;
+		} else {
+			dateToReturn = today.withDayOfWeek(1);
+		}
+		
+		return dateToReturn.toDate();
+	}
+	
+	@PreUpdate
+    public void preUpdate() {
+        modificationTime = new LocalDate().toDate();
+    }
+     
+    @PrePersist
+    public void prePersist() {
+        Date now = new LocalDate().toDate();
+        creationTime = now;
+        modificationTime = now;
+    }
 	
 	/*
 	 * Getters and Setters
@@ -145,6 +183,24 @@ public class Ibd50Ranking {
 	public String getSymbol() {
 		return ticker.getSymbol();
 	}
+	public Date getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public Date getModificationTime() {
+		return modificationTime;
+	}
+	public LocalDate getLocalDateModificationTime() {
+		return new LocalDate(modificationTime);
+	}
+	public void setModificationTime(Date modificationTime) {
+		this.modificationTime = modificationTime;
+	}
+
 	public void setSymbol(String symbol) {
 		ticker.setSymbol(symbol);
 	}

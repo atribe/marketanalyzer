@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.ibd50.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
@@ -14,4 +15,5 @@ public interface Ibd50RankingService {
 	public Ibd50Ranking update(Ibd50Ranking Ibd50Ranking) throws GenericIbd50NotFound;
 	public Ibd50Ranking findById(int id);
 	public List<Ibd50Ranking> findByRankAndTicker(int rank, TickerSymbol ticker) throws GenericIbd50NotFound;
+	public List<Ibd50Ranking> findByModificationTimeAfter(Date date) throws GenericIbd50NotFound;
 }

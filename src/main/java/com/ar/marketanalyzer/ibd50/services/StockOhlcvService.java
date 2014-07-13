@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.ibd50.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
@@ -15,4 +16,5 @@ public interface StockOhlcvService {
 	public StockOhlcv findById(int id);
 	public List<StockOhlcv> findByTicker(TickerSymbol ticker) throws GenericIbd50NotFound;
 	public void batchInsert(List<StockOhlcv> ohlcvList);
+	public StockOhlcv findByTickerAndDate(TickerSymbol foundTicker,	Date date);
 }

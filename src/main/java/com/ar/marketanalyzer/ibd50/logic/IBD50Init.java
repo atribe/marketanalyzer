@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.ibd50.services.Ibd50UpdateService;
-
 @Component
 public class IBD50Init {
 
@@ -14,7 +12,7 @@ public class IBD50Init {
 	static Logger log = Logger.getLogger(IBD50Init.class.getName());
 	
 	@Autowired
-	private Ibd50UpdateService ibd50UpdateService;
+	private Ibd50UpdateLogic ibd50Update;
 	
 	public void main() {
 		log.trace("Starting IBD50 DB init method");
@@ -54,6 +52,6 @@ public class IBD50Init {
 	}
 	
 	private void updateFromIbd50Web() {
-		ibd50UpdateService.updateIbd50();
+		ibd50Update.updateIbd50();
 	}
 }

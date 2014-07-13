@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.ibd50.services.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -24,19 +25,6 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	private TickerSymbolService tickerSymbolService;
 	
 	@Override
-	@Transactional
-	public StockOhlcv create(StockOhlcv stockOhlcv) {
-		StockOhlcv createdStockOhlcv = stockOhlcv;
-		return stockOhlcvRepo.save(createdStockOhlcv);
-	}
-
-	@Override
-	@Transactional
-	public StockOhlcv findById(int id) {
-		return stockOhlcvRepo.findOne(id);
-	}
-
-	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
 	public StockOhlcv delete(int id) throws GenericIbd50NotFound {
 		StockOhlcv deletedStockOhlcv = stockOhlcvRepo.findOne(id);
@@ -49,11 +37,34 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 		
 		return deletedStockOhlcv;	
 	}
-
+	
 	@Override
 	@Transactional
-	public List<StockOhlcv> findAll() {
-		return stockOhlcvRepo.findAll();
+	public StockOhlcv create(StockOhlcv stockOhlcv) {
+		
+		StockOhlcv createdStockOhlcv = stockOhlcv;
+		TickerSymbol ticker = createdStockOhlcv.getTicker();								//Get the ticker from the ohlcvList
+		
+		TickerSymbol foundTickerSymbol = getOrCreateSymbol(ticker);					//create a variable to hold the ticker from the db
+		
+		createdStockOhlcv.setTicker(foundTickerSymbol);
+		
+		return stockOhlcvRepo.save(createdStockOhlcv);
+	}
+
+	@Override
+	@Transactional(rollbackFor=GenericIbd50NotFound.class)
+	public void batchInsert(List<StockOhlcv> ohlcvList) {
+		
+		TickerSymbol ticker = ohlcvList.get(0).getTicker();								//Get the ticker from the ohlcvList
+		
+		TickerSymbol foundTickerSymbol = getOrCreateSymbol(ticker);						//create a variable to hold the ticker from the db
+		
+		for(StockOhlcv ohlcv: ohlcvList) {
+			ohlcv.setTicker(foundTickerSymbol);											//cycle through the list of ohlcv and add the ticker from the db
+		}
+
+		stockOhlcvRepo.save(ohlcvList);													//batch add 
 	}
 
 	@Override
@@ -70,7 +81,18 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 		
 		return updatedStockOhlcv;
 	}
-
+	
+	@Override
+	@Transactional
+	public List<StockOhlcv> findAll() {
+		return stockOhlcvRepo.findAll();
+	}
+	
+	@Override
+	@Transactional
+	public StockOhlcv findById(int id) {
+		return stockOhlcvRepo.findOne(id);
+	}
 	
 	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
@@ -92,28 +114,21 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 
 	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public void batchInsert(List<StockOhlcv> ohlcvList) {
-		
-		TickerSymbol ticker = ohlcvList.get(0).getTicker();									//Get the ticker from the ohlcvList
+	public StockOhlcv findByTickerAndDate(TickerSymbol ticker,	Date date) {
+		return stockOhlcvRepo.findByTickerAndDate(ticker, date);
+	}
+	
+	/*
+	 * Helper Methods
+	 */
+	private TickerSymbol getOrCreateSymbol(TickerSymbol ticker) {
 		TickerSymbol foundTickerSymbol;														//create a variable to hold the ticker from the db
 		try {
 			foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());		//find the ticker in the db
 		} catch (GenericIbd50NotFound e) {
-			foundTickerSymbol = tickerSymbolService.create(ticker);							//ticker wasn't in the db, so create it
-			
-			for(StockOhlcv ohlcv: ohlcvList) {
-				ohlcv.setTicker(foundTickerSymbol);											//cycle through the list of ohlcv and add the ticker from the db
-			}
+			foundTickerSymbol = tickerSymbolService.create(ticker);	
 		}
 		
-		//TODO This doesn't work
-		/*
-		for(StockOhlcv ohlcv: ohlcvList) {
-		 	stockOhlcvRepo.save(ohlcv);
-		}
-		*/
-		stockOhlcvRepo.save(ohlcvList);														//batch add
-		stockOhlcvRepo.flush();																//save the batch
-		
-	}
+		return foundTickerSymbol;
+	}	
 }

@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.services.impl;
+package com.ar.marketanalyzer.ibd50.logic;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,7 +17,6 @@ import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
-import com.ar.marketanalyzer.ibd50.services.Ibd50UpdateService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
@@ -27,7 +26,7 @@ import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
  *
  */
 @Service
-public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
+public class Ibd50UpdateLogic {
 	
 	//logger
 	private Logger log = Logger.getLogger(this.getClass().getName());
@@ -47,19 +46,19 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 	 * Constructor that gets a new DataSource and then creates all 
 	 * required DAOs with the DataSource
 	 */
-	public Ibd50UpdateServiceImpl() {
+	public Ibd50UpdateLogic() {
 	}
 
 	/**
 	 * Pulls the current top 50 from investors.com and adds them to the database 
 	 */
-	@Override
 	public void updateIbd50() {
-		 webDao = new Ibd50WebDao();
-		 
-		List<Ibd50Ranking> webIbd50 = webDao.grabIbd50();
-		
-		addWeeklyListToDB(webIbd50);
+		if( !isDbUpToDate() ) {
+			webDao = new Ibd50WebDao();
+			List<Ibd50Ranking> webIbd50 = webDao.grabIbd50();
+	
+			addThisWeeksListToDB(webIbd50);
+		}
 	}
 	
 	/**
@@ -82,34 +81,28 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 	 * </ol>
 	 * @param webIbd50
 	 */
-	private void addWeeklyListToDB(List<Ibd50Ranking> webIbd50) {
-		
-		if(!isDbUpToDate(webIbd50)) { //if db not up to date
-			addThisWeeksListToDB(webIbd50);
-		}
-	}
 
-	private boolean isDbUpToDate(List<Ibd50Ranking>	webIbd50) {
-		/*
-		 * Check to see if the first in the downloaded list matches the current first. 
-		 * See if the symbol and rank are the same. then check if the dates are within 7 days of each other, but not both from the same day
-		 */
-		Ibd50Ranking rankOne = webIbd50.get(0);
+	private boolean isDbUpToDate() {
+		LocalDate previousMonday = new LocalDate().withDayOfWeek(1);								// Get the most recent monday
 		
+		List<Ibd50Ranking> newestRankings;
 		try {
-			rankingService.findByRankAndTicker(rankOne.getRank(), rankOne.getTicker());
+			newestRankings = rankingService.findByModificationTimeAfter(previousMonday.toDate());	// Check the db for any rankings modified after monday
 		} catch (GenericIbd50NotFound e) {
-			log.info(e.getMessage());
-			log.info("The above message means that the DB is out of date and to proceed with updating it.");
-			return false;			//no results were found for the query, that must mean the list is not up to date
+			return false;																			// None found, so db is not up to date
 		}
 		
-		//TODO make sure whatever happens when the exceptions aren't thrown is what is supposed to happen
-		return true;
+		Ibd50Ranking newestRanking = newestRankings.get(0);
+		
+		if(newestRanking.getLocalDateModificationTime().isAfter(previousMonday) || newestRanking.getLocalDateRankDate().equals(previousMonday)) {							// Doing a check with the LocalDate to make sure it is after monday
+			return true;																			// test is true, so return true
+		} else {
+			return false;																			// Date is not after monday so return false
+		}
 	}
 	
 	private void addThisWeeksListToDB(List<Ibd50Ranking> webIbd50) {
-		for(Ibd50Ranking rankingRow : webIbd50) {
+		for(Ibd50Ranking rankingRow : webIbd50) {									// Cycle through the each of row of the top 50
 			
 			TickerSymbol rowTicker = rankingRow.getTicker();
 			TickerSymbol foundTicker;
@@ -125,6 +118,10 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 			}
 			
 			rankingRow.setTicker(foundTicker);										//Set the found ticker to be the ticker for the row
+			
+							//Check to see if the OHLCV data is up to date for this stock symbol
+			runOhlcvUpdate(rankingRow);												//add the last 6 months of OHLCV data to the db
+			
 			final boolean isActive = true;
 	
 			Ibd50Tracking foundTracker;
@@ -133,12 +130,12 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 			} catch (GenericIbd50NotFound e) {
 				log.info(e.getMessage());
 				
-					//Tracker not found
+																					//Tracker not found
 				Ibd50Tracking newTracker = new Ibd50Tracking();						//create a new tracker
 				newTracker.setTicker(foundTicker);									//set the Ticker for the new tracker
 				newTracker.setActive(Boolean.TRUE);
-				newTracker.setJoinDate(new LocalDate());
-				//Need to set the join price
+				StockOhlcv joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
+				newTracker.setJoinPrice(joinDayOhlcv.getClose());
 				
 				foundTracker = trackingService.create(newTracker);					//add the new tracker to the db
 			} catch (Ibd50TooManyFound e) {
@@ -150,9 +147,6 @@ public class Ibd50UpdateServiceImpl implements Ibd50UpdateService {
 			rankingRow.setTracker(foundTracker);									//Set the found tracker to be the tracker for the row
 	
 			rankingService.create(rankingRow);										//add the row to the db
-			
-				//Check to see if the OHLCV data is up to date for this stock symbol
-			runOhlcvUpdate(rankingRow);												//add the last 6 months of OHLCV data to the db
 		}
 	}
 

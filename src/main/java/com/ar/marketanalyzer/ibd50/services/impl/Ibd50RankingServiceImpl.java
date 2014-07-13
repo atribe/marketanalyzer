@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.ibd50.services.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -81,12 +82,21 @@ public class Ibd50RankingServiceImpl implements Ibd50RankingService{
 			throw new GenericIbd50NotFound("By Rank and Ticker search for " + ticker.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
 		}
 		
-		List<Ibd50Ranking> rankingList = ibd50RankingRepo.findByRankAndTickerOrderByRankDateAsc(rank, ticker);
+		List<Ibd50Ranking> rankingList = ibd50RankingRepo.findByRankAndTickerOrderByRankDateAsc(rank, foundTickerSymbol);
 		
 		if(rankingList.isEmpty()) {
-			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found with rank " + rank + " in the Rank DB");
+			throw new GenericIbd50NotFound("The Ticker '" + foundTickerSymbol.getSymbol() + "' was not found with rank " + rank + " in the Rank DB");
 		}
 		
 		return rankingList ;
+	}
+
+	@Override
+	public List<Ibd50Ranking> findByModificationTimeAfter(Date date) throws GenericIbd50NotFound {
+		List<Ibd50Ranking> foundRanking = ibd50RankingRepo.findByModificationTimeAfter(date);
+		if( foundRanking == null) {
+			throw new GenericIbd50NotFound();
+		}
+		return foundRanking;
 	}
 }
