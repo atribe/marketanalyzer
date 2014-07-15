@@ -91,9 +91,12 @@ public class Ibd50UpdateLogic {
 		} catch (GenericIbd50NotFound e) {
 			return false;																			// None found, so db is not up to date
 		}
-		
-		Ibd50Ranking newestRanking = newestRankings.get(0);
-		
+		Ibd50Ranking newestRanking;
+		try {
+			newestRanking = newestRankings.get(0);
+		} catch (IndexOutOfBoundsException e) {
+			return false;																			// if there isn't an element 0 then db isn't updated
+		}
 		if(newestRanking.getLocalDateModificationTime().isAfter(previousMonday) || newestRanking.getLocalDateRankDate().equals(previousMonday)) {							// Doing a check with the LocalDate to make sure it is after monday
 			return true;																			// test is true, so return true
 		} else {
