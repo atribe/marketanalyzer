@@ -16,5 +16,6 @@ public interface StockOhlcvService {
 	public StockOhlcv findById(int id);
 	public List<StockOhlcv> findByTicker(TickerSymbol ticker) throws GenericIbd50NotFound;
 	public void batchInsert(List<StockOhlcv> ohlcvList);
-	public StockOhlcv findByTickerAndDate(TickerSymbol foundTicker,	Date date);
+	public StockOhlcv findByTickerAndDate(TickerSymbol foundTicker,	Date date) throws GenericIbd50NotFound;
+	public List<StockOhlcv> findByTickerAndDateAfter(TickerSymbol ticker, Date date)throws GenericIbd50NotFound;
 }

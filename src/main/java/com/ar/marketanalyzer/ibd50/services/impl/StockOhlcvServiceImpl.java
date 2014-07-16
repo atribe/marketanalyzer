@@ -114,8 +114,26 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 
 	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public StockOhlcv findByTickerAndDate(TickerSymbol ticker,	Date date) {
-		return stockOhlcvRepo.findByTickerAndDate(ticker, date);
+	public StockOhlcv findByTickerAndDate(TickerSymbol ticker,	Date date) throws GenericIbd50NotFound{
+		StockOhlcv ohlcv = stockOhlcvRepo.findByTickerAndDate(ticker, date);
+		
+		if( ohlcv == null ) {
+			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found with date " + date.toString() + " in the stock ohlcv db.");
+		}
+		
+		return ohlcv;
+	}
+	
+	@Override
+	public List<StockOhlcv> findByTickerAndDateAfter(TickerSymbol ticker, Date date) throws GenericIbd50NotFound {
+		
+		List<StockOhlcv> ohlcvList = stockOhlcvRepo.findByTickerAndDateAfterOrderByDateDesc(ticker, date);
+		
+		if(ohlcvList.isEmpty()) {
+			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
+		}
+		
+		return ohlcvList;
 	}
 	
 	/*
@@ -130,5 +148,7 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 		}
 		
 		return foundTickerSymbol;
-	}	
+	}
+
+	
 }

@@ -13,4 +13,5 @@ public interface StockOhlcvRepository extends JpaRepository<StockOhlcv, Integer>
 	public List<StockOhlcv> findByTicker(TickerSymbol ticker);
 	public StockOhlcv findByTickerAndDate(TickerSymbol ticker, Date date);
 
+	public List<StockOhlcv> findByTickerAndDateAfterOrderByDateDesc(TickerSymbol ticker, Date date);
 }

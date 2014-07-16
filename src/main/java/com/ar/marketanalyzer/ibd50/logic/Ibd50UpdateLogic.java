@@ -42,10 +42,6 @@ public class Ibd50UpdateLogic {
 	@Autowired
 	private StockOhlcvService ohlcvService;
 	
-	/**
-	 * Constructor that gets a new DataSource and then creates all 
-	 * required DAOs with the DataSource
-	 */
 	public Ibd50UpdateLogic() {
 	}
 
@@ -137,7 +133,13 @@ public class Ibd50UpdateLogic {
 				Ibd50Tracking newTracker = new Ibd50Tracking();						//create a new tracker
 				newTracker.setTicker(foundTicker);									//set the Ticker for the new tracker
 				newTracker.setActive(Boolean.TRUE);
-				StockOhlcv joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
+				StockOhlcv joinDayOhlcv = null;
+				try {
+					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
+				} catch (GenericIbd50NotFound e1) {
+					log.info(e.getMessage());
+					e.printStackTrace();
+				}
 				newTracker.setJoinPrice(joinDayOhlcv.getClose());
 				
 				foundTracker = trackingService.create(newTracker);					//add the new tracker to the db
@@ -145,7 +147,7 @@ public class Ibd50UpdateLogic {
 				log.info(e.getMessage());
 				e.printStackTrace();
 				break;
-			}
+			} 
 			
 			rankingRow.setTracker(foundTracker);									//Set the found tracker to be the tracker for the row
 	
@@ -169,26 +171,23 @@ public class Ibd50UpdateLogic {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;
-		LocalDate oldestDate = new LocalDate();									//set the oldestDate as today
+		LocalDate ohlcvDesiredStartDate = new LocalDate().minusMonths(monthsOfData);									//set the oldestDate as today
+		LocalDate startDate;
+		LocalDate today = new LocalDate();
 		try {
-			currentOhlcvList = ohlcvService.findByTicker(row.getTicker());
-																			//Get the oldest date in the db for the given symbol	
-			for(StockOhlcv ohlcv: currentOhlcvList) {							//cycle through each ohlcv date and see if they are older than today and then, as it cycles, each other
-				if(ohlcv.getLocalDate().isBefore(oldestDate)) {					//if the date is older than the current oldest date
-					oldestDate=ohlcv.getLocalDate();							//set the new oldest date as the oldestDate
-				}
-			}
+			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(row.getTicker(), ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
 			
+			//older data was found in the db
+			//so find the newest, the above query sorts so newest is at position 0
+			StockOhlcv mostRecentDate = currentOhlcvList.get(0);
+			startDate = mostRecentDate.getLocalDate().plusDays(1); 		//Then add a day so we don't have duplicate data
 		} catch (GenericIbd50NotFound e) {
-			// No ohlcv data exists in the db yet for this stock. Proceed and add monthsOfData (6) of it
+			log.info(e.getMessage());
+			
+			//nothing was found in the db
+			//so set the furthest date back to be six months ago
+			startDate = ohlcvDesiredStartDate;
 		}
-		
-		LocalDate today = new LocalDate();										//get todays date
-		LocalDate startDate = today.minusMonths(monthsOfData);					//get monthsOfData (6) months agos date
-
-		if( oldestDate.isBefore(startDate) ) { 								//if the date in the db is after the proposed start date
-			startDate = oldestDate;											//then use the date from the db
-		}																	//else keep original start date
 		
 		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getTicker(), startDate, today);
 		
