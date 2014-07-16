@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "IBD50_RANKING")
@@ -140,12 +141,12 @@ public class Ibd50Ranking {
 	
 	@PreUpdate
     public void preUpdate() {
-        modificationTime = new LocalDate().toDate();
+        modificationTime = new LocalDateTime().toDate();
     }
      
     @PrePersist
     public void prePersist() {
-        Date now = new LocalDate().toDate();
+        Date now = new LocalDateTime().toDate();
         creationTime = now;
         modificationTime = now;
     }
