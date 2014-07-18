@@ -77,7 +77,6 @@ public class Ibd50UpdateLogic {
 	 * </ol>
 	 * @param webIbd50
 	 */
-
 	private boolean isDbUpToDate() {
 		LocalDate previousMonday = new LocalDate().withDayOfWeek(1);								// Get the most recent monday
 		
