@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,15 +17,17 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")
-public class StockOhlcv extends PersitableEntity{
+public class StockOhlcv{
 
-	private static final long serialVersionUID = 5357722208154510288L;
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(nullable=false, unique=true)
+	private Integer id;
+	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private TickerSymbol ticker;
@@ -96,6 +101,12 @@ public class StockOhlcv extends PersitableEntity{
 		return ToStringBuilder.reflectionToString(this);
 	}
 
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public TickerSymbol getTicker() {
 		return ticker;
 	}

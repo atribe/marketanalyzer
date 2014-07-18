@@ -17,10 +17,15 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 
 	@Resource
 	private Ibd50CustomIndexRepository ibd50CustomIndexRepo;
+
+	
+	/*
+	 * Database Functions
+	 */
 	
 	@Override
 	@Transactional
-	public Ibd50CustomIndex create(Ibd50CustomIndex ibd50CustomIndex) {
+ 	public Ibd50CustomIndex create(Ibd50CustomIndex ibd50CustomIndex) {
 		Ibd50CustomIndex createdIbd50CustomIndex = ibd50CustomIndex;
 		return ibd50CustomIndexRepo.save(createdIbd50CustomIndex);
 	}

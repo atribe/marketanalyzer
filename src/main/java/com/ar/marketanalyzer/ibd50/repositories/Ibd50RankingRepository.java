@@ -12,4 +12,5 @@ public interface Ibd50RankingRepository extends JpaRepository<Ibd50Ranking, Inte
 
 	public List<Ibd50Ranking> findByRankAndTickerOrderByRankDateAsc(int rank, TickerSymbol ticker);
 	public List<Ibd50Ranking> findByModificationTimeAfter(Date date);
+	public List<Ibd50Ranking> findByActiveTrueAndRankBetween(int startRank, int endRank);
 }

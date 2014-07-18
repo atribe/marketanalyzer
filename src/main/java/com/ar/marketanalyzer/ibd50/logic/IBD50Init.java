@@ -13,13 +13,14 @@ public class IBD50Init {
 	
 	@Autowired
 	private Ibd50UpdateLogic ibd50Update;
-	
+	@Autowired
+	private IBD50StatsLogic ibd50Stats;
 	public void main() {
 		log.trace("Starting IBD50 DB init method");
 
 		updateFromIbd50Web();
 
-		//ibd50StatService.calcIbd50Stats();
+		runIbd50Stats();
 	}
 
 	//Scheduled to run every Monday at 5 am
@@ -30,5 +31,9 @@ public class IBD50Init {
 	
 	private void updateFromIbd50Web() {
 		ibd50Update.updateIbd50();
+	}
+	
+	private void runIbd50Stats() {
+		ibd50Stats.calcIbd50Stats();
 	}
 }

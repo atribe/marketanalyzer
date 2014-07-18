@@ -20,8 +20,10 @@ public class Ibd50CustomIndex extends PersitableEntity{
 
 	@Column(name="index_name", nullable=false)
 	private String indexName;
+	
 	@Column(name="rank_range_start", nullable=false)
 	private Integer rankRangeStart;
+	
 	@Column(name="rank_range_end", nullable=false)
 	private Integer rankRangeEnd;
 	
