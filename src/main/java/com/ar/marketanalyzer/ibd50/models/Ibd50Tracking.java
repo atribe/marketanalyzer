@@ -7,9 +7,6 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -19,17 +16,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+
 @Entity
 @Table(name = "IBD50_TRACKING")
-public class Ibd50Tracking {
+public class Ibd50Tracking extends PersitableEntity{
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="tracking_id", nullable=false, unique=true, length=8)
-	private int trackingId;
-	
+	private static final long serialVersionUID = -3420926876186272627L;
+
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
-	@JoinColumn(name="symbol_id", referencedColumnName="ticker_symbol_id")
+	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private TickerSymbol ticker;
 	
 	@OneToMany(mappedBy = "tracker",cascade = CascadeType.ALL)
@@ -63,6 +59,7 @@ public class Ibd50Tracking {
 	/*
 	 * Helper Methods
 	 */
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
@@ -78,15 +75,6 @@ public class Ibd50Tracking {
 	/*
 	 * Getters and Setters
 	 */
-
-	public int getTrackingId() {
-		return trackingId;
-	}
-
-	public void setTrackingId(int trackingId) {
-		this.trackingId = trackingId;
-	}
-
 	public TickerSymbol getTicker() {
 		return ticker;
 	}

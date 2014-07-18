@@ -61,7 +61,7 @@ public class Ibd50RankingServiceImpl implements Ibd50RankingService{
 	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
 	public Ibd50Ranking update(Ibd50Ranking ibd50Ranking) throws GenericIbd50NotFound {
-		Ibd50Ranking updatedIbd50Ranking = ibd50RankingRepo.findOne(ibd50Ranking.getRankingId());
+		Ibd50Ranking updatedIbd50Ranking = ibd50RankingRepo.findOne(ibd50Ranking.getId());
 		
 		if( updatedIbd50Ranking == null) {
 			throw new GenericIbd50NotFound();

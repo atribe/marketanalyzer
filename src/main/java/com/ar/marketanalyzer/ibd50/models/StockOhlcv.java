@@ -7,9 +7,6 @@ import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,20 +14,17 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")
-public class StockOhlcv {
+public class StockOhlcv extends PersitableEntity{
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="stock_ohlcv_id", nullable=false, unique=true, length=10)
-	private int id;
-	
-	
+	private static final long serialVersionUID = 5357722208154510288L;
+
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
-	@JoinColumn(name="symbol_id", referencedColumnName="ticker_symbol_id")
+	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private TickerSymbol ticker;
 	
 	@Column
@@ -100,14 +94,6 @@ public class StockOhlcv {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public TickerSymbol getTicker() {

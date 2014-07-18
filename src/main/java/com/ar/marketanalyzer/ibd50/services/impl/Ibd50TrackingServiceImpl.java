@@ -59,7 +59,7 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 	@Override
 	@Transactional(rollbackFor=GenericIbd50NotFound.class)
 	public Ibd50Tracking update(Ibd50Tracking ibd50Tracking) throws GenericIbd50NotFound {
-		Ibd50Tracking updatedIbd50Tracking = ibd50TrackingRepo.findOne(ibd50Tracking.getTrackingId());
+		Ibd50Tracking updatedIbd50Tracking = ibd50TrackingRepo.findOne(ibd50Tracking.getId());
 		
 		if( updatedIbd50Tracking == null) {
 			throw new GenericIbd50NotFound();

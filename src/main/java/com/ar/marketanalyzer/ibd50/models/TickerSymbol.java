@@ -5,21 +5,16 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+
 @Entity
 @Table(name = "IBD50_TICKER_SYMBOLS")
-public class TickerSymbol {
+public class TickerSymbol extends PersitableEntity {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ticker_symbol_id", nullable=false, unique=true, length=6)
-	private int id;
+	private static final long serialVersionUID = 8657512556970860218L;
 
 	@Column(name="symbol", length=15, nullable=false)
 	private String symbol;
@@ -39,12 +34,6 @@ public class TickerSymbol {
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
 	private Collection<Ibd50Ranking> ohlcvData;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getSymbol() {
 		return symbol;
 	}

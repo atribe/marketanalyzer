@@ -1,55 +1,41 @@
 package com.ar.marketanalyzer.ibd50.models;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+
+import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
 
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50Ranking {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ranking_id", nullable=false, unique=true, length=8)
-	private Integer rankingId;
-	
+public class Ibd50Ranking extends PersitableEntity {
+		
+	private static final long serialVersionUID = 5791875306977524480L;
+
 	@Column(name="rank_date", nullable=false)
 	private Date rankDate;
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
-	@JoinColumn(name="symbol_id", referencedColumnName="ticker_symbol_id")
+	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private TickerSymbol ticker;
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
-	@JoinColumn(name="tracking_id", referencedColumnName="tracking_id")
+	@JoinColumn(name="tracking_id", referencedColumnName="id")
 	private Ibd50Tracking tracker;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "creation_time", nullable = false)
-	private Date creationTime;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "modification_time", nullable = false)
-	private Date modificationTime;
-	 
-	@Column(name="rank", nullable=false)
+	@Column(nullable=false)
 	private Integer rank;
 	
 	@Column(name="current_price", nullable=false, precision=10, scale=2)
@@ -115,6 +101,8 @@ public class Ibd50Ranking {
 	@Column(name="qtrs_rising_sponsorship")
 	private Integer qtrsRisingSponsorship;
 	
+	@OneToMany(mappedBy = "ranking",cascade = CascadeType.ALL)
+	private Collection<Ibd50IndexShares> shareCounts;
 	/*
 	 * Constructor
 	 */
@@ -122,6 +110,7 @@ public class Ibd50Ranking {
 		rankDate =  findMondayRankDate(); //aka today
 	}
 	
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
@@ -139,27 +128,9 @@ public class Ibd50Ranking {
 		return dateToReturn.toDate();
 	}
 	
-	@PreUpdate
-    public void preUpdate() {
-        modificationTime = new LocalDateTime().toDate();
-    }
-     
-    @PrePersist
-    public void prePersist() {
-        Date now = new LocalDateTime().toDate();
-        creationTime = now;
-        modificationTime = now;
-    }
-	
 	/*
 	 * Getters and Setters
 	 */
-	public Integer getRankingId() {
-		return rankingId;
-	}
-	public void setRankingId(Integer rankingId) {
-		this.rankingId = rankingId;
-	}
 	public Date getRankDate() {
 		return rankDate;
 	}
@@ -184,24 +155,6 @@ public class Ibd50Ranking {
 	public String getSymbol() {
 		return ticker.getSymbol();
 	}
-	public Date getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(Date creationTime) {
-		this.creationTime = creationTime;
-	}
-
-	public Date getModificationTime() {
-		return modificationTime;
-	}
-	public LocalDate getLocalDateModificationTime() {
-		return new LocalDate(modificationTime);
-	}
-	public void setModificationTime(Date modificationTime) {
-		this.modificationTime = modificationTime;
-	}
-
 	public void setSymbol(String symbol) {
 		ticker.setSymbol(symbol);
 	}
