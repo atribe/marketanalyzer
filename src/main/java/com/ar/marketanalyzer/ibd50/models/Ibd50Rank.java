@@ -10,17 +10,22 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
-import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
+import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50Ranking extends AuditableEntity {
+public class Ibd50Rank extends PersistableEntity {
 		
 	private static final long serialVersionUID = 5791875306977524480L;
 
@@ -103,10 +108,49 @@ public class Ibd50Ranking extends AuditableEntity {
 	
 	@OneToMany(mappedBy = "ranking",cascade = CascadeType.ALL)
 	private Collection<Ibd50IndexShares> shareCounts;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "creation_time", nullable = false)
+	private Date creationTime;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modification_time", nullable = false)
+	private Date modificationTime;
+	
+	@PreUpdate
+    public void preUpdate() {
+        modificationTime = new LocalDateTime().toDate();
+    }
+     
+    @PrePersist
+    public void prePersist() {
+        Date now = new LocalDateTime().toDate();
+        creationTime = now;
+        modificationTime = now;
+    }
+    
+    public Date getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public Date getModificationTime() {
+		return modificationTime;
+	}
+	public LocalDate getLocalDateModificationTime() {
+		return new LocalDate(modificationTime);
+	}
+	public void setModificationTime(Date modificationTime) {
+		this.modificationTime = modificationTime;
+	}
+	
 	/*
 	 * Constructor
 	 */
-	public Ibd50Ranking() {
+	public Ibd50Rank() {
 		rankDate =  findMondayRankDate(); //aka today
 	}
 	

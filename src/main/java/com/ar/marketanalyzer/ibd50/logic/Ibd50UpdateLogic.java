@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
-import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
-import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
 import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
@@ -36,7 +36,7 @@ public class Ibd50UpdateLogic {
 	@Autowired
 	private TickerSymbolService tsService;
 	@Autowired
-	private Ibd50RankingService rankingService;
+	private Ibd50RankService rankingService;
 	@Autowired
 	private Ibd50TrackingService trackingService;
 	@Autowired
@@ -51,7 +51,7 @@ public class Ibd50UpdateLogic {
 	public void updateIbd50() {
 		if( !isDbUpToDate() ) {
 			webDao = new Ibd50WebDao();
-			List<Ibd50Ranking> webIbd50 = webDao.grabIbd50();
+			List<Ibd50Rank> webIbd50 = webDao.grabIbd50();
 	
 			addThisWeeksListToDB(webIbd50);
 		}
@@ -80,13 +80,13 @@ public class Ibd50UpdateLogic {
 	private boolean isDbUpToDate() {
 		LocalDate previousMonday = new LocalDate().withDayOfWeek(1);								// Get the most recent monday
 		
-		List<Ibd50Ranking> newestRankings;
+		List<Ibd50Rank> newestRankings;
 		try {
 			newestRankings = rankingService.findByModificationTimeAfter(previousMonday.toDate());	// Check the db for any rankings modified after monday
 		} catch (GenericIbd50NotFound e) {
 			return false;																			// None found, so db is not up to date
 		}
-		Ibd50Ranking newestRanking;
+		Ibd50Rank newestRanking;
 		try {
 			newestRanking = newestRankings.get(0);
 		} catch (IndexOutOfBoundsException e) {
@@ -99,8 +99,8 @@ public class Ibd50UpdateLogic {
 		}
 	}
 	
-	private void addThisWeeksListToDB(List<Ibd50Ranking> webIbd50) {
-		for(Ibd50Ranking rankingRow : webIbd50) {									// Cycle through the each of row of the top 50
+	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
+		for(Ibd50Rank rankingRow : webIbd50) {									// Cycle through the each of row of the top 50
 			
 			TickerSymbol rowTicker = rankingRow.getTicker();
 			TickerSymbol foundTicker;
@@ -166,7 +166,7 @@ public class Ibd50UpdateLogic {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(Ibd50Ranking row) {
+	private void runOhlcvUpdate(Ibd50Rank row) {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;

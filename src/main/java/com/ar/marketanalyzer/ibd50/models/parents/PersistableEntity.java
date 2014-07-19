@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class PersitableEntity implements Serializable{
+public class PersistableEntity implements Serializable{
 	
 	@Version
 	private static final long serialVersionUID = -1389117743389307160L;

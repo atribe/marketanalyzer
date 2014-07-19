@@ -8,11 +8,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
 @Table(name = "ibd50_index_shares")
-public class Ibd50IndexShares extends PersitableEntity{
+public class Ibd50IndexShares extends PersistableEntity{
 
 	private static final long serialVersionUID = 8404969144499301634L;
 
@@ -22,7 +22,7 @@ public class Ibd50IndexShares extends PersitableEntity{
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="ranking_id", referencedColumnName="id")
-	private Ibd50Ranking ranking;
+	private Ibd50Rank ranking;
 	
 	@OneToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="ohlcv_id", referencedColumnName="id")
@@ -42,10 +42,10 @@ public class Ibd50IndexShares extends PersitableEntity{
 	public void setIndex(Ibd50CustomIndex index) {
 		this.index = index;
 	}
-	public Ibd50Ranking getRanking() {
+	public Ibd50Rank getRanking() {
 		return ranking;
 	}
-	public void setRanking(Ibd50Ranking ranking) {
+	public void setRanking(Ibd50Rank ranking) {
 		this.ranking = ranking;
 	}
 	public StockOhlcv getOhlcv() {

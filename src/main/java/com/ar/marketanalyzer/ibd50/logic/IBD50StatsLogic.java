@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
-import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
-import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
 
 @Service
@@ -27,7 +27,7 @@ public class IBD50StatsLogic {
 	@Autowired
 	private Ibd50IndexSharesService indexSharesService;
 	@Autowired
-	private Ibd50RankingService rankingService;
+	private Ibd50RankService rankingService;
 	@Autowired
 	private StockOhlcvService ohlcvService;
 	
@@ -109,12 +109,11 @@ public class IBD50StatsLogic {
 	private void populateCustomIndex(Ibd50CustomIndex ibd50CustomIndex) {
 		
 		try {
-			List<Ibd50Ranking> rankingsInRange = rankingService.findByActiveTrueAndRankBetween(ibd50CustomIndex.getRankRangeStart(), ibd50CustomIndex.getRankRangeEnd());
+			List<Ibd50Rank> rankingsInRange = rankingService.findByActiveTrueAndRankBetween(ibd50CustomIndex.getRankRangeStart(), ibd50CustomIndex.getRankRangeEnd());
 		
 			LocalDate mostRecentlyEnteredRankings = null;
 			
-			
-			for(Ibd50Ranking ranking: rankingsInRange) {
+			for(Ibd50Rank ranking: rankingsInRange) {
 				//List<StockOhlcv> ohlcvList = ohlcvService.findByTickerAndDateAfter(ranking.getTicker(), date) 
 				
 				Ibd50IndexShares indexShares = new Ibd50IndexShares();

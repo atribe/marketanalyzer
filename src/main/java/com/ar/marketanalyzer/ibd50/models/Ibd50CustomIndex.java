@@ -10,11 +10,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
 @Table(name = "IBD50_Custom_Index")
-public class Ibd50CustomIndex extends PersitableEntity{
+public class Ibd50CustomIndex extends PersistableEntity{
 
 	private static final long serialVersionUID = 6291983237483263551L;
 

@@ -13,7 +13,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 @MappedSuperclass
-public class AuditableEntity extends PersitableEntity{
+public class AuditableEntity extends PersistableEntity{
 	
 	private static final long serialVersionUID = -1206834257175517132L;
 

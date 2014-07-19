@@ -29,7 +29,7 @@ public class Ibd50Tracking extends AuditableEntity{
 	private TickerSymbol ticker;
 	
 	@OneToMany(mappedBy = "tracker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Ranking> ranking;
+	private Collection<Ibd50Rank> ranking;
 	
 	@Column
 	private Boolean active;

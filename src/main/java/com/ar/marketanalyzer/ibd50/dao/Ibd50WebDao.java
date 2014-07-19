@@ -28,7 +28,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 
 public class Ibd50WebDao{
@@ -40,9 +40,9 @@ public class Ibd50WebDao{
 	 * 
 	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
 	 */
-	public List<Ibd50Ranking> grabIbd50() {
+	public List<Ibd50Rank> grabIbd50() {
 		InputStream downloadedFileInputStream = null;
-		List<Ibd50Ranking> rowsFromIBD50 = null;
+		List<Ibd50Rank> rowsFromIBD50 = null;
 		
 		try {
 			downloadedFileInputStream = authenticatedIbd50Download();
@@ -153,8 +153,8 @@ public class Ibd50WebDao{
 		return response.getEntity().getContent();
 	}
 	
-	private List<Ibd50Ranking> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
-		List<Ibd50Ranking> rowsFromIBD50 = new ArrayList<Ibd50Ranking>();
+	private List<Ibd50Rank> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
+		List<Ibd50Rank> rowsFromIBD50 = new ArrayList<Ibd50Rank>();
 		
 		Document doc = Jsoup.parse(downloadedFileInputStream, "UTF-8", "");
 		Elements rows = doc.getElementsByTag("table").get(0).getElementsByTag("tr");
@@ -191,8 +191,8 @@ public class Ibd50WebDao{
 	 * @param ibd50tokenizedList
 	 * @return IBD50 Ranking Bean
 	 */
-	private Ibd50Ranking parseListToBean(List<String> ibd50tokenizedList) {
-		Ibd50Ranking ibdRow = new Ibd50Ranking();
+	private Ibd50Rank parseListToBean(List<String> ibd50tokenizedList) {
+		Ibd50Rank ibdRow = new Ibd50Rank();
 		
 		TickerSymbol company = new TickerSymbol();
 		

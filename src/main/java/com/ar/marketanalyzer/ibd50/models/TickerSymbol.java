@@ -8,11 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
 @Table(name = "IBD50_TICKER_SYMBOLS")
-public class TickerSymbol extends PersitableEntity {
+public class TickerSymbol extends PersistableEntity {
 
 	private static final long serialVersionUID = 8657512556970860218L;
 
@@ -26,13 +26,13 @@ public class TickerSymbol extends PersitableEntity {
 	private String type; //stock, ETF, Mutual Fund, Index
 	
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Ranking> rankings;
+	private Collection<Ibd50Rank> rankings;
 	
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Ranking> trackings;
+	private Collection<Ibd50Rank> trackings;
 	
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Ranking> ohlcvData;
+	private Collection<Ibd50Rank> ohlcvData;
 	
 	public String getSymbol() {
 		return symbol;
