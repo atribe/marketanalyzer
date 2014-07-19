@@ -16,11 +16,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersitableEntity;
+import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
 
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50Ranking extends PersitableEntity {
+public class Ibd50Ranking extends AuditableEntity {
 		
 	private static final long serialVersionUID = 5791875306977524480L;
 

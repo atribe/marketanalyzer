@@ -11,7 +11,6 @@ import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Ranking;
-import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankingService;
