@@ -109,7 +109,7 @@ public class IBD50StatsLogic {
 	private void populateCustomIndex(Ibd50CustomIndex ibd50CustomIndex) {
 		
 		try {
-			List<Ibd50Rank> rankingsInRange = rankingService.findByActiveTrueAndRankBetween(ibd50CustomIndex.getRankRangeStart(), ibd50CustomIndex.getRankRangeEnd());
+			List<Ibd50Rank> rankingsInRange = rankingService.findByRankBetweenAndActiveTrue(ibd50CustomIndex.getRankRangeStart(), ibd50CustomIndex.getRankRangeEnd());
 		
 			LocalDate mostRecentlyEnteredRankings = null;
 			

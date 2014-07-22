@@ -8,4 +8,5 @@
 *.war
 *.ear
 /target
-/.dbeaver-data-sources.xml
+
+/bin/

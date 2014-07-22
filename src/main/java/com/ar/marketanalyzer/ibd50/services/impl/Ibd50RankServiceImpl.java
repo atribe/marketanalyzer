@@ -101,8 +101,8 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	@Override
-	public List<Ibd50Rank> findByActiveTrueAndRankBetween(int startRank,	int endRank) throws GenericIbd50NotFound{
-		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByActiveTrueAndRankBetween(startRank, endRank);
+	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank,	int endRank) throws GenericIbd50NotFound{
+		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankBetweenAndActiveTrue(startRank, endRank);
 		
 		if( foundRanking == null) {
 			throw new GenericIbd50NotFound();

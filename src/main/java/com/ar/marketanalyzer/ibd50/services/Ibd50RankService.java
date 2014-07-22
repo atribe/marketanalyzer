@@ -16,5 +16,5 @@ public interface Ibd50RankService {
 	public Ibd50Rank findById(int id);
 	public List<Ibd50Rank> findByRankAndTicker(int rank, TickerSymbol ticker) throws GenericIbd50NotFound;
 	public List<Ibd50Rank> findByModificationTimeAfter(Date date) throws GenericIbd50NotFound;
-	public List<Ibd50Rank> findByActiveTrueAndRankBetween(int startRank, int endRank) throws GenericIbd50NotFound;
+	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank, int endRank) throws GenericIbd50NotFound;
 }

@@ -158,6 +158,15 @@ public class Ibd50Rank extends PersistableEntity {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
+	public Collection<Ibd50IndexShares> getShareCounts() {
+		return shareCounts;
+	}
+
+	public void setShareCounts(Collection<Ibd50IndexShares> shareCounts) {
+		this.shareCounts = shareCounts;
+	}
+
 	private Date findMondayRankDate() {
 		LocalDate today = new LocalDate();
 		
