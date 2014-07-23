@@ -9,4 +9,5 @@ import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 
 public interface Ibd50TrackingRepository extends JpaRepository<Ibd50Tracking, Integer>{
 	public List<Ibd50Tracking> findByActiveAndTicker(boolean active, TickerSymbol ticker);
+	public List<Ibd50Tracking> findByActiveTrue();
 }

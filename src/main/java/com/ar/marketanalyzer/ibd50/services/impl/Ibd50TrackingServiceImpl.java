@@ -65,7 +65,6 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 			throw new GenericIbd50NotFound();
 		}
 		
-		//TODO Filler until I really write this code
 		//updatedIbd50Tracking.setRank(Ibd50Tracking.getRank());
 		
 		return updatedIbd50Tracking;
@@ -89,5 +88,24 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 		}
 				
 		return trackingList.get(0);
+	}
+
+	
+	@Override
+	@Transactional
+	public List<Ibd50Tracking> findByActiveTrue() {
+		return ibd50TrackingRepo.findByActiveTrue();
+		
+	}
+
+	
+	@Override
+	@Transactional
+	public Ibd50Tracking updateActivity(Ibd50Tracking tracker) {
+		Ibd50Tracking updatedTracker = ibd50TrackingRepo.findOne(tracker.getId());
+		
+		updatedTracker.setActive(tracker.getActive());
+		
+		return ibd50TrackingRepo.save(updatedTracker);
 	}
 }

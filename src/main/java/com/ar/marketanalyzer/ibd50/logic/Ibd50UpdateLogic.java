@@ -53,10 +53,16 @@ public class Ibd50UpdateLogic {
 			webDao = new Ibd50WebDao();
 			List<Ibd50Rank> webIbd50 = webDao.grabIbd50();
 	
+			deactivateOldTrackers(webIbd50);
+			
 			addThisWeeksListToDB(webIbd50);
+			
+			//updateInactiveTrackerOHLCV();
 		}
 	}
 	
+
+
 	/**
 	 * Adds weekly list to the database
 	 * <p>
@@ -96,6 +102,26 @@ public class Ibd50UpdateLogic {
 			return true;																			// test is true, so return true
 		} else {
 			return false;																			// Date is not after monday so return false
+		}
+	}
+	
+	private void deactivateOldTrackers(List<Ibd50Rank> webIbd50) {
+		List<Ibd50Tracking> activeTrackers = trackingService.findByActiveTrue();			// Find all active trackers
+		
+		for( Ibd50Tracking tracker : activeTrackers ) {										// Loop through the active trackers
+			boolean trackerStillActive = false;												// Start with the assumption that the tracker is now inactive
+			
+			for( Ibd50Rank rank : webIbd50 ) {											// Loop through the downloaded rankings
+				if( rank.getTicker().getSymbol().equals( tracker.getTicker().getSymbol() ) ) {		// Check for a match in symbols 
+					trackerStillActive = true;
+					break;
+				}
+			}
+			
+			if(!trackerStillActive) {														// After all the new ranks are checked against the current tracker and the tracker isn't active 
+				tracker.setActive(trackerStillActive);										// Set it to inactive
+				trackingService.updateActivity(tracker);									// And update the tracker db
+			}
 		}
 	}
 	
@@ -191,5 +217,10 @@ public class Ibd50UpdateLogic {
 		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getTicker(), startDate, today);
 		
 		ohlcvService.batchInsert(ohlcvData);
+	}
+	
+	private void updateInactiveTrackerOHLCV() {
+		// TODO Auto-generated method stub
+		
 	}
 }

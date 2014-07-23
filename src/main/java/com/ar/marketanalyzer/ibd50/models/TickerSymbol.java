@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
@@ -33,6 +35,11 @@ public class TickerSymbol extends PersistableEntity {
 	
 	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
 	private Collection<Ibd50Rank> ohlcvData;
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 	
 	public String getSymbol() {
 		return symbol;

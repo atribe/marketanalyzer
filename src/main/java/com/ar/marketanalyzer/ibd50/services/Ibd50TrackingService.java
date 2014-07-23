@@ -25,5 +25,6 @@ public interface Ibd50TrackingService {
 	 * @throws Ibd50TooManyFound		Too many trackers found, objects are not getting set to inactive properly
 	 */
 	public Ibd50Tracking findByActiveAndTicker(boolean active, TickerSymbol ticker) throws GenericIbd50NotFound, Ibd50TooManyFound;
-	
+	public List<Ibd50Tracking> findByActiveTrue();
+	public Ibd50Tracking updateActivity(Ibd50Tracking tracker);
 }
