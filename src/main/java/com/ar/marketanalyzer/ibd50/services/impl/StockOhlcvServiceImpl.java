@@ -150,5 +150,4 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 		return foundTickerSymbol;
 	}
 
-	
 }

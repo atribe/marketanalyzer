@@ -2,6 +2,8 @@ package com.ar.marketanalyzer.ibd50.services;
 
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
@@ -27,4 +29,5 @@ public interface Ibd50TrackingService {
 	public Ibd50Tracking findByActiveAndTicker(boolean active, TickerSymbol ticker) throws GenericIbd50NotFound, Ibd50TooManyFound;
 	public List<Ibd50Tracking> findByActiveTrue();
 	public Ibd50Tracking updateActivity(Ibd50Tracking tracker);
+	public List<Ibd50Tracking> findByActiveFalseAndDateAfter(LocalDate date) throws GenericIbd50NotFound;
 }

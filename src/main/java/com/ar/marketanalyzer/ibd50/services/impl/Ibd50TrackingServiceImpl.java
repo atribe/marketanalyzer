@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +91,6 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 		return trackingList.get(0);
 	}
 
-	
 	@Override
 	@Transactional
 	public List<Ibd50Tracking> findByActiveTrue() {
@@ -98,14 +98,30 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 		
 	}
 
-	
 	@Override
 	@Transactional
 	public Ibd50Tracking updateActivity(Ibd50Tracking tracker) {
 		Ibd50Tracking updatedTracker = ibd50TrackingRepo.findOne(tracker.getId());
 		
 		updatedTracker.setActive(tracker.getActive());
+		updatedTracker.setLastPrice(tracker.getLastPrice());
+		updatedTracker.setLeaveDate(tracker.getLeaveDate());
+		updatedTracker.setPercentReturn(tracker.getPercentReturn());
 		
 		return ibd50TrackingRepo.save(updatedTracker);
+	}
+
+	@Override
+	@Transactional
+	public List<Ibd50Tracking> findByActiveFalseAndDateAfter(LocalDate date) throws GenericIbd50NotFound {
+		List<Ibd50Tracking> deactiveTrackers = null;
+		
+		deactiveTrackers = ibd50TrackingRepo.findByActiveFalseAndLeaveDateGreaterThanEqual(date.toDate());
+		
+		if( deactiveTrackers == null ) {
+			throw new GenericIbd50NotFound();
+		}
+		
+		return deactiveTrackers;
 	}
 }

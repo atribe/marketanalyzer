@@ -55,13 +55,11 @@ public class Ibd50UpdateLogic {
 	
 			deactivateOldTrackers(webIbd50);
 			
-			addThisWeeksListToDB(webIbd50);
+			updateOHLCVforInactiveTracker();
 			
-			//updateInactiveTrackerOHLCV();
+			addThisWeeksListToDB(webIbd50);
 		}
 	}
-	
-
 
 	/**
 	 * Adds weekly list to the database
@@ -111,7 +109,7 @@ public class Ibd50UpdateLogic {
 		for( Ibd50Tracking tracker : activeTrackers ) {										// Loop through the active trackers
 			boolean trackerStillActive = false;												// Start with the assumption that the tracker is now inactive
 			
-			for( Ibd50Rank rank : webIbd50 ) {											// Loop through the downloaded rankings
+			for( Ibd50Rank rank : webIbd50 ) {												// Loop through the downloaded rankings
 				if( rank.getTicker().getSymbol().equals( tracker.getTicker().getSymbol() ) ) {		// Check for a match in symbols 
 					trackerStillActive = true;
 					break;
@@ -119,7 +117,15 @@ public class Ibd50UpdateLogic {
 			}
 			
 			if(!trackerStillActive) {														// After all the new ranks are checked against the current tracker and the tracker isn't active 
-				tracker.setActive(trackerStillActive);										// Set it to inactive
+				runOhlcvUpdate(tracker.getTicker());
+				StockOhlcv leaveOhlcv = null;
+				try {
+					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getTicker(), tracker.newMonday().toDate());
+				} catch (GenericIbd50NotFound e) {
+					e.printStackTrace();
+					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
+				}
+				tracker.deactivate(leaveOhlcv.getClose());														// Set it to inactive
 				trackingService.updateActivity(tracker);									// And update the tracker db
 			}
 		}
@@ -144,7 +150,7 @@ public class Ibd50UpdateLogic {
 			rankingRow.setTicker(foundTicker);										//Set the found ticker to be the ticker for the row
 			
 							//Check to see if the OHLCV data is up to date for this stock symbol
-			runOhlcvUpdate(rankingRow);												//add the last 6 months of OHLCV data to the db
+			runOhlcvUpdate(foundTicker);												//add the last 6 months of OHLCV data to the db
 			
 			final boolean isActive = true;
 	
@@ -192,7 +198,7 @@ public class Ibd50UpdateLogic {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(Ibd50Rank row) {
+	private void runOhlcvUpdate(TickerSymbol ticker) {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;
@@ -200,7 +206,7 @@ public class Ibd50UpdateLogic {
 		LocalDate startDate;
 		LocalDate today = new LocalDate();
 		try {
-			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(row.getTicker(), ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
+			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(ticker, ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
 			
 			//older data was found in the db
 			//so find the newest, the above query sorts so newest is at position 0
@@ -214,13 +220,33 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(row.getTicker(), startDate, today);
+		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(ticker, startDate, today);
 		
 		ohlcvService.batchInsert(ohlcvData);
 	}
 	
-	private void updateInactiveTrackerOHLCV() {
-		// TODO Auto-generated method stub
+	private void updateOHLCVforInactiveTracker() {
+		/*
+		 * The plan for this method
+		 * 
+		 * 1. get all trackers that are 6 months old or less and are inactive
+		 * 
+		 * 2. update ohlcv for them
+		 */
+		final int inactiveUpdateMonthsWindow = 6;
+		LocalDate inactiveUpdateWindow = new LocalDate().minusMonths( inactiveUpdateMonthsWindow );
+		
+		List<Ibd50Tracking> deactiveTrackers = null;
+		try {
+			deactiveTrackers = trackingService.findByActiveFalseAndDateAfter(inactiveUpdateWindow);
+		} catch (GenericIbd50NotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(Ibd50Tracking tracker: deactiveTrackers) {
+			runOhlcvUpdate(tracker.getTicker());
+		}
 		
 	}
 }

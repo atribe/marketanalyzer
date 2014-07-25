@@ -64,7 +64,7 @@ public class Ibd50Tracking extends AuditableEntity{
 		return ToStringBuilder.reflectionToString(this);
 	}
 	
-	private LocalDate newMonday() {
+	public LocalDate newMonday() {
 		LocalDate today = new LocalDate();
 		if(today.getDayOfWeek() == DateTimeConstants.MONDAY) {
 			return today;
@@ -72,29 +72,35 @@ public class Ibd50Tracking extends AuditableEntity{
 			return today.withDayOfWeek(DateTimeConstants.MONDAY);
 		}
 	}
+	
+	public void deactivate(BigDecimal leavePrice) {
+		setActive(Boolean.FALSE);
+		setLeaveDate(newMonday());
+		setLastPrice(leavePrice);
+		calcPercentReturn();
+	}
+	private void calcPercentReturn() {
+		setPercentReturn((Double) lastPrice.subtract(joinPrice).doubleValue()/joinPrice.doubleValue());
+	}
+
 	/*
 	 * Getters and Setters
 	 */
 	public TickerSymbol getTicker() {
 		return ticker;
 	}
-
 	public void setTicker(TickerSymbol ticker) {
 		this.ticker = ticker;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
 	public Date getJoinDate() {
 		return joinDate;
 	}
-
 	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
 	}
@@ -104,31 +110,27 @@ public class Ibd50Tracking extends AuditableEntity{
 	public Date getLeaveDate() {
 		return leaveDate;
 	}
-
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}
-	
+	public void setLeaveDate(LocalDate leaveDate) {
+		setLeaveDate( leaveDate.toDate() );
+	}
 	public BigDecimal getJoinPrice() {
 		return joinPrice;
 	}
-
 	public void setJoinPrice(BigDecimal joinPrice) {
 		this.joinPrice = joinPrice;
 	}
-
 	public BigDecimal getLastPrice() {
 		return lastPrice;
 	}
-
 	public void setLastPrice(BigDecimal lastPrice) {
 		this.lastPrice = lastPrice;
 	}
-
 	public double getPercentReturn() {
 		return percentReturn;
 	}
-
 	public void setPercentReturn(double percentReturn) {
 		this.percentReturn = percentReturn;
 	}
