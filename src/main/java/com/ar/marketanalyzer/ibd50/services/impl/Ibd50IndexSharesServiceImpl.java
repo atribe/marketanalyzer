@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
+import com.ar.marketanalyzer.ibd50.exceptions.Ibd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50IndexSharesRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
@@ -27,11 +27,11 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 
 	@Override
 	@Transactional
-	public Ibd50IndexShares delete(int id) throws GenericIbd50NotFound {
+	public Ibd50IndexShares delete(int id) throws Ibd50NotFound {
 		Ibd50IndexShares deletedIbd50IndexShares = ibd50IndexSharesRepo.findOne(id);
 		
 		if(deletedIbd50IndexShares == null) {
-			throw new GenericIbd50NotFound();
+			throw new Ibd50NotFound();
 		}
 		
 		ibd50IndexSharesRepo.delete(id);
@@ -46,12 +46,12 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public Ibd50IndexShares update(Ibd50IndexShares ibd50IndexShares) throws GenericIbd50NotFound {
+	@Transactional(rollbackFor=Ibd50NotFound.class)
+	public Ibd50IndexShares update(Ibd50IndexShares ibd50IndexShares) throws Ibd50NotFound {
 		Ibd50IndexShares updatedIbd50IndexShares = ibd50IndexSharesRepo.findOne(ibd50IndexShares.getId());
 		
 		if(updatedIbd50IndexShares == null) {
-			throw new GenericIbd50NotFound();
+			throw new Ibd50NotFound();
 		}
 		
 		updatedIbd50IndexShares.setShareCount(ibd50IndexShares.getShareCount());
@@ -61,7 +61,7 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 
 	@Override
 	@Transactional
-	public Ibd50IndexShares findById(int id) throws GenericIbd50NotFound {
+	public Ibd50IndexShares findById(int id) throws Ibd50NotFound {
 		return ibd50IndexSharesRepo.findOne(id);
 	}
 

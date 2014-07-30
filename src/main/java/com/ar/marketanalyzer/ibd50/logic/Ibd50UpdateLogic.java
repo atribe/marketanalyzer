@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
-import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
+import com.ar.marketanalyzer.ibd50.exceptions.Ibd50NotFound;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
@@ -87,7 +87,7 @@ public class Ibd50UpdateLogic {
 		List<Ibd50Rank> newestRankings;
 		try {
 			newestRankings = rankingService.findByModificationTimeAfter(previousMonday.toDate());	// Check the db for any rankings modified after monday
-		} catch (GenericIbd50NotFound e) {
+		} catch (Ibd50NotFound e) {
 			return false;																			// None found, so db is not up to date
 		}
 		Ibd50Rank newestRanking;
@@ -121,7 +121,7 @@ public class Ibd50UpdateLogic {
 				StockOhlcv leaveOhlcv = null;
 				try {
 					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getTicker(), tracker.newMonday().toDate());
-				} catch (GenericIbd50NotFound e) {
+				} catch (Ibd50NotFound e) {
 					e.printStackTrace();
 					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
 				}
@@ -132,32 +132,23 @@ public class Ibd50UpdateLogic {
 	}
 	
 	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
-		for(Ibd50Rank rankingRow : webIbd50) {									// Cycle through the each of row of the top 50
+		for(Ibd50Rank rankingRow : webIbd50) {										// Cycle through the each of row of the top 50
 			
-			TickerSymbol rowTicker = rankingRow.getTicker();
-			TickerSymbol foundTicker;
+			TickerSymbol rowTicker = rankingRow.getTicker();						// Getting the ticker out of the ranking
 			
-			try {
-				foundTicker = tsService.findBySymbol(rowTicker.getSymbol());
-				
-					//No Exception is thrown, then the ticker must be in the DB
-				rowTicker = foundTicker;											//set the ticker to be the found ticker (this sets the ID of the ticker) 
-			} catch (GenericIbd50NotFound e) {
-					//Exception thrown, wasn't in the db
-				foundTicker = tsService.create(rowTicker);							//add it, return the added ticker (with the set id)
-			}
+			TickerSymbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the ticker to the DB or getting the one in the db out
 			
-			rankingRow.setTicker(foundTicker);										//Set the found ticker to be the ticker for the row
+			rankingRow.setTicker(foundTicker);										// Set the found ticker to be the ticker for the row
 			
-							//Check to see if the OHLCV data is up to date for this stock symbol
-			runOhlcvUpdate(foundTicker);												//add the last 6 months of OHLCV data to the db
+																					// Check to see if the OHLCV data is up to date for this stock symbol
+			runOhlcvUpdate(foundTicker);											// add the last 6 months of OHLCV data to the db
 			
 			final boolean isActive = true;
 	
 			Ibd50Tracking foundTracker;
 			try {
 				foundTracker = trackingService.findByActiveAndTicker(isActive, foundTicker);
-			} catch (GenericIbd50NotFound e) {
+			} catch (Ibd50NotFound e) {
 				log.info(e.getMessage());
 				
 																					//Tracker not found
@@ -167,7 +158,7 @@ public class Ibd50UpdateLogic {
 				StockOhlcv joinDayOhlcv = null;
 				try {
 					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
-				} catch (GenericIbd50NotFound e1) {
+				} catch (Ibd50NotFound e1) {
 					log.info(e.getMessage());
 					e.printStackTrace();
 				}
@@ -212,7 +203,7 @@ public class Ibd50UpdateLogic {
 			//so find the newest, the above query sorts so newest is at position 0
 			StockOhlcv mostRecentDate = currentOhlcvList.get(0);
 			startDate = mostRecentDate.getLocalDate().plusDays(1); 		//Then add a day so we don't have duplicate data
-		} catch (GenericIbd50NotFound e) {
+		} catch (Ibd50NotFound e) {
 			log.info(e.getMessage());
 			
 			//nothing was found in the db
@@ -239,7 +230,7 @@ public class Ibd50UpdateLogic {
 		List<Ibd50Tracking> deactiveTrackers = null;
 		try {
 			deactiveTrackers = trackingService.findByActiveFalseAndDateAfter(inactiveUpdateWindow);
-		} catch (GenericIbd50NotFound e) {
+		} catch (Ibd50NotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

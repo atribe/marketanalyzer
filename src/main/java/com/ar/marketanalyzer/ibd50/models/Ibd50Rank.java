@@ -106,6 +106,9 @@ public class Ibd50Rank extends PersistableEntity {
 	@Column(name="qtrs_rising_sponsorship")
 	private Integer qtrsRisingSponsorship;
 	
+	@Column(name="current_ranking")
+	private Boolean CurrentRanking;
+	
 	@OneToMany(mappedBy = "ranking",cascade = CascadeType.ALL)
 	private Collection<Ibd50IndexShares> shareCounts;
 	
@@ -399,6 +402,14 @@ public class Ibd50Rank extends PersistableEntity {
 	}
 	public void setQtrsRisingSponsorship(int qtrsRisingSponsorship) {
 		this.qtrsRisingSponsorship = new Integer(qtrsRisingSponsorship);
+	}
+
+	public Boolean getCurrentRanking() {
+		return CurrentRanking;
+	}
+
+	public void setCurrentRanking(Boolean currentRanking) {
+		CurrentRanking = currentRanking;
 	}
 	
 }

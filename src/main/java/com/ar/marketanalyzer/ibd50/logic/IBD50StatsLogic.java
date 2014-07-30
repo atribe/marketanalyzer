@@ -7,7 +7,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
+import com.ar.marketanalyzer.ibd50.exceptions.Ibd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
@@ -126,7 +126,7 @@ public class IBD50StatsLogic {
 		
 			
 		
-		} catch (GenericIbd50NotFound e) {
+		} catch (Ibd50NotFound e) {
 			log.info("Unable to populate custom index " + ibd50CustomIndex.getIndexName() + " because couldn't find any IBD50 Rankings in the specified range.");
 			e.printStackTrace();
 		}
