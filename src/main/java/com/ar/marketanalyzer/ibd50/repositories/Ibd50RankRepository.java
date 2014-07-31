@@ -27,6 +27,8 @@ public interface Ibd50RankRepository extends JpaRepository<Ibd50Rank, Integer>{
 	
 	//public List<Ibd50Rank> findByActiveRankingTrue();
 
+	public List<Ibd50Rank> findByRankBetweenAndActiveRankingTrue(int startRank,int endRank);
+	
 	@Modifying
 	@Transactional
 	@Query( "Update Ibd50Rank AS r SET r.activeRanking = false "

@@ -129,19 +129,17 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	
-	/*
-	 * Keeping as an example of a cross table query with a named query
 	@Override
-	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank,	int endRank) throws GenericIbd50NotFound{
-		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankBetweenAndActiveTrue(startRank, endRank);
+	@Transactional
+	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank,	int endRank) throws Ibd50NotFound{
+		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankBetweenAndActiveRankingTrue(startRank, endRank);
 		
 		if( foundRanking == null) {
-			throw new GenericIbd50NotFound();
+			throw new Ibd50NotFound();
 		}
 		
 		return foundRanking;
 	}
-	*/
 	
 	@Override
 	@Transactional
