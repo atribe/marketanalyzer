@@ -37,4 +37,5 @@ public interface Ibd50RankService {
 	 * @throws Ibd50TooManyFound
 	 */
 	public Ibd50Rank findByTickerAndCurrentRankTrue(TickerSymbol ticker) throws Ibd50NotFound, Ibd50TooManyFound;
+	public void deactivateAllCurrentRankings();
 }

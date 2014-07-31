@@ -154,7 +154,7 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 			throw e;																// Throw that exception up to the next level to be dealt with.
 		}
 		
-		List<Ibd50Rank> rankingList = ibd50RankingRepo.findByTickerAndCurrentRankTrue(foundTickerSymbol);
+		List<Ibd50Rank> rankingList = ibd50RankingRepo.findByTickerAndActiveRankingTrue(foundTickerSymbol);
 		
 		if(rankingList.isEmpty()) {													// Check if any were found with the desired rank and ticker
 			throw new Ibd50NotFound("The Ticker '" + foundTickerSymbol.getSymbol()	// If not throw an exception with the problem explained in the message 
@@ -165,5 +165,11 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 		}
 		
 		return rankingList.get(0);
+	}
+
+	@Override
+	@Transactional
+	public void deactivateAllCurrentRankings() {
+		ibd50RankingRepo.deactivateActiveRanking();
 	}
 }

@@ -53,12 +53,18 @@ public class Ibd50UpdateLogic {
 			webDao = new Ibd50WebDao();
 			List<Ibd50Rank> webIbd50 = webDao.grabIbd50();
 	
-			deactivateOldTrackers(webIbd50);
-			
-			updateOHLCVforInactiveTracker();
+			archiveOldInfo(webIbd50);
 			
 			addThisWeeksListToDB(webIbd50);
 		}
+	}
+
+	private void archiveOldInfo(List<Ibd50Rank> webIbd50) {
+		deactivateOldTrackers(webIbd50);
+		
+		deactivateAllCurrentRankings();
+		
+		updateOHLCVforInactiveTracker();
 	}
 
 	/**
@@ -130,6 +136,11 @@ public class Ibd50UpdateLogic {
 			}
 		}
 	}
+	
+	private void deactivateAllCurrentRankings() {
+		rankingService.deactivateAllCurrentRankings();
+	}
+
 	
 	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
 		for(Ibd50Rank rankingRow : webIbd50) {										// Cycle through the each of row of the top 50
