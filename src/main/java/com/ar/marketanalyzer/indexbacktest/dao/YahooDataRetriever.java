@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
@@ -83,7 +84,19 @@ public class YahooDataRetriever {
 	 * @return  construed URL
 	 */
 	public static String getYahooURL(String symbol, int daysAgo) {
-		LocalDate endDate = new LocalDate();
+		
+		LocalDate endDate;
+		LocalTime now = new LocalTime(); 
+		if(now.getHourOfDay() == 0) {
+			endDate = new LocalDate().minusDays(1);
+		} else {
+			endDate = new LocalDate();
+		}
+		
+		if(daysAgo < 2){
+			daysAgo = 2;
+		}
+		
 		LocalDate startDate = endDate.minusDays(daysAgo);
 
 		int a_startMonth, b_startDay, c_startYear;
@@ -134,7 +147,7 @@ public class YahooDataRetriever {
 		return convertedList;
 	}
 	
-	public static List<StockOhlcv> getStockFromYahoo(TickerSymbol ticker, LocalDate startDate, LocalDate endDate) {
+	public static List<StockOhlcv> getStockFromYahoo(TickerSymbol ticker, LocalDate startDate) {
 		int daysAgo = getNumberOfDaysFromNow(startDate);
 		
 		String url = getYahooURL(ticker.getSymbol(), daysAgo);		

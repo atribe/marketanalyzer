@@ -222,7 +222,7 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(ticker, startDate, today);
+		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(ticker, startDate);
 		
 		ohlcvService.batchInsert(ohlcvData);
 	}
