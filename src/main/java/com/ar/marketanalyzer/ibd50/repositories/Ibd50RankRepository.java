@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface Ibd50RankRepository extends JpaRepository<Ibd50Rank, Integer>{
 
-	public List<Ibd50Rank> findByRankAndTickerOrderByRankDateAsc(int rank, TickerSymbol ticker);
+	public List<Ibd50Rank> findByRankAndTickerOrderByRankDateAsc(int rank, Symbol ticker);
 	public List<Ibd50Rank> findByModificationTimeAfter(Date date);
-	public List<Ibd50Rank> findByTickerAndActiveRankingTrue(TickerSymbol ticker);
+	public List<Ibd50Rank> findByTickerAndActiveRankingTrue(Symbol ticker);
 	
 	/* Keeping this query as an example
 	 * @Query(	  "SELECT ir FROM Ibd50Rank ir "

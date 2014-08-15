@@ -24,7 +24,7 @@ import com.ar.marketanalyzer.spring.init.PropCache;
 public class marketAnalyzerListener implements ServletContextListener{
 
 	@Autowired @Qualifier("IndexBacktestInit")
-	private Runnable maBean;
+	private Runnable indexBacktestBean;
 	
 	//@Autowired @Qualifier("IBD50InitRunnable")
 	//private Runnable i50Bean;
@@ -47,7 +47,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
 		log.trace("1.1 Creating the DB init thread");
 		String thread1Name = PropCache.getCachedProps("threads.dbinit");;
-		t1 = new Thread(maBean, thread1Name);
+		t1 = new Thread(indexBacktestBean, thread1Name);
 		log.trace("1.2 Starting the DB init thread");
 		//t1.start();
 		

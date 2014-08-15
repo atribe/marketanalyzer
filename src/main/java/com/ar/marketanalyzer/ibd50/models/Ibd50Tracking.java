@@ -17,6 +17,7 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 @Entity
 @Table(name = "IBD50_TRACKING")
@@ -26,7 +27,7 @@ public class Ibd50Tracking extends AuditableEntity{
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
-	private TickerSymbol ticker;
+	private Symbol ticker;
 	
 	@OneToMany(mappedBy = "tracker",cascade = CascadeType.ALL)
 	private Collection<Ibd50Rank> ranking;
@@ -86,10 +87,10 @@ public class Ibd50Tracking extends AuditableEntity{
 	/*
 	 * Getters and Setters
 	 */
-	public TickerSymbol getTicker() {
+	public Symbol getTicker() {
 		return ticker;
 	}
-	public void setTicker(TickerSymbol ticker) {
+	public void setTicker(Symbol ticker) {
 		this.ticker = ticker;
 	}
 	public Boolean getActive() {

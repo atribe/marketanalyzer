@@ -142,7 +142,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//log.info("          The newest date in the database is " + newestDateInDB.toString() + ".");
 		log.debug("IY.3.1--The newest date in the database for " + symbol + "is " + newestDate.toString() + ".");
 		
-		int DBDaysTilNow = YahooDataRetriever.getNumberOfDaysFromNow(newestDate);
+		int DBDaysTilNow = YahooOhlcvDao.getNumberOfDaysFromNow(newestDate);
 		
 		return DBDaysTilNow;//DBDaysTilNow;
 	}
@@ -159,13 +159,13 @@ public class OHLCVDao extends GenericDBSuperclass {
 			LocalDate beginningDate = new LocalDate(PropCache.getCachedProps("yahoo.startdate"));
 	
 			//calculates the number of days from today back to beginning date
-			int numDays = YahooDataRetriever.getNumberOfDaysFromNow(beginningDate);
+			int numDays = YahooOhlcvDao.getNumberOfDaysFromNow(beginningDate);
 	
 			//Creates a yahoo URL given the index symbol from now back a given number of days
-			String URL = YahooDataRetriever.getYahooURL(index, numDays);
+			String URL = YahooOhlcvDao.getYahooURL(index, numDays);
 	
 
-			rowsFromYahoo = YahooDataRetriever.getIndexFromYahoo(URL, index);
+			rowsFromYahoo = YahooOhlcvDao.getIndexFromYahoo(URL, index);
 
 	
 			if(rowsFromYahoo != null) {
@@ -178,9 +178,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//Container to hold the downloaded data
 		List<IndexOHLCVData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
-		String URL = YahooDataRetriever.getYahooURL(index, indexDaysBehind);
+		String URL = YahooOhlcvDao.getYahooURL(index, indexDaysBehind);
 
-		rowsFromYahoo = YahooDataRetriever.getIndexFromYahoo(URL, index);
+		rowsFromYahoo = YahooOhlcvDao.getIndexFromYahoo(URL, index);
 			
 		// extract price and volume data for URL, # of yahoo days
 		addRecordsFromData(rowsFromYahoo);

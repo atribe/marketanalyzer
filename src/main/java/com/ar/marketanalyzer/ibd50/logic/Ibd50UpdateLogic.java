@@ -9,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
-import com.ar.marketanalyzer.ibd50.exceptions.Ibd50NotFound;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
-import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
-import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
-import com.ar.marketanalyzer.indexbacktest.dao.YahooDataRetriever;
+import com.ar.marketanalyzer.indexbacktest.dao.YahooOhlcvDao;
+import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.securities.models.Symbol;
+import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
 
 /**
  * @author Allan
@@ -34,7 +34,7 @@ public class Ibd50UpdateLogic {
 	private Ibd50WebDao webDao;
 	
 	@Autowired
-	private TickerSymbolService tsService;
+	private SymbolServiceInterface tsService;
 	@Autowired
 	private Ibd50RankService rankingService;
 	@Autowired
@@ -93,7 +93,7 @@ public class Ibd50UpdateLogic {
 		List<Ibd50Rank> newestRankings;
 		try {
 			newestRankings = rankingService.findByModificationTimeAfter(previousMonday.toDate());	// Check the db for any rankings modified after monday
-		} catch (Ibd50NotFound e) {
+		} catch (SecuritiesNotFound e) {
 			return false;																			// None found, so db is not up to date
 		}
 		Ibd50Rank newestRanking;
@@ -127,7 +127,7 @@ public class Ibd50UpdateLogic {
 				StockOhlcv leaveOhlcv = null;
 				try {
 					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getTicker(), tracker.newMonday().toDate());
-				} catch (Ibd50NotFound e) {
+				} catch (SecuritiesNotFound e) {
 					e.printStackTrace();
 					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
 				}
@@ -145,9 +145,9 @@ public class Ibd50UpdateLogic {
 	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
 		for(Ibd50Rank rankingRow : webIbd50) {										// Cycle through the each of row of the top 50
 			
-			TickerSymbol rowTicker = rankingRow.getTicker();						// Getting the ticker out of the ranking
+			Symbol rowTicker = rankingRow.getTicker();						// Getting the ticker out of the ranking
 			
-			TickerSymbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the ticker to the DB or getting the one in the db out
+			Symbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the ticker to the DB or getting the one in the db out
 			
 			rankingRow.setTicker(foundTicker);										// Set the found ticker to be the ticker for the row
 			
@@ -159,7 +159,7 @@ public class Ibd50UpdateLogic {
 			Ibd50Tracking foundTracker;
 			try {
 				foundTracker = trackingService.findByActiveAndTicker(isActive, foundTicker);
-			} catch (Ibd50NotFound e) {
+			} catch (SecuritiesNotFound e) {
 				log.info(e.getMessage());
 				
 																					//Tracker not found
@@ -169,7 +169,7 @@ public class Ibd50UpdateLogic {
 				StockOhlcv joinDayOhlcv = null;
 				try {
 					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
-				} catch (Ibd50NotFound e1) {
+				} catch (SecuritiesNotFound e1) {
 					log.info(e.getMessage());
 					e.printStackTrace();
 				}
@@ -200,7 +200,7 @@ public class Ibd50UpdateLogic {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(TickerSymbol ticker) {
+	private void runOhlcvUpdate(Symbol ticker) {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;
@@ -214,7 +214,7 @@ public class Ibd50UpdateLogic {
 			//so find the newest, the above query sorts so newest is at position 0
 			StockOhlcv mostRecentDate = currentOhlcvList.get(0);
 			startDate = mostRecentDate.getLocalDate().plusDays(1); 		//Then add a day so we don't have duplicate data
-		} catch (Ibd50NotFound e) {
+		} catch (SecuritiesNotFound e) {
 			log.info(e.getMessage());
 			
 			//nothing was found in the db
@@ -222,7 +222,7 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooDataRetriever.getStockFromYahoo(ticker, startDate);
+		List<StockOhlcv> ohlcvData = YahooOhlcvDao.getStockFromYahoo(ticker, startDate);
 		
 		ohlcvService.batchInsert(ohlcvData);
 	}
@@ -241,7 +241,7 @@ public class Ibd50UpdateLogic {
 		List<Ibd50Tracking> deactiveTrackers = null;
 		try {
 			deactiveTrackers = trackingService.findByActiveFalseAndDateAfter(inactiveUpdateWindow);
-		} catch (Ibd50NotFound e) {
+		} catch (SecuritiesNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

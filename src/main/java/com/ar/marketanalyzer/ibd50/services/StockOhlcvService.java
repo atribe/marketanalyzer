@@ -3,19 +3,19 @@ package com.ar.marketanalyzer.ibd50.services;
 import java.util.Date;
 import java.util.List;
 
-import com.ar.marketanalyzer.ibd50.exceptions.Ibd50NotFound;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
-import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
+import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface StockOhlcvService {
 
 	public StockOhlcv create(StockOhlcv stockOhlcv);
-	public StockOhlcv delete(int id) throws Ibd50NotFound;
+	public StockOhlcv delete(int id) throws SecuritiesNotFound;
 	public List<StockOhlcv> findAll();
-	public StockOhlcv update(StockOhlcv stockOhlcv) throws Ibd50NotFound;
+	public StockOhlcv update(StockOhlcv stockOhlcv) throws SecuritiesNotFound;
 	public StockOhlcv findById(int id);
-	public List<StockOhlcv> findByTicker(TickerSymbol ticker) throws Ibd50NotFound;
+	public List<StockOhlcv> findByTicker(Symbol ticker) throws SecuritiesNotFound;
 	public void batchInsert(List<StockOhlcv> ohlcvList);
-	public StockOhlcv findByTickerAndDate(TickerSymbol foundTicker,	Date date) throws Ibd50NotFound;
-	public List<StockOhlcv> findByTickerAndDateAfter(TickerSymbol ticker, Date date)throws Ibd50NotFound;
+	public StockOhlcv findByTickerAndDate(Symbol foundTicker,	Date date) throws SecuritiesNotFound;
+	public List<StockOhlcv> findByTickerAndDateAfter(Symbol ticker, Date date)throws SecuritiesNotFound;
 }

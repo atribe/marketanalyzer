@@ -18,6 +18,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")
@@ -30,7 +31,7 @@ public class StockOhlcv{
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
-	private TickerSymbol ticker;
+	private Symbol ticker;
 	
 	@Column
 	private Date date;
@@ -59,7 +60,7 @@ public class StockOhlcv{
 	//Empty constructed required to be a Java Bean
 	public StockOhlcv() {}
 	
-	public StockOhlcv(YahooOHLCV y, TickerSymbol ticker) {
+	public StockOhlcv(YahooOHLCV y, Symbol ticker) {
 		
 		this.ticker = ticker;												//Setting the ticker to the passed ticker
 		
@@ -107,11 +108,11 @@ public class StockOhlcv{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public TickerSymbol getTicker() {
+	public Symbol getTicker() {
 		return ticker;
 	}
 
-	public void setTicker(TickerSymbol ticker) {
+	public void setTicker(Symbol ticker) {
 		this.ticker = ticker;
 	}
 

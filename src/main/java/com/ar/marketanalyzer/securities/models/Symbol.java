@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.models;
+package com.ar.marketanalyzer.securities.models;
 
 import java.util.Collection;
 
@@ -10,11 +10,12 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 
 @Entity
-@Table(name = "IBD50_TICKER_SYMBOLS")
-public class TickerSymbol extends PersistableEntity {
+@Table(name = "securities_symbols")
+public class Symbol extends PersistableEntity {
 
 	private static final long serialVersionUID = 8657512556970860218L;
 

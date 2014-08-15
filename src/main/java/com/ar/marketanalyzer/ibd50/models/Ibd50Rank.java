@@ -22,6 +22,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 @Entity
 @Table(name = "IBD50_RANKING")
@@ -34,7 +35,7 @@ public class Ibd50Rank extends PersistableEntity {
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
-	private TickerSymbol ticker;
+	private Symbol ticker;
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="tracking_id", referencedColumnName="id")
@@ -202,10 +203,10 @@ public class Ibd50Rank extends PersistableEntity {
 	public void setTracker(Ibd50Tracking tracker) {
 		this.tracker = tracker;
 	}
-	public TickerSymbol getTicker() {
+	public Symbol getTicker() {
 		return ticker;
 	}
-	public void setTicker(TickerSymbol ticker) {
+	public void setTicker(Symbol ticker) {
 		this.ticker = ticker;
 	}
 	public String getSymbol() {

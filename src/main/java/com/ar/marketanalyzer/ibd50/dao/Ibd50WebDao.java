@@ -29,7 +29,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
+import com.ar.marketanalyzer.securities.models.Symbol;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
@@ -194,7 +194,7 @@ public class Ibd50WebDao{
 	private Ibd50Rank parseListToBean(List<String> ibd50tokenizedList) {
 		Ibd50Rank ibdRow = new Ibd50Rank();
 		
-		TickerSymbol company = new TickerSymbol();
+		Symbol company = new Symbol();
 		
 		company.setSymbol(ibd50tokenizedList.get(0));
 		company.setName(ibd50tokenizedList.get(1));
