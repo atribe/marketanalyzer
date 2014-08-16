@@ -8,11 +8,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
+import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "ibd50_index_shares")
-public class Ibd50IndexShares extends PersistableEntity{
+public class Ibd50IndexShares extends PersistableEntityInt{
 
 	private static final long serialVersionUID = 8404969144499301634L;
 

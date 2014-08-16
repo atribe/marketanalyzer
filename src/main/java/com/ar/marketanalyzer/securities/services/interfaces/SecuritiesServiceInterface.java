@@ -9,9 +9,13 @@ import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface SecuritiesServiceInterface {
 
-	public SecuritiesOhlcv create(SecuritiesOhlcv securitiesOhlcv);
+	/**
+	 * @param secOhlcv
+	 * @return
+	 */
+	public SecuritiesOhlcv create(SecuritiesOhlcv secOhlcv);
 	public void batchInsert(List<SecuritiesOhlcv> ohlcvList);
-	public SecuritiesOhlcv update(SecuritiesOhlcv securitiesOhlcv) throws SecuritiesNotFound;
+	public SecuritiesOhlcv update(SecuritiesOhlcv secOhlcv) throws SecuritiesNotFound;
 	public SecuritiesOhlcv delete(long id) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findAll();
 	public SecuritiesOhlcv findById(long id);

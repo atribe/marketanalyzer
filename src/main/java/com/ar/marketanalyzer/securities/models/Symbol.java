@@ -11,11 +11,11 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
+import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "securities_symbols")
-public class Symbol extends PersistableEntity {
+public class Symbol extends PersistableEntityInt {
 
 	private static final long serialVersionUID = 8657512556970860218L;
 
@@ -28,14 +28,8 @@ public class Symbol extends PersistableEntity {
 	@Column(name="type", length=10, nullable=false)
 	private String type; //stock, ETF, Mutual Fund, Index
 	
-	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Rank> rankings;
-	
-	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Rank> trackings;
-	
-	@OneToMany(mappedBy = "ticker",cascade = CascadeType.ALL)
-	private Collection<Ibd50Rank> ohlcvData;
+	@OneToMany(mappedBy = "symbol",cascade = CascadeType.ALL)
+	private Collection<SecuritiesOhlcv> ohlcv;
 	
 	@Override
 	public String toString() {

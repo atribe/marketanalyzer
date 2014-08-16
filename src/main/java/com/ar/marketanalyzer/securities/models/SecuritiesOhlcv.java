@@ -7,9 +7,6 @@ import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,15 +14,14 @@ import javax.persistence.Table;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
+import com.ar.marketanalyzer.securities.models.parents.PersistableEntityLong;
 
 @Entity
 @Table(name = "securities_ohlcv")
-public class SecuritiesOhlcv {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(nullable=false, unique=true)
-	private Long id;
-	
+public class SecuritiesOhlcv extends PersistableEntityLong{
+
+	private static final long serialVersionUID = 8652512535460860218L;
+
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private Symbol symbol;
@@ -33,16 +29,16 @@ public class SecuritiesOhlcv {
 	@Column
 	private Date date;
 	
-	@Column(precision=12, scale=2)
+	@Column(precision=12, scale=2, nullable=false)
 	private BigDecimal open;
 	
-	@Column(precision=12, scale=2)
+	@Column(precision=12, scale=2, nullable=false)
 	private BigDecimal high;
 	
-	@Column(precision=12, scale=2)
+	@Column(precision=12, scale=2, nullable=false)
 	private BigDecimal low;
 	
-	@Column(precision=12, scale=2)
+	@Column(precision=12, scale=2, nullable=false)
 	private BigDecimal close;
 	
 	@Column(precision=0)
@@ -97,16 +93,6 @@ public class SecuritiesOhlcv {
 	public String toString() {
 		return symbol.getSymbol() + "( O:" + open + " H:" + high + " L:" + low + " C:" + close + " V:" + volume + ")";
 		//return ToStringBuilder.reflectionToString(this);
-	}
-
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public void setId(Integer id) {
-		this.id = (Long)id.longValue();
 	}
 	
 	public Symbol getSymbol() {

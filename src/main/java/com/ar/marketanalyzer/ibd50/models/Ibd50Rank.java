@@ -21,12 +21,12 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
 import com.ar.marketanalyzer.securities.models.Symbol;
+import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50Rank extends PersistableEntity {
+public class Ibd50Rank extends PersistableEntityInt {
 		
 	private static final long serialVersionUID = 5791875306977524480L;
 

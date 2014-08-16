@@ -51,32 +51,32 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public SecuritiesOhlcv update(SecuritiesOhlcv securitiesOhlcv)
+	public SecuritiesOhlcv update(SecuritiesOhlcv secOhlcv)
 			throws SecuritiesNotFound {
-		SecuritiesOhlcv updatedStockOhlcv = secRepo.findOne(securitiesOhlcv.getId());
+		SecuritiesOhlcv updatedSecOhlcv = secRepo.findOne(secOhlcv.getId());
 		
-		if( updatedStockOhlcv == null) {
+		if( updatedSecOhlcv == null) {
 			throw new SecuritiesNotFound();
 		}
 		
 		//TODO Filler until I really write this code
 		//updatedStockOhlcv.setRank(StockOhlcv.getRank());
 		
-		return updatedStockOhlcv;
+		return updatedSecOhlcv;
 	}
 	
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public SecuritiesOhlcv delete(long id) throws SecuritiesNotFound {
-		SecuritiesOhlcv deletedStockOhlcv = secRepo.findOne(id);
+		SecuritiesOhlcv deletedSecOhlcv = secRepo.findOne(id);
 		
-		if(deletedStockOhlcv == null) {
+		if(deletedSecOhlcv == null) {
 			throw new SecuritiesNotFound();
 		} 
 
 		secRepo.delete(id);
 		
-		return deletedStockOhlcv;
+		return deletedSecOhlcv;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.models.parents;
+package com.ar.marketanalyzer.securities.models.parents;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class PersistableEntity implements Serializable{
+public class PersistableEntityInt implements Serializable{
 	
 	@Version
 	private static final long serialVersionUID = -1389117743389307160L;
@@ -28,6 +28,9 @@ public class PersistableEntity implements Serializable{
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public void setId(Long id) {
+		this.id = (Integer)id.intValue();
 	}
 	
 }

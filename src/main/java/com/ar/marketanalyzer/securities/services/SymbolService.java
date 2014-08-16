@@ -20,12 +20,12 @@ public class SymbolService implements SymbolServiceInterface{
 	
 	@Override
 	@Transactional
-	public Symbol createOrFindDuplicate(Symbol tickerSymbol) {
+	public Symbol createOrFindDuplicate(Symbol symbol) {
 		Symbol foundSymbol;
 		try {
-			foundSymbol = findBySymbol(tickerSymbol.getSymbol());					// Looks to see if the symbol is already in the db
+			foundSymbol = findBySymbol(symbol.getSymbol());					// Looks to see if the symbol is already in the db
 		} catch (SecuritiesNotFound e) {													// If there is not exception is caught
-			return symbolRepo.save(tickerSymbol);								// No duplicate so add this ticker to the db
+			return symbolRepo.save(symbol);								// No duplicate so add this ticker to the db
 		}
 		return foundSymbol;															// Ticker was already in the db, returning the found one.
 	}
@@ -44,17 +44,17 @@ public class SymbolService implements SymbolServiceInterface{
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public Symbol delete(int id) throws SecuritiesNotFound {
-		Symbol deletedTickerSymbol;				// Creating variable for the deletedTicker
+		Symbol deletedSymbol;				// Creating variable for the deletedTicker
 		
 		try {
-			deletedTickerSymbol = findById(id);			// Looking up the ticker by the provided ID to make sure that ID exists
+			deletedSymbol = findById(id);			// Looking up the ticker by the provided ID to make sure that ID exists
 		} catch (SecuritiesNotFound e) {						// If ID is not found exception is caught here
 			throw e;									// Throw the exception caught up to the next level to be dealt with
 		}
 
 		symbolRepo.delete(id);					// No exception thrown, so go ahead and delete the ticker with the provided ID
 		
-		return deletedTickerSymbol;						// Return the full ticker that was just deleted...Maybe I'll need it for something.
+		return deletedSymbol;						// Return the full ticker that was just deleted...Maybe I'll need it for something.
 	}
 
 	@Override
@@ -65,18 +65,18 @@ public class SymbolService implements SymbolServiceInterface{
 
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Symbol update(Symbol tickerSymbol) throws SecuritiesNotFound {
+	public Symbol update(Symbol symbol) throws SecuritiesNotFound {
 		Symbol updatedSymbol;							// Creating variable for the ticker to be updated
 		
 		try {
-			updatedSymbol = findById(tickerSymbol.getId());	// Looking up the ticker by the provided ID to make sure that ID exists
+			updatedSymbol = findById(symbol.getId());	// Looking up the ticker by the provided ID to make sure that ID exists
 		} catch (SecuritiesNotFound e) {							// If ID is not found exception is caught here
 			throw e;												// Throw the exception caught up to the next level to be dealt with
 		}
 		
-		updatedSymbol.setName(tickerSymbol.getName());		// Update all fields of the ticker
-		updatedSymbol.setSymbol(tickerSymbol.getSymbol());
-		updatedSymbol.setType(tickerSymbol.getType());
+		updatedSymbol.setName(symbol.getName());		// Update all fields of the ticker
+		updatedSymbol.setSymbol(symbol.getSymbol());
+		updatedSymbol.setType(symbol.getType());
 		
 		return updatedSymbol;									// Return the updated ticker
 	}
