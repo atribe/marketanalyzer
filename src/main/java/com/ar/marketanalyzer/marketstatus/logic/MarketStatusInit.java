@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.indexbacktest.logic;
+package com.ar.marketanalyzer.marketstatus.logic;
 
 import javax.annotation.Resource;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource({ "classpath:common.properties" })
-public class IndBackInit {
+public class MarketStatusInit {
 
 	/* Get actual class name to be printed on */
 	Logger log = Logger.getLogger(this.getClass().getName());
@@ -17,15 +17,13 @@ public class IndBackInit {
 	@Resource
 	private Environment env;
 	
-	
-	
 	static private String[] indexList;
 	
-	public void main() {
+	public void init() {
 		log.trace("Starting Index Backtest (IndBack) Thread");
 		
 		indexList = env.getRequiredProperty("index.names").split(",");		// Getting the index list from the property file
 		
-		 
 	}
+
 }

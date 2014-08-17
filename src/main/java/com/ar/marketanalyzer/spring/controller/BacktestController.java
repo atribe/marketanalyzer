@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
 import com.ar.marketanalyzer.indexbacktest.services.BacktestService;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
+import com.ar.marketanalyzer.threads.MarketAnalyzerListener;
 
 @Controller
 public class BacktestController {
@@ -29,7 +29,7 @@ public class BacktestController {
 	@RequestMapping(value = {"/" + BASEURL, "/" + BASEURL + "/"}, method = RequestMethod.GET)
 	public String backtestPage(ModelMap m) {
 		
-		if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+		if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
         	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
 
         	//Creating a backtest service
@@ -63,7 +63,7 @@ public class BacktestController {
         if(symbol == "IXIC" || symbol == "GSPC" || symbol == "SML") {
         	symbol = "^" + symbol;
         }
-        if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+        if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
         	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
 
         	//Creating a backtest service

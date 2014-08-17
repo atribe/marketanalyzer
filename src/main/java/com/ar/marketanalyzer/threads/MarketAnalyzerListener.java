@@ -6,6 +6,8 @@ import javax.servlet.ServletContextListener;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -21,16 +23,23 @@ import com.ar.marketanalyzer.spring.init.PropCache;
  *   MarketAnalyzerBean, which handles the database initialization.
  */
 @Component
-public class marketAnalyzerListener implements ServletContextListener{
+@PropertySource("classpath:common.properties")
+public class MarketAnalyzerListener implements ServletContextListener{
 
 	@Autowired @Qualifier("IndexBacktestInit")
 	private Runnable indexBacktestBean;
+	
+	@Autowired @Qualifier("MarketStatus")
+	private Runnable marketStatusBean;
+	
+	@Autowired
+	Environment env;
 	
 	//@Autowired @Qualifier("IBD50InitRunnable")
 	//private Runnable i50Bean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
-	protected static Logger staticLog = Logger.getLogger(marketAnalyzerListener.class.getName());
+	protected static Logger staticLog = Logger.getLogger(MarketAnalyzerListener.class.getName());
 	
 	private static Thread t1, t2;
 	
@@ -44,13 +53,17 @@ public class marketAnalyzerListener implements ServletContextListener{
 			.getAutowireCapableBeanFactory()
 			.autowireBean(this);
 		
+		t1 = new Thread(marketStatusBean, env.getProperty("threads.marketStatus"));
+		t1.start();
+		
+		/*
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
 		log.trace("1.1 Creating the DB init thread");
 		String thread1Name = PropCache.getCachedProps("threads.dbinit");;
 		t1 = new Thread(indexBacktestBean, thread1Name);
 		log.trace("1.2 Starting the DB init thread");
 		//t1.start();
-		
+		*/
 		/*
 		 * No longer subscribed to IBD50, therefore this feature is useless
 		 

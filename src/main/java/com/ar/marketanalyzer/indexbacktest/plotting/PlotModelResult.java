@@ -31,7 +31,7 @@ import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.beans.StockTransaction;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean.parametersTypeEnum;
 import com.ar.marketanalyzer.indexbacktest.services.BacktestService;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
+import com.ar.marketanalyzer.threads.MarketAnalyzerListener;
 
 public class PlotModelResult {
 
@@ -41,7 +41,7 @@ public class PlotModelResult {
 	private static BigDecimal minPrice;
 
 	public static JFreeChart createChart(String symbol) {
-		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
+		if(MarketAnalyzerListener.dbInitThreadIsAlive()) {
 			return null;
 		} else {
 			maxPrice=new BigDecimal(0);

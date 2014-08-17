@@ -35,14 +35,14 @@ import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.services.IndexCalcsService;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
+import com.ar.marketanalyzer.threads.MarketAnalyzerListener;
 
 public class PlotOHLC {
 	
 	static Logger log = Logger.getLogger(PlotOHLC.class.getName());
 	
 	public static JFreeChart createChart(String symbol) {
-		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
+		if(MarketAnalyzerListener.dbInitThreadIsAlive()) {
 			return null;
 		} else {
 			return createCombinedChart(symbol);

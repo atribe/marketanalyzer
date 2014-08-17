@@ -183,6 +183,9 @@ public class YahooOhlcvDao {
 	/*
 	 * Spring Data JPA + Hibernate section
 	 */
+	public static List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate) throws IOException {
+		return getYahooOhlcvData(symbol, startDate, new LocalDate());
+	}
 	
 	public static List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate, LocalDate endDate) throws IOException {
 		
