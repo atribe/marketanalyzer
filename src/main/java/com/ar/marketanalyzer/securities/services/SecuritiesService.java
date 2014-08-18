@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
@@ -15,6 +16,7 @@ import com.ar.marketanalyzer.securities.repo.SecuritiesRepo;
 import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesServiceInterface;
 import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
 
+@Service
 public class SecuritiesService implements SecuritiesServiceInterface {
 
 	@Resource
@@ -148,5 +150,11 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 		}
 		
 		return foundSymbol;
+	}
+
+	@Override
+	public void updateOhlcv(Symbol symbol) {
+		// TODO Auto-generated method stub
+		
 	}
 }
