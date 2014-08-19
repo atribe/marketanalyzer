@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.indexbacktest.beans;
+package com.ar.marketanalyzer.securities.models;
 
 public class YahooOHLCV {
 	private long id;

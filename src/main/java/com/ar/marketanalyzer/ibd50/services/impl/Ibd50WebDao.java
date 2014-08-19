@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.dao;
+package com.ar.marketanalyzer.ibd50.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;

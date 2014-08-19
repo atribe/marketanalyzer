@@ -13,7 +13,6 @@ import javax.persistence.Table;
 
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 import com.ar.marketanalyzer.securities.models.parents.PersistableEntityLong;
 
 @Entity

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.interfaces.OHLCVInterface;
+import com.ar.marketanalyzer.securities.models.YahooOHLCV;
 
 /**
  * @author Allan

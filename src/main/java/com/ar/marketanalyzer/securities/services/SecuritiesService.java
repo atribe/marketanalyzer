@@ -1,17 +1,25 @@
 package com.ar.marketanalyzer.securities.services;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
+import org.jfree.util.Log;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.securities.models.Symbol;
+import com.ar.marketanalyzer.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.securities.repo.SecuritiesRepo;
 import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesServiceInterface;
 import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
@@ -23,6 +31,8 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	private SecuritiesRepo secRepo;
 	@Autowired
 	private SymbolServiceInterface symbolService;
+	@Autowired
+	private YahooOhlcvService yahooService;
 	
 	@Override
 	@Transactional
@@ -127,8 +137,7 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfter(Symbol symbol,
-			Date date) throws SecuritiesNotFound {
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfter(Symbol symbol, Date date) throws SecuritiesNotFound {
 		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateAfterOrderByDateDesc(symbol, date);
 		
 		if(ohlcvList.isEmpty()) {
@@ -138,6 +147,51 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 		return ohlcvList;
 	}
 
+	@Override
+	public boolean updateOhlcv(Symbol symbol) {
+		
+		LocalDate updateStartDate = new LocalDate();
+		List<YahooOHLCV> yahooDataList = null;
+		List<SecuritiesOhlcv> secOhlcvList = null;
+		
+		try {
+			SecuritiesOhlcv lastDate = findSymbolsLastDate(symbol);			// Looking up the last ohlcv date in the db for the symbol
+			
+			if( lastDate.getLocalDate().equals(new LocalDate()) ) {			// Checking if the last date in the db is today, then db is already up to date
+				return false;												// Database not updated, no need
+			} else {
+				updateStartDate = lastDate.getLocalDate().plusDays(1);		// Set start date to be the last date in the db plus 1, so no duplicate date
+			}
+		} catch (SecuritiesNotFound e) {									// The symbol wasn't in the ohlcv db
+			updateStartDate = updateStartDate.minusMonths(6);				// Default ohlcv period is 6 months
+		}
+		
+		try {
+			yahooDataList = yahooService.getYahooOhlcvData(symbol.getName(), updateStartDate);	// Get data from Yahoo
+			secOhlcvList = convertYahooOhlcvDataToSecurityOhlcvData(yahooDataList, symbol);		// Convert the data, in prep to be stored in the db
+			batchInsert(secOhlcvList);															// batch insert the data
+			return true;																		// database updated, return true
+		} catch (IOException e) {
+			Log.debug("Yahoo OHLCV IOException Error!");
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	@Override
+	@Transactional
+	public SecuritiesOhlcv findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
+		
+		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolsLastDate(symbol);		// Get a list of ohlcv data from the query
+		
+		if( ohlcvList.isEmpty() ) {														// if the list is empty 
+			throw new SecuritiesNotFound( "No Ohlcv data found for the symbol: " + symbol.getName() );	//Throw and exception
+		}
+		
+		return ohlcvList.get(0);														// Else return the first item in the list, aka the newest date
+	}
+	
 	/*
 	 * Helper Methods
 	 */
@@ -151,10 +205,15 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 		
 		return foundSymbol;
 	}
-
-	@Override
-	public void updateOhlcv(Symbol symbol) {
-		// TODO Auto-generated method stub
+	
+	private List<SecuritiesOhlcv> convertYahooOhlcvDataToSecurityOhlcvData(	List<YahooOHLCV> yahooDataList, Symbol symbol ) {
+		List<SecuritiesOhlcv> secOhlcvList = new ArrayList<SecuritiesOhlcv>();	// Create secOhlcv list variable
 		
+		for(YahooOHLCV y:yahooDataList) {										// Cycle though the Yahoo Data
+			SecuritiesOhlcv s = new SecuritiesOhlcv(y, symbol);					// create new secOhlcv objects from the yahoo objects
+			secOhlcvList.add(s);												// add the secOhlcv objects to the list
+		}
+		
+		return secOhlcvList;													// return the list of secOhlcv objects
 	}
 }

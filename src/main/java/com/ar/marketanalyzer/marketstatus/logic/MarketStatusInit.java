@@ -51,7 +51,7 @@ public class MarketStatusInit {
 				symbol = symbolService.createOrFindDuplicate(symbol);				// add it to the db and return the symbol including the ID
 			}
 			
-			secService.updateOhlcv(symbol);
+			boolean ohlcvAlreadyUpToDate = !secService.updateOhlcv(symbol);			// Inverting the boolean returned because return is (was db updated) and I want the opposite of that
 		}
 	}
 

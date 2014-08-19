@@ -25,8 +25,8 @@ import au.com.bytecode.opencsv.bean.CsvToBean;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
-import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 import com.ar.marketanalyzer.securities.models.Symbol;
+import com.ar.marketanalyzer.securities.models.YahooOHLCV;
 
 /**
  * @author Aaron

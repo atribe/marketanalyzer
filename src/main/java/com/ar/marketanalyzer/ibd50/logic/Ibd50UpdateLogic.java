@@ -8,7 +8,6 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
@@ -16,6 +15,7 @@ import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
+import com.ar.marketanalyzer.ibd50.services.impl.Ibd50WebDao;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooOhlcvDao;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.securities.models.Symbol;

@@ -22,5 +22,6 @@ public interface SecuritiesServiceInterface {
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound;
 	public SecuritiesOhlcv findBySymbolAndDate(Symbol foundSymbol,	Date date) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfter(Symbol symbol, Date date)throws SecuritiesNotFound;
-	public void updateOhlcv(Symbol symbol);
+	public boolean updateOhlcv(Symbol symbol);
+	public SecuritiesOhlcv findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound;
 }
