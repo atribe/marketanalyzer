@@ -36,6 +36,12 @@ public class Symbol extends PersistableEntityInt {
 		return ToStringBuilder.reflectionToString(this);
 	}
 	
+	public Symbol(String symbol, String name, String type) {
+		this.symbol = symbol;
+		this.name = name;
+		this.type = type;
+	}
+	
 	public String getSymbol() {
 		return symbol;
 	}
