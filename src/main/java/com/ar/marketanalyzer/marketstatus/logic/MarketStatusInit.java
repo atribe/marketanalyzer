@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.backtest.logic.BacktestModelLogic;
+import com.ar.marketanalyzer.backtest.service.BacktestModelService;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.securities.models.Symbol;
 import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesServiceInterface;
@@ -29,7 +29,7 @@ public class MarketStatusInit {
 	@Autowired
 	private SecuritiesServiceInterface secService;
 	@Autowired
-	private BacktestModelLogic backtestLogic;
+	private BacktestModelService backtestService;
 	
 	private String[] indexSymbolList;
 	private String[] indexNamesList;
@@ -54,7 +54,7 @@ public class MarketStatusInit {
 			
 			boolean ohlcvAlreadyUpToDate = !secService.updateOhlcv(symbol);			// Inverting the boolean returned because return is (was db updated) and I want the opposite of that
 			
-			backtestLogic.runCurrentModel(symbol);									// Run the current model
+			backtestService.runCurrentModel(symbol);									// Run the current model
 		}
 	}
 
