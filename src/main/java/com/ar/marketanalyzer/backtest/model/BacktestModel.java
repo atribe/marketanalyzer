@@ -5,9 +5,13 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
 import com.ar.marketanalyzer.securities.models.Symbol;
@@ -37,8 +41,8 @@ public class BacktestModel extends PersistableEntityInt {
 	private Date startDate;
 	@Column(name="end_date")
 	private Date endDate;
-	@Column
-	private int modelType;
+	@Enumerated(EnumType.ORDINAL)
+	private modelTypeEnum modelType;
 	@Column
 	private int dDayWindow;
 	@Column
@@ -141,23 +145,29 @@ public class BacktestModel extends PersistableEntityInt {
 	public void setSymbol(Symbol symbol) {
 		this.symbol = symbol;
 	}
-	public int getModelType() {
-		return modelType;
-	}
-	public void setModelType(int modelType) {
-		this.modelType = modelType;
-	}
 	public Date getStartDate() {
 		return startDate;
 	}
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = new Date(startDate.toDateTimeAtStartOfDay().getMillis());
+	}
 	public Date getEndDate() {
 		return endDate;
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = new Date(endDate.toDateTimeAtStartOfDay().getMillis());
+	}
+	public modelTypeEnum getModelType() {
+		return modelType;
+	}
+	public void setModelType(modelTypeEnum modelType) {
+		this.modelType = modelType;
 	}
 	public int getdDayWindow() {
 		return dDayWindow;
