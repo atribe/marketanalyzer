@@ -35,8 +35,8 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	@Autowired
 	Environment env;
 	
-	//@Autowired @Qualifier("IBD50InitRunnable")
-	//private Runnable i50Bean;
+	@Autowired @Qualifier("IBD50InitRunnable")
+	private Runnable i50Bean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	protected static Logger staticLog = Logger.getLogger(MarketAnalyzerListener.class.getName());
@@ -53,8 +53,8 @@ public class MarketAnalyzerListener implements ServletContextListener{
 			.getAutowireCapableBeanFactory()
 			.autowireBean(this);
 		
-		t1 = new Thread(marketStatusBean, env.getProperty("threads.marketStatus"));
-		t1.start();
+		//t1 = new Thread(marketStatusBean, env.getProperty("threads.marketStatus"));
+		//t1.start();
 		
 		/*
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
@@ -64,15 +64,12 @@ public class MarketAnalyzerListener implements ServletContextListener{
 		log.trace("1.2 Starting the DB init thread");
 		//t1.start();
 		*/
-		/*
-		 * No longer subscribed to IBD50, therefore this feature is useless
-		 
+
 		//Also starting up the IBD50 thread
 		String thread2Name = PropCache.getCachedProps("threads.IBD50");
 		t2 = new Thread(i50Bean, thread2Name);
 		t2.start();
-		
-		*/
+
 	}
 	
 	@Override

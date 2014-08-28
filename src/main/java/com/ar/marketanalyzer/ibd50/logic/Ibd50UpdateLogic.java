@@ -3,9 +3,13 @@ package com.ar.marketanalyzer.ibd50.logic;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
@@ -15,6 +19,7 @@ import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
+import com.ar.marketanalyzer.ibd50.services.impl.Ibd50FileService;
 import com.ar.marketanalyzer.ibd50.services.impl.Ibd50WebDao;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooOhlcvDao;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
@@ -26,13 +31,21 @@ import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterfa
  *
  */
 @Service
+@PropertySource({ "classpath:common.properties" })
 public class Ibd50UpdateLogic {
 	
 	//logger
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
-	private Ibd50WebDao webDao;
+	;
 	
+	@Resource
+	private Environment env;
+	
+	@Autowired
+	private Ibd50WebDao webDao;
+	@Autowired
+	private Ibd50FileService fileService;
 	@Autowired
 	private SymbolServiceInterface tsService;
 	@Autowired
@@ -49,10 +62,15 @@ public class Ibd50UpdateLogic {
 	 * Pulls the current top 50 from investors.com and adds them to the database 
 	 */
 	public void updateIbd50() {
-		if( !isDbUpToDate() ) {
-			webDao = new Ibd50WebDao();
-			List<Ibd50Rank> webIbd50 = webDao.grabIbd50();
-	
+		if( !isDbUpToDate() ) {														// if the DB is up to date, then do nothing
+			List<Ibd50Rank> webIbd50 = null;										// else
+			
+			Boolean fileInitMode = new Boolean(env.getProperty("fileInitMode"));		// Check if we use the web or files to initialize
+			if( fileInitMode ) {														// if file mode is true
+				webIbd50 = fileService.loadIbd50(); 
+			} else {
+				webIbd50 = webDao.grabIbd50();
+			}
 			archiveOldInfo(webIbd50);
 			
 			addThisWeeksListToDB(webIbd50);

@@ -27,10 +27,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.securities.models.Symbol;
 
+@Component
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
 	private final static String password = "aaronnhugh";
@@ -142,7 +144,8 @@ public class Ibd50WebDao{
 		// Text file version of the list
 		//httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd&exportType=text");
 		// Excel file version of the list
-		httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd");
+		//httpget = new HttpGet("http://news.investors.com/StockResearch/ScreenCenter/ExportScreen.aspx?start=ibd");
+		httpget = new HttpGet("http://research.investors.com/etables/IBD50XLS.aspx?from=etables&tabView=IBD100&columnsort1=ibd100rank&columnsorttype1=DESC&columnsort2=&columnsorttype2=DESC");
 		response = httpclient.execute(httpget);
 		Header[] headers = response.getAllHeaders();
 		for(int i=0;i<headers.length;i++){
@@ -153,7 +156,7 @@ public class Ibd50WebDao{
 		return response.getEntity().getContent();
 	}
 	
-	private List<Ibd50Rank> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
+	public List<Ibd50Rank> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
 		List<Ibd50Rank> rowsFromIBD50 = new ArrayList<Ibd50Rank>();
 		
 		Document doc = Jsoup.parse(downloadedFileInputStream, "UTF-8", "");
