@@ -87,7 +87,7 @@ public class Ibd50Tracking extends AuditableEntity{
 	/*
 	 * Getters and Setters
 	 */
-	public Symbol getTicker() {
+	public Symbol getSymbol() {
 		return ticker;
 	}
 	public void setTicker(Symbol ticker) {

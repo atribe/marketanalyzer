@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.ibd50.services.impl;
+package com.ar.marketanalyzer.ibd50.services;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,31 +27,32 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50RankServiceInterface;
 import com.ar.marketanalyzer.securities.models.Symbol;
 
 @Component
-public class Ibd50WebDao{
+public class Ibd50WebService{
 	private final static String username = "teedit@gmail.com";
 	private final static String password = "aaronnhugh";
 	
+	@Autowired
+	private Ibd50RankServiceInterface rankService;
 	/**
 	 * Main method for getting the Ibd 50 from the website.
 	 * 
 	 * @return List of Ibd50Ranking Beans ready to be inserted into the DB
 	 */
-	public List<Ibd50Rank> grabIbd50() {
+	public InputStream grabIbd50() {
 		InputStream downloadedFileInputStream = null;
-		List<Ibd50Rank> rowsFromIBD50 = null;
-		
+		List<Ibd50Rank> ibd50List = null;
 		try {
 			downloadedFileInputStream = authenticatedIbd50Download();
 			
-			rowsFromIBD50 = parseIbd50HTMLToBeanList(downloadedFileInputStream);
-			//rowsFromIBD50 = parseIBD50toBeanList(downloadedTextFile);
-			
+			ibd50List = rankService.parseIbd50HTMLToBeanList(downloadedFileInputStream);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,8 +60,7 @@ public class Ibd50WebDao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return rowsFromIBD50;
+		return downloadedFileInputStream;
 	}
 	
 
@@ -154,91 +154,5 @@ public class Ibd50WebDao{
 		System.out.println(response.toString());
 		
 		return response.getEntity().getContent();
-	}
-	
-	public List<Ibd50Rank> parseIbd50HTMLToBeanList(InputStream downloadedFileInputStream) throws IOException {
-		List<Ibd50Rank> rowsFromIBD50 = new ArrayList<Ibd50Rank>();
-		
-		Document doc = Jsoup.parse(downloadedFileInputStream, "UTF-8", "");
-		Elements rows = doc.getElementsByTag("table").get(0).getElementsByTag("tr");
-		
-		//loop throw all the rows of the table
-		for(Element row : rows) {
-			//Get all the cells in the row
-			Elements cells = row.getElementsByTag("td");
-			List<String> rowOfStrings = new ArrayList<String>();
-			
-			if( cells.hasText()) {			//if the list cells is not empty (aka it isn't the header row)
-				//Loop through all the cells in the row
-				for(Element cell : cells) {
-					//Add every cell of the row to a List<String>
-					String cellContents = cell.getElementsByTag("td").text();
-					if( !cellContents.equalsIgnoreCase("N/A") ) {
-						rowOfStrings.add(cellContents);
-					} else {
-						rowOfStrings.add(null);
-					}
-				}
-				//parse the List<String> into a bean and then add it to the list<bean>
-				rowsFromIBD50.add(parseListToBean(rowOfStrings));
-			}
-		}
-		
-		//return the list of beans
-		return rowsFromIBD50;
-	}
-	
-	/**
-	 * Turns a IBD50 List of Strings into a IBD50 Ranking Bean
-	 * 
-	 * @param ibd50tokenizedList
-	 * @return IBD50 Ranking Bean
-	 */
-	private Ibd50Rank parseListToBean(List<String> ibd50tokenizedList) {
-		Ibd50Rank ibdRow = new Ibd50Rank();
-		
-		Symbol company = new Symbol();
-		
-		company.setSymbol(ibd50tokenizedList.get(0));
-		company.setName(ibd50tokenizedList.get(1));
-		company.setType("Stock");
-		ibdRow.setTicker(company);
-		ibdRow.setActiveRanking(Boolean.TRUE);
-		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));
-		ibdRow.setCurrentPrice(new BigDecimal(ibd50tokenizedList.get(3)));
-		ibdRow.setPriceChange(new BigDecimal(ibd50tokenizedList.get(4)));
-		ibdRow.setPricePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(5)));
-		ibdRow.setPercentOffHigh(parseDoubleOrNull(ibd50tokenizedList.get(6)));
-		ibdRow.setVolume(parseLongOrNull(ibd50tokenizedList.get(7)));
-		ibdRow.setVolumePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(8)));
-		ibdRow.setCompositeRating(parseDoubleOrNull(ibd50tokenizedList.get(9)));
-		ibdRow.setEpsRating(parseDoubleOrNull(ibd50tokenizedList.get(10)));
-		ibdRow.setRsRating(parseDoubleOrNull(ibd50tokenizedList.get(11)));
-		ibdRow.setSmrRating(ibd50tokenizedList.get(12));
-		ibdRow.setAccDisRating(ibd50tokenizedList.get(13));
-		ibdRow.setGroupRelStrRating(ibd50tokenizedList.get(14));
-		ibdRow.setEpsPercentChangeLastQtr(parseDoubleOrNull(ibd50tokenizedList.get(15)));
-		ibdRow.setEpsPercentChangePriorQtr(parseDoubleOrNull(ibd50tokenizedList.get(16)));
-		ibdRow.setEpsPercentChangeCurrentQtr(parseDoubleOrNull(ibd50tokenizedList.get(17)));
-		ibdRow.setEpsEstPercentChangeCurrentYear(parseDoubleOrNull(ibd50tokenizedList.get(18)));
-		ibdRow.setSalesPercentChangeLastQtr(parseDoubleOrNull(ibd50tokenizedList.get(19)));
-		ibdRow.setAnnualROELastYear(parseDoubleOrNull(ibd50tokenizedList.get(20)));
-		ibdRow.setAnnualProfitMarginLatestYear(parseDoubleOrNull(ibd50tokenizedList.get(21)));
-		ibdRow.setManagmentOwnPercent(parseDoubleOrNull(ibd50tokenizedList.get(22)));
-		ibdRow.setQtrsRisingSponsorship(parseIntOrNull(ibd50tokenizedList.get(23)));
-		
-		return ibdRow;
-	}
-	
-	private Double parseDoubleOrNull(String str) {
-		return str != null ? Double.parseDouble(str) : null;
-	}
-	
-	private Integer parseIntOrNull(String str) {
-		return str != null ? Integer.parseInt(str) : null;
-	}
-	
-	private Long parseLongOrNull(String str) {
-		return str != null ? Long.parseLong(str) : null;
 	}
 }

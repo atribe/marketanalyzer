@@ -1,8 +1,7 @@
-package com.ar.marketanalyzer.ibd50.services.impl;
+package com.ar.marketanalyzer.ibd50.services;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50RankServiceInterface;
 
 @Component
 @PropertySource({ "classpath:common.properties" })
@@ -24,7 +24,7 @@ public class Ibd50FileService {
 	@Resource
 	private Environment env;
 	@Autowired
-	private Ibd50WebDao webDao;
+	private Ibd50RankServiceInterface rankService;
 
 	public List<Ibd50Rank> loadIbd50() {
 		final File folder = new File(env.getProperty("ibd50.fileDirectory"));
@@ -35,7 +35,7 @@ public class Ibd50FileService {
 		for (final File file : fileList) {
 			try {
 				InputStream is = new FileInputStream(file);
-				rowsFromIBD50 = webDao.parseIbd50HTMLToBeanList(is);
+				rowsFromIBD50 = rankService.parseIbd50HTMLToBeanList(is);
 				bigIbd50List.addAll(rowsFromIBD50);
 				
 			} catch (IOException e) {

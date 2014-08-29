@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
-import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
-import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
-import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50CustomIndexServiceInterface;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50IndexSharesServiceInterface;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50RankServiceInterface;
+import com.ar.marketanalyzer.ibd50.services.interfaces.StockOhlcvServiceInterface;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 
 @Service
@@ -23,13 +23,13 @@ public class IBD50StatsLogic {
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
 	@Autowired
-	private Ibd50CustomIndexService customIndexService;
+	private Ibd50CustomIndexServiceInterface customIndexService;
 	@Autowired
-	private Ibd50IndexSharesService indexSharesService;
+	private Ibd50IndexSharesServiceInterface indexSharesService;
 	@Autowired
-	private Ibd50RankService rankingService;
+	private Ibd50RankServiceInterface rankingService;
 	@Autowired
-	private StockOhlcvService ohlcvService;
+	private StockOhlcvServiceInterface ohlcvService;
 	
 	public IBD50StatsLogic() {
 

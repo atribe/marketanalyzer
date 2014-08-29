@@ -13,6 +13,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
 
+/**
+ * @author Allan
+ *
+ */
 @Entity
 @Table(name = "securities_symbols")
 public class Symbol extends PersistableEntityInt {
@@ -36,6 +40,13 @@ public class Symbol extends PersistableEntityInt {
 		return ToStringBuilder.reflectionToString(this);
 	}
 	
+	/**
+	 * Constructor that takes the following arguments
+	 * 
+	 * @param symbol - String symbol
+	 * @param name - String company name
+	 * @param type - String type of security (Stock, ETF, Mutual Fund, Index)
+	 */
 	public Symbol(String symbol, String name, String type) {
 		this.symbol = symbol;
 		this.name = name;

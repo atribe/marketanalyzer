@@ -35,7 +35,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
-	private Symbol ticker;
+	private Symbol symbol;
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="tracking_id", referencedColumnName="id")
@@ -203,23 +203,17 @@ public class Ibd50Rank extends PersistableEntityInt {
 	public void setTracker(Ibd50Tracking tracker) {
 		this.tracker = tracker;
 	}
-	public Symbol getTicker() {
-		return ticker;
+	public Symbol getSymbol() {
+		return symbol;
 	}
-	public void setTicker(Symbol ticker) {
-		this.ticker = ticker;
-	}
-	public String getSymbol() {
-		return ticker.getSymbol();
-	}
-	public void setSymbol(String symbol) {
-		ticker.setSymbol(symbol);
+	public void setSymbol(Symbol symbol) {
+		this.symbol = symbol;
 	}
 	public String getCompanyName() {
-		return ticker.getName();
+		return symbol.getName();
 	}
 	public void setCompanyName(String companyName) {
-		ticker.setName(companyName);
+		symbol.setName(companyName);
 	}
 	public Integer getRank() {
 		return rank;

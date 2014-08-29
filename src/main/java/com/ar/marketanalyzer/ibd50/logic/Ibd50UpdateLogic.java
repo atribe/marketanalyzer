@@ -1,5 +1,7 @@
 package com.ar.marketanalyzer.ibd50.logic;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,11 +18,11 @@ import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
-import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
-import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
-import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
-import com.ar.marketanalyzer.ibd50.services.impl.Ibd50FileService;
-import com.ar.marketanalyzer.ibd50.services.impl.Ibd50WebDao;
+import com.ar.marketanalyzer.ibd50.services.Ibd50FileService;
+import com.ar.marketanalyzer.ibd50.services.Ibd50WebService;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50RankServiceInterface;
+import com.ar.marketanalyzer.ibd50.services.interfaces.Ibd50TrackingServiceInterface;
+import com.ar.marketanalyzer.ibd50.services.interfaces.StockOhlcvServiceInterface;
 import com.ar.marketanalyzer.indexbacktest.dao.YahooOhlcvDao;
 import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.securities.models.Symbol;
@@ -43,17 +45,17 @@ public class Ibd50UpdateLogic {
 	private Environment env;
 	
 	@Autowired
-	private Ibd50WebDao webDao;
+	private Ibd50WebService webDao;
 	@Autowired
 	private Ibd50FileService fileService;
 	@Autowired
-	private SymbolServiceInterface tsService;
+	private SymbolServiceInterface symbolService;
 	@Autowired
-	private Ibd50RankService rankingService;
+	private Ibd50RankServiceInterface rankingService;
 	@Autowired
-	private Ibd50TrackingService trackingService;
+	private Ibd50TrackingServiceInterface trackingService;
 	@Autowired
-	private StockOhlcvService ohlcvService;
+	private StockOhlcvServiceInterface ohlcvService;
 	
 	public Ibd50UpdateLogic() {
 	}
@@ -63,17 +65,19 @@ public class Ibd50UpdateLogic {
 	 */
 	public void updateIbd50() {
 		if( !isDbUpToDate() ) {														// if the DB is up to date, then do nothing
-			List<Ibd50Rank> webIbd50 = null;										// else
+			InputStream ibd50Stream = null;
+			List<Ibd50Rank> ibd50List = null;										// else
 			
 			Boolean fileInitMode = new Boolean(env.getProperty("fileInitMode"));		// Check if we use the web or files to initialize
 			if( fileInitMode ) {														// if file mode is true
-				webIbd50 = fileService.loadIbd50(); 
+				ibd50List = fileService.loadIbd50(); 									// File service returns a list, a big one
 			} else {
-				webIbd50 = webDao.grabIbd50();
+				ibd50Stream = webDao.grabIbd50();										// web returns a list
 			}
-			archiveOldInfo(webIbd50);
+
+			archiveOldInfo(ibd50List);
 			
-			addThisWeeksListToDB(webIbd50);
+			addRanksListToDB(ibd50List);
 		}
 	}
 
@@ -134,17 +138,17 @@ public class Ibd50UpdateLogic {
 			boolean trackerStillActive = false;												// Start with the assumption that the tracker is now inactive
 			
 			for( Ibd50Rank rank : webIbd50 ) {												// Loop through the downloaded rankings
-				if( rank.getTicker().getSymbol().equals( tracker.getTicker().getSymbol() ) ) {		// Check for a match in symbols 
+				if( rank.getSymbol().getSymbol().equals( tracker.getSymbol().getSymbol() ) ) {		// Check for a match in symbols 
 					trackerStillActive = true;
 					break;
 				}
 			}
 			
 			if(!trackerStillActive) {														// After all the new ranks are checked against the current tracker and the tracker isn't active 
-				runOhlcvUpdate(tracker.getTicker());
+				runOhlcvUpdate(tracker.getSymbol());
 				StockOhlcv leaveOhlcv = null;
 				try {
-					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getTicker(), tracker.newMonday().toDate());
+					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getSymbol(), tracker.newMonday().toDate());
 				} catch (SecuritiesNotFound e) {
 					e.printStackTrace();
 					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
@@ -160,33 +164,33 @@ public class Ibd50UpdateLogic {
 	}
 
 	
-	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
+	private void addRanksListToDB(List<Ibd50Rank> webIbd50) {
 		for(Ibd50Rank rankingRow : webIbd50) {										// Cycle through the each of row of the top 50
 			
-			Symbol rowTicker = rankingRow.getTicker();						// Getting the ticker out of the ranking
+			Symbol rowSymbol = rankingRow.getSymbol();						// Getting the ticker out of the ranking
 			
-			Symbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the ticker to the DB or getting the one in the db out
+			Symbol foundSymbol = symbolService.createOrFindDuplicate(rowSymbol);	// Adding the ticker to the DB or getting the one in the db out
 			
-			rankingRow.setTicker(foundTicker);										// Set the found ticker to be the ticker for the row
+			rankingRow.setSymbol(foundSymbol);										// Set the found ticker to be the ticker for the row
 			
 																					// Check to see if the OHLCV data is up to date for this stock symbol
-			runOhlcvUpdate(foundTicker);											// add the last 6 months of OHLCV data to the db
+			runOhlcvUpdate(foundSymbol);											// add the last 6 months of OHLCV data to the db
 			
 			final boolean isActive = true;
 	
 			Ibd50Tracking foundTracker;
 			try {
-				foundTracker = trackingService.findByActiveAndTicker(isActive, foundTicker);
+				foundTracker = trackingService.findByActiveAndTicker(isActive, foundSymbol);
 			} catch (SecuritiesNotFound e) {
 				log.info(e.getMessage());
 				
 																					//Tracker not found
 				Ibd50Tracking newTracker = new Ibd50Tracking();						//create a new tracker
-				newTracker.setTicker(foundTicker);									//set the Ticker for the new tracker
+				newTracker.setTicker(foundSymbol);									//set the Ticker for the new tracker
 				newTracker.setActive(Boolean.TRUE);
 				StockOhlcv joinDayOhlcv = null;
 				try {
-					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
+					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundSymbol, newTracker.getJoinDate());
 				} catch (SecuritiesNotFound e1) {
 					log.info(e.getMessage());
 					e.printStackTrace();
@@ -218,7 +222,7 @@ public class Ibd50UpdateLogic {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(Symbol ticker) {
+	private void runOhlcvUpdate(Symbol symbol) {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;
@@ -226,7 +230,7 @@ public class Ibd50UpdateLogic {
 		LocalDate startDate;
 		LocalDate today = new LocalDate();
 		try {
-			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(ticker, ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
+			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(symbol, ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
 			
 			//older data was found in the db
 			//so find the newest, the above query sorts so newest is at position 0
@@ -240,7 +244,7 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooOhlcvDao.getStockFromYahoo(ticker, startDate);
+		List<StockOhlcv> ohlcvData = YahooOhlcvDao.getStockFromYahoo(symbol, startDate);
 		
 		ohlcvService.batchInsert(ohlcvData);
 	}
@@ -265,7 +269,7 @@ public class Ibd50UpdateLogic {
 		}
 		
 		for(Ibd50Tracking tracker: deactiveTrackers) {
-			runOhlcvUpdate(tracker.getTicker());
+			runOhlcvUpdate(tracker.getSymbol());
 		}
 		
 	}
