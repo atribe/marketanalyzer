@@ -53,8 +53,8 @@ public class MarketAnalyzerListener implements ServletContextListener{
 			.getAutowireCapableBeanFactory()
 			.autowireBean(this);
 		
-		//t1 = new Thread(marketStatusBean, env.getProperty("threads.marketStatus"));
-		//t1.start();
+		t1 = new Thread(marketStatusBean, env.getProperty("threads.marketStatus"));
+		t1.start();
 		
 		/*
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
@@ -66,9 +66,8 @@ public class MarketAnalyzerListener implements ServletContextListener{
 		*/
 
 		//Also starting up the IBD50 thread
-		String thread2Name = PropCache.getCachedProps("threads.IBD50");
-		t2 = new Thread(i50Bean, thread2Name);
-		t2.start();
+		//t2 = new Thread(i50Bean, env.getProperty("threads.IBD50"));
+		//t2.start();
 
 	}
 	

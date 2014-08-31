@@ -21,11 +21,11 @@ import com.ar.marketanalyzer.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.securities.models.Symbol;
 import com.ar.marketanalyzer.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.securities.repo.SecuritiesRepo;
-import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesServiceInterface;
+import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesOhlcvServiceInterface;
 import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
 
 @Service
-public class SecuritiesService implements SecuritiesServiceInterface {
+public class SecuritiesOhlcvService implements SecuritiesOhlcvServiceInterface {
 
 	@Resource
 	private SecuritiesRepo secRepo;
@@ -39,7 +39,7 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	public SecuritiesOhlcv create(SecuritiesOhlcv secOhlcv) {
 
 		if( secOhlcv.getSymbol().getId() == null ) {							// if the id of the symbol is not set
-			Symbol foundSymbol = getOrCreateSymbol(secOhlcv.getSymbol());		// get or create the id of the symbol
+			Symbol foundSymbol = symbolService.createOrFindDuplicate(secOhlcv.getSymbol());		// get or create the id of the symbol
 		
 			secOhlcv.setSymbol(foundSymbol);									// set the foundSymbol to be the symbol of the security OHLCV to be created
 		}
@@ -52,7 +52,7 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	public void batchInsert(List<SecuritiesOhlcv> ohlcvList) {
 		Symbol symbol = ohlcvList.get(0).getSymbol();								//Get the ticker from the ohlcvList
 		
-		Symbol foundSymbol = getOrCreateSymbol(symbol);						//create a variable to hold the ticker from the db
+		Symbol foundSymbol = symbolService.createOrFindDuplicate(symbol);						//create a variable to hold the ticker from the db
 		
 		for(SecuritiesOhlcv ohlcv: ohlcvList) {
 			ohlcv.setSymbol(foundSymbol);											//cycle through the list of ohlcv and add the ticker from the db
@@ -195,17 +195,6 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	/*
 	 * Helper Methods
 	 */
-	private Symbol getOrCreateSymbol(Symbol symbol) {
-		Symbol foundSymbol;														//create a variable to hold the ticker from the db
-		try {
-			foundSymbol = symbolService.findBySymbol(symbol.getSymbol());		//find the ticker in the db
-		} catch (SecuritiesNotFound e) {
-			foundSymbol = symbolService.createOrFindDuplicate(symbol);	
-		}
-		
-		return foundSymbol;
-	}
-	
 	private List<SecuritiesOhlcv> convertYahooOhlcvDataToSecurityOhlcvData(	List<YahooOHLCV> yahooDataList, Symbol symbol ) {
 		List<SecuritiesOhlcv> secOhlcvList = new ArrayList<SecuritiesOhlcv>();	// Create secOhlcv list variable
 		

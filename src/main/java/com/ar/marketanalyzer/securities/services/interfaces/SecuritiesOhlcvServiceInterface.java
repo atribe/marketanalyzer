@@ -7,7 +7,7 @@ import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.securities.models.Symbol;
 
-public interface SecuritiesServiceInterface {
+public interface SecuritiesOhlcvServiceInterface {
 
 	/**
 	 * @param secOhlcv
