@@ -26,12 +26,12 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.TextAnchor;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.beans.StockTransaction;
 import com.ar.marketanalyzer.indexbacktest.beans.BacktestBean.parametersTypeEnum;
 import com.ar.marketanalyzer.indexbacktest.services.BacktestService;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotModelResult {
 

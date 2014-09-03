@@ -3,10 +3,10 @@ package com.ar.marketanalyzer.ibd50.logic;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
@@ -14,7 +14,6 @@ import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 
 @Service
 public class IBD50StatsLogic {
@@ -111,7 +110,7 @@ public class IBD50StatsLogic {
 		try {
 			List<Ibd50Rank> rankingsInRange = rankingService.findByRankBetweenAndActiveTrue(ibd50CustomIndex.getRankRangeStart(), ibd50CustomIndex.getRankRangeEnd());
 		
-			LocalDate mostRecentlyEnteredRankings = null;
+			//LocalDate mostRecentlyEnteredRankings = null;
 			
 			for(Ibd50Rank ranking: rankingsInRange) {
 				//List<StockOhlcv> ohlcvList = ohlcvService.findByTickerAndDateAfter(ranking.getTicker(), date) 

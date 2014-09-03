@@ -7,10 +7,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50CustomIndexRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
 
 @Service
 public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{

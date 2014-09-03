@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
-import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface StockOhlcvRepository extends JpaRepository<StockOhlcv, Integer>{
 

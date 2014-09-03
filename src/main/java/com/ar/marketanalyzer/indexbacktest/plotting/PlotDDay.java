@@ -15,10 +15,10 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 
+import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.services.IndexCalcsService;
 import com.ar.marketanalyzer.spring.init.PropCache;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotDDay {
 	

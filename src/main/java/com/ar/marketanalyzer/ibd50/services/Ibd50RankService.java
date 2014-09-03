@@ -3,10 +3,10 @@ package com.ar.marketanalyzer.ibd50.services;
 import java.util.Date;
 import java.util.List;
 
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
-import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface Ibd50RankService {
 

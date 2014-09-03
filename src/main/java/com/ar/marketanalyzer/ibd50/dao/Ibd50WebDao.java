@@ -28,8 +28,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.securities.models.Symbol;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";

@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50RankRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
-import com.ar.marketanalyzer.securities.models.Symbol;
-import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
 
 @Service
 public class Ibd50RankServiceImpl implements Ibd50RankService{

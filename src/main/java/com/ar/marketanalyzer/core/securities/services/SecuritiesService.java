@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.services;
+package com.ar.marketanalyzer.core.securities.services;
 
 import java.util.Date;
 import java.util.List;
@@ -8,12 +8,12 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
-import com.ar.marketanalyzer.securities.models.SecuritiesOhlcv;
-import com.ar.marketanalyzer.securities.models.Symbol;
-import com.ar.marketanalyzer.securities.repo.SecuritiesRepo;
-import com.ar.marketanalyzer.securities.services.interfaces.SecuritiesServiceInterface;
-import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.repo.SecuritiesRepo;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SecuritiesServiceInterface;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
 public class SecuritiesService implements SecuritiesServiceInterface {
 

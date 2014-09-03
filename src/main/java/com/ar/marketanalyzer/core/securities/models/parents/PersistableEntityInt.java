@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.models.parents;
+package com.ar.marketanalyzer.core.securities.models.parents;
 
 import java.io.Serializable;
 

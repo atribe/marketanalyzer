@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.threads;
+package com.ar.marketanalyzer.core.threads;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

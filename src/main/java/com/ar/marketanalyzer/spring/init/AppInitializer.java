@@ -15,8 +15,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
 import com.ar.marketanalyzer.spring.init.PropCache;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */

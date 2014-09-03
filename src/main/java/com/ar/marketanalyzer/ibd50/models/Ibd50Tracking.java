@@ -16,8 +16,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
-import com.ar.marketanalyzer.securities.models.Symbol;
 
 @Entity
 @Table(name = "IBD50_TRACKING")

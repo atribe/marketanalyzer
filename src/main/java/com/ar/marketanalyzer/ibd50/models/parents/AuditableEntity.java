@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @MappedSuperclass
 public class AuditableEntity extends PersistableEntityInt{

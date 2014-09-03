@@ -21,8 +21,8 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import com.ar.marketanalyzer.securities.models.Symbol;
-import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "IBD50_RANKING")

@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.threads;
+package com.ar.marketanalyzer.core.threads;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -32,6 +32,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	protected static Logger staticLog = Logger.getLogger(marketAnalyzerListener.class.getName());
 	
+	@SuppressWarnings("unused")
 	private static Thread t1, t2;
 	
 	@Override

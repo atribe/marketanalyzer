@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "ibd50_index_shares")

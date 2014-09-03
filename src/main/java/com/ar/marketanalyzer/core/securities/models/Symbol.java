@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.models;
+package com.ar.marketanalyzer.core.securities.models;
 
 import java.util.Collection;
 
@@ -10,8 +10,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
-import com.ar.marketanalyzer.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "securities_symbols")

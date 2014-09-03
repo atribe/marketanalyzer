@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
-import com.ar.marketanalyzer.securities.models.Symbol;
 
 public interface Ibd50TrackingService {
 

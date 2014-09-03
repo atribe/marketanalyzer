@@ -33,9 +33,9 @@ import org.jfree.data.xy.OHLCDataset;
 import org.jfree.ui.TextAnchor;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
 import com.ar.marketanalyzer.indexbacktest.services.IndexCalcsService;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 
 public class PlotOHLC {
 	

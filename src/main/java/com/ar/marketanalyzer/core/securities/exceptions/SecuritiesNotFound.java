@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.exceptions;
+package com.ar.marketanalyzer.core.securities.exceptions;
 
 public class SecuritiesNotFound extends Exception{
 

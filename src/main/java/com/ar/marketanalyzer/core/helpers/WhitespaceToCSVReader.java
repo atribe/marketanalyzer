@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.helpers;
+package com.ar.marketanalyzer.core.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;

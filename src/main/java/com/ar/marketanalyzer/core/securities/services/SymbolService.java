@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.services;
+package com.ar.marketanalyzer.core.securities.services;
 
 import java.util.List;
 
@@ -7,10 +7,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.securities.exceptions.SecuritiesNotFound;
-import com.ar.marketanalyzer.securities.models.Symbol;
-import com.ar.marketanalyzer.securities.repo.SymbolRepo;
-import com.ar.marketanalyzer.securities.services.interfaces.SymbolServiceInterface;
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.repo.SymbolRepo;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
 @Service
 public class SymbolService implements SymbolServiceInterface{

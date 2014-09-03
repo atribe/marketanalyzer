@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.securities.models;
+package com.ar.marketanalyzer.core.securities.models;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -13,8 +13,8 @@ import javax.persistence.Table;
 
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityLong;
 import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
-import com.ar.marketanalyzer.securities.models.parents.PersistableEntityLong;
 
 @Entity
 @Table(name = "securities_ohlcv")

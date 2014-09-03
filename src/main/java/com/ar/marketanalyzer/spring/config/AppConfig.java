@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.ar.marketanalyzer.threads.IndexBacktestInitRunnable;
+import com.ar.marketanalyzer.core.threads.IndexBacktestInitRunnable;
 
 @Configuration
 @ComponentScan(basePackages = "com.ar.marketanalyzer")
