@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
@@ -19,7 +20,6 @@ import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.ibd50.services.Ibd50RankService;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
-import com.ar.marketanalyzer.indexbacktest.dao.YahooOhlcvDao;
 
 /**
  * @author Allan
@@ -222,7 +222,7 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooOhlcvDao.getStockFromYahoo(ticker, startDate);
+		List<StockOhlcv> ohlcvData = YahooOhlcvService.getStockFromYahoo(ticker, startDate);
 		
 		ohlcvService.batchInsert(ohlcvData);
 	}

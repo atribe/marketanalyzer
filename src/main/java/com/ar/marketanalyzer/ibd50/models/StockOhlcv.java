@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")

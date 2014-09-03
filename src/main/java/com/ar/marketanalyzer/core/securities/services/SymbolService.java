@@ -82,7 +82,7 @@ public class SymbolService implements SymbolServiceInterface{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	@Transactional
 	public Symbol findBySymbol(String symbol) throws SecuritiesNotFound {
 		Symbol foundSymbolSymbol = symbolRepo.findBySymbol(symbol);
 		

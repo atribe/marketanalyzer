@@ -1,10 +1,11 @@
 package com.ar.marketanalyzer.core.threads;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.database.init.IndexBacktestInit;
+import com.ar.marketanalyzer.backtest.logic.BacktestLogic;
 
 /**
  * @author Allan
@@ -12,16 +13,19 @@ import com.ar.marketanalyzer.database.init.IndexBacktestInit;
  */
 @Component("IndexBacktestInit")
 @Scope("prototype")
-public class IndexBacktestInitRunnable implements Runnable {
+public class BacktestInitThread implements Runnable {
 
 	Logger log = Logger.getLogger(this.getClass().getName());
+	
+	@Autowired
+	BacktestLogic backtestLogic;
 
 	@Override
 	public void run() { 
-		log.info("Index Backtest thread commenced running");
+		log.info("Backtest thread commenced running");
 		
-		IndexBacktestInit.marketsDBInitialization();
+		backtestLogic.init();
 		
-		log.info("Index Backtest thread has ended");
+		log.info("Backtest thread has ended");
 	}
 }

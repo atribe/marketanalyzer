@@ -18,7 +18,7 @@ public class PersistableEntityLong implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(nullable=false, unique=true)
-	private Long id;
+	protected Long id;
 	
     /*
 	 * Getters and Setters

@@ -18,7 +18,7 @@ public class PersistableEntityInt implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(nullable=false, unique=true)
-	private Integer id;
+	protected Integer id;
 	
     /*
 	 * Getters and Setters

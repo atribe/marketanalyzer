@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.indexbacktest.beans.interfaces.OHLCVInterface;
 
 /**

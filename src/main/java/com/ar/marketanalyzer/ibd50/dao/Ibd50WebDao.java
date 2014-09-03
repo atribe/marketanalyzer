@@ -194,11 +194,8 @@ public class Ibd50WebDao{
 	private Ibd50Rank parseListToBean(List<String> ibd50tokenizedList) {
 		Ibd50Rank ibdRow = new Ibd50Rank();
 		
-		Symbol company = new Symbol();
-		
-		company.setSymbol(ibd50tokenizedList.get(0));
-		company.setName(ibd50tokenizedList.get(1));
-		company.setType("Stock");
+		Symbol company = new Symbol(ibd50tokenizedList.get(0), ibd50tokenizedList.get(1), "Stock");
+
 		ibdRow.setTicker(company);
 		ibdRow.setActiveRanking(Boolean.TRUE);
 		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));

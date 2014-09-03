@@ -46,11 +46,10 @@ public class marketAnalyzerListener implements ServletContextListener{
 			.autowireBean(this);
 		
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
-		log.trace("1.1 Creating the DB init thread");
-		String thread1Name = PropCache.getCachedProps("threads.dbinit");;
-		t1 = new Thread(indexBacktestBean, thread1Name);
-		log.trace("1.2 Starting the DB init thread");
-		//t1.start();
+		
+		
+		t1 = new Thread(indexBacktestBean, PropCache.getCachedProps("threads.backtest"));
+		t1.start();
 		
 		/*
 		 * No longer subscribed to IBD50, therefore this feature is useless

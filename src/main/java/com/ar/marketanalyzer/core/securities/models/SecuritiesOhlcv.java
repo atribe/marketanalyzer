@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityLong;
-import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 @Entity
 @Table(name = "securities_ohlcv")

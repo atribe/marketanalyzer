@@ -14,6 +14,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.joda.time.LocalDate;
 
+import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.database.MarketPredDataSource;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVCalcs;
@@ -142,7 +143,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//log.info("          The newest date in the database is " + newestDateInDB.toString() + ".");
 		log.debug("IY.3.1--The newest date in the database for " + symbol + "is " + newestDate.toString() + ".");
 		
-		int DBDaysTilNow = YahooOhlcvDao.getNumberOfDaysFromNow(newestDate);
+		int DBDaysTilNow = YahooOhlcvService.getNumberOfDaysFromNow(newestDate);
 		
 		return DBDaysTilNow;//DBDaysTilNow;
 	}
@@ -159,13 +160,13 @@ public class OHLCVDao extends GenericDBSuperclass {
 			LocalDate beginningDate = new LocalDate(PropCache.getCachedProps("yahoo.startdate"));
 	
 			//calculates the number of days from today back to beginning date
-			int numDays = YahooOhlcvDao.getNumberOfDaysFromNow(beginningDate);
+			int numDays = YahooOhlcvService.getNumberOfDaysFromNow(beginningDate);
 	
 			//Creates a yahoo URL given the index symbol from now back a given number of days
-			String URL = YahooOhlcvDao.getYahooURL(index, numDays);
+			String URL = YahooOhlcvService.getYahooURL(index, numDays);
 	
 
-			rowsFromYahoo = YahooOhlcvDao.getIndexFromYahoo(URL, index);
+			rowsFromYahoo = YahooOhlcvService.getIndexFromYahoo(URL, index);
 
 	
 			if(rowsFromYahoo != null) {
@@ -178,9 +179,9 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//Container to hold the downloaded data
 		List<IndexOHLCVData> rowsFromYahoo = null;
 		//Creates a yahoo URL given the index symbol from now back a given number of days
-		String URL = YahooOhlcvDao.getYahooURL(index, indexDaysBehind);
+		String URL = YahooOhlcvService.getYahooURL(index, indexDaysBehind);
 
-		rowsFromYahoo = YahooOhlcvDao.getIndexFromYahoo(URL, index);
+		rowsFromYahoo = YahooOhlcvService.getIndexFromYahoo(URL, index);
 			
 		// extract price and volume data for URL, # of yahoo days
 		addRecordsFromData(rowsFromYahoo);

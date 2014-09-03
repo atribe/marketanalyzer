@@ -1,24 +1,28 @@
 package com.ar.marketanalyzer.core.securities.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.repo.SecuritiesRepo;
-import com.ar.marketanalyzer.core.securities.services.interfaces.SecuritiesServiceInterface;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import com.ar.marketanalyzer.core.securities.repo.SecurityOhlcvRepo;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
-public class SecuritiesService implements SecuritiesServiceInterface {
+@Service
+public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Resource
-	private SecuritiesRepo secRepo;
+	private SecurityOhlcvRepo secRepo;
 	@Autowired
 	private SymbolServiceInterface symbolService;
 	
@@ -27,7 +31,7 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	public SecuritiesOhlcv create(SecuritiesOhlcv secOhlcv) {
 
 		if( secOhlcv.getSymbol().getId() == null ) {							// if the id of the symbol is not set
-			Symbol foundSymbol = getOrCreateSymbol(secOhlcv.getSymbol());		// get or create the id of the symbol
+			Symbol foundSymbol = symbolService.createOrFindDuplicate(secOhlcv.getSymbol());		// get or create the id of the symbol
 		
 			secOhlcv.setSymbol(foundSymbol);									// set the foundSymbol to be the symbol of the security OHLCV to be created
 		}
@@ -38,17 +42,28 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public void batchInsert(List<SecuritiesOhlcv> ohlcvList) {
-		Symbol symbol = ohlcvList.get(0).getSymbol();								//Get the ticker from the ohlcvList
+		Symbol symbol = ohlcvList.get(0).getSymbol();							//Get the ticker from the ohlcvList
 		
-		Symbol foundSymbol = getOrCreateSymbol(symbol);						//create a variable to hold the ticker from the db
-		
-		for(SecuritiesOhlcv ohlcv: ohlcvList) {
-			ohlcv.setSymbol(foundSymbol);											//cycle through the list of ohlcv and add the ticker from the db
+		if( symbol.getId() == null ) {											// If the symbol ID is null, create one in the DB
+			Symbol foundSymbol = symbolService.createOrFindDuplicate(symbol);						//create a variable to hold the ticker from the db
+			
+			for(SecuritiesOhlcv ohlcv: ohlcvList) {
+				ohlcv.setSymbol(foundSymbol);									//cycle through the list of ohlcv and add the ticker from the db
+			}
 		}
-
-		secRepo.save(ohlcvList);													//batch add 
+		
+		secRepo.save(ohlcvList);												//batch add 
 	}
-	
+	@Override
+	public void batchInsertYahoo(List<YahooOHLCV> ohlcvList, Symbol symbol) {
+		List<SecuritiesOhlcv> secOhlcv = new ArrayList<SecuritiesOhlcv>();
+		
+		for(YahooOHLCV y: ohlcvList) {
+			secOhlcv.add(new SecuritiesOhlcv(y, symbol));
+		}
+		
+		batchInsert(secOhlcv);
+	}
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public SecuritiesOhlcv update(SecuritiesOhlcv secOhlcv)
@@ -136,17 +151,20 @@ public class SecuritiesService implements SecuritiesServiceInterface {
 		return ohlcvList;
 	}
 
+	@Override
+	@Transactional
+	public SecuritiesOhlcv findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
+		
+		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolsLastDate(symbol);		// Get a list of ohlcv data from the query
+		
+		if( ohlcvList.isEmpty() ) {														// if the list is empty 
+			throw new SecuritiesNotFound( "No Ohlcv data found for the symbol: " + symbol.getName() );	//Throw and exception
+		}
+		
+		return ohlcvList.get(0);														// Else return the first item in the list, aka the newest date
+	}
 	/*
 	 * Helper Methods
 	 */
-	private Symbol getOrCreateSymbol(Symbol symbol) {
-		Symbol foundSymbol;														//create a variable to hold the ticker from the db
-		try {
-			foundSymbol = symbolService.findBySymbol(symbol.getSymbol());		//find the ticker in the db
-		} catch (SecuritiesNotFound e) {
-			foundSymbol = symbolService.createOrFindDuplicate(symbol);	
-		}
-		
-		return foundSymbol;
-	}
+
 }

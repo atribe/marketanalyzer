@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
@@ -32,9 +30,23 @@ public class Symbol extends PersistableEntityInt {
 	
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return "ID:" + id + ", " +symbol + ", " + name + ", " + type;
 	}
 	
+	/*
+	 * =====Constructors=====
+	 */
+	public Symbol() {};
+	
+	public Symbol(String symbol, String name, String type) {
+		this.symbol = symbol;
+		this.name = name;
+		this.type = type;
+	}
+	
+	/*
+	 * =====Getters and Setters=======
+	 */
 	public String getSymbol() {
 		return symbol;
 	}

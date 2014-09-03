@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ar.marketanalyzer.indexbacktest.dao;
+package com.ar.marketanalyzer.core.securities.services;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,23 +17,28 @@ import org.apache.log4j.Logger;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.springframework.stereotype.Component;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.database.GenericDBSuperclass;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
 import com.ar.marketanalyzer.indexbacktest.beans.IndexOHLCVData;
-import com.ar.marketanalyzer.indexbacktest.beans.YahooOHLCV;
 
 /**
- * @author Aaron
+ * @author Aaron/Allan
  */
-public class YahooOhlcvDao {
+@Component
+public class YahooOhlcvService {
 	
-	static Logger log = Logger.getLogger(GenericDBSuperclass.class.getName());
+	/*
+	 * =======================Old Code that needs to be removed when possible===========================
+	 */
+	static Logger logg = Logger.getLogger(GenericDBSuperclass.class.getName());
 
 	public static List<IndexOHLCVData> getIndexFromYahoo(String url, String index) {
 		
@@ -43,7 +48,7 @@ public class YahooOhlcvDao {
 			rowsFromYahooURL = getAndParseYahooData(index, url);
 		
 		} catch (FileNotFoundException fe) {
-			log.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
+			logg.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,23 +110,23 @@ public class YahooOhlcvDao {
 		b_startDay = startDate.getDayOfMonth();//this gets beginning dates day
 		c_startYear = startDate.getYear();//this gets beginning dates year
 		
-		log.debug("Start Month (variable A): " + a_startMonth);
-		log.debug("Start Day (variable B): " + b_startDay);
-		log.debug("Start Year (variable C): " + c_startYear);
+		logg.debug("Start Month (variable A): " + a_startMonth);
+		logg.debug("Start Day (variable B): " + b_startDay);
+		logg.debug("Start Year (variable C): " + c_startYear);
 
 		d_endMonth = endDate.getMonthOfYear()-1;//Yahoo uses zero based month numbering,this gets todays month
 		e_endDay = endDate.getDayOfMonth();//this gets todays day of month
 		f_endYear = endDate.getYear();//this gets todays year
 		
-		log.debug("End Month (variable D): " + d_endMonth);
-		log.debug("End Day (variable E): " + e_endDay);
-		log.debug("End Year (variable f): " + f_endYear);
+		logg.debug("End Month (variable D): " + d_endMonth);
+		logg.debug("End Day (variable E): " + e_endDay);
+		logg.debug("End Year (variable f): " + f_endYear);
 
 		String str = "http://ichart.finance.yahoo.com/table.csv?s="
 				+ symbol.toUpperCase() + "&a=" + a_startMonth + "&b=" + b_startDay + "&c=" + c_startYear + "&g=d&d=" + d_endMonth + "&e=" + e_endDay
 				+ "&f=" + f_endYear + "&ignore=.csv";
-		log.info("          Using the following Yahoo URL:");
-		log.info("          " + str);
+		logg.info("          Using the following Yahoo URL:");
+		logg.info("          " + str);
 		return str;
 	}
 
@@ -158,7 +163,7 @@ public class YahooOhlcvDao {
 		try {
 			rawList = getAndParseYahooData(ticker.getSymbol(), url);
 		} catch (FileNotFoundException fe) {
-			log.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
+			logg.error("the yahoo URL: " + url + " was not valid. It is probably just after midnight and the yahoo servers have not yet updated.", fe);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,12 +184,19 @@ public class YahooOhlcvDao {
 		
 		return convertedList;
 	}
-
+	/*
+	 * ===============================End Old Code==========================================================
+	 */
 	/*
 	 * Spring Data JPA + Hibernate section
 	 */
+	Logger log = Logger.getLogger(this.getClass().getName());
 	
-	public static List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate, LocalDate endDate) throws IOException {
+	public List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate) throws IOException {
+		return getYahooOhlcvData(symbol, startDate, new LocalDate());
+	}
+	
+	public List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate, LocalDate endDate) throws IOException {
 		
 		String url = generateURL(symbol, startDate, endDate);		// Generate URL
 		
@@ -193,7 +205,7 @@ public class YahooOhlcvDao {
 		return parseCSVtoObject(reader);
 	}
 
-	private static String generateURL(String symbol, LocalDate startDate, LocalDate endDate) {
+	private String generateURL(String symbol, LocalDate startDate, LocalDate endDate) {
 		LocalTime now = new LocalTime(); 						// temporary variable with the current time
 		if(now.getHourOfDay() == 0) {							// if it is between 12:00 am and 1:00 am
 			endDate = new LocalDate().minusDays(1);				// 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
@@ -227,7 +239,7 @@ public class YahooOhlcvDao {
 		return str;
 	}
 	
-	private static BufferedReader callURL(String url) throws IOException {
+	private BufferedReader callURL(String url) throws IOException {
 		URL ur = new URL(url);
 		HttpURLConnection HUC = (HttpURLConnection) ur.openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(HUC.getInputStream()));
@@ -237,7 +249,7 @@ public class YahooOhlcvDao {
 		return reader;
 	}
 
-	private static List<YahooOHLCV> parseCSVtoObject(BufferedReader reader) {
+	private List<YahooOHLCV> parseCSVtoObject(BufferedReader reader) {
 		//OpenCSV parser
 		CSVReader csvReader = new CSVReader(reader, ',', '\"');
 		ColumnPositionMappingStrategy<YahooOHLCV> strategy = new ColumnPositionMappingStrategy<YahooOHLCV>();
