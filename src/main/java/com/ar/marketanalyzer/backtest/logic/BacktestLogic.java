@@ -39,6 +39,8 @@ public class BacktestLogic {
 		List<Symbol> defaultSymbols = getDefaultSymbols();
 		
 		populateDefaultOhlcv(defaultSymbols);
+		
+		runCurrentModel(defaultSymbols);
 	}
 
 	private List<Symbol> getDefaultSymbols() {
@@ -82,5 +84,17 @@ public class BacktestLogic {
 			
 			secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
 		}
+	}
+	
+	private void runCurrentModel(List<Symbol> defaultSymbols) {
+		/* Get current model
+		 * 	If no current model, the use the default model
+		 * Check the model needs to be run
+		 * 	model results already calculated?
+		 * If model already ran, do nothing
+		 * If model not yet run,
+		 * 	Run model
+		 */
+		
 	}
 }
