@@ -4,21 +4,19 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.backtest.models.DollarValue;
-import com.ar.marketanalyzer.backtest.models.Trade;
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
@@ -29,14 +27,17 @@ import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt
 @Table(name="backtest_model")
 public abstract class AbstractModel extends PersistableEntityInt {
 
+	public enum modelStatus { CURRENT, PREVIOUS }
+	
 	private static final long serialVersionUID = 5829380092032471186L;
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	protected Symbol symbol;
 	
+	@Enumerated(EnumType.STRING)
 	@Column( name="model_status", nullable=false)
-	protected String modelStatus;
+	protected modelStatus modelStatus;
 	
 	@Column( name="start_date", nullable=false)
 	protected Date startDate;
@@ -59,34 +60,31 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	/*
 	 * Not DB stored fields
 	 */
+	@Transient
 	protected List<SecuritiesOhlcv> ohlcvData;
 
-	protected final int modelMonthRange = 60;
+	protected final static int modelMonthRange = 60;
 	protected final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
-	protected final Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
-	protected final Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );
+	protected final static Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
+	protected final static Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );
 	/*
 	 * Constructors
 	 */
 	public AbstractModel() {
 	}
 	public AbstractModel(Symbol symbol) {
-		this.symbol = symbol;
-		this.startDate = defaultStartDate;
-		this.startDate = defaultEndDate;
-		this.initialInvestment = defaultInitialInvestment;
+		this(symbol, defaultStartDate);
 	}
 	public AbstractModel(Symbol symbol, Date startDate) {
-		this.symbol = symbol;
-		this.startDate = startDate;
-		this.endDate = defaultEndDate;
-		this.initialInvestment = defaultInitialInvestment;
+		this(symbol, defaultStartDate, defaultEndDate);
 	}
+
 	public AbstractModel(Symbol symbol, Date startDate, Date endDate) {
 		this.symbol = symbol;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.initialInvestment = defaultInitialInvestment;
+		this.modelStatus = modelStatus.CURRENT;
 	}
 
 	/*
@@ -100,14 +98,12 @@ public abstract class AbstractModel extends PersistableEntityInt {
 		this.symbol = symbol;
 	}
 
-	public String getModelStatus() {
+	public modelStatus getModelStatus() {
 		return modelStatus;
 	}
-
-	public void setModelStatus(String modelStatus) {
+	public void setModelStatus(modelStatus modelStatus) {
 		this.modelStatus = modelStatus;
 	}
-
 	public Date getStartDate() {
 		return startDate;
 	}

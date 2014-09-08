@@ -83,12 +83,9 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public SecuritiesOhlcv delete(long id) throws SecuritiesNotFound {
-		SecuritiesOhlcv deletedSecOhlcv = secRepo.findOne(id);
+		SecuritiesOhlcv deletedSecOhlcv = findById(id);
 		
-		if(deletedSecOhlcv == null) {
-			throw new SecuritiesNotFound();
-		} 
-
+		// if the findById method fails, then exception thrown and this code not run
 		secRepo.delete(id);
 		
 		return deletedSecOhlcv;
@@ -102,8 +99,14 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public SecuritiesOhlcv findById(long id) {
-		return secRepo.findOne(id);
+	public SecuritiesOhlcv findById(long id) throws SecuritiesNotFound  {
+		SecuritiesOhlcv ohlcv = secRepo.findOne(id);
+		
+		if( ohlcv == null ) {
+			throw new SecuritiesNotFound();
+		}
+		
+		return ohlcv; 
 	}
 
 	@Override

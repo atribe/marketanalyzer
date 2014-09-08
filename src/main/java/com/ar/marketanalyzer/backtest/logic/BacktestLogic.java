@@ -13,6 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
+import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
@@ -34,6 +36,8 @@ public class BacktestLogic {
 	private SecurityOhlcvServiceInterface secOhlcvService;
 	@Autowired
 	private YahooOhlcvService yahooService;
+	@Autowired
+	private AbstractModelServiceInterface modelService;
 	
 	public void init() {
 		List<Symbol> defaultSymbols = getDefaultSymbols();
@@ -96,5 +100,11 @@ public class BacktestLogic {
 		 * 	Run model
 		 */
 		
+		//Testing
+		for( Symbol symbol : defaultSymbols ) {
+			IndexBacktestingModel defaultModel = new IndexBacktestingModel(symbol);
+			
+			modelService.create(defaultModel);
+		}
 	}
 }

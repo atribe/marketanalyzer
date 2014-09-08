@@ -1,12 +1,15 @@
 package com.ar.marketanalyzer.backtest.models.rules.key;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import org.joda.time.LocalDate;
 
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 
-public class RuleResultKey {
+public class RuleResultKey implements Serializable{
+	
+	private static final long serialVersionUID = 8500186321606923666L;
 	private AbstractRule rule;
 	private Date date;
 	

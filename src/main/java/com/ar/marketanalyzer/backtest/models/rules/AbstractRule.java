@@ -25,8 +25,8 @@ public class AbstractRule extends PersistableEntityInt {
 	@JoinColumn(name="model_id", referencedColumnName="id")
 	private AbstractModel model;
 	
-	private List<RuleResult> ruleResult;
+	//private List<RuleResult> ruleResult;
 	
-	private String ruleParameters; //probably a StringList converted into a String
+	//private String ruleParameters; //probably a StringList converted into a String
 	
 }

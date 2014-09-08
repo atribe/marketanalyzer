@@ -20,7 +20,7 @@ public interface SecurityOhlcvServiceInterface {
 	public SecuritiesOhlcv update(SecuritiesOhlcv secOhlcv) throws SecuritiesNotFound;
 	public SecuritiesOhlcv delete(long id) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findAll();
-	public SecuritiesOhlcv findById(long id);
+	public SecuritiesOhlcv findById(long id) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound;
 	public SecuritiesOhlcv findBySymbolAndDate(Symbol foundSymbol,	Date date) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfter(Symbol symbol, Date date)throws SecuritiesNotFound;
