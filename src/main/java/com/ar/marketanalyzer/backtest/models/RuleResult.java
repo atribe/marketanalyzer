@@ -10,7 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.ar.marketanalyzer.backtest.models.key.RuleResultKey;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.backtest.models.rules.key.RuleResultKey;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity

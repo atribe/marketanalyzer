@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.backtest.models;
+package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.backtest.models.RuleResult;
+import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity

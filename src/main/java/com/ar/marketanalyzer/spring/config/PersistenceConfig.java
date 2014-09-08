@@ -17,7 +17,10 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @Configuration
-@EnableJpaRepositories({"com.ar.marketanalyzer.ibd50.repositories","com.ar.marketanalyzer.indexbacktest.repositories","com.ar.marketanalyzer.core.securities.repo"})
+@EnableJpaRepositories({"com.ar.marketanalyzer.ibd50.repositories",
+						"com.ar.marketanalyzer.indexbacktest.repositories",
+						"com.ar.marketanalyzer.core.securities.repo",
+						"com.ar.marketanalyzer.backtest.repo"})
 @PropertySource({ "classpath:common.properties" })
 public class PersistenceConfig {
 

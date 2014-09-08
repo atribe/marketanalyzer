@@ -1,10 +1,10 @@
-package com.ar.marketanalyzer.backtest.models.key;
+package com.ar.marketanalyzer.backtest.models.rules.key;
 
 import java.sql.Date;
 
 import org.joda.time.LocalDate;
 
-import com.ar.marketanalyzer.backtest.models.AbstractRule;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 
 public class RuleResultKey {
 	private AbstractRule rule;
