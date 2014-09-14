@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -156,18 +157,30 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public SecuritiesOhlcv findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
+	public LocalDate findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
 		
-		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolsLastDate(symbol);		// Get a list of ohlcv data from the query
+		List <Date> ohlcvList = secRepo.findBySymbolsLastDate(symbol);		// Get a list of ohlcv data from the query
 		
 		if( ohlcvList.isEmpty() ) {														// if the list is empty 
 			throw new SecuritiesNotFound( "No Ohlcv data found for the symbol: " + symbol.getName() );	//Throw and exception
 		}
 		
-		return ohlcvList.get(0);														// Else return the first item in the list, aka the newest date
+		return new LocalDate(ohlcvList.get(0));														// Else return the first item in the list, aka the newest date
 	}
 	/*
 	 * Helper Methods
 	 */
+
+	@Override
+	@Transactional
+	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate) throws SecuritiesNotFound {
+		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateBetween(symbol, startDate, endDate);		// Get a list of ohlcv data from the query
+		
+		if( ohlcvList.isEmpty() ) {														// if the list is empty 
+			throw new SecuritiesNotFound( "No OHLCV data found for " + symbol.getName() + " between " + startDate.toString() + " and " + endDate.toString() + ".");	//Throw and exception
+		}
+		
+		return ohlcvList;
+	}
 
 }

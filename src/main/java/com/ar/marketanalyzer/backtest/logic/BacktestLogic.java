@@ -36,8 +36,9 @@ public class BacktestLogic {
 	private SecurityOhlcvServiceInterface secOhlcvService;
 	@Autowired
 	private YahooOhlcvService yahooService;
+
 	@Autowired
-	private AbstractModelServiceInterface modelService;
+	private BacktestModelLogic modelLogic;
 	
 	public void init() {
 		List<Symbol> defaultSymbols = getDefaultSymbols();
@@ -64,18 +65,19 @@ public class BacktestLogic {
 	}
 	
 	private void populateDefaultOhlcv(List<Symbol> defaultSymbols) {
-		final int DESIRED_MONTHS_OF_DATA = 36;
+		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
 		LocalDate desiredStartDate = new LocalDate().minusMonths(DESIRED_MONTHS_OF_DATA);
 		List<YahooOHLCV> yahooOhlcv = null;
 		
 		for(Symbol symbol: defaultSymbols) {
 			try {
 				try {
-					LocalDate lastDate = secOhlcvService.findSymbolsLastDate(symbol).getLocalDate();		// Try to find the last date in the DB
+					LocalDate lastDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 					
 					if( desiredStartDate.isBefore(lastDate) ) {					// If the last date is not before desired months ago
 						yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, lastDate);
 					}
+					// Need a check to see if it up to date as well
 				} catch (SecuritiesNotFound e) {
 					// Catch block if there is no Ohlcv data for the symbol in the DB
 					yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate);
@@ -86,7 +88,9 @@ public class BacktestLogic {
 				e.printStackTrace();
 			}
 			
-			secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
+			if( yahooOhlcv != null ) {
+				secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
+			}
 		}
 	}
 	
@@ -102,9 +106,7 @@ public class BacktestLogic {
 		
 		//Testing
 		for( Symbol symbol : defaultSymbols ) {
-			IndexBacktestingModel defaultModel = new IndexBacktestingModel(symbol);
-			
-			modelService.create(defaultModel);
+			modelLogic.createDefaultModel(symbol);
 		}
 	}
 }

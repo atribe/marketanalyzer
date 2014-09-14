@@ -2,6 +2,7 @@ package com.ar.marketanalyzer.backtest.models.models;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,18 +19,27 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
+import com.ar.marketanalyzer.backtest.models.models.interfaces.AbstractModelInterface;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.backtest.models.stats.Stats;
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
+import com.ar.marketanalyzer.spring.init.PropCache;
 
+@Component	//this is so the autowired works for the ohlcv service
 @Entity
 @Inheritance
 @DiscriminatorColumn(name="MODEL_NAME") //http://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Single_Table_Inheritance
 @Table(name="backtest_model")
-public abstract class AbstractModel extends PersistableEntityInt {
+public abstract class AbstractModel extends PersistableEntityInt implements AbstractModelInterface{
 	
 	private static final long serialVersionUID = 5829380092032471186L;
 
@@ -66,10 +76,13 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	/*
 	 * Not DB stored fields
 	 */
+		
 	@Transient
 	protected List<SecuritiesOhlcv> ohlcvData;
+	@Transient
+	protected List<Stats> stats;
 
-	protected final static int modelMonthRange = 60;
+	protected final static int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
 	protected final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
 	protected final static Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
 	protected final static Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );
@@ -80,7 +93,7 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	public AbstractModel() {
 	}
 	public AbstractModel(Symbol symbol) {
-		this(symbol, defaultStartDate);
+		this(symbol, defaultStartDate, defaultEndDate);
 	}
 	public AbstractModel(Symbol symbol, Date startDate) {
 		this(symbol, defaultStartDate, defaultEndDate);
@@ -91,12 +104,15 @@ public abstract class AbstractModel extends PersistableEntityInt {
 		this.endDate = endDate;
 		this.initialInvestment = defaultInitialInvestment;
 		this.modelStatus = ModelStatus.CURRENT;
-		
-		assignRules();
-	}
 
+		//assignRules();	// assigns the rules to this model, must be overridden by the child class
+	}
 	/*
 	 * Helper Methods
+	 */
+
+	/*
+	 * Helper Methods that must be implemented by the extending class
 	 */
 	/**
 	 * This method must be implemented by the extending class
@@ -104,6 +120,74 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	protected void assignRules() {
 		
 	}
+	/**
+	 * This method must be implemented by the extending class
+	 * Can also call super() in the implementation to get the default calcs below
+	 */
+	protected void calcStats() {
+		/*
+		 * Default stats calculated below:
+		 * 1. 50 day close price average
+		 * 2. 100 day close price average
+		 * 3. 200 day close price average
+		 * 4. 50 day volume average
+		 */
+		BigDecimal close50DayAvg;
+		BigDecimal close100DayAvg;
+		BigDecimal close200DayAvg;
+		long vol50DayAvg;
+		
+		stats = new ArrayList<Stats>();
+		
+		for(int i=ohlcvData.size()-1; i>0; i--) {
+			int loopDays = 50;
+			BigDecimal priceCloseSum = new BigDecimal(0.0);
+			long volumeSum = 0;
+			
+			/*
+			 * Loop for 50 days
+			 * Calculates the 50 day moving average
+			 * and calculates the 50 day moving volume average
+			 */
+			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+				//Summing up for closePriceAvg
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+
+				//summing up for volumeAverage
+				volumeSum+=ohlcvData.get(j).getVolume();
+			}
+			close50DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
+			vol50DayAvg = volumeSum/loopDays;
+			
+			/*
+			 * Loop for 100 days
+			 * Calculates the 100 day moving average
+			 */
+			loopDays = 100;
+			priceCloseSum = new BigDecimal(0);
+			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+				//Summing up for closePriceAvg
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+			}
+			close100DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
+			
+			/*
+			 * Loop for 200 days
+			 * Calculates the 200 day moving average
+			 */
+			loopDays = 200;
+			priceCloseSum = new BigDecimal(0);
+			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+				//Summing up for closePriceAvg
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+			}
+			close200DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
+			
+			Stats stat = new Stats(ohlcvData.get(i).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
+			stats.add(stat);
+		}
+	}
+
 	
 	/*
 	 * Getters and Setters
@@ -179,6 +263,8 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	public void setOhlcvData(List<SecuritiesOhlcv> ohlcvData) {
 		this.ohlcvData = ohlcvData;
 	}
+
+	
 	protected void evaluateRules() {
 		// TODO Auto-generated method stub
 		

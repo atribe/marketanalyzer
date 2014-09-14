@@ -18,6 +18,8 @@ public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> 
 	
 	@Query(	  "SELECT date FROM SecuritiesOhlcv O "
 			+ "WHERE O.symbol = :symbol "
-			+ "ORDER BY date DESC ")
-	public List<SecuritiesOhlcv> findBySymbolsLastDate( @Param("symbol")Symbol symbol);
+			+ "ORDER BY date ASC ")
+	public List<Date> findBySymbolsLastDate( @Param("symbol")Symbol symbol);
+	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol,
+			Date startDate, Date endDate);
 }
