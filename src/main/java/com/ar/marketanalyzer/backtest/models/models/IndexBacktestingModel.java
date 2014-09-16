@@ -1,19 +1,27 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import com.ar.marketanalyzer.backtest.models.rules.Above30DayAverage;
 import com.ar.marketanalyzer.backtest.models.rules.Above30DayVolumeAverage;
+import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
+import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.mysql.jdbc.log.Log;
 
 @Entity
 @DiscriminatorValue("Index Backtesting")
-public class IndexBacktestingModel extends AbstractModel{
+public class IndexBacktestingModel extends AbstractModel {
 	private static final long serialVersionUID = -5707374797673699670L;
 
+	@Transient
+	protected List<FollowThruStats> stats;
+	
 	/*
 	 * Constructors
 	 */
@@ -46,6 +54,26 @@ public class IndexBacktestingModel extends AbstractModel{
 		buyRuleList.add(buyRule2);
 	}
 	
+	public void calcStats() {
+		super.calcStats();
+		stats = FollowThruStats.convertStatList(defaultStats);
+		// calc more stats as needed
+		/*
+		 * Loop for 35 days
+		 * Calculates Price Trend of the previous 35 days'
+		 * 		This is the average percent gain over the last 35 days (excluding today)
+		 */
+		int loopDays = 35;
+		
+		for(int i=ohlcvData.size()-1; i>0; i--) {
+			double closePercentChange = 0;
+			
+			for(int j=i; j>i-loopDays && j>2; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+				closePercentChange+=(ohlcvData.get(j-1).getClose().subtract(ohlcvData.get(j-2).getClose())).doubleValue() / ohlcvData.get(j-2).getClose().doubleValue();
+			}
+			stats.get(i-1).setPriceTrend35(closePercentChange/loopDays);
+		}
+	}
 	@Override
 	protected void evaluateRules() {
 		/*

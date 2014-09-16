@@ -4,7 +4,6 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
@@ -18,7 +17,6 @@ public class AbstractRule extends PersistableEntityInt {
 
 	private static final long serialVersionUID = 9159243363042551334L;
 	
-	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="model_id", referencedColumnName="id")
 	private AbstractModel model;
 	

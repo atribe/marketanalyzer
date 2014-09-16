@@ -3,6 +3,7 @@ package com.ar.marketanalyzer.backtest.services.interfaces;
 import java.util.List;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 
@@ -12,4 +13,5 @@ public interface AbstractModelServiceInterface {
 	public AbstractModel delete(int id) throws ModelNotFound;
 	public List<AbstractModel> findBySymbol(Symbol symbol) throws ModelNotFound;
 	public AbstractModel findById(int id) throws ModelNotFound;
+	public AbstractModel findBySymbolAndModelStatus(Symbol symbol, ModelStatus modelStatus) throws ModelNotFound;
 }

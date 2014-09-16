@@ -19,19 +19,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
-import com.ar.marketanalyzer.backtest.models.models.interfaces.AbstractModelInterface;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.stats.Stats;
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
-import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
-import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.spring.init.PropCache;
 
 @Component	//this is so the autowired works for the ohlcv service
@@ -39,7 +34,7 @@ import com.ar.marketanalyzer.spring.init.PropCache;
 @Inheritance
 @DiscriminatorColumn(name="MODEL_NAME") //http://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Single_Table_Inheritance
 @Table(name="backtest_model")
-public abstract class AbstractModel extends PersistableEntityInt implements AbstractModelInterface{
+public abstract class AbstractModel extends PersistableEntityInt {
 	
 	private static final long serialVersionUID = 5829380092032471186L;
 
@@ -80,12 +75,12 @@ public abstract class AbstractModel extends PersistableEntityInt implements Abst
 	@Transient
 	protected List<SecuritiesOhlcv> ohlcvData;
 	@Transient
-	protected List<Stats> stats;
+	protected List<Stats> defaultStats;
 
-	protected final static int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
-	protected final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
-	protected final static Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
-	protected final static Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );
+	protected static final int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
+	protected static final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
+	protected static final Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
+	protected static final Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );
 	
 	/*
 	 * Constructors
@@ -105,26 +100,28 @@ public abstract class AbstractModel extends PersistableEntityInt implements Abst
 		this.initialInvestment = defaultInitialInvestment;
 		this.modelStatus = ModelStatus.CURRENT;
 
-		//assignRules();	// assigns the rules to this model, must be overridden by the child class
+		assignRules();	// assigns the rules to this model, must be overridden by the child class
 	}
+	
 	/*
-	 * Helper Methods
+	 * Helper Methods that do not need to be implemented
 	 */
 
 	/*
 	 * Helper Methods that must be implemented by the extending class
 	 */
-	/**
-	 * This method must be implemented by the extending class
-	 */
 	protected void assignRules() {
 		
 	}
-	/**
-	 * This method must be implemented by the extending class
-	 * Can also call super() in the implementation to get the default calcs below
+	
+	/*
+	 * This method must be implemented by the extending class, can call super()
 	 */
-	protected void calcStats() {
+	
+	/*
+	 * Helper Methods that may be overridden and call super(), but don't have to be
+	 */
+	public void calcStats() {
 		/*
 		 * Default stats calculated below:
 		 * 1. 50 day close price average
@@ -137,7 +134,7 @@ public abstract class AbstractModel extends PersistableEntityInt implements Abst
 		BigDecimal close200DayAvg;
 		long vol50DayAvg;
 		
-		stats = new ArrayList<Stats>();
+		defaultStats = new ArrayList<Stats>();
 		
 		for(int i=ohlcvData.size()-1; i>0; i--) {
 			int loopDays = 50;
@@ -184,11 +181,10 @@ public abstract class AbstractModel extends PersistableEntityInt implements Abst
 			close200DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			
 			Stats stat = new Stats(ohlcvData.get(i).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
-			stats.add(stat);
+			defaultStats.add(stat);
 		}
 	}
 
-	
 	/*
 	 * Getters and Setters
 	 */

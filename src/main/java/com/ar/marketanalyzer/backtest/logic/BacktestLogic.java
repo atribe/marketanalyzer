@@ -13,8 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
-import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
@@ -95,18 +93,8 @@ public class BacktestLogic {
 	}
 	
 	private void runCurrentModel(List<Symbol> defaultSymbols) {
-		/* Get current model
-		 * 	If no current model, the use the default model
-		 * Check the model needs to be run
-		 * 	model results already calculated?
-		 * If model already ran, do nothing
-		 * If model not yet run,
-		 * 	Run model
-		 */
-		
-		//Testing
 		for( Symbol symbol : defaultSymbols ) {
-			modelLogic.createDefaultModel(symbol);
+			modelLogic.runCurrentModel(symbol);
 		}
 	}
 }

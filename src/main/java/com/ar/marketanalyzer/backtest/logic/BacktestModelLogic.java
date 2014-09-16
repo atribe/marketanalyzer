@@ -3,6 +3,8 @@ package com.ar.marketanalyzer.backtest.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
@@ -20,31 +22,56 @@ public class BacktestModelLogic {
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
 	
-	public void createDefaultModel(Symbol symbol) {
-		IndexBacktestingModel defaultModel = new IndexBacktestingModel(symbol);
-		
-		defaultModel = getModelOhlcv(defaultModel);
-		//defaultModel
-		/*
-		 * setOhlcvData(); // Looks up the ohclv data from the database
-		
-		calcStats();	// calculate stats needed for the model
+	private AbstractModel model;
+	
+	public void runCurrentModel(Symbol symbol) {
+		/* Get current model
+		 * 	If no current model, the use the default model
+		 * Check the model needs to be run
+		 * 	model results already calculated?
+		 * If model already ran, do nothing
+		 * If model not yet run,
+		 * 	Run model
 		 */
+
+		findCurrentModel(symbol);
 		
-		modelService.create(defaultModel);
-		
+		prepModel();
+
 		
 	}
-	
-	private AbstractModel getModelOhlcv(AbstractModel model) {
+
+	private void findCurrentModel(Symbol symbol) {
 		try {
-			ohlcvService = new SecurityOhlcvService();
+			this.model = modelService.findBySymbolAndModelStatus(symbol, ModelStatus.CURRENT);
+		} catch (ModelNotFound e) {
+			this.model = createDefaultModel(symbol);
+		}
+	}
+
+	private AbstractModel createDefaultModel(Symbol symbol) {
+		AbstractModel defaultModel = new IndexBacktestingModel(symbol);
+		
+		defaultModel = modelService.create(defaultModel);
+		
+		return defaultModel;
+	}
+	
+	
+	private void prepModel() {
+		getModelOhlcv();
+		
+		model.calcStats();	// calculate stats needed for the model
+	}
+	
+	private void getModelOhlcv() {
+		try {
 			model.setOhlcvData(ohlcvService.findBySymbolAndDateBetween(model.getSymbol(), model.getStartDate(), model.getEndDate()));
 		} catch (SecuritiesNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return model;
 	}
+
+	
 }

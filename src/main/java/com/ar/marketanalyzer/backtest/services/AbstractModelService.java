@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.repo.AbstractModelRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
@@ -55,6 +56,18 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	@Transactional
 	public AbstractModel findById(int id) throws ModelNotFound {
 		AbstractModel foundModel = modelRepo.findOne(id);
+		
+		if( foundModel == null ) {
+			throw new ModelNotFound();
+		}
+		
+		return foundModel;
+	}
+	
+	@Override
+	@Transactional
+	public AbstractModel findBySymbolAndModelStatus(Symbol symbol, ModelStatus modelStatus) throws ModelNotFound {
+		AbstractModel foundModel = modelRepo.findBySymbolAndModelStatus(symbol, modelStatus);
 		
 		if( foundModel == null ) {
 			throw new ModelNotFound();

@@ -90,7 +90,7 @@ public class SecuritiesOhlcv extends PersistableEntityLong{
 	 */
 	@Override
 	public String toString() {
-		return symbol.getSymbol() + "( O:" + open + " H:" + high + " L:" + low + " C:" + close + " V:" + volume + ")";
+		return symbol.getSymbol() + "(" + date.toString() + " O:" + open + " H:" + high + " L:" + low + " C:" + close + " V:" + volume + ")";
 		//return ToStringBuilder.reflectionToString(this);
 	}
 	
