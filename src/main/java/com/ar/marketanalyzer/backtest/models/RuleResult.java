@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.rules.key.RuleResultKey;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @IdClass(RuleResultKey.class)
@@ -21,7 +20,7 @@ public class RuleResult {
 
 	@Id
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
-	@JoinColumn(name="rule_id", referencedColumnName="id")
+	@JoinColumn(name="rule_id", referencedColumnName="rule_id")
 	private AbstractRule rule;
 
 	@Id

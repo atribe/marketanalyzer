@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -11,8 +12,12 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,7 +31,6 @@ import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 import com.ar.marketanalyzer.spring.init.PropCache;
 
 @Component	//this is so the autowired works for the ohlcv service
@@ -34,10 +38,15 @@ import com.ar.marketanalyzer.spring.init.PropCache;
 @Inheritance
 @DiscriminatorColumn(name="MODEL_NAME") //http://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Single_Table_Inheritance
 @Table(name="backtest_model")
-public abstract class AbstractModel extends PersistableEntityInt {
+public abstract class AbstractModel implements Serializable{
 	
 	private static final long serialVersionUID = 5829380092032471186L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="model_id", nullable=false, unique=true)
+	protected Integer modelId;
+	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	protected Symbol symbol;
@@ -55,11 +64,11 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	@Column( name="initial_investment")
 	protected BigDecimal initialInvestment;
 	
-	@ManyToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected List<AbstractRule> buyRuleList;
-	
-	@ManyToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected List<AbstractRule> sellRuleList;
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="backtest_model_rule",
+				joinColumns={@JoinColumn(name="rule_id")},
+				inverseJoinColumns={@JoinColumn(name="model_id")})
+	protected List<AbstractRule> ruleList = new ArrayList<AbstractRule>();
 	
 	/*
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
@@ -73,9 +82,9 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	 */
 		
 	@Transient
-	protected List<SecuritiesOhlcv> ohlcvData;
+	protected List<SecuritiesOhlcv> ohlcvData = new ArrayList<SecuritiesOhlcv>();
 	@Transient
-	protected List<Stats> defaultStats;
+	protected List<Stats> defaultStats = new ArrayList<Stats>();
 
 	protected static final int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
 	protected static final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
@@ -99,6 +108,8 @@ public abstract class AbstractModel extends PersistableEntityInt {
 		this.endDate = endDate;
 		this.initialInvestment = defaultInitialInvestment;
 		this.modelStatus = ModelStatus.CURRENT;
+		
+		ruleList = new ArrayList<AbstractRule>();
 
 		assignRules();	// assigns the rules to this model, must be overridden by the child class
 	}
@@ -188,6 +199,15 @@ public abstract class AbstractModel extends PersistableEntityInt {
 	/*
 	 * Getters and Setters
 	 */
+	public Integer getModelId() {
+		return modelId;
+	}
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
+	}
+	public void setModelId(Long modelId) {
+		this.modelId = (Integer)modelId.intValue();
+	}
 	public Symbol getSymbol() {
 		return symbol;
 	}
@@ -223,18 +243,13 @@ public abstract class AbstractModel extends PersistableEntityInt {
 		this.initialInvestment = initialInvestment;
 	}
 
-	public List<AbstractRule> getBuyRuleList() {
-		return buyRuleList;
+	public List<AbstractRule> getRuleList() {
+		return ruleList;
 	}
-	public void setBuyRuleList(List<AbstractRule> buyRuleList) {
-		this.buyRuleList = buyRuleList;
+	public void setRuleList(List<AbstractRule> ruleList) {
+		this.ruleList = ruleList;
 	}
-	public List<AbstractRule> getSellRuleList() {
-		return sellRuleList;
-	}
-	public void setSellRuleList(List<AbstractRule> sellRuleList) {
-		this.sellRuleList = sellRuleList;
-	}
+	
 	/*
 	public List<Trade> getTradeList() {
 		return tradeList;

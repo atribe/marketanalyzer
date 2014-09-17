@@ -7,12 +7,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import com.ar.marketanalyzer.backtest.models.rules.Above30DayAverage;
-import com.ar.marketanalyzer.backtest.models.rules.Above30DayVolumeAverage;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.backtest.models.rules.RuleBuyFollowThru;
+import com.ar.marketanalyzer.backtest.models.rules.RuleSellDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
-import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.mysql.jdbc.log.Log;
 
 @Entity
 @DiscriminatorValue("Index Backtesting")
@@ -48,10 +47,13 @@ public class IndexBacktestingModel extends AbstractModel {
 		 * 5. Define the sell rule relationships: and, or, not, Xor
 		 */
 		
-		Above30DayAverage buyRule1 = new Above30DayAverage();
-		Above30DayVolumeAverage buyRule2 = new Above30DayVolumeAverage();
-		buyRuleList.add(buyRule1);
-		buyRuleList.add(buyRule2);
+		AbstractRule sellRule1 = new RuleSellDDaysAndChurnDays(this);
+		
+		ruleList.add(sellRule1);
+		
+		AbstractRule buyRule1 = new RuleBuyFollowThru(this);
+		
+		ruleList.add(buyRule1);
 	}
 	
 	public void calcStats() {
