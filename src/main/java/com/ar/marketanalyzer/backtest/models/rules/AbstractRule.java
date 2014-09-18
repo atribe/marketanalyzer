@@ -17,33 +17,36 @@ import javax.persistence.Inheritance;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
 @Entity
 @Inheritance
 @DiscriminatorColumn(name="RULE_NAME") //http://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Single_Table_Inheritance
 @Table(name="backtest_rule")
-public class AbstractRule implements Serializable{
+public abstract class AbstractRule implements Serializable{
 
 	private static final long serialVersionUID = 9159243363042551334L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="rule_id", nullable=false, unique=true)
 	protected Integer ruleId;
-	
     
 	@ManyToMany(mappedBy="ruleList")
-	private List<AbstractModel> modelList;
+	protected List<AbstractModel> modelList = new ArrayList<AbstractModel>();
+	@Transient
+	protected AbstractModel currentModel;
 	
 	@Enumerated(EnumType.STRING)
 	@Column( name="rule_type", nullable=false)
-	private RuleType ruleType;
+	protected RuleType ruleType;
 	
 	@OneToMany(mappedBy="rule", cascade=CascadeType.ALL)
-	private List<RuleResult> ruleResult;
+	protected List<RuleResult> ruleResult = new ArrayList<RuleResult>();
 
 	/*
 	 * Constructors
@@ -52,11 +55,16 @@ public class AbstractRule implements Serializable{
 		
 	}
 	public AbstractRule(AbstractModel model, RuleType ruleType) {
-		this.modelList = new ArrayList<AbstractModel>();
-		this.modelList.add(model);
+		this.currentModel = model;
 		
 		this.ruleType = ruleType;
 	}
+	
+	/*
+	 * Helper Methods
+	 */
+	public abstract void setDefaultParameters();
+	public abstract void runRule();
 	
 	/*
 	 * Getters and Setters
@@ -70,10 +78,10 @@ public class AbstractRule implements Serializable{
 	public void setId(Long ruleId) {
 		this.ruleId = (Integer)ruleId.intValue();
 	}
+	
 	public List<AbstractModel> getModelList() {
 		return modelList;
 	}
-
 	public void setModelList(List<AbstractModel> model) {
 		this.modelList = model;
 	}
@@ -81,7 +89,6 @@ public class AbstractRule implements Serializable{
 	public RuleType getRuleType() {
 		return ruleType;
 	}
-
 	public void setRuleType(RuleType ruleType) {
 		this.ruleType = ruleType;
 	}
@@ -89,10 +96,7 @@ public class AbstractRule implements Serializable{
 	public List<RuleResult> getRuleResult() {
 		return ruleResult;
 	}
-
 	public void setRuleResult(List<RuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
 	}
-	
-	
 }

@@ -31,6 +31,17 @@ public class RuleResult {
 	private Boolean ruleResult;
 	
 	/*
+	 * Constructors
+	 */
+	public RuleResult() {
+		
+	}
+	public RuleResult( Date date, Boolean result) {
+		this.date = date;
+		this.ruleResult = result;
+	}
+	
+	/*
 	 * Getters and Setters
 	 */
 	public AbstractRule getRule() {

@@ -47,12 +47,14 @@ public class IndexBacktestingModel extends AbstractModel {
 		 * 5. Define the sell rule relationships: and, or, not, Xor
 		 */
 		
+		// Create all rules
 		AbstractRule sellRule1 = new RuleSellDDaysAndChurnDays(this);
-		
-		ruleList.add(sellRule1);
-		
 		AbstractRule buyRule1 = new RuleBuyFollowThru(this);
 		
+		// Initialize Rules?
+		
+		// Add rules to model
+		ruleList.add(sellRule1);
 		ruleList.add(buyRule1);
 	}
 	
@@ -90,5 +92,12 @@ public class IndexBacktestingModel extends AbstractModel {
 			//if rule1 && rule2
 			
 		}
+	}
+	@Override
+	public List<FollowThruStats> getStats() {
+		return stats;
+	}
+	public void setStats(List<FollowThruStats> stats) {
+		this.stats = stats;
 	}
 }

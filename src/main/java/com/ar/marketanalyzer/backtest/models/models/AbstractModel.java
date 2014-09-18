@@ -121,14 +121,17 @@ public abstract class AbstractModel implements Serializable{
 	/*
 	 * Helper Methods that must be implemented by the extending class
 	 */
-	protected void assignRules() {
-		
-	}
+	protected abstract void assignRules();
 	
 	/*
 	 * This method must be implemented by the extending class, can call super()
 	 */
-	
+	protected void evaluateRules() {
+		for(AbstractRule rule: ruleList) {
+			rule.runRule();
+		}
+		
+	}
 	/*
 	 * Helper Methods that may be overridden and call super(), but don't have to be
 	 */
@@ -208,6 +211,7 @@ public abstract class AbstractModel implements Serializable{
 	public void setModelId(Long modelId) {
 		this.modelId = (Integer)modelId.intValue();
 	}
+	
 	public Symbol getSymbol() {
 		return symbol;
 	}
@@ -275,9 +279,5 @@ public abstract class AbstractModel implements Serializable{
 		this.ohlcvData = ohlcvData;
 	}
 
-	
-	protected void evaluateRules() {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract <T> List<T> getStats();
 }
