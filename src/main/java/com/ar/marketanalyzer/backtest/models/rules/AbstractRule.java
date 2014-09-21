@@ -19,10 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
-import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
 @Entity
 @Inheritance
@@ -44,6 +44,9 @@ public abstract class AbstractRule implements Serializable{
 	@Enumerated(EnumType.STRING)
 	@Column( name="rule_type", nullable=false)
 	protected RuleType ruleType;
+	
+	@OneToMany(mappedBy = "rule",cascade = CascadeType.ALL)
+	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
 	@OneToMany(mappedBy="rule", cascade=CascadeType.ALL)
 	protected List<RuleResult> ruleResult = new ArrayList<RuleResult>();
@@ -93,6 +96,18 @@ public abstract class AbstractRule implements Serializable{
 		this.ruleType = ruleType;
 	}
 
+	public AbstractModel getCurrentModel() {
+		return currentModel;
+	}
+	public void setCurrentModel(AbstractModel currentModel) {
+		this.currentModel = currentModel;
+	}
+	public List<RuleParameter> getRuleParameters() {
+		return ruleParameters;
+	}
+	public void setRuleParameters(List<RuleParameter> ruleParameters) {
+		this.ruleParameters = ruleParameters;
+	}
 	public List<RuleResult> getRuleResult() {
 		return ruleResult;
 	}

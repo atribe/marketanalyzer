@@ -38,7 +38,9 @@ public class BacktestModelLogic {
 		
 		prepModel();
 
+		runModel();
 		
+		saveModel();
 	}
 
 	private void findCurrentModel(Symbol symbol) {
@@ -52,11 +54,10 @@ public class BacktestModelLogic {
 	private AbstractModel createDefaultModel(Symbol symbol) {
 		AbstractModel defaultModel = new IndexBacktestingModel(symbol);
 		
-		defaultModel = modelService.create(defaultModel);
+		//defaultModel = modelService.create(defaultModel);
 		
 		return defaultModel;
 	}
-	
 	
 	private void prepModel() {
 		getModelOhlcv();
@@ -73,5 +74,12 @@ public class BacktestModelLogic {
 		}
 	}
 
-	
+
+	private void runModel() {
+		model.evaluateRules();
+	}
+
+	private void saveModel() {
+		modelService.create(model);
+	}
 }

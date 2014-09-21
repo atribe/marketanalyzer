@@ -126,7 +126,7 @@ public abstract class AbstractModel implements Serializable{
 	/*
 	 * This method must be implemented by the extending class, can call super()
 	 */
-	protected void evaluateRules() {
+	public void evaluateRules() {
 		for(AbstractRule rule: ruleList) {
 			rule.runRule();
 		}

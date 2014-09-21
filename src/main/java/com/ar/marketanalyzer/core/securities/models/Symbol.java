@@ -1,6 +1,6 @@
 package com.ar.marketanalyzer.core.securities.models;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public class Symbol extends PersistableEntityInt {
 	private String type; //stock, ETF, Mutual Fund, Index
 	
 	@OneToMany(mappedBy = "symbol",cascade = CascadeType.ALL)
-	private Collection<SecuritiesOhlcv> ohlcv;
+	private List<SecuritiesOhlcv> ohlcv;
 	
 	@Override
 	public String toString() {

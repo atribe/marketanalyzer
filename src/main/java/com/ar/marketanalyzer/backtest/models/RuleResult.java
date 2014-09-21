@@ -41,6 +41,11 @@ public class RuleResult {
 		this.ruleResult = result;
 	}
 	
+	@Override
+	public String toString() {
+		return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+	}
+	
 	/*
 	 * Getters and Setters
 	 */

@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import com.ar.marketanalyzer.backtest.exceptions.BacktestRuleException;
+import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
@@ -33,14 +36,33 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	 */
 	// D Days
 	double priceDrop;
+	final static String PRICE_DROP = "priceDrop";
 	
 	// Churn Days
+	@Transient
 	double churnVolRange;
+	@Transient
+	final static String CHURN_VOL_RANGE = "churnVolRange";
+	@Transient
 	double churnPriceRange;
+	@Transient
+	final static String CHURN_PRICE_RANGE = "churnPriceRange";
+	@Transient
 	boolean churnPriceCloseHigherOn;
-	boolean churnAVG50On;
+	@Transient
+	final static String CHURN_PRICE_CLOSE_HIGHER = "churnPriceCloseHigher";
+	@Transient
+	boolean churnAvg50;
+	@Transient
+	final static String CHURN_AVG_50_ON = "churnAvg50On";
+	@Transient
 	boolean churnPriceTrend35On;
+	@Transient
+	final static String CHURN_PRICE_TREND_35_ON = "churnPriceTrend35On";
+	@Transient
 	double churnPriceTrend35;
+	@Transient
+	final static String CHURN_PRICE_TREND_35 = "churnPriceTrend35";
 	
 	/*
 	 * Constructors
@@ -50,12 +72,48 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	}
 	public RuleSellDDaysAndChurnDays(AbstractModel model) {
 		super(model, RuleType.SELL);
+		
+		if(!checkForParametersInDb()) {
+			setDefaultParameters();
+		} else {
+			//getParameters();
+		}
+	}
+	
+	private boolean checkForParametersInDb() {
+		//TODO need to implement this method
+		return false;
 	}
 	
 	@Override
 	public void setDefaultParameters() {
+		/*
+		 * Setting default values for rule parameters
+		 */
+		// D Days
+		priceDrop=-.002;
 		
+		// Churn Days
+		churnVolRange=.03;
+		churnPriceRange=.02;
+		churnPriceCloseHigherOn=false;
+		churnAvg50=false;
+		churnPriceTrend35On=false;
+		churnPriceTrend35=.009;
+
+		/*
+		 * Adding parameters to ruleParameter list
+		 * Any parameters added to this list will be saved in the DB
+		 */
+		ruleParameters.add(new RuleParameter(PRICE_DROP, priceDrop));
+		ruleParameters.add(new RuleParameter(CHURN_VOL_RANGE, churnVolRange));
+		ruleParameters.add(new RuleParameter(CHURN_PRICE_RANGE, churnPriceRange));
+		ruleParameters.add(new RuleParameter(CHURN_PRICE_CLOSE_HIGHER, churnPriceCloseHigherOn));
+		ruleParameters.add(new RuleParameter(CHURN_AVG_50_ON, churnAvg50));
+		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35_ON, churnPriceTrend35On));
+		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35, churnPriceTrend35));
 		
+		//I don't think I need to save it now, because this will get saved when the model gets saved
 	}
 	
 	@Override
@@ -68,6 +126,8 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		runDdayAnalysis(); // sets ddays list
 		
 		runChurnDayAnalysis(); // sets churn day list
+		
+		combineInnerRuleResults();
 	}
 	
 	private void runDdayAnalysis() {
@@ -108,7 +168,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		List<FollowThruStats> stats = currentModel.getStats();
 		int rowCount = ohlcvData.size();
 		
-		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
+		for(int i = 1; i < rowCount-1; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{
 			/*
 			 * this part gets churning ddays
@@ -150,7 +210,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 					todaysClose.compareTo(previousDaysClose.multiply(new BigDecimal(1+churnPriceRange))) <= 0/*rule 3*/)
 			{
 				result.setRuleResult(Boolean.TRUE);
-				churnDays.set(i, result);
+				churnDays.add(result);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, ohlcvData.get(i).getPVD_id(), true);
 			} else {
 				// {{ Churn day conditions set by the parameter db
@@ -158,7 +218,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 				int conditionsMet = 0;
 				if (churnPriceCloseHigherOn)
 					conditionsRequired++;
-				if (churnAVG50On)
+				if (churnAvg50)
 					conditionsRequired++;
 				if (churnPriceTrend35On)
 					conditionsRequired++;
@@ -167,7 +227,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 				if(churnPriceCloseHigherOn && todaysClose.compareTo(previousDaysClose) >= 0) //rule 4
 					conditionsMet++;
 								 
-				if(churnAVG50On && todaysVolume > todaysVolumeAvg50 ) //rule 5
+				if(churnAvg50 && todaysVolume > todaysVolumeAvg50 ) //rule 5
 					conditionsMet++;
 				
 				if(churnPriceTrend35On && todaysPriceTrend35 > churnPriceTrend35) //rule 6
@@ -176,13 +236,40 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 				if(conditionsRequired == conditionsMet && conditionsRequired != 0)
 				{
 					result.setRuleResult(Boolean.TRUE);
-					churnDays.set(i, result);
+					churnDays.add(result);
 				} else {
 					result.setRuleResult(Boolean.FALSE);
-					churnDays.set(i, result);
+					churnDays.add(result);
 				}
 			}
 			//No need set to false because it was already done by the d-day method.
+		}
+	}
+
+	private void combineInnerRuleResults() {
+		if(!ruleResult.isEmpty()) {
+			ruleResult.clear();
+		}
+		
+		if(ddays.size() != churnDays.size() && // Check to make sure the lists are the same size
+				ddays.get(0).getDate().equals(churnDays.get(0).getDate())) { // Check to make sure they start on the same day
+			try {
+				throw new BacktestRuleException("Rule lists cannot be combined because they are not the same size.");
+			} catch (BacktestRuleException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		for(int i=0;i<currentModel.getOhlcvData().size(); i++) {
+			Date date = currentModel.getOhlcvData().get(i).getDate();
+			
+			RuleResult result = new RuleResult(date, false); // Create a new result, default to false
+			
+			if(ddays.get(i).getRuleResult() || churnDays.get(i).getRuleResult()) {
+				result.setRuleResult(Boolean.TRUE);
+			}
+			ruleResult.add(result);
 		}
 	}
 }

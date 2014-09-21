@@ -78,21 +78,7 @@ public class IndexBacktestingModel extends AbstractModel {
 			stats.get(i-1).setPriceTrend35(closePercentChange/loopDays);
 		}
 	}
-	@Override
-	protected void evaluateRules() {
-		/*
-		 * for ohlcv list or something {
-		 * 		if( rule1 && rule2)
-		 * 			true	//buy
-		 * 		else
-		 * 			false	//sell
-		 * }
-		 */
-		{
-			//if rule1 && rule2
-			
-		}
-	}
+	
 	@Override
 	public List<FollowThruStats> getStats() {
 		return stats;
