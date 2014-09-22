@@ -9,7 +9,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import com.ar.marketanalyzer.backtest.exceptions.BacktestRuleException;
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
@@ -251,24 +250,52 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			ruleResult.clear();
 		}
 		
-		if(ddays.size() != churnDays.size() && // Check to make sure the lists are the same size
-				ddays.get(0).getDate().equals(churnDays.get(0).getDate())) { // Check to make sure they start on the same day
-			try {
-				throw new BacktestRuleException("Rule lists cannot be combined because they are not the same size.");
-			} catch (BacktestRuleException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		/*
+		 * Combining two lists with common dates, but the lists don't start with the same dates
+		 * find the earliest date
+		 * iterate though the list with the earliest date
+		 * check the other list to see if the date matches
+		 * once a match is found change a boolean to false so that it won't check for matching dates
+		 * 
+		 */
+		
+		Date earliestDate = ddays.get(0).getDate();
+		// Default values
+		List<RuleResult> list1 = ddays;
+		List<RuleResult> list2 = churnDays;
+		
+		if( churnDays.get(0).getDate().before(earliestDate) ) {
+			earliestDate = churnDays.get(0).getDate();
+			list1 = churnDays;
+			list2 = ddays;
 		}
 		
+		/*
+		 * Inputs, list1 and list2
+		 * This could be a stand a lone method
+		 */
+		int list1Iterator = 0;
+		int list2Iterator = 0;
 		for(int i=0;i<currentModel.getOhlcvData().size(); i++) {
-			Date date = currentModel.getOhlcvData().get(i).getDate();
+			Date date = currentModel.getOhlcvData().get(i).getDate();			// Get the date from the OHLCV list
 			
-			RuleResult result = new RuleResult(date, false); // Create a new result, default to false
+			RuleResult result = new RuleResult(date, false); 					// Create a new result, default to false
 			
-			if(ddays.get(i).getRuleResult() || churnDays.get(i).getRuleResult()) {
-				result.setRuleResult(Boolean.TRUE);
+			if( list1.size() > list1Iterator &&									// make sure the list is bigger than the index 
+					list1.get(list1Iterator).getDate().equals(date) ) {			// check if the list has the same date as the OHLCV list
+
+				if( list1.get(list1Iterator).getRuleResult() ) {							// if the result is true for list 1
+					result.setRuleResult(Boolean.TRUE);							// make the combined result be true
+				}
+				list1Iterator++;												// iterate the list index
 			}
+			if( list2.size() > list2Iterator && list2.get(list2Iterator).getDate().equals(date) ) {
+				if( list2.get(list2Iterator).getRuleResult() ) {
+					result.setRuleResult(Boolean.TRUE);
+				}
+				list2Iterator++;
+			}
+
 			ruleResult.add(result);
 		}
 	}

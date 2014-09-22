@@ -59,6 +59,9 @@ public abstract class AbstractRule implements Serializable{
 	}
 	public AbstractRule(AbstractModel model, RuleType ruleType) {
 		this.currentModel = model;
+		if( !this.modelList.contains(model) ) {
+			this.modelList.add(model);
+		}
 		
 		this.ruleType = ruleType;
 	}
