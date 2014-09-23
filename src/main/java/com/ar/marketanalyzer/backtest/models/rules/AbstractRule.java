@@ -43,7 +43,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	@OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
-	@OneToMany(mappedBy="rule", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
 	protected List<RuleResult> ruleResult = new ArrayList<RuleResult>();
 
 	/*

@@ -34,6 +34,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	 * Fields that are rule parameters
 	 */
 	// D Days
+	@Transient
 	double priceDrop;
 	final static String PRICE_DROP = "priceDrop";
 	
