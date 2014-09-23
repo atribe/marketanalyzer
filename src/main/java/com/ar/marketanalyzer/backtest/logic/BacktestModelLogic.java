@@ -10,7 +10,6 @@ import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 
 @Component

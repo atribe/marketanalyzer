@@ -81,7 +81,7 @@ public class Ibd50Tracking extends AuditableEntity{
 		calcPercentReturn();
 	}
 	private void calcPercentReturn() {
-		setPercentReturn((Double) lastPrice.subtract(joinPrice).doubleValue()/joinPrice.doubleValue());
+		setPercentReturn(lastPrice.subtract(joinPrice).doubleValue()/joinPrice.doubleValue());
 	}
 
 	/*

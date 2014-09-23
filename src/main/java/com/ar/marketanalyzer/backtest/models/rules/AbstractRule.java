@@ -1,6 +1,5 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -23,21 +20,19 @@ import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Inheritance
 @DiscriminatorColumn(name="RULE_NAME") //http://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Single_Table_Inheritance
 @Table(name="backtest_rule")
-public abstract class AbstractRule implements Serializable{
+public abstract class AbstractRule extends PersistableEntityInt{
 
 	private static final long serialVersionUID = 9159243363042551334L;
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="rule_id", nullable=false, unique=true)
-	protected Integer ruleId;
     
 	@ManyToMany(mappedBy="ruleList")
 	protected List<AbstractModel> modelList = new ArrayList<AbstractModel>();
+	
 	@Transient
 	protected AbstractModel currentModel;
 	
@@ -45,10 +40,10 @@ public abstract class AbstractRule implements Serializable{
 	@Column( name="rule_type", nullable=false)
 	protected RuleType ruleType;
 	
-	@OneToMany(mappedBy = "rule",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
-	@OneToMany(mappedBy="rule", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="rule", cascade = CascadeType.ALL)
 	protected List<RuleResult> ruleResult = new ArrayList<RuleResult>();
 
 	/*
@@ -75,16 +70,6 @@ public abstract class AbstractRule implements Serializable{
 	/*
 	 * Getters and Setters
 	 */
-	public Integer getRuleId() {
-		return ruleId;
-	}
-	public void setRuleId(Integer ruleId) {
-		this.ruleId = ruleId;
-	}
-	public void setId(Long ruleId) {
-		this.ruleId = (Integer)ruleId.intValue();
-	}
-	
 	public List<AbstractModel> getModelList() {
 		return modelList;
 	}

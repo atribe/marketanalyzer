@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,8 +22,7 @@ public class RuleParameter extends PersistableEntityInt{
 	@Column(name = "parameter_value")
 	private String value;
 	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="rule_id", referencedColumnName="rule_id")
+	@ManyToOne
 	private AbstractRule rule;
 
 	/*
@@ -77,10 +75,10 @@ public class RuleParameter extends PersistableEntityInt{
 		return value;
 	}
 	public int getValueInt() {
-		return (Integer)Integer.getInteger(value);
+		return Integer.getInteger(value);
 	}
 	public double getValueDouble() {
-		return (Double)Double.parseDouble(value);
+		return Double.parseDouble(value);
 	}
 	public BigDecimal getValueBigDecimal() {
 		return new BigDecimal(value);
@@ -90,13 +88,13 @@ public class RuleParameter extends PersistableEntityInt{
 		this.value = value;
 	}
 	public void setValue(boolean value) {
-		this.value = (String)String.valueOf(value);
+		this.value = String.valueOf(value);
 	}
 	public void setValue(double value) {
-		this.value = (String)String.valueOf(value);
+		this.value = String.valueOf(value);
 	}
 	public void setValue(int value) {
-		this.value = (String)String.valueOf(value);
+		this.value = String.valueOf(value);
 	}
 
 	public AbstractRule getRule() {

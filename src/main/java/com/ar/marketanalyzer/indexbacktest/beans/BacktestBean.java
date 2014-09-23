@@ -187,6 +187,7 @@ public class BacktestBean {
 	/*
 	 * Helper Methods
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if(!(o instanceof BacktestBean)) {
 			return false;

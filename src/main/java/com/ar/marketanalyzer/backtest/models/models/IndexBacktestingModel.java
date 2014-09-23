@@ -58,6 +58,7 @@ public class IndexBacktestingModel extends AbstractModel {
 		ruleList.add(buyRule1);
 	}
 	
+	@Override
 	public void calcStats() {
 		super.calcStats();
 		stats = FollowThruStats.convertStatList(defaultStats);

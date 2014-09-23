@@ -28,7 +28,7 @@ public class PersistableEntityInt implements Serializable{
 		this.id = id;
 	}
 	public void setId(Long id) {
-		this.id = (Integer)id.intValue();
+		this.id = id.intValue();
 	}
 	
 }
