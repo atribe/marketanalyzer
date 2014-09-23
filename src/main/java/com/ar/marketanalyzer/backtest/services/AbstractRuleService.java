@@ -1,7 +1,5 @@
 package com.ar.marketanalyzer.backtest.services;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.repo.AbstractRuleRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractRuleServiceInterface;
-import com.ar.marketanalyzer.core.securities.models.Symbol;
 
 @Service
 public class AbstractRuleService implements AbstractRuleServiceInterface {
@@ -22,8 +19,8 @@ public class AbstractRuleService implements AbstractRuleServiceInterface {
 	@Override
 	@Transactional
 	public AbstractRule create(AbstractRule rule) {
-		
-		return ruleRepo.save(rule);
+		AbstractRule createdRule = ruleRepo.save(rule);
+		return createdRule;
 	}
 
 	@Override
@@ -42,13 +39,6 @@ public class AbstractRuleService implements AbstractRuleServiceInterface {
 		ruleRepo.delete(id);
 		
 		return ruleToDelete;
-	}
-
-	@Override
-	@Transactional
-	public List<AbstractRule> findBySymbol(Symbol symbol) throws ModelNotFound {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

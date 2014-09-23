@@ -7,6 +7,7 @@ import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -79,6 +80,10 @@ public class BacktestModelLogic {
 	}
 
 	private void saveModel() {
-		modelService.create(model);
+		AbstractModel savedModel = modelService.create(model);
+		for(AbstractRule rule: savedModel.getRuleList()) {
+			int ruleId = rule.getId();
+			// Do something here to get the rule ID into the ruleResult and the ruleParam and then save them
+		}
 	}
 }

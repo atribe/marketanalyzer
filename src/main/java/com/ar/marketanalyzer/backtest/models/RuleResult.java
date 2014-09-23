@@ -2,14 +2,11 @@ package com.ar.marketanalyzer.backtest.models;
 
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
 
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
@@ -20,7 +17,7 @@ public class RuleResult extends PersistableEntityInt{
 
 	private static final long serialVersionUID = 6088797692365143508L;
 
-	@ManyToOne(optional=false)
+	@ManyToOne
 	@JoinColumn(name="rule_id", referencedColumnName = "id")
 	private AbstractRule rule;
 

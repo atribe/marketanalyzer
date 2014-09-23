@@ -23,8 +23,11 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	@Override
 	@Transactional
 	public AbstractModel create(AbstractModel model) {
+		AbstractModel createdModel = modelRepo.save(model);
 		
-		return modelRepo.save(model);
+		System.out.print("WAIT!" + createdModel.getRuleList().get(0).getId());
+		
+		return createdModel;
 	}
 
 	@Override
