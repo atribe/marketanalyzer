@@ -28,7 +28,7 @@ public class RuleParameterService implements RuleParameterServiceInterface {
 	@Override
 	@Transactional
 	public void batchCreate(List<RuleParameter> paramList) {
-		
+		paramRepo.save(paramList);
 	}
 
 	@Override

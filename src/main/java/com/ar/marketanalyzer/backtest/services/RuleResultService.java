@@ -1,5 +1,7 @@
 package com.ar.marketanalyzer.backtest.services;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -21,6 +23,12 @@ public class RuleResultService implements RuleResultServiceInterface {
 	public RuleResult create(RuleResult rule) {
 		
 		return resultRepo.save(rule);
+	}
+	
+	@Override
+	@Transactional
+	public void batchCreate(List<RuleResult> resultList) {
+		resultRepo.save(resultList);
 	}
 
 	@Override
