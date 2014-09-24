@@ -81,9 +81,5 @@ public class BacktestModelLogic {
 
 	private void saveModel() {
 		AbstractModel savedModel = modelService.create(model);
-		for(AbstractRule rule: savedModel.getRuleList()) {
-			int ruleId = rule.getId();
-			// Do something here to get the rule ID into the ruleResult and the ruleParam and then save them
-		}
 	}
 }
