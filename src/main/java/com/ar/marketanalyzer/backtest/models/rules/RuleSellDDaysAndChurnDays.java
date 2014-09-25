@@ -73,16 +73,9 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	public RuleSellDDaysAndChurnDays(AbstractModel model) {
 		super(model, RuleType.SELL);
 		
-		if(!checkForParametersInDb()) {
+		if( !parametersAlreadyExist() ) {
 			setDefaultParameters();
-		} else {
-			//getParameters();
 		}
-	}
-	
-	private boolean checkForParametersInDb() {
-		//TODO need to implement this method
-		return false;
 	}
 	
 	@Override
@@ -112,8 +105,6 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		ruleParameters.add(new RuleParameter(CHURN_AVG_50_ON, churnAvg50));
 		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35_ON, churnPriceTrend35On));
 		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35, churnPriceTrend35));
-		
-		//I don't think I need to save it now, because this will get saved when the model gets saved
 	}
 	
 	@Override

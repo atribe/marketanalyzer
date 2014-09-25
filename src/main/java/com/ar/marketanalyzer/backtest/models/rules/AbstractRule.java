@@ -52,6 +52,14 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	public AbstractRule() {
 		
 	}
+	/**
+	 * The constructor of the child class should call super(model, RuleType.XXXX)
+	 * It should then check the DB for parameters that already exists.
+	 * Then it should populate the default parameters for those that don't exist.
+	 * 
+	 * @param model
+	 * @param ruleType
+	 */
 	public AbstractRule(AbstractModel model, RuleType ruleType) {
 		this.currentModel = model;
 		if( !this.modelList.contains(model) ) {
@@ -67,6 +75,13 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	public abstract void setDefaultParameters();
 	public abstract void runRule();
 	
+	protected boolean parametersAlreadyExist() {
+		if( ruleParameters.isEmpty() ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	/*
 	 * Getters and Setters
 	 */
