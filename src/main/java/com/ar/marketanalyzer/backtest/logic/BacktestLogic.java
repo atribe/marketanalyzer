@@ -2,6 +2,7 @@ package com.ar.marketanalyzer.backtest.logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -64,19 +65,29 @@ public class BacktestLogic {
 	
 	private void populateDefaultOhlcv(List<Symbol> defaultSymbols) {
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
+		final LocalDate today = new LocalDate();
+		
 		LocalDate desiredStartDate = new LocalDate().minusMonths(DESIRED_MONTHS_OF_DATA);
-		List<YahooOHLCV> yahooOhlcv = null;
+		List<YahooOHLCV> yahooOhlcv = new ArrayList<YahooOHLCV>();
 		
 		for(Symbol symbol: defaultSymbols) {
 			try {
 				try {
-					LocalDate lastDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
+					/*
+					 * Need to find the first and last date in the DB, then fill in the gaps from Yahoo
+					 */
+					LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
+					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
 					
-					if( desiredStartDate.isBefore(lastDate) ) {					// If the last date is not before desired months ago
-						yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, lastDate);
+					if( desiredStartDate.isAfter(earliestDate) ) {								// If the last date is not before desired months ago
+						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate) );	//Get from yahoo the gap
 					}
+					if( mostCurrentDate.isBefore( today )) {
+						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate, today) );	//Get from yahoo the gap
+					}
+					
 					// Need a check to see if it up to date as well
-				} catch (SecuritiesNotFound e) {
+				} catch (IllegalArgumentException|SecuritiesNotFound e) {
 					// Catch block if there is no Ohlcv data for the symbol in the DB
 					yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate);
 				}
