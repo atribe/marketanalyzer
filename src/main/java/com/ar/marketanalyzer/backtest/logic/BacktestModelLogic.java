@@ -7,7 +7,6 @@ import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -34,20 +33,23 @@ public class BacktestModelLogic {
 		 * 	Run model
 		 */
 
-		findCurrentModel(symbol);
-		
-		prepModel();
+		if( !findCurrentModel(symbol) ) {	// If the current model isn't found
+											// create a default and run it
+			prepModel();
 
-		runModel();
-		
-		saveModel();
+			runModel();
+			
+			saveModel();
+		}
 	}
 
-	private void findCurrentModel(Symbol symbol) {
+	private boolean findCurrentModel(Symbol symbol) {
 		try {
 			this.model = modelService.findBySymbolAndModelStatus(symbol, ModelStatus.CURRENT);
+			return true;
 		} catch (ModelNotFound e) {
 			this.model = createDefaultModel(symbol);
+			return false;
 		}
 	}
 

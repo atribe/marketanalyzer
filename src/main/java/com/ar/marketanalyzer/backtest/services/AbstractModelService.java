@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
-import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;

@@ -2,7 +2,6 @@ package com.ar.marketanalyzer.backtest.logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
