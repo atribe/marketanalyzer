@@ -65,7 +65,13 @@ public class BacktestLogic {
 	
 	private void populateDefaultOhlcv(List<Symbol> defaultSymbols) {
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
-		final LocalDate today = new LocalDate();
+		LocalDate today = new LocalDate();
+		final int FRIDAY = 5;
+		int offset;
+		
+		if( (offset = today.dayOfWeek().get() - FRIDAY ) > 0 ) { 	// if today is a weekend
+			today = today.minusDays(offset);						// shift today back to Friday
+		}
 		
 		LocalDate desiredStartDate = new LocalDate().minusMonths(DESIRED_MONTHS_OF_DATA);
 		List<YahooOHLCV> yahooOhlcv = new ArrayList<YahooOHLCV>();
