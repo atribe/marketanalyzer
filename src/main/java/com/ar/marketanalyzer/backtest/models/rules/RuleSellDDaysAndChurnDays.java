@@ -257,7 +257,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		List<RuleResult> list2 = churnDays;
 		
 		if( churnDays.get(0).getDate().before(earliestDate) ) {
-			earliestDate = churnDays.get(0).getDate();
+			//earliestDate = churnDays.get(0).getDate();
 			list1 = churnDays;
 			list2 = ddays;
 		}

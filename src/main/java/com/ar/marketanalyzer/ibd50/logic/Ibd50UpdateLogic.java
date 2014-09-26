@@ -127,12 +127,13 @@ public class Ibd50UpdateLogic {
 				StockOhlcv leaveOhlcv = null;
 				try {
 					leaveOhlcv = ohlcvService.findByTickerAndDate(tracker.getTicker(), tracker.newMonday().toDate());
+					
+					tracker.deactivate(leaveOhlcv.getClose());														// Set it to inactive
+					trackingService.updateActivity(tracker);									// And update the tracker db
 				} catch (SecuritiesNotFound e) {
 					e.printStackTrace();
 					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
 				}
-				tracker.deactivate(leaveOhlcv.getClose());														// Set it to inactive
-				trackingService.updateActivity(tracker);									// And update the tracker db
 			}
 		}
 	}
@@ -169,11 +170,13 @@ public class Ibd50UpdateLogic {
 				StockOhlcv joinDayOhlcv = null;
 				try {
 					joinDayOhlcv = ohlcvService.findByTickerAndDate(foundTicker, newTracker.getJoinDate());
+					
+					newTracker.setJoinPrice(joinDayOhlcv.getClose());
 				} catch (SecuritiesNotFound e1) {
 					log.info(e.getMessage());
 					e.printStackTrace();
 				}
-				newTracker.setJoinPrice(joinDayOhlcv.getClose());
+				
 				
 				foundTracker = trackingService.create(newTracker);					//add the new tracker to the db
 			} catch (Ibd50TooManyFound e) {
@@ -241,14 +244,16 @@ public class Ibd50UpdateLogic {
 		List<Ibd50Tracking> deactiveTrackers = null;
 		try {
 			deactiveTrackers = trackingService.findByActiveFalseAndDateAfter(inactiveUpdateWindow);
+			
+			for(Ibd50Tracking tracker: deactiveTrackers) {
+				runOhlcvUpdate(tracker.getTicker());
+			}
 		} catch (SecuritiesNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		for(Ibd50Tracking tracker: deactiveTrackers) {
-			runOhlcvUpdate(tracker.getTicker());
-		}
+		
 		
 	}
 }

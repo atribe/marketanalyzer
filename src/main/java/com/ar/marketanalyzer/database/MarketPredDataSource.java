@@ -14,7 +14,7 @@ public class MarketPredDataSource {
 	private static BoneCPDataSource ds;
 	
     public static DataSource setDataSource() { 
-    	if(ds==null) {
+    	//if(ds==null) {
     		
 			String host, port, dbURL, username, password, DBName;
 			ds = new BoneCPDataSource();
@@ -62,7 +62,7 @@ public class MarketPredDataSource {
 	        
 	        
 	        staticLog.info("Connection established to " + DBName);
-    	}
+    	//}
         return ds;  
     }
     

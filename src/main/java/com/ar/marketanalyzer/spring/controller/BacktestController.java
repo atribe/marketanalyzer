@@ -60,7 +60,7 @@ public class BacktestController {
 	
 	@RequestMapping(value="/" + BASEURL + "/{symbol}", method = RequestMethod.GET)
     public String backtestPage(ModelMap m, @PathVariable String symbol) {
-        if(symbol == "IXIC" || symbol == "GSPC" || symbol == "SML") {
+        if(symbol.equals("IXIC") || symbol.equals("GSPC") || symbol.equals("SML") ) {
         	symbol = "^" + symbol;
         }
         if(!marketAnalyzerListener.dbInitThreadIsAlive()) {

@@ -39,7 +39,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 	public OHLCVDao(DataSource newDs) {
 		log.trace("IY.0 Yahoo Table Manager Created");
 			
-		ds = newDs;
+		//ds = newDs;
 	}
 
 	public synchronized void tableInitialization(String[] indexList) {
@@ -141,7 +141,7 @@ public class OHLCVDao extends GenericDBSuperclass {
 		//calls the getNumberOfDaysFromNow method from market retriever and immediately returns
 		//how many behind the database is from the current date
 		//log.info("          The newest date in the database is " + newestDateInDB.toString() + ".");
-		log.debug("IY.3.1--The newest date in the database for " + symbol + "is " + newestDate.toString() + ".");
+		//log.debug("IY.3.1--The newest date in the database for " + symbol + "is " + newestDate.toString() + ".");
 		
 		int DBDaysTilNow = YahooOhlcvService.getNumberOfDaysFromNow(newestDate);
 		

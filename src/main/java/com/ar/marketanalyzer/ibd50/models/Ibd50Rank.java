@@ -176,7 +176,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		
 		LocalDate dateToReturn = null;
 		
-		if(today.dayOfWeek().equals(DateTimeConstants.MONDAY)) {
+		if(today.getDayOfWeek() == (DateTimeConstants.MONDAY)) {
 			dateToReturn = today;
 		} else {
 			dateToReturn = today.withDayOfWeek(1);

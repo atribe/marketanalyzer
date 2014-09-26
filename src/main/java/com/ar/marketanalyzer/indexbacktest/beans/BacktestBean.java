@@ -188,6 +188,11 @@ public class BacktestBean {
 	 * Helper Methods
 	 */
 	@Override
+	public int hashCode() {
+		  assert false : "hashCode not designed";
+		  return 42; // any arbitrary constant will do
+		  }
+	@Override
 	public boolean equals(Object o) {
 		if(!(o instanceof BacktestBean)) {
 			return false;

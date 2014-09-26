@@ -24,7 +24,7 @@ public class IndBackInit {
 	public void main() {
 		log.trace("Starting Index Backtest (IndBack) Thread");
 		
-		indexList = env.getRequiredProperty("index.names").split(",");		// Getting the index list from the property file
+		//indexList = env.getRequiredProperty("index.names").split(",");		// Getting the index list from the property file
 		
 		
 	}

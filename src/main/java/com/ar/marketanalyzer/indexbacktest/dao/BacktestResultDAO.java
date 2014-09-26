@@ -43,7 +43,7 @@ public class BacktestResultDAO extends GenericDBSuperclass{
 		log.debug("------------------------------Index Parameter Table Manager Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		ds = newDs;
+		//ds = newDs;
 	}
 	
 	/**

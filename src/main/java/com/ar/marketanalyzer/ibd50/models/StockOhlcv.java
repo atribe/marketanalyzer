@@ -68,11 +68,12 @@ public class StockOhlcv{
 	    java.util.Date parsed=null;
 		try {
 			parsed = format.parse(y.getDate());
+			setDate(new java.sql.Date(parsed.getTime()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	setDate(new java.sql.Date(parsed.getTime()));
+    	
 		setOpen(new BigDecimal(y.getOpen()));
 		setHigh(new BigDecimal(y.getHigh()));
 		setLow(new BigDecimal(y.getLow()));
@@ -175,7 +176,7 @@ public class StockOhlcv{
 	}
 	
 	public void setVolume(double volume) {
-		volume = Math.round(volume);
+		this.volume = Math.round(volume);
 	}
 	
 	

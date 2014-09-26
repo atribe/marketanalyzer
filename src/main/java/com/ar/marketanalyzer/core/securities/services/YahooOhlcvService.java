@@ -42,7 +42,7 @@ public class YahooOhlcvService {
 
 	public static List<IndexOHLCVData> getIndexFromYahoo(String url, String index) {
 		
-		List<YahooOHLCV> rowsFromYahooURL = null;
+		List<YahooOHLCV> rowsFromYahooURL = new ArrayList<YahooOHLCV>();
 		try {
 			
 			rowsFromYahooURL = getAndParseYahooData(index, url);
@@ -157,8 +157,8 @@ public class YahooOhlcvService {
 		
 		String url = getYahooURL(ticker.getSymbol(), daysAgo);		
 		
-		List<YahooOHLCV> rawList = null;
-		List<StockOhlcv> convertedList = null;
+		List<YahooOHLCV> rawList = new ArrayList<YahooOHLCV>();
+		List<StockOhlcv> convertedList = new ArrayList<StockOhlcv>();
 		
 		try {
 			rawList = getAndParseYahooData(ticker.getSymbol(), url);

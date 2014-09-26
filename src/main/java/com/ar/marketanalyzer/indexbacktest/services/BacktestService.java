@@ -307,7 +307,7 @@ public class BacktestService extends IndexBacktestServiceSuperclass{
 
 		if( type==parametersTypeEnum.CURRENT ) {
 			modelResult = getCurrent(symbol);
-		} else if (type == parametersTypeEnum.BASE) {
+		} else /* if (type == parametersTypeEnum.BASE) */{
 			modelResult = getBaseline(symbol);
 		}
 		

@@ -36,7 +36,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 		log.debug("------------------------------StockTransactionDAO Created--------------------------");
 		
 		//m_connection is declared in GenericDBSuperclass, which this class extends, so it gets to use it
-		ds = newDs;
+		//ds = newDs;
 	}
 	
 	public void tableInitialization(String[] indexList) {
@@ -145,7 +145,7 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 	}
 
 	public void insertTransactionList(List<StockTransaction> transactionList) {
-		
+		/*
 		int batchSize = 100;
 		int counter = 0;
 		Connection con = null;
@@ -159,10 +159,10 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 			con = ds.getConnection();
 			ps = con.prepareStatement(insertQuery);
 			for(StockTransaction s:transactionList) {
-				/*
-				 * if transaction is not in db id will be set to -1
-				 * If transaction is in the db the id will be set to the id from the db
-				 */
+				
+				// if transaction is not in db id will be set to -1
+				// If transaction is in the db the id will be set to the id from the db
+				 
 				long id = transactionAlreadyInDB(s);
 				if(id>0) {
 					s.setId(id);
@@ -201,5 +201,6 @@ public class StockTransactionDAO extends GenericDBSuperclass{
 				e.printStackTrace();
 			}
 		}
+		*/
 	}
 }
