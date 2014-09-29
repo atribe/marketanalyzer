@@ -256,5 +256,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 			}
 			followThruDays.get(i).setRuleResult(Boolean.FALSE);
 		}
+		
+		ruleResult = followThruDays;
 	}
 }
