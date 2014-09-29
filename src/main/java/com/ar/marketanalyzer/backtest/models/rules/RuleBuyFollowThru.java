@@ -128,6 +128,10 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * Optional criteria: rally can't start unless the pivotTrend35 < -.1%
 		 * I'm not going to implement this right away
 		 */
+		for(int i = 0; i < 2; i++) { //This loop just creates dummy values up to when the next loop starts
+			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
+			followThruDays.add(result);
+		}
 
 		//Loops starts on 2 because the object at i-2 is accessed
 		for(int i = 2; i< ohlcvData.size(); i++) {
@@ -198,7 +202,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		}
 		
 		//loop starts at 2 because i-2 is accessed
-		for(int i = 2; i < ohlcvData.size() + pivotOffset; i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
+		for(int i = 2; i < ohlcvData.size() + pivotOffset-2; i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
 			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
 			followThruDays.add(result);
 			
