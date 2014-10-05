@@ -196,19 +196,20 @@ public class RuleBuyFollowThru extends AbstractRule {
 
 		int pivotOffset = Period.fieldDifference(ohlcvData.get(0).getLocalDate(), new LocalDate(pivotDays.get(0).getDate())).getDays();
 
-		for(int i = 0; i < 2; i++) { //This loop just creates dummy values up to when the next loop starts
-			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
-			followThruDays.add(result);
-		}
-		
 		//loop starts at 2 because i-2 is accessed
 		for(int i = 2; i < ohlcvData.size() + pivotOffset-2; i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
+			
+			if( !RuleResult.listContainsDate(followThruDays, ohlcvData.get(i).getDate())) {
+				RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
+				followThruDays.add(result);
+			}
 			
 			//if the day is a pivot day, as set by the findPivotDay method then...
 			if( pivotDays.get(i-pivotOffset).getRuleResult() ) {
 				checkPivotDay(ohlcvData, i);
 			}
 		}
+		
 		
 		ruleResult = followThruDays;
 	}
@@ -224,10 +225,10 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * or a follow thru day has been found
 		 */
 		for(int j = i; j < i + rDaysMax && j < ohlcvData.size(); j++) {
-			RuleResult result = new RuleResult(ohlcvData.get(j).getDate(), false); 	// Create a new result, default to false
 			
-			if( followThruDays.size()-1 < j) {
-				followThruDays.add(result);									// This makes sure the followThruDay list is loaded, ready to be acted on
+			if( !RuleResult.listContainsDate(followThruDays, ohlcvData.get(j).getDate())) {
+				RuleResult result = new RuleResult(ohlcvData.get(j).getDate(), false); 	// Create a new result, default to false
+				followThruDays.add(result);
 			}
 			
 			//Checking to see if a new high for the rally has been set has been set
@@ -254,10 +255,14 @@ public class RuleBuyFollowThru extends AbstractRule {
 				//and end checking conditions to see if the day is a follow thru day
 				break;
 			} else if( todaysLow.compareTo(support) < 0) { //if the low drops below the support the rally is over and the day is not a follow thru day
-				followThruDays.get(j).setRuleResult(Boolean.FALSE);
+				if( !followThruDays.get(j).getRuleResult() ) {	// This prevents overriding a previously set true value
+					followThruDays.get(j).setRuleResult(Boolean.FALSE);
+				}
 				break;
 			} else { //the day must not 
-				followThruDays.get(j).setRuleResult(Boolean.FALSE);
+				if( !followThruDays.get(j).getRuleResult() ) { // This prevents overriding a previously set true value
+					followThruDays.get(j).setRuleResult(Boolean.FALSE);
+				}
 			}
 			rallyDayCount++;
 		}

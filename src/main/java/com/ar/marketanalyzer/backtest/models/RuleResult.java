@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.backtest.models;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,19 @@ public class RuleResult extends PersistableEntityInt{
 	@Override
 	public String toString() {
 		return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+	}
+	
+	static public boolean listContainsDate(List<RuleResult> resultList, Date dateInQuestion) {
+		boolean exists = false;								// Start with the assumption the date is not in the list
+		
+		for(RuleResult result: resultList) {				// Loop through the list
+			if(result.getDate().equals(dateInQuestion)) {	// Check if the date of the result is equal to the date in question
+				exists = true;								// If the date is in the list set exists to true
+				break;										// Stop the loop
+			}
+		}
+		
+		return exists;
 	}
 	
 	/*
