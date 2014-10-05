@@ -187,7 +187,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	@Override
 	@Transactional
 	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate) throws SecuritiesNotFound {
-		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateBetween(symbol, startDate, endDate);		// Get a list of ohlcv data from the query
+		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateBetweenOrderByDateAsc(symbol, startDate, endDate);		// Get a list of ohlcv data from the query
 		
 		if( ohlcvList.isEmpty() ) {														// if the list is empty 
 			throw new SecuritiesNotFound( "No OHLCV data found for " + symbol.getName() + " between " + startDate.toString() + " and " + endDate.toString() + ".");	//Throw and exception
@@ -195,7 +195,4 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		
 		return ohlcvList;
 	}
-
-	
-
 }

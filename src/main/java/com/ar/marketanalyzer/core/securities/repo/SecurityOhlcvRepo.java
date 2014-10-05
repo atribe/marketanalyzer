@@ -21,6 +21,6 @@ public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> 
 	@Query(	"SELECT MAX(date) FROM SecuritiesOhlcv O WHERE O.symbol = :symbol" )
 	public Date findBySymbolsFirstDate( @Param("symbol")Symbol symbol);
 	
-	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol,
+	public List<SecuritiesOhlcv> findBySymbolAndDateBetweenOrderByDateAsc(Symbol symbol,
 			Date startDate, Date endDate);
 }

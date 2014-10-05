@@ -203,60 +203,63 @@ public class RuleBuyFollowThru extends AbstractRule {
 		
 		//loop starts at 2 because i-2 is accessed
 		for(int i = 2; i < ohlcvData.size() + pivotOffset-2; i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
-			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
-			followThruDays.add(result);
 			
 			//if the day is a pivot day, as set by the findPivotDay method then...
 			if( pivotDays.get(i-pivotOffset).getRuleResult() ) {
-				BigDecimal rallyHigh = ohlcvData.get(i).getHigh(); 
-				BigDecimal support = ohlcvData.get(i).getLow();
-				
-				int rallyDayCount = 1;
-				/*
-				 * When j = i that is the the pivot day
-				 * Loop goes until rDaysMax days have been checked for a follow thru day
-				 * or a follow thru day has been found
-				 */
-				for(int j = i; j < i + rDaysMax && j < ohlcvData.size(); j++) {
-					if( followThruDays.size()-1 < j) {
-						followThruDays.add(result);
-					}
-					
-					//Checking to see if a new high for the rally has been set has been set
-					BigDecimal todaysHigh = ohlcvData.get(j).getHigh();
-					if( todaysHigh.compareTo(rallyHigh) > 0) {
-						rallyHigh = todaysHigh;
-					}
-					
-					BigDecimal todaysClose = ohlcvData.get(j).getClose();
-					BigDecimal previousClose = ohlcvData.get(j-1).getClose();
-					
-					BigDecimal todaysLow = ohlcvData.get(j).getLow();
-					
-					long todaysVolume = ohlcvData.get(j).getVolume();
-					long previousVolume = ohlcvData.get(j-1).getVolume();
-					long previousPreviousVolume = ohlcvData.get(j-2).getVolume();
-					
-					if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0 && //price requirement 
-							( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
-							rallyDayCount > rDaysMin && //follow thru days from pivot day requirement 1
-							rallyDayCount < rDaysMax) { //follow thru days from pivot day requirement 2
-						//if the above conditions are true the day is a follow thru day
-						followThruDays.get(j).setRuleResult(Boolean.TRUE);
-						//and end checking conditions to see if the day is a follow thru day
-						break;
-					} else if( todaysLow.compareTo(support) < 0) { //if the low drops below the support the rally is over and the day is not a follow thru day
-						followThruDays.get(j).setRuleResult(Boolean.FALSE);
-						break;
-					} else { //the day must not 
-						followThruDays.get(j).setRuleResult(Boolean.FALSE);
-					}
-					rallyDayCount++;
-				}
+				checkPivotDay(ohlcvData, i);
 			}
-			followThruDays.get(i).setRuleResult(Boolean.FALSE);
 		}
 		
 		ruleResult = followThruDays;
+	}
+	
+	private void checkPivotDay (List<SecuritiesOhlcv> ohlcvData, int i) {
+		BigDecimal rallyHigh = ohlcvData.get(i).getHigh(); 
+		BigDecimal support = ohlcvData.get(i).getLow();
+		
+		int rallyDayCount = 1;
+		/*
+		 * When j = i that is the the pivot day
+		 * Loop goes until rDaysMax days have been checked for a follow 	thru day
+		 * or a follow thru day has been found
+		 */
+		for(int j = i; j < i + rDaysMax && j < ohlcvData.size(); j++) {
+			RuleResult result = new RuleResult(ohlcvData.get(j).getDate(), false); 	// Create a new result, default to false
+			
+			if( followThruDays.size()-1 < j) {
+				followThruDays.add(result);									// This makes sure the followThruDay list is loaded, ready to be acted on
+			}
+			
+			//Checking to see if a new high for the rally has been set has been set
+			BigDecimal todaysHigh = ohlcvData.get(j).getHigh();
+			if( todaysHigh.compareTo(rallyHigh) > 0) {
+				rallyHigh = todaysHigh;
+			}
+			
+			BigDecimal todaysClose = ohlcvData.get(j).getClose();
+			BigDecimal previousClose = ohlcvData.get(j-1).getClose();
+			
+			BigDecimal todaysLow = ohlcvData.get(j).getLow();
+			
+			long todaysVolume = ohlcvData.get(j).getVolume();
+			long previousVolume = ohlcvData.get(j-1).getVolume();
+			long previousPreviousVolume = ohlcvData.get(j-2).getVolume();
+			
+			if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0 && //price requirement 
+					( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
+					rallyDayCount > rDaysMin && //follow thru days from pivot day requirement 1
+					rallyDayCount < rDaysMax) { //follow thru days from pivot day requirement 2
+				//if the above conditions are true the day is a follow thru day
+				followThruDays.get(j).setRuleResult(Boolean.TRUE);
+				//and end checking conditions to see if the day is a follow thru day
+				break;
+			} else if( todaysLow.compareTo(support) < 0) { //if the low drops below the support the rally is over and the day is not a follow thru day
+				followThruDays.get(j).setRuleResult(Boolean.FALSE);
+				break;
+			} else { //the day must not 
+				followThruDays.get(j).setRuleResult(Boolean.FALSE);
+			}
+			rallyDayCount++;
+		}
 	}
 }
