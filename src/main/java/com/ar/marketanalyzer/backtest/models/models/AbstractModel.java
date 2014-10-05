@@ -122,7 +122,6 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		for(AbstractRule rule: ruleList) {
 			rule.runRule();
 		}
-		
 	}
 	/*
 	 * Helper Methods that may be overridden and call super(), but don't have to be

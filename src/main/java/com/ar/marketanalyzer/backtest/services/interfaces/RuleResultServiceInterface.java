@@ -3,18 +3,18 @@ package com.ar.marketanalyzer.backtest.services.interfaces;
 import java.util.List;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
-import com.ar.marketanalyzer.backtest.models.RuleResult;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 
 public interface RuleResultServiceInterface {
 
-	RuleResult create(RuleResult rule);
+	AbstractRuleResult create(AbstractRuleResult rule);
 
-	RuleResult update(RuleResult rule);
+	AbstractRuleResult update(AbstractRuleResult rule);
 
-	RuleResult delete(int id) throws ModelNotFound;
+	AbstractRuleResult delete(int id) throws ModelNotFound;
 
-	RuleResult findById(int id) throws ModelNotFound;
+	AbstractRuleResult findById(int id) throws ModelNotFound;
 
-	void batchCreate(List<RuleResult> resultList);
+	void batchCreate(List<AbstractRuleResult> resultList);
 
 }

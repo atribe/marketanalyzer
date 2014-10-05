@@ -12,9 +12,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
-import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
@@ -27,9 +27,9 @@ public class RuleBuyFollowThru extends AbstractRule {
 	 * Fields specific to this rule
 	 */
 	@Transient
-	private List<RuleResult> pivotDays = new ArrayList<RuleResult>();
+	private List<AbstractRuleResult> pivotDays = new ArrayList<AbstractRuleResult>();
 	@Transient
-	private List<RuleResult> followThruDays = new ArrayList<RuleResult>();
+	private List<AbstractRuleResult> followThruDays = new ArrayList<AbstractRuleResult>();
 	
 	
 	/*
@@ -129,7 +129,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * I'm not going to implement this right away
 		 */
 		for(int i = 0; i < 2; i++) { //This loop just creates dummy values up to when the next loop starts
-			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
+			AbstractRuleResult result = new AbstractRuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
 			followThruDays.add(result);
 		}
 
@@ -183,9 +183,9 @@ public class RuleBuyFollowThru extends AbstractRule {
 			}
 			
 			if(potentialPivotDay == true) {
-				pivotDays.add( new RuleResult(ohlcvData.get(i).getDate(), Boolean.TRUE ) );
+				pivotDays.add( new AbstractRuleResult(ohlcvData.get(i).getDate(), Boolean.TRUE ) );
 			} else {
-				pivotDays.add( new RuleResult(ohlcvData.get(i).getDate(), Boolean.FALSE ) );
+				pivotDays.add( new AbstractRuleResult(ohlcvData.get(i).getDate(), Boolean.FALSE ) );
 			}
 			
 		}
@@ -199,8 +199,8 @@ public class RuleBuyFollowThru extends AbstractRule {
 		//loop starts at 2 because i-2 is accessed
 		for(int i = 2; i < ohlcvData.size() + pivotOffset-2; i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
 			
-			if( !RuleResult.listContainsDate(followThruDays, ohlcvData.get(i).getDate())) {
-				RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
+			if( !AbstractRuleResult.listContainsDate(followThruDays, ohlcvData.get(i).getDate())) {
+				AbstractRuleResult result = new AbstractRuleResult(ohlcvData.get(i).getDate(), false); 	// Create a new result, default to false
 				followThruDays.add(result);
 			}
 			
@@ -226,8 +226,8 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 */
 		for(int j = i; j < i + rDaysMax && j < ohlcvData.size(); j++) {
 			
-			if( !RuleResult.listContainsDate(followThruDays, ohlcvData.get(j).getDate())) {
-				RuleResult result = new RuleResult(ohlcvData.get(j).getDate(), false); 	// Create a new result, default to false
+			if( !AbstractRuleResult.listContainsDate(followThruDays, ohlcvData.get(j).getDate())) {
+				AbstractRuleResult result = new AbstractRuleResult(ohlcvData.get(j).getDate(), false); 	// Create a new result, default to false
 				followThruDays.add(result);
 			}
 			

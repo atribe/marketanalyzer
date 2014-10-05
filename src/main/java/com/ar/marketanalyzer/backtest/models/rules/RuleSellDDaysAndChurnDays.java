@@ -1,7 +1,6 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
-import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
@@ -26,16 +25,25 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	 * Fields specific to this rule
 	 */
 	@Transient
-	private List<RuleResult> ddays = new ArrayList<RuleResult>();
-	@Transient
-	private List<RuleResult> churnDays = new ArrayList<RuleResult>();
-	
+	private List<RuleResultsDDaysAndChurnDays> ddaysResults = new ArrayList<RuleResultsDDaysAndChurnDays>();
+
 	/*
 	 * Fields that are rule parameters
 	 */
+	// Sell Triggers
+	@Transient
+	int ddayCountSellTrigger;
+	@Transient
+	final static String DDAY_COUNT_SELL_TRIGGER = "d_day_count_sell_trigger";
+	@Transient
+	int ddayWindow;
+	@Transient
+	final static String DDAY_WINDOW = "d_day_window";
+	
 	// D Days
 	@Transient
 	double priceDrop;
+	@Transient
 	final static String PRICE_DROP = "priceDrop";
 	
 	// Churn Days
@@ -83,6 +91,10 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		/*
 		 * Setting default values for rule parameters
 		 */
+		// Sell Triggers
+		ddayCountSellTrigger = 7;
+		ddayWindow = 20;
+		
 		// D Days
 		priceDrop=-.002;
 		
@@ -98,6 +110,8 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		 * Adding parameters to ruleParameter list
 		 * Any parameters added to this list will be saved in the DB
 		 */
+		ruleParameters.add(new RuleParameter(DDAY_WINDOW, ddayWindow));
+		ruleParameters.add(new RuleParameter(DDAY_COUNT_SELL_TRIGGER, ddayCountSellTrigger));
 		ruleParameters.add(new RuleParameter(PRICE_DROP, priceDrop));
 		ruleParameters.add(new RuleParameter(CHURN_VOL_RANGE, churnVolRange));
 		ruleParameters.add(new RuleParameter(CHURN_PRICE_RANGE, churnPriceRange));
@@ -118,20 +132,24 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		
 		runChurnDayAnalysis(); // sets churn day list
 		
-		combineInnerRuleResults();
+		countDDaysInWindow();
+		
+		setSellDates();
 	}
 	
 	private void runDdayAnalysis() {
 		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
-		int rowCount = ohlcvData.size();
 		
-		for(int i = 1; i < rowCount; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
+		for(int i = 1; i < ohlcvData.size(); i++) //Starting at i=1 so that i can use i-1 in the first calculation 
 		{ 
 			/*
 			 * D day rules
 			 * 1. Volume Higher than the previous day
 			 * 2. Price drops by X% (IBD states .2%)
 			 */
+			
+			RuleResultsDDaysAndChurnDays result =  new RuleResultsDDaysAndChurnDays(ohlcvData.get(i).getDate() );
+			ddaysResults.add(result);
 			
 			// {{ pulling variables from List
 			long todaysVolume = ohlcvData.get(i).getVolume();
@@ -145,11 +163,11 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < priceDrop /*This is rule #1*/)
 			{
-				ddays.add( new RuleResult(ohlcvData.get(i).getDate(), Boolean.TRUE ) );
+				ddaysResults.get(i).setDday(Boolean.TRUE);
 			}
 			else
 			{
-				ddays.add( new RuleResult(ohlcvData.get(i).getDate(), Boolean.FALSE ) );
+				ddaysResults.get(i).setDday(Boolean.FALSE);
 			}
 		}
 	}
@@ -190,18 +208,12 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			
 			double todaysPriceTrend35 = stats.get(i).getPriceTrend35();
 			
-			//Creating a result that is by default set to false
-			RuleResult result = new RuleResult(ohlcvData.get(i).getDate(), Boolean.FALSE);
-			// }}
-			
-			
 			if( todaysClose.compareTo(todaysHigh.add(todaysLow).divide(new BigDecimal(2))) < 0 /*rule 1*/ &&
 					todaysVolume >= previousDaysVolume*(1-churnVolRange) /*rule 2a*/ &&
 					todaysVolume <= previousDaysVolume*(1+churnVolRange) /*rule 2b*/ &&
 					todaysClose.compareTo(previousDaysClose.multiply(new BigDecimal(1+churnPriceRange))) <= 0/*rule 3*/)
 			{
-				result.setRuleResult(Boolean.TRUE);
-				churnDays.add(result);
+				ddaysResults.get(i).setChurnDay(Boolean.TRUE);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, ohlcvData.get(i).getPVD_id(), true);
 			} else {
 				// {{ Churn day conditions set by the parameter db
@@ -226,69 +238,49 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 				
 				if(conditionsRequired == conditionsMet && conditionsRequired != 0)
 				{
-					result.setRuleResult(Boolean.TRUE);
-					churnDays.add(result);
+					ddaysResults.get(i).setChurnDay(Boolean.TRUE);
 				} else {
-					result.setRuleResult(Boolean.FALSE);
-					churnDays.add(result);
+					ddaysResults.get(i).setChurnDay(Boolean.FALSE);
 				}
 			}
-			//No need set to false because it was already done by the d-day method.
 		}
 	}
 
-	private void combineInnerRuleResults() {
-		if(!ruleResult.isEmpty()) {
-			ruleResult.clear();
-		}
-		
+	private void setSellDates() {
 		/*
-		 * Combining two lists with common dates, but the lists don't start with the same dates
-		 * find the earliest date
-		 * iterate though the list with the earliest date
-		 * check the other list to see if the date matches
-		 * once a match is found change a boolean to false so that it won't check for matching dates
 		 * 
 		 */
-		
-		Date earliestDate = ddays.get(0).getDate();
-		// Default values
-		List<RuleResult> list1 = ddays;
-		List<RuleResult> list2 = churnDays;
-		
-		if( churnDays.get(0).getDate().before(earliestDate) ) {
-			//earliestDate = churnDays.get(0).getDate();
-			list1 = churnDays;
-			list2 = ddays;
+		for( RuleResultsDDaysAndChurnDays result: ddaysResults) {
+			if(result.getDdaysInWindow() >= ddayCountSellTrigger) {
+				result.setRuleResult(Boolean.TRUE);
+			} else {
+				result.setRuleResult(Boolean.FALSE);
+			}
 		}
+	}
+	
+	private void countDDaysInWindow() {
+		/* 
+		 * 		2. For each loop of all the data
+		 * 		3. As the loop progresses through each row, look back in the data the number of days in the window
+		 * 			and see how many d-days there are
+		 * 		4. Write the results to the database 
+		*/
 		
-		/*
-		 * Inputs, list1 and list2
-		 * This could be a stand a lone method
-		 */
-		int list1Iterator = 0;
-		int list2Iterator = 0;
-		for(int i=0;i<currentModel.getOhlcvData().size(); i++) {
-			Date date = currentModel.getOhlcvData().get(i).getDate();			// Get the date from the OHLCV list
-			
-			RuleResult result = new RuleResult(date, false); 					// Create a new result, default to false
-			
-			if( list1.size() > list1Iterator &&									// make sure the list is bigger than the index 
-					list1.get(list1Iterator).getDate().equals(date) ) {			// check if the list has the same date as the OHLCV list
 
-				if( list1.get(list1Iterator).getRuleResult() ) {							// if the result is true for list 1
-					result.setRuleResult(Boolean.TRUE);							// make the combined result be true
+		//This list starts with the newest date, which means the loop is goes back in time with each iteration 
+		for(int i=ddaysResults.size(); i>0; i--) {
+			
+			int dDayCount=0;
+			
+			for(int j=i; j>i-ddayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
+				
+				if( Boolean.TRUE.equals(ddaysResults.get(j).getDday()) || Boolean.TRUE.equals(ddaysResults.get(j).getChurnDay()) ) {
+					dDayCount++;
 				}
-				list1Iterator++;												// iterate the list index
 			}
-			if( list2.size() > list2Iterator && list2.get(list2Iterator).getDate().equals(date) ) {
-				if( list2.get(list2Iterator).getRuleResult() ) {
-					result.setRuleResult(Boolean.TRUE);
-				}
-				list2Iterator++;
-			}
-
-			ruleResult.add(result);
+			
+			ddaysResults.get(i).setDdaysInWindow(dDayCount);
 		}
 	}
 }

@@ -79,8 +79,6 @@ public class BacktestModelLogic {
 
 	private void runModel() {
 		model.evaluateRules();
-		
-		
 	}
 
 	private void saveModel() {

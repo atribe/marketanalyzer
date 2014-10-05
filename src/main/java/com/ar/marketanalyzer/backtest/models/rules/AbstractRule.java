@@ -17,9 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
-import com.ar.marketanalyzer.backtest.models.RuleResult;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
@@ -44,7 +44,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE)
-	protected List<RuleResult> ruleResult = new ArrayList<RuleResult>();
+	protected List<AbstractRuleResult> ruleResult = new ArrayList<AbstractRuleResult>();
 
 	/*
 	 * Constructors
@@ -111,10 +111,10 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	public void setRuleParameters(List<RuleParameter> ruleParameters) {
 		this.ruleParameters = ruleParameters;
 	}
-	public List<RuleResult> getRuleResult() {
+	public List<AbstractRuleResult> getRuleResult() {
 		return ruleResult;
 	}
-	public void setRuleResult(List<RuleResult> ruleResult) {
+	public void setRuleResult(List<AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
 	}
 }
