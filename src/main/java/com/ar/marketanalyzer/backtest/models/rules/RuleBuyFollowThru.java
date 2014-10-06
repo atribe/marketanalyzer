@@ -204,6 +204,10 @@ public class RuleBuyFollowThru extends AbstractRule {
 			if( result.getPivotDay() ) {
 				checkPivotDay(ohlcvData, i);
 			}
+			
+			if(result.getFollowThruDay() == null) {
+				result.setFollowThruDay(Boolean.FALSE);
+			}
 		}
 	}
 	
