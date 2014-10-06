@@ -74,14 +74,18 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	 */
 	public abstract void setDefaultParameters();
 	public abstract void runRule();
+	protected abstract void initializeRuleResultList();
 	
 	protected boolean parametersAlreadyExist() {
-		if( ruleParameters.isEmpty() ) {
+		if( ruleParameters == null || ruleParameters.isEmpty() ) {
 			return false;
 		} else {
 			return true;
 		}
 	}
+	
+	
+	
 	/*
 	 * Getters and Setters
 	 */
@@ -111,10 +115,12 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	public void setRuleParameters(List<RuleParameter> ruleParameters) {
 		this.ruleParameters = ruleParameters;
 	}
+	
 	public List<AbstractRuleResult> getRuleResult() {
 		return ruleResult;
 	}
 	public void setRuleResult(List<AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
 	}
+	
 }

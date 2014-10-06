@@ -1,7 +1,6 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -11,6 +10,7 @@ import javax.persistence.Transient;
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
@@ -24,9 +24,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	/*
 	 * Fields specific to this rule
 	 */
-	@Transient
-	private List<RuleResultsDDaysAndChurnDays> ddaysResults = new ArrayList<RuleResultsDDaysAndChurnDays>();
-
+	
 	/*
 	 * Fields that are rule parameters
 	 */
@@ -128,6 +126,8 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		 * 2. Create a List<RuleResult> of Churn days
 		 * 3. Combine the two into the official List<RuleResult> for this rule
 		 */
+		initializeRuleResultList();
+		
 		runDdayAnalysis(); // sets ddays list
 		
 		runChurnDayAnalysis(); // sets churn day list
@@ -135,6 +135,15 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		countDDaysInWindow();
 		
 		setSellDates();
+	}
+	
+	@Override
+	protected void initializeRuleResultList() {
+		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		
+		for(SecuritiesOhlcv ohlcv: ohlcvData) {
+			ruleResult.add(new RuleResultsDDaysAndChurnDays(ohlcv.getDate()));
+		}
 	}
 	
 	private void runDdayAnalysis() {
@@ -148,9 +157,6 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			 * 2. Price drops by X% (IBD states .2%)
 			 */
 			
-			RuleResultsDDaysAndChurnDays result =  new RuleResultsDDaysAndChurnDays(ohlcvData.get(i).getDate() );
-			ddaysResults.add(result);
-			
 			// {{ pulling variables from List
 			long todaysVolume = ohlcvData.get(i).getVolume();
 			long previousDaysVolume = ohlcvData.get(i-1).getVolume();
@@ -163,11 +169,15 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < priceDrop /*This is rule #1*/)
 			{
-				ddaysResults.get(i).setDday(Boolean.TRUE);
+				RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+				result.setDday(Boolean.TRUE);
+				ruleResult.set(i, result);
 			}
 			else
 			{
-				ddaysResults.get(i).setDday(Boolean.FALSE);
+				RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+				result.setDday(Boolean.FALSE);
+				ruleResult.set(i, result);
 			}
 		}
 	}
@@ -191,6 +201,8 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			 * 6. price must be on upswing over  previous 35 days
 			 */
 			
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+			
 			// {{ pulling variables from List, just to make the code below prettier
 			BigDecimal todaysHigh = ohlcvData.get(i).getHigh();			
 			//double previousDaysHigh = ohlcvData.get(i-1).getHigh();
@@ -213,7 +225,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 					todaysVolume <= previousDaysVolume*(1+churnVolRange) /*rule 2b*/ &&
 					todaysClose.compareTo(previousDaysClose.multiply(new BigDecimal(1+churnPriceRange))) <= 0/*rule 3*/)
 			{
-				ddaysResults.get(i).setChurnDay(Boolean.TRUE);
+				result.setChurnDay(Boolean.TRUE);
 				//MarketIndexAnalysisDB.addDDayStatus(ps, ohlcvData.get(i).getPVD_id(), true);
 			} else {
 				// {{ Churn day conditions set by the parameter db
@@ -238,27 +250,15 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 				
 				if(conditionsRequired == conditionsMet && conditionsRequired != 0)
 				{
-					ddaysResults.get(i).setChurnDay(Boolean.TRUE);
+					result.setChurnDay(Boolean.TRUE);
 				} else {
-					ddaysResults.get(i).setChurnDay(Boolean.FALSE);
+					result.setChurnDay(Boolean.FALSE);
 				}
 			}
+			ruleResult.set(i, result);
 		}
 	}
 
-	private void setSellDates() {
-		/*
-		 * 
-		 */
-		for( RuleResultsDDaysAndChurnDays result: ddaysResults) {
-			if(result.getDdaysInWindow() >= ddayCountSellTrigger) {
-				result.setRuleResult(Boolean.TRUE);
-			} else {
-				result.setRuleResult(Boolean.FALSE);
-			}
-		}
-	}
-	
 	private void countDDaysInWindow() {
 		/* 
 		 * 		2. For each loop of all the data
@@ -267,20 +267,37 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		 * 		4. Write the results to the database 
 		*/
 		
-
 		//This list starts with the newest date, which means the loop is goes back in time with each iteration 
-		for(int i=ddaysResults.size(); i>0; i--) {
+		for(int i=ruleResult.size()-1; i>0; i--) {
 			
 			int dDayCount=0;
 			
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+			
 			for(int j=i; j>i-ddayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
-				
-				if( Boolean.TRUE.equals(ddaysResults.get(j).getDday()) || Boolean.TRUE.equals(ddaysResults.get(j).getChurnDay()) ) {
+				RuleResultsDDaysAndChurnDays innerResult = (RuleResultsDDaysAndChurnDays) ruleResult.get(j);
+				if( Boolean.TRUE.equals(innerResult.getDday()) || Boolean.TRUE.equals(innerResult.getChurnDay()) ) {
 					dDayCount++;
 				}
 			}
 			
-			ddaysResults.get(i).setDdaysInWindow(dDayCount);
+			result.setDdaysInWindow(dDayCount);
+			ruleResult.set(i, result);
+		}
+	}
+
+	private void setSellDates() {
+
+		/*
+		 * The DDay and Churn rule determines sell dates by when the ddays+churndays > ddayCountSellTrigger
+		 */
+		for( AbstractRuleResult result: ruleResult) {
+			RuleResultsDDaysAndChurnDays castResult = (RuleResultsDDaysAndChurnDays) result;
+			if(castResult.getDdaysInWindow() >= ddayCountSellTrigger) {
+				castResult.setRuleResult(Boolean.TRUE);
+			} else {
+				castResult.setRuleResult(Boolean.FALSE);
+			}
 		}
 	}
 }

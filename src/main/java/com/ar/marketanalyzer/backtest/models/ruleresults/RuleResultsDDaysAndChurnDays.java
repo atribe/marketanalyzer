@@ -12,9 +12,6 @@ public class RuleResultsDDaysAndChurnDays extends AbstractRuleResult{
 
 	private static final long serialVersionUID = 5530876944518715723L;
 
-	@Column( name = "pivot_day" )
-	Boolean pivotDay;
-	
 	@Column( name = "d_day" )
 	Boolean dday;
 	
@@ -45,13 +42,6 @@ public class RuleResultsDDaysAndChurnDays extends AbstractRuleResult{
 	/*
 	 * Getters and Setters
 	 */
-	public Boolean getPivotDay() {
-		return pivotDay;
-	}
-	public void setPivotDay(Boolean pivotDay) {
-		this.pivotDay = pivotDay;
-	}
-	
 	public Boolean getDday() {
 		return dday;
 	}
