@@ -72,9 +72,23 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	/*
 	 * Helper Methods
 	 */
+	/**
+	 * Sets the default parameters for the rule
+	 */
 	public abstract void setDefaultParameters();
+	/**
+	 * The brains of the rule. Does all the calculations for the rule
+	 */
 	public abstract void runRule();
+	/**
+	 * Populates the ruleResult list that matches the length of the ohlcv data
+	 */
 	protected abstract void initializeRuleResultList();
+	/**
+	 * Turns the results from the rule into the triggers to buy or sell,
+	 * depending on the rule.
+	 */
+	protected abstract void findTriggerDays();
 	
 	protected boolean parametersAlreadyExist() {
 		if( ruleParameters == null || ruleParameters.isEmpty() ) {

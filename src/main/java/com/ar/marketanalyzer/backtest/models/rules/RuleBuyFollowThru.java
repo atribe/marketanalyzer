@@ -104,6 +104,8 @@ public class RuleBuyFollowThru extends AbstractRule {
 		findPivotDays();
 		
 		findFollowThruDays();
+		
+		findTriggerDays();
 	}
 	
 	@Override
@@ -124,7 +126,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 */
 		boolean potentialPivotDay = false;
 		
-		BigDecimal support = new BigDecimal(0); //if price goes below support the rally is broken
+
 		
 		/*
 		 * Optional criteria: rally can't start unless the pivotTrend35 < -.1%
@@ -162,7 +164,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 				
 				//if the day is still a potentialPivotDay after the additional criteria then check to see if the rally achieves the minimum of rDaysMin days (typically 4)
 				if( potentialPivotDay ) {
-					support = ohlcvData.get(i).getLow();
+					 BigDecimal support = ohlcvData.get(i).getLow();//if price goes below support the rally is broken
 					
 					/*
 					 * Loop starts at the 2nd day in the rally from the potential pivot day (i+1)
@@ -223,6 +225,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 */
 		for(int j = i; j < i + rDaysMax && j < ohlcvData.size() && j < ruleResult.size(); j++) {
 			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(j);
+			
 			//Checking to see if a new high for the rally has been set has been set
 			BigDecimal todaysHigh = ohlcvData.get(j).getHigh();
 			if( todaysHigh.compareTo(rallyHigh) > 0) {
@@ -264,4 +267,16 @@ public class RuleBuyFollowThru extends AbstractRule {
 		}
 	}
 	
+	@Override
+	protected void findTriggerDays() {
+		
+		for(int i=0; i<ruleResult.size(); i++) {
+			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
+			if(result.getFollowThruDay()!=null && result.getFollowThruDay()) {
+				result.setRuleResult(Boolean.TRUE);
+			} else {
+				result.setRuleResult(Boolean.FALSE);
+			}
+		}
+	}
 }

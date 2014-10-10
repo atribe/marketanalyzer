@@ -134,7 +134,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		
 		countDDaysInWindow();
 		
-		setSellDates();
+		findTriggerDays();
 	}
 	
 	@Override
@@ -286,17 +286,17 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		}
 	}
 
-	private void setSellDates() {
-
+	@Override
+	protected void findTriggerDays() {
 		/*
 		 * The DDay and Churn rule determines sell dates by when the ddays+churndays > ddayCountSellTrigger
 		 */
-		for( AbstractRuleResult result: ruleResult) {
-			RuleResultsDDaysAndChurnDays castResult = (RuleResultsDDaysAndChurnDays) result;
-			if(castResult.getDdaysInWindow() >= ddayCountSellTrigger) {
-				castResult.setRuleResult(Boolean.TRUE);
+		for(int i=0; i<ruleResult.size(); i++) {
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+			if(result.getDdaysInWindow()>=ddayCountSellTrigger) {
+				result.setRuleResult(Boolean.TRUE);
 			} else {
-				castResult.setRuleResult(Boolean.FALSE);
+				result.setRuleResult(Boolean.FALSE);
 			}
 		}
 	}
