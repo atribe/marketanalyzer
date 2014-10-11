@@ -22,7 +22,11 @@ import javax.persistence.Transient;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
+import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
+import com.ar.marketanalyzer.backtest.models.enums.RuleType;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
@@ -61,6 +65,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 				joinColumns={@JoinColumn(name="model_id")},
 				inverseJoinColumns={@JoinColumn(name="rule_id")})
 	protected List<AbstractRule> ruleList = new ArrayList<AbstractRule>();
+	
+	@Transient
+	protected List<BuySellTrigger> buySellTriggers = new ArrayList<BuySellTrigger>();
+
 	
 	/*
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
@@ -115,6 +123,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	 */
 	protected abstract void assignRules();
 	
+	public void runModel() {
+		evaluateRules();
+		
+		makeTrades();
+	}
+	
 	/*
 	 * This method must be implemented by the extending class, can call super()
 	 */
@@ -123,6 +137,41 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			rule.runRule();
 		}
 	}
+	
+	private void makeTrades() {
+		/*
+		 * loop through the rule results
+		 * 
+		 * if there is a buy trigger, buy it
+		 * if there is a sell trigger, sell
+		 * 
+		 */
+		setBuySellTriggers();
+		
+		
+	}
+	
+	public void setBuySellTriggers() {
+		//Initialize the buySellTriggers to the same length as the OHLCV data
+		for(SecuritiesOhlcv ohlcv: ohlcvData) {
+			buySellTriggers.add(new BuySellTrigger(ohlcv.getDate()));
+		}
+		
+		for(AbstractRule rule: ruleList) {								//Loop through the rules
+			List<AbstractRuleResult> results = rule.getRuleResult();
+			
+			for(int i = 0; i < results.size(); i++)	{					//Loop through the results of the rule
+				if(results.get(i).getRuleResult()) {							//If the result is true
+					if(rule.getRuleType() == RuleType.BUY) {			//If the rule is a buy rule
+						buySellTriggers.get(i).setBuy(Boolean.TRUE);
+					} else if(rule.getRuleType() == RuleType.SELL) {
+						buySellTriggers.get(i).setSell(Boolean.TRUE);
+					}
+				}
+			}
+		}
+	}
+	
 	/*
 	 * Helper Methods that may be overridden and call super(), but don't have to be
 	 */
