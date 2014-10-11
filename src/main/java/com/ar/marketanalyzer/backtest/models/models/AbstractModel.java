@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,10 +24,10 @@ import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
+import com.ar.marketanalyzer.backtest.models.Trade;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
-import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
@@ -69,18 +70,17 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Transient
 	protected List<BuySellTrigger> buySellTriggers = new ArrayList<BuySellTrigger>();
 
+	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
+	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
 	/*
-	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected List<Trade> tradeList;
-	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	protected List<DollarValue> valueList;
 	*/
+	
 	/*
 	 * Not DB stored fields
 	 */
-		
 	@Transient
 	protected List<SecuritiesOhlcv> ohlcvData = new ArrayList<SecuritiesOhlcv>();
 	@Transient
@@ -148,7 +148,23 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		 */
 		setBuySellTriggers();
 		
+		//Initializing the trade
+		Trade trade = new Trade();
 		
+		for(BuySellTrigger trigger: buySellTriggers) {
+			if(trigger.getSell() && trade.getBuyDate() != null) {
+				trade.sell(trigger.getDate());
+			} else if (trigger.getBuy() && trade.getBuyDate() == null && trade.getSellDate() == null) {
+				trade.buy(trigger.getDate());
+			}
+			
+			if(trade.getSellDate() != null) { //need the tradeList.size > 1 so it won't start for the 
+				tradeList.add(trade);
+				trade = new Trade();
+			}
+		}
+		
+		boolean five = true;
 	}
 	
 	public void setBuySellTriggers() {
@@ -310,4 +326,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	}
 
 	public abstract <T> List<T> getStats();
+	public List<Trade> getTradeList() {
+		return tradeList;
+	}
+	public void setTradeList(List<Trade> tradeList) {
+		this.tradeList = tradeList;
+	}
 }

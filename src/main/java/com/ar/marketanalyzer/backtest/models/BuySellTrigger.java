@@ -10,6 +10,9 @@ public class BuySellTrigger {
 	
 	private Boolean buy;
 	
+	/*
+	 * Constructors
+	 */
 	public BuySellTrigger() {
 		sell = false;
 		buy = false;
@@ -20,6 +23,14 @@ public class BuySellTrigger {
 		buy = false;
 	}
 	
+	@Override
+	public String toString() {
+		return date.toString() + " Buy:" + buy.toString() + " Sell:" + sell.toString();
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public Date getDate() {
 		return date;
 	}
