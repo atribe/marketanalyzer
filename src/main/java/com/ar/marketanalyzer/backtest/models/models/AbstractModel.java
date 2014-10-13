@@ -23,7 +23,9 @@ import javax.persistence.Transient;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
+import com.ar.marketanalyzer.backtest.exceptions.DatesMisMatchException;
 import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
+import com.ar.marketanalyzer.backtest.models.DollarValue;
 import com.ar.marketanalyzer.backtest.models.Trade;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
@@ -73,10 +75,8 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
-	/*
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	protected List<DollarValue> valueList;
-	*/
 	
 	/*
 	 * Not DB stored fields
@@ -127,6 +127,8 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		evaluateRules();
 		
 		makeTrades();
+		
+		calculateDollarValue();
 	}
 	
 	/*
@@ -151,11 +153,22 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		//Initializing the trade
 		Trade trade = new Trade();
 		
-		for(BuySellTrigger trigger: buySellTriggers) {
-			if(trigger.getSell() && trade.getBuyDate() != null) {
-				trade.sell(trigger.getDate());
-			} else if (trigger.getBuy() && trade.getBuyDate() == null && trade.getSellDate() == null) {
-				trade.buy(trigger.getDate());
+		int dateOffset = 0;
+		try {
+			if( !buySellTriggers.get(0).getDate().equals( ohlcvData.get(0).getDate() ) ) {
+				throw new DatesMisMatchException();	
+			}
+		} catch (DatesMisMatchException e) {
+			dateOffset = -1;
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < buySellTriggers.size(); i++)	{												//Loops through each day that there is data for
+			BuySellTrigger trigger = buySellTriggers.get(i);
+			if(trigger.getSell() && trade.getBuyDate() != null) {										//if today is a sell day and the buy date is set
+				trade.sell(trigger.getDate(), ohlcvData.get(i+dateOffset).getClose() );										//set sell price
+			} else if (trigger.getBuy() && trade.getBuyDate() == null && trade.getSellDate() == null) {	//if today is a buy day, and buy and sell dates are not set
+				trade.buy(trigger.getDate(), ohlcvData.get(i+dateOffset).getClose() );
 			}
 			
 			if(trade.getSellDate() != null) { //need the tradeList.size > 1 so it won't start for the 
@@ -163,8 +176,6 @@ public abstract class AbstractModel extends PersistableEntityInt{
 				trade = new Trade();
 			}
 		}
-		
-		boolean five = true;
 	}
 	
 	public void setBuySellTriggers() {
@@ -186,6 +197,20 @@ public abstract class AbstractModel extends PersistableEntityInt{
 				}
 			}
 		}
+	}
+	
+	private void calculateDollarValue() {
+		initializeValueList();
+		
+		
+	}
+	
+	private void initializeValueList() {
+		for(SecuritiesOhlcv ohlcv: ohlcvData) {
+			valueList.add(new DollarValue(ohlcv.getDate()));
+		}
+		
+		valueList.get(0).setDollarValue(initialInvestment);
 	}
 	
 	/*
@@ -331,5 +356,11 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	}
 	public void setTradeList(List<Trade> tradeList) {
 		this.tradeList = tradeList;
+	}
+	public List<DollarValue> getValueList() {
+		return valueList;
+	}
+	public void setValueList(List<DollarValue> valueList) {
+		this.valueList = valueList;
 	}
 }

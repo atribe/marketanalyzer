@@ -37,21 +37,32 @@ public class Trade extends PersistableEntityInt {
 	@Column(precision=12, scale=2, nullable=false)
 	private BigDecimal sellPrice;
 	
+	/*
+	 * Constructors
+	 */
 	public Trade() {
 	}
 	
-	public void sell(Date date) {
-		sellDate = date;
+	/*
+	 * Helper Methods
+	 */
+	public void sell(Date date, BigDecimal sellPrice) {
+		setSellDate(date);
+		setSellPrice(sellPrice);
 	}
-	public void buy(Date date) {
-		buyDate = date;
+	public void buy(Date date, BigDecimal buyPrice) {
+		setBuyDate(date);
+		setBuyPrice(buyPrice);
 	}
 	
 	@Override
 	public String toString() {
-		return " Buy:" + buyDate.toString() + " Sell:" + sellDate.toString();
+		return "Buy:" + buyDate.toString() + " Sell:" + sellDate.toString();
 	}
 	
+	/*
+	 * Getters and Setters
+	 */
 	public AbstractModel getModel() {
 		return model;
 	}
