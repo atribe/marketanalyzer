@@ -76,7 +76,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected List<DollarValue> valueList;
+	protected List<DollarValue> valueList = new ArrayList<DollarValue>();
 	
 	/*
 	 * Not DB stored fields
@@ -202,7 +202,37 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	private void calculateDollarValue() {
 		initializeValueList();
 		
+		int tradeIterator = 0;
 		
+		boolean tradeOpen = false; //false for no open trade, true if there is an open trade
+		Trade currentTrade = tradeList.get(tradeIterator);
+		
+		for(int i = 0; i < ohlcvData.size(); i++)
+		{
+			SecuritiesOhlcv currentOhlcv = ohlcvData.get(i);
+			if( currentTrade.getBuyDate().equals( currentOhlcv.getDate() ) ) {
+				tradeOpen = true;
+			} else if(currentTrade.getSellDate().equals( currentOhlcv.getDate() ) ) {
+				tradeOpen = false;
+			}
+			
+			
+			
+			if( i > 0 ) {
+				DollarValue currentValue = valueList.get(i);
+				DollarValue previousValue = valueList.get(i-1);
+				
+				if(tradeOpen) {
+					SecuritiesOhlcv previousOhlcv = ohlcvData.get(i-1);
+					
+					double percentChange = currentOhlcv.getClose().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
+					
+					currentValue.setDollarValue( new BigDecimal( previousValue.getDollarValue().doubleValue() * percentChange ) );
+				} else {
+					currentValue.setDollarValue( previousValue.getDollarValue() );
+				}
+			}
+		}
 	}
 	
 	private void initializeValueList() {

@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
 import java.sql.Date;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -78,6 +79,8 @@ public class IndexBacktestingModel extends AbstractModel {
 			}
 			stats.get(i-1).setPriceTrend35(closePercentChange/loopDays);
 		}
+		
+		Collections.reverse(stats);
 	}
 	
 	@Override

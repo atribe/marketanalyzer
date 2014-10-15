@@ -127,71 +127,74 @@ public class RuleBuyFollowThru extends AbstractRule {
 		boolean potentialPivotDay = false;
 		
 
-		
 		/*
 		 * Optional criteria: rally can't start unless the pivotTrend35 < -.1%
 		 * I'm not going to implement this right away
 		 */
 
-		//Loops starts on 2 because the object at i-2 is accessed
-		for(int i = 2; i< ohlcvData.size(); i++) {
-			//Initializing variables for this loop run
-			potentialPivotDay = false;
-			BigDecimal todaysClose = ohlcvData.get(i).getClose();
-			BigDecimal previousClose = ohlcvData.get(i-1).getClose();
-			BigDecimal previousPreviousClose = ohlcvData.get(i-2).getClose();
-			
-			/*
-			 * Pivot day conditions:
-			 * 1. Price dropped yesterday from the day before that
-			 * 1. Price came up today from yesterday 
-			 */
-			if( previousPreviousClose.compareTo(previousClose) > 0 && todaysClose.compareTo(previousClose) > 0) {
+		try{
+			//Loops starts on 2 because the object at i-2 is accessed
+			for(int i = 2; i< ohlcvData.size(); i++) {
+				//Initializing variables for this loop run
+				potentialPivotDay = false;
+				BigDecimal todaysClose = ohlcvData.get(i).getClose();
+				BigDecimal previousClose = ohlcvData.get(i-1).getClose();
+				BigDecimal previousPreviousClose = ohlcvData.get(i-2).getClose();
 				
 				/*
-				 * Optional Condition:
-				 * PivotDayTrend35 < -.1%
+				 * Pivot day conditions:
+				 * 1. Price dropped yesterday from the day before that
+				 * 1. Price came up today from yesterday 
 				 */
-				double todaysPivotTrend35 = stats.get(i).getPriceTrend35();
-				
-				if(!churnPivotTrend35On) { //if churnPivotTrend35 is turned off then today is a potential pivotDay because it met the criteria in the if statement above
-					potentialPivotDay = true;
-				} else if( churnPivotTrend35On && todaysPivotTrend35 < pivotTrend35) { //if churnPivotTrend35 is on and pivotTrend35 criteria is met then the day is still a potential pivot day
-					potentialPivotDay = true;
-				} else { //if churnPivotTrend35 is on and pivotTrend35 criteria is not met then the day is no longer a potential pivot day
-					potentialPivotDay = false;
-				}
-				
-				//if the day is still a potentialPivotDay after the additional criteria then check to see if the rally achieves the minimum of rDaysMin days (typically 4)
-				if( potentialPivotDay ) {
-					 BigDecimal support = ohlcvData.get(i).getLow();//if price goes below support the rally is broken
+				if( previousPreviousClose.compareTo(previousClose) > 0 && todaysClose.compareTo(previousClose) > 0) {
 					
 					/*
-					 * Loop starts at the 2nd day in the rally from the potential pivot day (i+1)
-					 * 
-					 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
+					 * Optional Condition:
+					 * PivotDayTrend35 < -.1%
 					 */
-					for(int j = i + 1; j < i + rDaysMin && j < ohlcvData.size(); j++) {
-						BigDecimal nextDayInRallyLow = ohlcvData.get(j).getLow();
-						if( nextDayInRallyLow.compareTo(support) < 0) {
-							//not a rally
-							potentialPivotDay = false;
-							break;
+					double todaysPivotTrend35 = stats.get(i).getPriceTrend35();
+					
+					if(!churnPivotTrend35On) { //if churnPivotTrend35 is turned off then today is a potential pivotDay because it met the criteria in the if statement above
+						potentialPivotDay = true;
+					} else if( churnPivotTrend35On && todaysPivotTrend35 < pivotTrend35) { //if churnPivotTrend35 is on and pivotTrend35 criteria is met then the day is still a potential pivot day
+						potentialPivotDay = true;
+					} else { //if churnPivotTrend35 is on and pivotTrend35 criteria is not met then the day is no longer a potential pivot day
+						potentialPivotDay = false;
+					}
+					
+					//if the day is still a potentialPivotDay after the additional criteria then check to see if the rally achieves the minimum of rDaysMin days (typically 4)
+					if( potentialPivotDay ) {
+						 BigDecimal support = ohlcvData.get(i).getLow();//if price goes below support the rally is broken
+						
+						/*
+						 * Loop starts at the 2nd day in the rally from the potential pivot day (i+1)
+						 * 
+						 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
+						 */
+						for(int j = i + 1; j < i + rDaysMin && j < ohlcvData.size(); j++) {
+							BigDecimal nextDayInRallyLow = ohlcvData.get(j).getLow();
+							if( nextDayInRallyLow.compareTo(support) < 0) {
+								//not a rally
+								potentialPivotDay = false;
+								break;
+							}
 						}
 					}
 				}
+				
+				if(potentialPivotDay == true) {
+					RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
+					result.setPivotDay( Boolean.TRUE );
+					ruleResult.set(i, result);
+				} else {
+					RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
+					result.setPivotDay( Boolean.FALSE );
+					ruleResult.set(i, result);
+				}
+				
 			}
-			
-			if(potentialPivotDay == true) {
-				RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
-				result.setPivotDay( Boolean.TRUE );
-				ruleResult.set(i, result);
-			} else {
-				RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
-				result.setPivotDay( Boolean.FALSE );
-				ruleResult.set(i, result);
-			}
-			
+		} catch ( IndexOutOfBoundsException e) {
+			e.printStackTrace();
 		}
 	}
 	
