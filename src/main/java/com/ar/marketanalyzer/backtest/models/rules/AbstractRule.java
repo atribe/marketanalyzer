@@ -1,7 +1,10 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +47,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE)
-	protected List<AbstractRuleResult> ruleResult = new ArrayList<AbstractRuleResult>();
+	protected SortedMap<Date, AbstractRuleResult> ruleResult = new TreeMap<Date, AbstractRuleResult>();
 
 	/*
 	 * Constructors
@@ -130,10 +133,10 @@ public abstract class AbstractRule extends PersistableEntityInt{
 		this.ruleParameters = ruleParameters;
 	}
 	
-	public List<AbstractRuleResult> getRuleResult() {
+	public SortedMap<Date, AbstractRuleResult> getRuleResult() {
 		return ruleResult;
 	}
-	public void setRuleResult(List<AbstractRuleResult> ruleResult) {
+	public void setRuleResult(SortedMap<Date, AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
 	}
 	
