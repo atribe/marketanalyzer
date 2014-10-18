@@ -1,8 +1,11 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -20,7 +23,7 @@ public class IndexBacktestingModel extends AbstractModel {
 	private static final long serialVersionUID = -5707374797673699670L;
 
 	@Transient
-	protected List<FollowThruStats> stats;
+	protected SortedMap<Date, FollowThruStats> stats;
 	
 	/*
 	 * Constructors
@@ -62,7 +65,7 @@ public class IndexBacktestingModel extends AbstractModel {
 	@Override
 	public void calcStats() {
 		super.calcStats();
-		stats = FollowThruStats.convertStatList(defaultStats);
+		stats = (TreeMap<Date, FollowThruStats>)FollowThruStats.convertStatList(defaultStats);
 		// calc more stats as needed
 		/*
 		 * Loop for 35 days
@@ -71,23 +74,24 @@ public class IndexBacktestingModel extends AbstractModel {
 		 */
 		int loopDays = 35;
 		
-		for(int i=ohlcvData.size()-1; i>0; i--) {
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		
+		for(int i = keys.size() -1; i >= 0; i--) {
+
 			double closePercentChange = 0;
 			
 			for(int j=i; j>i-loopDays && j>2; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
-				closePercentChange+=(ohlcvData.get(j-1).getClose().subtract(ohlcvData.get(j-2).getClose())).doubleValue() / ohlcvData.get(j-2).getClose().doubleValue();
+				closePercentChange+=(ohlcvData.get(keys.get(j)).getClose().subtract(ohlcvData.get(keys.get(j-1)).getClose())).doubleValue() / ohlcvData.get(keys.get(j-1)).getClose().doubleValue();
 			}
-			stats.get(i-1).setPriceTrend35(closePercentChange/loopDays);
+			stats.get(keys.get(i)).setPriceTrend35(closePercentChange/loopDays);
 		}
-		
-		Collections.reverse(stats);
 	}
 	
 	@Override
-	public List<FollowThruStats> getStats() {
-		return stats;
+	public TreeMap<Date, FollowThruStats> getStats() {
+		return (TreeMap<Date, FollowThruStats>) stats;
 	}
-	public void setStats(List<FollowThruStats> stats) {
+	public void setStats(SortedMap<Date, FollowThruStats> stats) {
 		this.stats = stats;
 	}
 }

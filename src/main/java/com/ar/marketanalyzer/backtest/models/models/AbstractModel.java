@@ -27,7 +27,6 @@ import javax.persistence.Transient;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.backtest.exceptions.DatesMisMatchException;
 import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
 import com.ar.marketanalyzer.backtest.models.DollarValue;
 import com.ar.marketanalyzer.backtest.models.Trade;
@@ -88,7 +87,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Transient
 	protected SortedMap<Date, SecuritiesOhlcv> ohlcvData = new TreeMap<Date, SecuritiesOhlcv>();
 	@Transient
-	protected List<Stats> defaultStats = new ArrayList<Stats>();
+	protected SortedMap<Date, Stats> defaultStats = new TreeMap<Date, Stats>();
 
 	protected static final int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
 	protected static final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
@@ -183,7 +182,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		}
 		
 		for(AbstractRule rule: ruleList) {								//Loop through the rules
-			List<AbstractRuleResult> results = rule.getRuleResult();
+			SortedMap<Date, AbstractRuleResult> results = rule.getRuleResult();
 			
 			for(int i = 0; i < results.size(); i++)	{					//Loop through the results of the rule
 				if(results.get(i).getRuleResult()) {							//If the result is true
@@ -257,9 +256,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		BigDecimal close200DayAvg;
 		long vol50DayAvg;
 		
-		defaultStats = new ArrayList<Stats>();
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
 		
-		for(int i=ohlcvData.size()-1; i>0; i--) {
+		for(int i = keys.size() -1; i >= 0; i--) {
 			int loopDays = 50;
 			BigDecimal priceCloseSum = new BigDecimal(0.0);
 			long volumeSum = 0;
@@ -269,12 +268,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 * Calculates the 50 day moving average
 			 * and calculates the 50 day moving volume average
 			 */
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j >= 0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 
 				//summing up for volumeAverage
-				volumeSum+=ohlcvData.get(j).getVolume();
+				volumeSum+=ohlcvData.get(keys.get(j)).getVolume();
 			}
 			close50DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			vol50DayAvg = volumeSum/loopDays;
@@ -285,9 +284,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 */
 			loopDays = 100;
 			priceCloseSum = new BigDecimal(0);
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j>=0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 			}
 			close100DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			
@@ -297,14 +296,14 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 */
 			loopDays = 200;
 			priceCloseSum = new BigDecimal(0);
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j>=0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 			}
 			close200DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			
-			Stats stat = new Stats(ohlcvData.get(i).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
-			defaultStats.add(stat);
+			Stats stat = new Stats(ohlcvData.get(keys.get(i)).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
+			defaultStats.put(keys.get(i), stat);
 		}
 	}
 
@@ -383,7 +382,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		this.ohlcvData = ohlcvData;
 	}
 
-	public abstract <T> List<T> getStats();
+	public abstract <T> TreeMap<Date,T> getStats();
 	public List<Trade> getTradeList() {
 		return tradeList;
 	}
