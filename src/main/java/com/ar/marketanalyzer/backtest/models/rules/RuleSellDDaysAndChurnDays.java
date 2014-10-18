@@ -1,7 +1,12 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -12,6 +17,7 @@ import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
@@ -139,18 +145,18 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 	
 	@Override
 	protected void initializeRuleResultList() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
-		for(SecuritiesOhlcv ohlcv: ohlcvData) {
-			ruleResult.add(new RuleResultsDDaysAndChurnDays(ohlcv.getDate()));
+		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
+			ruleResult.put(ohlcv.getKey(), new RuleResultsDDaysAndChurnDays(ohlcv.getKey()));
 		}
 	}
 	
 	private void runDdayAnalysis() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
-		for(int i = 1; i < ohlcvData.size(); i++) //Starting at i=1 so that i can use i-1 in the first calculation 
-		{ 
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		for(int i = 1; i< keys.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
 			/*
 			 * D day rules
 			 * 1. Volume Higher than the previous day
@@ -158,37 +164,35 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			 */
 			
 			// {{ pulling variables from List
-			long todaysVolume = ohlcvData.get(i).getVolume();
-			long previousDaysVolume = ohlcvData.get(i-1).getVolume();
+			long todaysVolume = ohlcvData.get(keys.get(i)).getVolume();
+			long previousDaysVolume = ohlcvData.get(keys.get(i-1)).getVolume();
 			
-			BigDecimal todaysClose = ohlcvData.get(i).getClose();
-			BigDecimal previousDaysClose = ohlcvData.get(i-1).getClose();
+			BigDecimal todaysClose = ohlcvData.get(keys.get(i)).getClose();
+			BigDecimal previousDaysClose = ohlcvData.get(keys.get(i-1)).getClose();
 
 			double closePercentChange = (todaysClose.doubleValue()/previousDaysClose.doubleValue()-1);
 			// }}
 			
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(keys.get(i));
 			if( todaysVolume > previousDaysVolume /*This is rule #1*/ && closePercentChange < priceDrop /*This is rule #1*/)
 			{
-				RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
 				result.setDday(Boolean.TRUE);
-				ruleResult.set(i, result);
 			}
 			else
 			{
-				RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
 				result.setDday(Boolean.FALSE);
-				ruleResult.set(i, result);
 			}
+			ruleResult.put(keys.get(i), result);
 		}
 	}
 	
 	private void runChurnDayAnalysis() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
-		List<FollowThruStats> stats = currentModel.getStats();
-		int rowCount = ohlcvData.size();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
+		SortedMap<Date, FollowThruStats> stats = currentModel.getStats();
 		
-		for(int i = 1; i < rowCount-1; i++) //Starting at i=1 so that i can use i-1 in the first calculation 
-		{
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		for(int i = 1; i< keys.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
+		
 			/*
 			 * this part gets churning ddays
 			 * churning is defined as
@@ -204,21 +208,21 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
 			
 			// {{ pulling variables from List, just to make the code below prettier
-			BigDecimal todaysHigh = ohlcvData.get(i).getHigh();			
+			BigDecimal todaysHigh = ohlcvData.get(keys.get(i)).getHigh();			
 			//double previousDaysHigh = ohlcvData.get(i-1).getHigh();
 			
-			BigDecimal todaysLow = ohlcvData.get(i).getLow();			
+			BigDecimal todaysLow = ohlcvData.get(keys.get(i)).getLow();			
 			//double previousDaysLow = ohlcvData.get(i-1).getLow();
 			
-			BigDecimal todaysClose = ohlcvData.get(i).getClose();
-			BigDecimal previousDaysClose = ohlcvData.get(i-1).getClose();
+			BigDecimal todaysClose = ohlcvData.get(keys.get(i)).getClose();
+			BigDecimal previousDaysClose = ohlcvData.get(keys.get(i-1)).getClose();
 			
-			long todaysVolume = ohlcvData.get(i).getVolume();
-			long previousDaysVolume = ohlcvData.get(i-1).getVolume();
+			long todaysVolume = ohlcvData.get(keys.get(i)).getVolume();
+			long previousDaysVolume = ohlcvData.get(keys.get(i-1)).getVolume();
 			
-			long todaysVolumeAvg50 = stats.get(i).getVol50DayAvg();
+			long todaysVolumeAvg50 = stats.get(keys.get(i)).getVol50DayAvg();
 			
-			double todaysPriceTrend35 = stats.get(i).getPriceTrend35();
+			double todaysPriceTrend35 = stats.get(keys.get(i)).getPriceTrend35();
 			
 			if( todaysClose.compareTo(todaysHigh.add(todaysLow).divide(new BigDecimal(2))) < 0 /*rule 1*/ &&
 					todaysVolume >= previousDaysVolume*(1-churnVolRange) /*rule 2a*/ &&
@@ -255,7 +259,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 					result.setChurnDay(Boolean.FALSE);
 				}
 			}
-			ruleResult.set(i, result);
+			ruleResult.put(keys.get(i), result);
 		}
 	}
 
@@ -268,21 +272,22 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		*/
 		
 		//This list starts with the newest date, which means the loop is goes back in time with each iteration 
-		for(int i=ruleResult.size()-1; i>0; i--) {
+		ArrayList<Date> keys = new ArrayList<Date>(ruleResult.keySet());
+		for(int i = keys.size()-1; i>0; i--) {
 			
 			int dDayCount=0;
 			
-			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(keys.get(i));
 			
 			for(int j=i; j>i-ddayWindow && j>0; j--) { //This loop starts at i and then goes back dDayWindow days adding up all the d days
-				RuleResultsDDaysAndChurnDays innerResult = (RuleResultsDDaysAndChurnDays) ruleResult.get(j);
+				RuleResultsDDaysAndChurnDays innerResult = (RuleResultsDDaysAndChurnDays) ruleResult.get(keys.get(j));
 				if( Boolean.TRUE.equals(innerResult.getDday()) || Boolean.TRUE.equals(innerResult.getChurnDay()) ) {
 					dDayCount++;
 				}
 			}
 			
 			result.setDdaysInWindow(dDayCount);
-			ruleResult.set(i, result);
+			ruleResult.put(keys.get(i), result);
 		}
 	}
 
@@ -291,8 +296,8 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		/*
 		 * The DDay and Churn rule determines sell dates by when the ddays+churndays > ddayCountSellTrigger
 		 */
-		for(int i=0; i<ruleResult.size(); i++) {
-			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+		for(Map.Entry<Date,AbstractRuleResult> entry : ruleResult.entrySet()) {
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) entry.getValue();
 			if(result.getDdaysInWindow()>=ddayCountSellTrigger) {
 				result.setRuleResult(Boolean.TRUE);
 			} else {
