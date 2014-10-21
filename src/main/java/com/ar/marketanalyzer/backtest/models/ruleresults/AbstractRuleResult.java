@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
@@ -17,7 +18,7 @@ import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt
 @Inheritance
 @DiscriminatorColumn(name="RULE_NAME")
 @Table(name = "backtest_rule_result")
-public class AbstractRuleResult extends PersistableEntityInt{
+public class AbstractRuleResult extends PersistableEntityInt implements DateCompImp{
 
 	private static final long serialVersionUID = 6088797692365143508L;
 
@@ -60,9 +61,11 @@ public class AbstractRuleResult extends PersistableEntityInt{
 		this.rule = rule;
 	}
 
+	@Override
 	public Date getDate() {
 		return date;
 	}
+	@Override
 	public void setDate(Date date) {
 		this.date = date;
 	}

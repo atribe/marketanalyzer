@@ -9,12 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "backtest_value")
-public class DollarValue extends PersistableEntityInt {
+public class DollarValue extends PersistableEntityInt implements DateCompImp{
 
 	private static final long serialVersionUID = -1433482868025063181L;
 
@@ -54,10 +55,12 @@ public class DollarValue extends PersistableEntityInt {
 		this.model = model;
 	}
 
+	@Override
 	public Date getDate() {
 		return date;
 	}
 
+	@Override
 	public void setDate(Date date) {
 		this.date = date;
 	}

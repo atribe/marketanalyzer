@@ -42,7 +42,8 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 			}
 			
 			paramService.batchCreate(rule.getRuleParameters());
-			resultService.batchCreate(rule.getRuleResult());
+			rule.convertRuleResultMapToSet();
+			resultService.batchCreate(rule.getRuleResultSet());
 		}
 		
 		return createdModel;

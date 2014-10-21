@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.SortedSet;
 
 import javax.annotation.Resource;
 
@@ -30,8 +31,8 @@ public class RuleResultService implements RuleResultServiceInterface {
 	
 	@Override
 	@Transactional
-	public void batchCreate(SortedMap<Date, AbstractRuleResult> resultList) {
-		resultRepo.save((Map<Date,AbstractRuleResult>)resultList);
+	public void batchCreate(SortedSet<AbstractRuleResult> resultList) {
+		resultRepo.save(resultList);
 	}
 
 	@Override

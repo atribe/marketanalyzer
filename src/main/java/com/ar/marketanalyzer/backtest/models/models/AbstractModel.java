@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -79,7 +81,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected SortedMap<Date, DollarValue> valueList = new TreeMap<Date, DollarValue>();
+	protected SortedSet<DollarValue> valueSet = new TreeSet<DollarValue>();
+	
+	@Transient
+	protected SortedMap<Date, DollarValue> valueMap = new TreeMap<Date, DollarValue>();
 	
 	/*
 	 * Not DB stored fields
@@ -216,8 +221,8 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			
 			
 			if( i > 0 ) {
-				DollarValue currentValue = valueList.get(i);
-				DollarValue previousValue = valueList.get(i-1);
+				DollarValue currentValue = valueMap.get(i);
+				DollarValue previousValue = valueMap.get(i-1);
 				
 				if(tradeOpen) {
 					SecuritiesOhlcv previousOhlcv = ohlcvData.get(i-1);
@@ -234,10 +239,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	
 	private void initializeValueList() {
 		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
-			valueList.put(ohlcv.getKey(), new DollarValue(ohlcv.getKey()));
+			valueMap.put(ohlcv.getKey(), new DollarValue(ohlcv.getKey()));
 		}
 		
-		valueList.get(valueList.firstKey()).setDollarValue(initialInvestment);
+		valueMap.get(valueMap.firstKey()).setDollarValue(initialInvestment);
 	}
 	
 	/*
@@ -390,14 +395,24 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		this.tradeList = tradeList;
 	}
 	public SortedMap<Date, DollarValue> getValueList() {
-		return valueList;
+		return valueMap;
 	}
-	public void setValueList(List<DollarValue> valueList) {
-		for(DollarValue value: valueList) {
-			this.valueList.put(value.getDate(), value);
+	public void setValueMap(List<DollarValue> valueMap) {
+		for(DollarValue value: valueMap) {
+			this.valueMap.put(value.getDate(), value);
 		}
 	}
-	public void setValueList(SortedMap<Date,DollarValue> valueList) {
-		this.valueList = valueList;
+	public SortedMap<Date, DollarValue> getValueMap() {
+		return valueMap;
 	}
+	public void setValueMap(SortedMap<Date,DollarValue> valueMap) {
+		this.valueMap = valueMap;
+	}
+	public SortedSet<DollarValue> getValueSet() {
+		return valueSet;
+	}
+	public void setValueSet(SortedSet<DollarValue> valueSet) {
+		this.valueSet = valueSet;
+	}
+	
 }

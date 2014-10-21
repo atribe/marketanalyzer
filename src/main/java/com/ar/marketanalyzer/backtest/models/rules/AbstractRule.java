@@ -3,8 +3,11 @@ package com.ar.marketanalyzer.backtest.models.rules;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,6 +50,8 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE)
+	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<AbstractRuleResult>();
+	@Transient
 	protected SortedMap<Date, AbstractRuleResult> ruleResult = new TreeMap<Date, AbstractRuleResult>();
 
 	/*
@@ -93,6 +98,12 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	 */
 	protected abstract void findTriggerDays();
 	
+	public void convertRuleResultMapToSet() {
+		for(Map.Entry<Date, AbstractRuleResult> resultEntry: ruleResult.entrySet()) {
+			ruleResultSet.add(resultEntry.getValue());
+		}
+	}
+	
 	protected boolean parametersAlreadyExist() {
 		if( ruleParameters == null || ruleParameters.isEmpty() ) {
 			return false;
@@ -138,6 +149,12 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	}
 	public void setRuleResult(SortedMap<Date, AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
+	}
+	public SortedSet<AbstractRuleResult> getRuleResultSet() {
+		return ruleResultSet;
+	}
+	public void setRuleResultSet(SortedSet<AbstractRuleResult> ruleResultSet) {
+		this.ruleResultSet = ruleResultSet;
 	}
 	
 }
