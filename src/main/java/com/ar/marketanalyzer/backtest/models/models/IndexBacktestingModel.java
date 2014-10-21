@@ -2,8 +2,6 @@ package com.ar.marketanalyzer.backtest.models.models;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -87,6 +85,7 @@ public class IndexBacktestingModel extends AbstractModel {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public TreeMap<Date, FollowThruStats> getStats() {
 		return (TreeMap<Date, FollowThruStats>) stats;

@@ -118,7 +118,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
 		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
-			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(ohlcv.getKey()));
+			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(ohlcv.getKey(), Boolean.FALSE));
 		}
 	}
 	
@@ -210,7 +210,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		for(int i = 0; i < keys.size(); i++) {	
 			//if the day is a pivot day, as set by the findPivotDay method then...
 			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(keys.get(i));
-			if( result.getPivotDay() ) {
+			if( result.getPivotDay()!= null && result.getPivotDay() ) {
 				checkPivotDay(ohlcvData, keys, i);
 			}
 			

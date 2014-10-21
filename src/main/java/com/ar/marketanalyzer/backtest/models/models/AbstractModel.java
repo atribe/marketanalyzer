@@ -23,6 +23,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -80,7 +81,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
+	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
+	@OrderBy("date")
 	protected SortedSet<DollarValue> valueSet = new TreeSet<DollarValue>();
 	
 	@Transient
@@ -187,14 +190,14 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		}
 		
 		for(AbstractRule rule: ruleList) {								//Loop through the rules
-			SortedMap<Date, AbstractRuleResult> results = rule.getRuleResult();
+			SortedMap<Date, AbstractRuleResult> results = (TreeMap<Date, AbstractRuleResult>)rule.getRuleResult();
 			
-			for(int i = 0; i < results.size(); i++)	{					//Loop through the results of the rule
-				if(results.get(i).getRuleResult()) {							//If the result is true
+			for(Map.Entry<Date, AbstractRuleResult> resultEntry: results.entrySet())	{					//Loop through the results of the rule
+				if(resultEntry.getValue().getRuleResult()) {							//If the result is true
 					if(rule.getRuleType() == RuleType.BUY) {			//If the rule is a buy rule
-						buySellTriggers.get(i).setBuy(Boolean.TRUE);
+						buySellTriggers.get(resultEntry.getKey()).setBuy(Boolean.TRUE);
 					} else if(rule.getRuleType() == RuleType.SELL) {
-						buySellTriggers.get(i).setSell(Boolean.TRUE);
+						buySellTriggers.get(resultEntry.getKey()).setSell(Boolean.TRUE);
 					}
 				}
 			}
@@ -209,9 +212,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		boolean tradeOpen = false; //false for no open trade, true if there is an open trade
 		Trade currentTrade = tradeList.get(tradeIterator);
 		
-		for(int i = 0; i < ohlcvData.size(); i++)
-		{
-			SecuritiesOhlcv currentOhlcv = ohlcvData.get(i);
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		
+		for(int i = 0 ; i < keys.size(); i++) {
+			SecuritiesOhlcv currentOhlcv = ohlcvData.get(keys.get(i));
 			if( currentTrade.getBuyDate().equals( currentOhlcv.getDate() ) ) {
 				tradeOpen = true;
 			} else if(currentTrade.getSellDate().equals( currentOhlcv.getDate() ) ) {
@@ -220,12 +224,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			
 			
 			
-			if( i > 0 ) {
-				DollarValue currentValue = valueMap.get(i);
-				DollarValue previousValue = valueMap.get(i-1);
+			if( !ohlcvData.firstKey().equals(currentOhlcv.getDate()) ) {
+				DollarValue currentValue = valueMap.get(keys.get(i));
+				DollarValue previousValue = valueMap.get(keys.get(i-1));
 				
 				if(tradeOpen) {
-					SecuritiesOhlcv previousOhlcv = ohlcvData.get(i-1);
+					SecuritiesOhlcv previousOhlcv = ohlcvData.get(keys.get(i-1));
 					
 					double percentChange = currentOhlcv.getClose().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
 					
@@ -311,6 +315,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			defaultStats.put(keys.get(i), stat);
 		}
 	}
+	
+	public void convertValueMapToSet() {
+		for(Map.Entry<Date, DollarValue> valueEntry: valueMap.entrySet()) {
+			valueSet.add(valueEntry.getValue());
+		}
+	}
 
 	/*
 	 * Getters and Setters
@@ -357,24 +367,6 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		this.ruleList = ruleList;
 	}
 	
-	/*
-	public List<Trade> getTradeList() {
-		return tradeList;
-	}
-
-	public void setTradeList(List<Trade> tradeList) {
-		this.tradeList = tradeList;
-	}
-
-	public List<DollarValue> getValueList() {
-		return valueList;
-	}
-
-	public void setValueList(List<DollarValue> valueList) {
-		this.valueList = valueList;
-	}
-*/
-	
 	public SortedMap<Date, SecuritiesOhlcv> getOhlcvData() {
 		return ohlcvData;
 	}
@@ -413,6 +405,5 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	}
 	public void setValueSet(SortedSet<DollarValue> valueSet) {
 		this.valueSet = valueSet;
-	}
-	
+	}	
 }

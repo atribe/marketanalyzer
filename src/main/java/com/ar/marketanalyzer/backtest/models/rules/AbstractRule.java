@@ -19,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -50,6 +51,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE)
+	@OrderBy("date")
 	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<AbstractRuleResult>();
 	@Transient
 	protected SortedMap<Date, AbstractRuleResult> ruleResult = new TreeMap<Date, AbstractRuleResult>();

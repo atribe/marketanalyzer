@@ -28,6 +28,9 @@ public class RuleResultsFollowThru extends AbstractRuleResult {
 		super(date);
 	}
 	
+	public RuleResultsFollowThru(Date date, Boolean result) {
+		super(date, result);
+	}
 	/*
 	 * Getters and Setters
 	 */

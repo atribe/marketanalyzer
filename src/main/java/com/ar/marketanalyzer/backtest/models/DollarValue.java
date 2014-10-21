@@ -72,4 +72,13 @@ public class DollarValue extends PersistableEntityInt implements DateCompImp{
 	public void setDollarValue(BigDecimal dollarValue) {
 		this.dollarValue = dollarValue;
 	}
+
+	@Override
+	public int compareTo(DateCompImp o) {
+		if(o != null) {
+			return this.date.compareTo(o.getDate());
+		} else {
+			return -1;
+		}
+	}
 }

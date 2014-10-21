@@ -48,7 +48,11 @@ public class AbstractRuleResult extends PersistableEntityInt implements DateComp
 	
 	@Override
 	public String toString() {
-		return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+		if( ruleResult!=null ) {
+			return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+		} else {
+			return "Date: " + date.toString() + " Result: Not Set"; 
+		}
 	}
 	
 	/*
@@ -75,5 +79,14 @@ public class AbstractRuleResult extends PersistableEntityInt implements DateComp
 	}
 	public void setRuleResult(Boolean ruleResult) {
 		this.ruleResult = ruleResult;
+	}
+
+	@Override
+	public int compareTo(DateCompImp o) {
+		if(o != null) {
+			return this.date.compareTo(o.getDate());
+		} else {
+			return -1;
+		}
 	}
 }

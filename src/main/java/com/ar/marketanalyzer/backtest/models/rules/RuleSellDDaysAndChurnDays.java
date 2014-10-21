@@ -3,7 +3,6 @@ package com.ar.marketanalyzer.backtest.models.rules;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -17,7 +16,6 @@ import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
-import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 
@@ -205,7 +203,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 			 * 6. price must be on upswing over  previous 35 days
 			 */
 			
-			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(i);
+			RuleResultsDDaysAndChurnDays result = (RuleResultsDDaysAndChurnDays) ruleResult.get(keys.get(i));
 			
 			// {{ pulling variables from List, just to make the code below prettier
 			BigDecimal todaysHigh = ohlcvData.get(keys.get(i)).getHigh();			

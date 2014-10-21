@@ -30,6 +30,9 @@ public class RuleResultsDDaysAndChurnDays extends AbstractRuleResult{
 	public RuleResultsDDaysAndChurnDays( Date date ) {
 		super(date);
 	}
+	public RuleResultsDDaysAndChurnDays( Date date, Boolean result ) {
+		super(date, result);
+	}
 	
 	/*
 	 * Helper Methods

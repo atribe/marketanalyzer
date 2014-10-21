@@ -31,6 +31,8 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	@Override
 	@Transactional
 	public AbstractModel create(AbstractModel model) {
+		model.convertValueMapToSet();
+		
 		AbstractModel createdModel = modelRepo.save(model);
 		
 		for(AbstractRule rule: createdModel.getRuleList()) {
