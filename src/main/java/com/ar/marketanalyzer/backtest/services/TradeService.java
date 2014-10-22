@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
@@ -11,6 +12,7 @@ import com.ar.marketanalyzer.backtest.models.Trade;
 import com.ar.marketanalyzer.backtest.repo.TradeRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.TradeServiceInterface;
 
+@Service
 public class TradeService implements TradeServiceInterface{
 	@Resource
 	private TradeRepo tradeRepo;

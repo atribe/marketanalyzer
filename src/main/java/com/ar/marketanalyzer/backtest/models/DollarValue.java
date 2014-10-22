@@ -36,6 +36,11 @@ public class DollarValue extends PersistableEntityInt implements DateCompImp{
 		this.date = date;
 	}
 
+	public DollarValue(AbstractModel model, Date date) {
+		this.model = model;
+		this.date = date;
+	}
+
 	/*
 	 * Helper Methods
 	 */

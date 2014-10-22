@@ -17,6 +17,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -82,7 +83,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
 	
-	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "model", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@OrderBy("date")
 	protected SortedSet<DollarValue> valueSet = new TreeSet<DollarValue>();
 	
@@ -162,7 +163,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		setBuySellTriggers();
 		
 		//Initializing the trade
-		Trade trade = new Trade();
+		Trade trade = new Trade(this);
 		
 		Set<Date> keys = buySellTriggers.keySet();
 		for( Date key : keys ) {
@@ -177,7 +178,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 				
 				if(trade.getSellDate() != null) { //need the tradeList.size > 1 so it won't start for the 
 					tradeList.add(trade);
-					trade = new Trade();
+					trade = new Trade(this);
 				}
 			}
 		}
@@ -243,7 +244,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	
 	private void initializeValueList() {
 		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
-			valueMap.put(ohlcv.getKey(), new DollarValue(ohlcv.getKey()));
+			valueMap.put(ohlcv.getKey(), new DollarValue(this, ohlcv.getKey()));
 		}
 		
 		valueMap.get(valueMap.firstKey()).setDollarValue(initialInvestment);
