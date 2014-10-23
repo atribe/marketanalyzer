@@ -1,6 +1,10 @@
 package com.ar.marketanalyzer.backtest.services;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 import javax.annotation.Resource;
 
@@ -27,7 +31,7 @@ public class RuleResultService implements RuleResultServiceInterface {
 	
 	@Override
 	@Transactional
-	public void batchCreate(List<AbstractRuleResult> resultList) {
+	public void batchCreate(SortedSet<AbstractRuleResult> resultList) {
 		resultRepo.save(resultList);
 	}
 

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
@@ -17,7 +18,7 @@ import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt
 @Inheritance
 @DiscriminatorColumn(name="RULE_NAME")
 @Table(name = "backtest_rule_result")
-public class AbstractRuleResult extends PersistableEntityInt{
+public class AbstractRuleResult extends PersistableEntityInt implements DateCompImp{
 
 	private static final long serialVersionUID = 6088797692365143508L;
 
@@ -37,17 +38,26 @@ public class AbstractRuleResult extends PersistableEntityInt{
 	public AbstractRuleResult() {
 		
 	}
-	public AbstractRuleResult( Date date ) {
+	public AbstractRuleResult(AbstractRule rule) {
+		this.rule = rule;
+	}
+	public AbstractRuleResult( AbstractRule rule, Date date ) {
+		this.rule = rule;
 		this.date = date;
 	}
-	public AbstractRuleResult( Date date, Boolean result) {
+	public AbstractRuleResult( AbstractRule rule, Date date, Boolean result) {
+		this.rule = rule;
 		this.date = date;
 		this.ruleResult = result;
 	}
 	
 	@Override
 	public String toString() {
-		return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+		if( ruleResult!=null ) {
+			return "Date: " + date.toString() + " Result: " + ruleResult.toString();
+		} else {
+			return "Date: " + date.toString() + " Result: Not Set"; 
+		}
 	}
 	
 	/*
@@ -60,9 +70,11 @@ public class AbstractRuleResult extends PersistableEntityInt{
 		this.rule = rule;
 	}
 
+	@Override
 	public Date getDate() {
 		return date;
 	}
+	@Override
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -72,5 +84,14 @@ public class AbstractRuleResult extends PersistableEntityInt{
 	}
 	public void setRuleResult(Boolean ruleResult) {
 		this.ruleResult = ruleResult;
+	}
+
+	@Override
+	public int compareTo(DateCompImp o) {
+		if(o != null) {
+			return this.date.compareTo(o.getDate());
+		} else {
+			return -1;
+		}
 	}
 }

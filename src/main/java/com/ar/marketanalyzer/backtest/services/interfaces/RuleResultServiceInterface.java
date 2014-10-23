@@ -1,6 +1,9 @@
 package com.ar.marketanalyzer.backtest.services.interfaces;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
@@ -15,6 +18,6 @@ public interface RuleResultServiceInterface {
 
 	AbstractRuleResult findById(int id) throws ModelNotFound;
 
-	void batchCreate(List<AbstractRuleResult> resultList);
+	void batchCreate(SortedSet<AbstractRuleResult> resultList);
 
 }

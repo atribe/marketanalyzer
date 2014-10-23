@@ -1,7 +1,13 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -40,11 +47,14 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	@Column( name="rule_type", nullable=false)
 	protected RuleType ruleType;
 	
-	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
-	@OneToMany(mappedBy = "rule", cascade=CascadeType.REMOVE)
-	protected List<AbstractRuleResult> ruleResult = new ArrayList<AbstractRuleResult>();
+	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL)
+	@OrderBy("date")
+	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<AbstractRuleResult>();
+	@Transient
+	protected SortedMap<Date, AbstractRuleResult> ruleResult = new TreeMap<Date, AbstractRuleResult>();
 
 	/*
 	 * Constructors
@@ -90,6 +100,12 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	 */
 	protected abstract void findTriggerDays();
 	
+	public void convertRuleResultMapToSet() {
+		for(Map.Entry<Date, AbstractRuleResult> resultEntry: ruleResult.entrySet()) {
+			ruleResultSet.add(resultEntry.getValue());
+		}
+	}
+	
 	protected boolean parametersAlreadyExist() {
 		if( ruleParameters == null || ruleParameters.isEmpty() ) {
 			return false;
@@ -130,11 +146,17 @@ public abstract class AbstractRule extends PersistableEntityInt{
 		this.ruleParameters = ruleParameters;
 	}
 	
-	public List<AbstractRuleResult> getRuleResult() {
+	public SortedMap<Date, AbstractRuleResult> getRuleResult() {
 		return ruleResult;
 	}
-	public void setRuleResult(List<AbstractRuleResult> ruleResult) {
+	public void setRuleResult(SortedMap<Date, AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
+	}
+	public SortedSet<AbstractRuleResult> getRuleResultSet() {
+		return ruleResultSet;
+	}
+	public void setRuleResultSet(SortedSet<AbstractRuleResult> ruleResultSet) {
+		this.ruleResultSet = ruleResultSet;
 	}
 	
 }

@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,19 +17,20 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.backtest.exceptions.DatesMisMatchException;
 import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
 import com.ar.marketanalyzer.backtest.models.DollarValue;
 import com.ar.marketanalyzer.backtest.models.Trade;
@@ -70,21 +77,26 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	protected List<AbstractRule> ruleList = new ArrayList<AbstractRule>();
 	
 	@Transient
-	protected List<BuySellTrigger> buySellTriggers = new ArrayList<BuySellTrigger>();
+	protected SortedMap<Date, BuySellTrigger> buySellTriggers = new TreeMap<Date, BuySellTrigger>();
 
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
-	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	protected List<DollarValue> valueList = new ArrayList<DollarValue>();
+	
+	@OneToMany(mappedBy = "model", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OrderBy("date")
+	protected SortedSet<DollarValue> valueSet = new TreeSet<DollarValue>();
+	
+	@Transient
+	protected SortedMap<Date, DollarValue> valueMap = new TreeMap<Date, DollarValue>();
 	
 	/*
 	 * Not DB stored fields
 	 */
 	@Transient
-	protected List<SecuritiesOhlcv> ohlcvData = new ArrayList<SecuritiesOhlcv>();
+	protected SortedMap<Date, SecuritiesOhlcv> ohlcvData = new TreeMap<Date, SecuritiesOhlcv>();
 	@Transient
-	protected List<Stats> defaultStats = new ArrayList<Stats>();
+	protected SortedMap<Date, Stats> defaultStats = new TreeMap<Date, Stats>();
 
 	protected static final int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
 	protected static final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
@@ -151,48 +163,42 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		setBuySellTriggers();
 		
 		//Initializing the trade
-		Trade trade = new Trade();
+		Trade trade = new Trade(this);
 		
-		int dateOffset = 0;
-		try {
-			if( !buySellTriggers.get(0).getDate().equals( ohlcvData.get(0).getDate() ) ) {
-				throw new DatesMisMatchException();	
-			}
-		} catch (DatesMisMatchException e) {
-			dateOffset = -1;
-			e.printStackTrace();
-		}
-		
-		for(int i = 0; i < buySellTriggers.size(); i++)	{												//Loops through each day that there is data for
-			BuySellTrigger trigger = buySellTriggers.get(i);
-			if(trigger.getSell() && trade.getBuyDate() != null) {										//if today is a sell day and the buy date is set
-				trade.sell(trigger.getDate(), ohlcvData.get(i+dateOffset).getClose() );										//set sell price
-			} else if (trigger.getBuy() && trade.getBuyDate() == null && trade.getSellDate() == null) {	//if today is a buy day, and buy and sell dates are not set
-				trade.buy(trigger.getDate(), ohlcvData.get(i+dateOffset).getClose() );
-			}
-			
-			if(trade.getSellDate() != null) { //need the tradeList.size > 1 so it won't start for the 
-				tradeList.add(trade);
-				trade = new Trade();
+		Set<Date> keys = buySellTriggers.keySet();
+		for( Date key : keys ) {
+			if(buySellTriggers.containsKey(key)) {
+				BuySellTrigger trigger = buySellTriggers.get(key);
+				
+				if(trigger.getSell() && trade.getBuyDate() != null) {										//if today is a sell day and the buy date is set
+					trade.sell(trigger.getDate(), ohlcvData.get(key).getClose() );										//set sell price
+				} else if (trigger.getBuy() && trade.getBuyDate() == null && trade.getSellDate() == null) {	//if today is a buy day, and buy and sell dates are not set
+					trade.buy(trigger.getDate(), ohlcvData.get(key).getClose() );
+				}
+				
+				if(trade.getSellDate() != null) { //need the tradeList.size > 1 so it won't start for the 
+					tradeList.add(trade);
+					trade = new Trade(this);
+				}
 			}
 		}
 	}
 	
 	public void setBuySellTriggers() {
 		//Initialize the buySellTriggers to the same length as the OHLCV data
-		for(SecuritiesOhlcv ohlcv: ohlcvData) {
-			buySellTriggers.add(new BuySellTrigger(ohlcv.getDate()));
+		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
+			buySellTriggers.put(ohlcv.getKey(), new BuySellTrigger(ohlcv.getKey()));
 		}
 		
 		for(AbstractRule rule: ruleList) {								//Loop through the rules
-			List<AbstractRuleResult> results = rule.getRuleResult();
+			SortedMap<Date, AbstractRuleResult> results = (TreeMap<Date, AbstractRuleResult>)rule.getRuleResult();
 			
-			for(int i = 0; i < results.size(); i++)	{					//Loop through the results of the rule
-				if(results.get(i).getRuleResult()) {							//If the result is true
+			for(Map.Entry<Date, AbstractRuleResult> resultEntry: results.entrySet())	{					//Loop through the results of the rule
+				if(resultEntry.getValue().getRuleResult()) {							//If the result is true
 					if(rule.getRuleType() == RuleType.BUY) {			//If the rule is a buy rule
-						buySellTriggers.get(i).setBuy(Boolean.TRUE);
+						buySellTriggers.get(resultEntry.getKey()).setBuy(Boolean.TRUE);
 					} else if(rule.getRuleType() == RuleType.SELL) {
-						buySellTriggers.get(i).setSell(Boolean.TRUE);
+						buySellTriggers.get(resultEntry.getKey()).setSell(Boolean.TRUE);
 					}
 				}
 			}
@@ -207,9 +213,10 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		boolean tradeOpen = false; //false for no open trade, true if there is an open trade
 		Trade currentTrade = tradeList.get(tradeIterator);
 		
-		for(int i = 0; i < ohlcvData.size(); i++)
-		{
-			SecuritiesOhlcv currentOhlcv = ohlcvData.get(i);
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		
+		for(int i = 0 ; i < keys.size(); i++) {
+			SecuritiesOhlcv currentOhlcv = ohlcvData.get(keys.get(i));
 			if( currentTrade.getBuyDate().equals( currentOhlcv.getDate() ) ) {
 				tradeOpen = true;
 			} else if(currentTrade.getSellDate().equals( currentOhlcv.getDate() ) ) {
@@ -218,12 +225,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			
 			
 			
-			if( i > 0 ) {
-				DollarValue currentValue = valueList.get(i);
-				DollarValue previousValue = valueList.get(i-1);
+			if( !ohlcvData.firstKey().equals(currentOhlcv.getDate()) ) {
+				DollarValue currentValue = valueMap.get(keys.get(i));
+				DollarValue previousValue = valueMap.get(keys.get(i-1));
 				
 				if(tradeOpen) {
-					SecuritiesOhlcv previousOhlcv = ohlcvData.get(i-1);
+					SecuritiesOhlcv previousOhlcv = ohlcvData.get(keys.get(i-1));
 					
 					double percentChange = currentOhlcv.getClose().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
 					
@@ -236,11 +243,11 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	}
 	
 	private void initializeValueList() {
-		for(SecuritiesOhlcv ohlcv: ohlcvData) {
-			valueList.add(new DollarValue(ohlcv.getDate()));
+		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
+			valueMap.put(ohlcv.getKey(), new DollarValue(this, ohlcv.getKey()));
 		}
 		
-		valueList.get(0).setDollarValue(initialInvestment);
+		valueMap.get(valueMap.firstKey()).setDollarValue(initialInvestment);
 	}
 	
 	/*
@@ -259,9 +266,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		BigDecimal close200DayAvg;
 		long vol50DayAvg;
 		
-		defaultStats = new ArrayList<Stats>();
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
 		
-		for(int i=ohlcvData.size()-1; i>0; i--) {
+		for(int i = keys.size() -1; i >= 0; i--) {
 			int loopDays = 50;
 			BigDecimal priceCloseSum = new BigDecimal(0.0);
 			long volumeSum = 0;
@@ -271,12 +278,12 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 * Calculates the 50 day moving average
 			 * and calculates the 50 day moving volume average
 			 */
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j >= 0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 
 				//summing up for volumeAverage
-				volumeSum+=ohlcvData.get(j).getVolume();
+				volumeSum+=ohlcvData.get(keys.get(j)).getVolume();
 			}
 			close50DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			vol50DayAvg = volumeSum/loopDays;
@@ -287,9 +294,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 */
 			loopDays = 100;
 			priceCloseSum = new BigDecimal(0);
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j>=0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 			}
 			close100DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			
@@ -299,14 +306,20 @@ public abstract class AbstractModel extends PersistableEntityInt{
 			 */
 			loopDays = 200;
 			priceCloseSum = new BigDecimal(0);
-			for(int j=i; j>i-loopDays && j>0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
+			for(int j=i; j>i-loopDays && j>=0; j--) { //This loop starts at i and then goes back loopDays days adding up all the d days
 				//Summing up for closePriceAvg
-				priceCloseSum = priceCloseSum.add(ohlcvData.get(j).getClose());
+				priceCloseSum = priceCloseSum.add(ohlcvData.get(keys.get(j)).getClose());
 			}
 			close200DayAvg = priceCloseSum.divide(new BigDecimal(loopDays));
 			
-			Stats stat = new Stats(ohlcvData.get(i).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
-			defaultStats.add(stat);
+			Stats stat = new Stats(ohlcvData.get(keys.get(i)).getLocalDate(), close50DayAvg, close100DayAvg, close200DayAvg, vol50DayAvg);
+			defaultStats.put(keys.get(i), stat);
+		}
+	}
+	
+	public void convertValueMapToSet() {
+		for(Map.Entry<Date, DollarValue> valueEntry: valueMap.entrySet()) {
+			valueSet.add(valueEntry.getValue());
 		}
 	}
 
@@ -355,42 +368,43 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		this.ruleList = ruleList;
 	}
 	
-	/*
-	public List<Trade> getTradeList() {
-		return tradeList;
-	}
-
-	public void setTradeList(List<Trade> tradeList) {
-		this.tradeList = tradeList;
-	}
-
-	public List<DollarValue> getValueList() {
-		return valueList;
-	}
-
-	public void setValueList(List<DollarValue> valueList) {
-		this.valueList = valueList;
-	}
-*/
-	
-	public List<SecuritiesOhlcv> getOhlcvData() {
+	public SortedMap<Date, SecuritiesOhlcv> getOhlcvData() {
 		return ohlcvData;
 	}
 	public void setOhlcvData(List<SecuritiesOhlcv> ohlcvData) {
+		for(SecuritiesOhlcv ohlcv: ohlcvData) {
+			this.ohlcvData.put(ohlcv.getDate(), ohlcv);
+		}
+	}
+	public void setOhlcvData(SortedMap<Date, SecuritiesOhlcv> ohlcvData) {
 		this.ohlcvData = ohlcvData;
 	}
 
-	public abstract <T> List<T> getStats();
+	public abstract <T> TreeMap<Date,T> getStats();
 	public List<Trade> getTradeList() {
 		return tradeList;
 	}
 	public void setTradeList(List<Trade> tradeList) {
 		this.tradeList = tradeList;
 	}
-	public List<DollarValue> getValueList() {
-		return valueList;
+	public SortedMap<Date, DollarValue> getValueList() {
+		return valueMap;
 	}
-	public void setValueList(List<DollarValue> valueList) {
-		this.valueList = valueList;
+	public void setValueMap(List<DollarValue> valueMap) {
+		for(DollarValue value: valueMap) {
+			this.valueMap.put(value.getDate(), value);
+		}
 	}
+	public SortedMap<Date, DollarValue> getValueMap() {
+		return valueMap;
+	}
+	public void setValueMap(SortedMap<Date,DollarValue> valueMap) {
+		this.valueMap = valueMap;
+	}
+	public SortedSet<DollarValue> getValueSet() {
+		return valueSet;
+	}
+	public void setValueSet(SortedSet<DollarValue> valueSet) {
+		this.valueSet = valueSet;
+	}	
 }

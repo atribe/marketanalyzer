@@ -43,6 +43,10 @@ public class Trade extends PersistableEntityInt {
 	public Trade() {
 	}
 	
+	public Trade(AbstractModel model) {
+		this.model = model;
+	}
+
 	/*
 	 * Helper Methods
 	 */

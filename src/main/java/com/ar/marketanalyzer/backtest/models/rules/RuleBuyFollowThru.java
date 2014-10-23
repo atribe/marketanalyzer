@@ -1,7 +1,11 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,6 +14,7 @@ import javax.persistence.Transient;
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
@@ -89,12 +94,12 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * Adding parameters to ruleParameter list
 		 * Any parameters added to this list will be saved in the DB
 		 */
-		ruleParameters.add(new RuleParameter(CHURN_PIVOT_TREND_35_ON, churnPivotTrend35On));
-		ruleParameters.add(new RuleParameter(PIVOT_TREND_35, pivotTrend35));
-		ruleParameters.add(new RuleParameter(R_DAYS_MIN, rDaysMin));
-		ruleParameters.add(new RuleParameter(R_DAYS_MAX, rDaysMax));
-		ruleParameters.add(new RuleParameter(PRICE_MULT, priceMult));
-		ruleParameters.add(new RuleParameter(VOL_MULT, volMult));			
+		ruleParameters.add(new RuleParameter(this, CHURN_PIVOT_TREND_35_ON, churnPivotTrend35On));
+		ruleParameters.add(new RuleParameter(this, PIVOT_TREND_35, pivotTrend35));
+		ruleParameters.add(new RuleParameter(this, R_DAYS_MIN, rDaysMin));
+		ruleParameters.add(new RuleParameter(this, R_DAYS_MAX, rDaysMax));
+		ruleParameters.add(new RuleParameter(this, PRICE_MULT, priceMult));
+		ruleParameters.add(new RuleParameter(this, VOL_MULT, volMult));			
 	}
 	
 	@Override
@@ -110,16 +115,16 @@ public class RuleBuyFollowThru extends AbstractRule {
 	
 	@Override
 	protected void initializeRuleResultList() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
-		for(SecuritiesOhlcv ohlcv: ohlcvData) {
-			ruleResult.add(new RuleResultsFollowThru(ohlcv.getDate()));
+		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
+			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(this, ohlcv.getKey(), Boolean.FALSE));
 		}
 	}
 	
 	private void findPivotDays() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
-		List<FollowThruStats> stats = currentModel.getStats();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
+		TreeMap<Date, FollowThruStats> stats = currentModel.getStats();
 		
 		/*
 		 * Deffinition: PivotDay = first day of a rally
@@ -133,13 +138,14 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 */
 
 		try{
+			ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
 			//Loops starts on 2 because the object at i-2 is accessed
-			for(int i = 2; i< ohlcvData.size(); i++) {
+			for(int i = 2; i< keys.size(); i++) {
 				//Initializing variables for this loop run
 				potentialPivotDay = false;
-				BigDecimal todaysClose = ohlcvData.get(i).getClose();
-				BigDecimal previousClose = ohlcvData.get(i-1).getClose();
-				BigDecimal previousPreviousClose = ohlcvData.get(i-2).getClose();
+				BigDecimal todaysClose = ohlcvData.get(keys.get(i)).getClose();
+				BigDecimal previousClose = ohlcvData.get(keys.get(i-1)).getClose();
+				BigDecimal previousPreviousClose = ohlcvData.get(keys.get(i-2)).getClose();
 				
 				/*
 				 * Pivot day conditions:
@@ -152,7 +158,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 					 * Optional Condition:
 					 * PivotDayTrend35 < -.1%
 					 */
-					double todaysPivotTrend35 = stats.get(i).getPriceTrend35();
+					double todaysPivotTrend35 = stats.get(keys.get(i)).getPriceTrend35();
 					
 					if(!churnPivotTrend35On) { //if churnPivotTrend35 is turned off then today is a potential pivotDay because it met the criteria in the if statement above
 						potentialPivotDay = true;
@@ -164,15 +170,15 @@ public class RuleBuyFollowThru extends AbstractRule {
 					
 					//if the day is still a potentialPivotDay after the additional criteria then check to see if the rally achieves the minimum of rDaysMin days (typically 4)
 					if( potentialPivotDay ) {
-						 BigDecimal support = ohlcvData.get(i).getLow();//if price goes below support the rally is broken
+						 BigDecimal support = ohlcvData.get(keys.get(i)).getLow();//if price goes below support the rally is broken
 						
 						/*
 						 * Loop starts at the 2nd day in the rally from the potential pivot day (i+1)
 						 * 
 						 * Loop checks for rally atleast rDaysMin long. at rDaysMin is the soonest a follow thru day could occur
 						 */
-						for(int j = i + 1; j < i + rDaysMin && j < ohlcvData.size(); j++) {
-							BigDecimal nextDayInRallyLow = ohlcvData.get(j).getLow();
+						for(int j = i + 1; j < i + rDaysMin && j < keys.size(); j++) {
+							BigDecimal nextDayInRallyLow = ohlcvData.get(keys.get(j)).getLow();
 							if( nextDayInRallyLow.compareTo(support) < 0) {
 								//not a rally
 								potentialPivotDay = false;
@@ -182,16 +188,13 @@ public class RuleBuyFollowThru extends AbstractRule {
 					}
 				}
 				
+				RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(keys.get(i));
 				if(potentialPivotDay == true) {
-					RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
 					result.setPivotDay( Boolean.TRUE );
-					ruleResult.set(i, result);
 				} else {
-					RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
 					result.setPivotDay( Boolean.FALSE );
-					ruleResult.set(i, result);
 				}
-				
+				ruleResult.put(keys.get(i), result);
 			}
 		} catch ( IndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -199,15 +202,16 @@ public class RuleBuyFollowThru extends AbstractRule {
 	}
 	
 	private void findFollowThruDays() {
-		List<SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 
 		//loop starts at 2 because i-2 is accessed
-		for(int i = 2; i < ohlcvData.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
-			
+		//for(int i = 2; i < ohlcvData.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
+		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		for(int i = 0; i < keys.size(); i++) {	
 			//if the day is a pivot day, as set by the findPivotDay method then...
-			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
-			if( result.getPivotDay() ) {
-				checkPivotDay(ohlcvData, i);
+			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(keys.get(i));
+			if( result.getPivotDay()!= null && result.getPivotDay() ) {
+				checkPivotDay(ohlcvData, keys, i);
 			}
 			
 			if(result.getFollowThruDay() == null) {
@@ -216,9 +220,9 @@ public class RuleBuyFollowThru extends AbstractRule {
 		}
 	}
 	
-	private void checkPivotDay (List<SecuritiesOhlcv> ohlcvData, int i) {
-		BigDecimal rallyHigh = ohlcvData.get(i).getHigh(); 
-		BigDecimal support = ohlcvData.get(i).getLow();
+	private void checkPivotDay (SortedMap<Date, SecuritiesOhlcv> ohlcvData, ArrayList<Date> keys, int i) {
+		BigDecimal rallyHigh = ohlcvData.get(keys.get(i)).getHigh(); 
+		BigDecimal support = ohlcvData.get(keys.get(i)).getLow();
 		
 		int rallyDayCount = 1;
 		/*
@@ -226,23 +230,23 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * Loop goes until rDaysMax days have been checked for a follow 	thru day
 		 * or a follow thru day has been found
 		 */
-		for(int j = i; j < i + rDaysMax && j < ohlcvData.size() && j < ruleResult.size(); j++) {
-			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(j);
+		for(int j = i; j < i + rDaysMax && j < keys.size() && j < ruleResult.size(); j++) {
+			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(keys.get(j));
 			
 			//Checking to see if a new high for the rally has been set has been set
-			BigDecimal todaysHigh = ohlcvData.get(j).getHigh();
+			BigDecimal todaysHigh = ohlcvData.get(keys.get(j)).getHigh();
 			if( todaysHigh.compareTo(rallyHigh) > 0) {
 				rallyHigh = todaysHigh;
 			}
 			
-			BigDecimal todaysClose = ohlcvData.get(j).getClose();
-			BigDecimal previousClose = ohlcvData.get(j-1).getClose();
+			BigDecimal todaysClose = ohlcvData.get(keys.get(j)).getClose();
+			BigDecimal previousClose = ohlcvData.get(keys.get(j-1)).getClose();
 			
-			BigDecimal todaysLow = ohlcvData.get(j).getLow();
+			BigDecimal todaysLow = ohlcvData.get(keys.get(j)).getLow();
 			
-			long todaysVolume = ohlcvData.get(j).getVolume();
-			long previousVolume = ohlcvData.get(j-1).getVolume();
-			long previousPreviousVolume = ohlcvData.get(j-2).getVolume();
+			long todaysVolume = ohlcvData.get(keys.get(j)).getVolume();
+			long previousVolume = ohlcvData.get(keys.get(j-1)).getVolume();
+			long previousPreviousVolume = ohlcvData.get(keys.get(j-2)).getVolume();
 			
 			if( todaysClose.compareTo(previousClose.multiply(new BigDecimal(priceMult))) > 0 && //price requirement 
 					( todaysVolume > previousVolume * volMult || todaysVolume > previousPreviousVolume ) && //volume requirement
@@ -251,30 +255,29 @@ public class RuleBuyFollowThru extends AbstractRule {
 				//if the above conditions are true the day is a follow thru day
 				
 				result.setFollowThruDay(Boolean.TRUE);
-				ruleResult.set(j, result);
+				ruleResult.put(keys.get(j), result);
 				//and end checking conditions to see if the day is a follow thru day
 				break;
 			} else if( todaysLow.compareTo(support) < 0) { //if the low drops below the support the rally is over and the day is not a follow thru day
 				if( result.getFollowThruDay() == null || !result.getFollowThruDay() ) {	// This prevents overriding a previously set true value
 					result.setFollowThruDay(Boolean.FALSE);
 				}
-				ruleResult.set(j, result);
+				ruleResult.put(keys.get(j), result);
 				break;
 			} else { //the day must not 
 				if( result.getFollowThruDay() == null || !result.getFollowThruDay() ) { // This prevents overriding a previously set true value
 					result.setFollowThruDay(Boolean.FALSE);
 				}
 			}
-			ruleResult.set(j, result);
+			ruleResult.put(keys.get(j), result);
 			rallyDayCount++;
 		}
 	}
 	
 	@Override
 	protected void findTriggerDays() {
-		
-		for(int i=0; i<ruleResult.size(); i++) {
-			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(i);
+		for(Map.Entry<Date,AbstractRuleResult> entry : ruleResult.entrySet()) {
+			RuleResultsFollowThru result = (RuleResultsFollowThru) entry.getValue();
 			if(result.getFollowThruDay()!=null && result.getFollowThruDay()) {
 				result.setRuleResult(Boolean.TRUE);
 			} else {

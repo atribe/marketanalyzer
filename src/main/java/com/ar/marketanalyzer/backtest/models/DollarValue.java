@@ -9,12 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "backtest_value")
-public class DollarValue extends PersistableEntityInt {
+public class DollarValue extends PersistableEntityInt implements DateCompImp{
 
 	private static final long serialVersionUID = -1433482868025063181L;
 
@@ -32,6 +33,11 @@ public class DollarValue extends PersistableEntityInt {
 	 * Constructors
 	 */
 	public DollarValue(Date date) {
+		this.date = date;
+	}
+
+	public DollarValue(AbstractModel model, Date date) {
+		this.model = model;
 		this.date = date;
 	}
 
@@ -54,10 +60,12 @@ public class DollarValue extends PersistableEntityInt {
 		this.model = model;
 	}
 
+	@Override
 	public Date getDate() {
 		return date;
 	}
 
+	@Override
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -68,5 +76,14 @@ public class DollarValue extends PersistableEntityInt {
 
 	public void setDollarValue(BigDecimal dollarValue) {
 		this.dollarValue = dollarValue;
+	}
+
+	@Override
+	public int compareTo(DateCompImp o) {
+		if(o != null) {
+			return this.date.compareTo(o.getDate());
+		} else {
+			return -1;
+		}
 	}
 }

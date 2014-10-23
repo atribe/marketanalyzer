@@ -1,8 +1,10 @@
 package com.ar.marketanalyzer.backtest.models.stats;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.joda.time.LocalDate;
 
@@ -33,12 +35,12 @@ public class FollowThruStats extends Stats{
 	/*
 	 * Helper Methods
 	 */
-	public static List<FollowThruStats> convertStatList(List<Stats> defaultStats) {
-		List<FollowThruStats> ftsList = new ArrayList<FollowThruStats>();
+	public static SortedMap<Date, FollowThruStats> convertStatList(SortedMap<Date, Stats> defaultStats) {
+		SortedMap<Date, FollowThruStats> ftsList = new TreeMap<Date, FollowThruStats>();
 		
-		for(Stats s: defaultStats) {
-			FollowThruStats fts = new FollowThruStats(s);
-			ftsList.add(fts);
+		for(Map.Entry<Date, Stats> entry: defaultStats.entrySet()) {
+			FollowThruStats fts = new FollowThruStats(entry.getValue());
+			ftsList.put(entry.getKey(), fts);
 		}
 		return ftsList;
 	}

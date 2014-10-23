@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.DollarValue;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
@@ -27,12 +28,22 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	
 	@Autowired
 	private RuleResultService resultService;
+	
+	@Autowired
+	private DollarValueService valueService;
 
 	@Override
 	@Transactional
 	public AbstractModel create(AbstractModel model) {
+		model.convertValueMapToSet();
+		
+		for(AbstractRule rule: model.getRuleList()) {
+			rule.convertRuleResultMapToSet();
+		}
+		
 		AbstractModel createdModel = modelRepo.save(model);
 		
+		/*
 		for(AbstractRule rule: createdModel.getRuleList()) {
 			for(int i = 0; i < rule.getRuleParameters().size(); i++) {
 				rule.getRuleParameters().get(i).setRule(rule);
@@ -42,9 +53,10 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 			}
 			
 			paramService.batchCreate(rule.getRuleParameters());
-			resultService.batchCreate(rule.getRuleResult());
+			
+			resultService.batchCreate(rule.getRuleResultSet());
 		}
-		
+		*/
 		return createdModel;
 	}
 
