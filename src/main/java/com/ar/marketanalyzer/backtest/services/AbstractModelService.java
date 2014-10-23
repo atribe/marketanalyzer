@@ -37,6 +37,10 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	public AbstractModel create(AbstractModel model) {
 		model.convertValueMapToSet();
 		
+		for(AbstractRule rule: model.getRuleList()) {
+			rule.convertRuleResultMapToSet();
+		}
+		
 		AbstractModel createdModel = modelRepo.save(model);
 		
 		/*
@@ -49,7 +53,7 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 			}
 			
 			paramService.batchCreate(rule.getRuleParameters());
-			rule.convertRuleResultMapToSet();
+			
 			resultService.batchCreate(rule.getRuleResultSet());
 		}
 		*/
