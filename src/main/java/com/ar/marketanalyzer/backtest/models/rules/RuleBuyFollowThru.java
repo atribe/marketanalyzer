@@ -94,12 +94,12 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 * Adding parameters to ruleParameter list
 		 * Any parameters added to this list will be saved in the DB
 		 */
-		ruleParameters.add(new RuleParameter(CHURN_PIVOT_TREND_35_ON, churnPivotTrend35On));
-		ruleParameters.add(new RuleParameter(PIVOT_TREND_35, pivotTrend35));
-		ruleParameters.add(new RuleParameter(R_DAYS_MIN, rDaysMin));
-		ruleParameters.add(new RuleParameter(R_DAYS_MAX, rDaysMax));
-		ruleParameters.add(new RuleParameter(PRICE_MULT, priceMult));
-		ruleParameters.add(new RuleParameter(VOL_MULT, volMult));			
+		ruleParameters.add(new RuleParameter(this, CHURN_PIVOT_TREND_35_ON, churnPivotTrend35On));
+		ruleParameters.add(new RuleParameter(this, PIVOT_TREND_35, pivotTrend35));
+		ruleParameters.add(new RuleParameter(this, R_DAYS_MIN, rDaysMin));
+		ruleParameters.add(new RuleParameter(this, R_DAYS_MAX, rDaysMax));
+		ruleParameters.add(new RuleParameter(this, PRICE_MULT, priceMult));
+		ruleParameters.add(new RuleParameter(this, VOL_MULT, volMult));			
 	}
 	
 	@Override
@@ -118,7 +118,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
 		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
-			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(ohlcv.getKey(), Boolean.FALSE));
+			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(this, ohlcv.getKey(), Boolean.FALSE));
 		}
 	}
 	

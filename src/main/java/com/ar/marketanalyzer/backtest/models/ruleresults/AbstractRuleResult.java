@@ -38,10 +38,15 @@ public class AbstractRuleResult extends PersistableEntityInt implements DateComp
 	public AbstractRuleResult() {
 		
 	}
-	public AbstractRuleResult( Date date ) {
+	public AbstractRuleResult(AbstractRule rule) {
+		this.rule = rule;
+	}
+	public AbstractRuleResult( AbstractRule rule, Date date ) {
+		this.rule = rule;
 		this.date = date;
 	}
-	public AbstractRuleResult( Date date, Boolean result) {
+	public AbstractRuleResult( AbstractRule rule, Date date, Boolean result) {
+		this.rule = rule;
 		this.date = date;
 		this.ruleResult = result;
 	}

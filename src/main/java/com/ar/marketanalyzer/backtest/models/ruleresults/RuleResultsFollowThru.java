@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+
 @Entity
 @DiscriminatorValue("Buy:Follow Thru")
 public class RuleResultsFollowThru extends AbstractRuleResult {
@@ -24,12 +26,15 @@ public class RuleResultsFollowThru extends AbstractRuleResult {
 	public RuleResultsFollowThru() {
 		super();
 	}
-	public RuleResultsFollowThru( Date date ) {
-		super(date);
+	public RuleResultsFollowThru(AbstractRule rule) {
+		super(rule);
+	}
+	public RuleResultsFollowThru(AbstractRule rule, Date date ) {
+		super(rule, date);
 	}
 	
-	public RuleResultsFollowThru(Date date, Boolean result) {
-		super(date, result);
+	public RuleResultsFollowThru(AbstractRule rule, Date date, Boolean result) {
+		super(rule, date, result);
 	}
 	/*
 	 * Getters and Setters

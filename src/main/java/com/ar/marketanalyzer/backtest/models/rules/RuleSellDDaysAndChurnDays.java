@@ -112,15 +112,15 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		 * Adding parameters to ruleParameter list
 		 * Any parameters added to this list will be saved in the DB
 		 */
-		ruleParameters.add(new RuleParameter(DDAY_WINDOW, ddayWindow));
-		ruleParameters.add(new RuleParameter(DDAY_COUNT_SELL_TRIGGER, ddayCountSellTrigger));
-		ruleParameters.add(new RuleParameter(PRICE_DROP, priceDrop));
-		ruleParameters.add(new RuleParameter(CHURN_VOL_RANGE, churnVolRange));
-		ruleParameters.add(new RuleParameter(CHURN_PRICE_RANGE, churnPriceRange));
-		ruleParameters.add(new RuleParameter(CHURN_PRICE_CLOSE_HIGHER, churnPriceCloseHigherOn));
-		ruleParameters.add(new RuleParameter(CHURN_AVG_50_ON, churnAvg50));
-		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35_ON, churnPriceTrend35On));
-		ruleParameters.add(new RuleParameter(CHURN_PRICE_TREND_35, churnPriceTrend35));
+		ruleParameters.add(new RuleParameter(this, DDAY_WINDOW, ddayWindow));
+		ruleParameters.add(new RuleParameter(this, DDAY_COUNT_SELL_TRIGGER, ddayCountSellTrigger));
+		ruleParameters.add(new RuleParameter(this, PRICE_DROP, priceDrop));
+		ruleParameters.add(new RuleParameter(this, CHURN_VOL_RANGE, churnVolRange));
+		ruleParameters.add(new RuleParameter(this, CHURN_PRICE_RANGE, churnPriceRange));
+		ruleParameters.add(new RuleParameter(this, CHURN_PRICE_CLOSE_HIGHER, churnPriceCloseHigherOn));
+		ruleParameters.add(new RuleParameter(this, CHURN_AVG_50_ON, churnAvg50));
+		ruleParameters.add(new RuleParameter(this, CHURN_PRICE_TREND_35_ON, churnPriceTrend35On));
+		ruleParameters.add(new RuleParameter(this, CHURN_PRICE_TREND_35, churnPriceTrend35));
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class RuleSellDDaysAndChurnDays extends AbstractRule {
 		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
 		
 		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
-			ruleResult.put(ohlcv.getKey(), new RuleResultsDDaysAndChurnDays(ohlcv.getKey()));
+			ruleResult.put(ohlcv.getKey(), new RuleResultsDDaysAndChurnDays(this, ohlcv.getKey()));
 		}
 	}
 	

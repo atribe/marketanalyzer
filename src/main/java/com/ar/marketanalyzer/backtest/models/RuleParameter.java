@@ -34,23 +34,30 @@ public class RuleParameter extends PersistableEntityInt{
 	public RuleParameter() {
 		
 	}
+	public RuleParameter(AbstractRule rule) {
+		this.rule = rule;
+	}
 	/**
 	 * @param name
 	 * @param value
 	 */
-	public RuleParameter(String name, String value) {
+	public RuleParameter(AbstractRule rule, String name, String value) {
+		this.rule = rule;
 		setParameterName(name);
 		setValue(value);
 	}
-	public RuleParameter(String name, double value) {
+	public RuleParameter(AbstractRule rule, String name, double value) {
+		this.rule = rule;
 		setParameterName(name);
 		setValue(value);
 	}
-	public RuleParameter(String name, int value) {
+	public RuleParameter(AbstractRule rule, String name, int value) {
+		this.rule = rule;
 		setParameterName(name);
 		setValue(value);
 	}
-	public RuleParameter(String name, boolean value) {
+	public RuleParameter(AbstractRule rule, String name, boolean value) {
+		this.rule = rule;
 		setParameterName(name);
 		setValue(value);
 	}

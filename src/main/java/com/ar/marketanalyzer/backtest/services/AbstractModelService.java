@@ -39,6 +39,7 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 		
 		AbstractModel createdModel = modelRepo.save(model);
 		
+		/*
 		for(AbstractRule rule: createdModel.getRuleList()) {
 			for(int i = 0; i < rule.getRuleParameters().size(); i++) {
 				rule.getRuleParameters().get(i).setRule(rule);
@@ -51,12 +52,7 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 			rule.convertRuleResultMapToSet();
 			resultService.batchCreate(rule.getRuleResultSet());
 		}
-		
-		for(DollarValue value:createdModel.getValueSet()) {
-			value.setModel(createdModel);
-		}
-		valueService.batchCreate(createdModel.getValueSet());
-		
+		*/
 		return createdModel;
 	}
 
