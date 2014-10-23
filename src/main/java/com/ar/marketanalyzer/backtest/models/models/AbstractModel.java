@@ -209,34 +209,54 @@ public abstract class AbstractModel extends PersistableEntityInt{
 		initializeValueList();
 		
 		int tradeIterator = 0;
+		double percentChange = 0;												// declaring percentChange so it is scoped properly.
 		
 		boolean tradeOpen = false; //false for no open trade, true if there is an open trade
+		boolean sellFlag = false;
 		Trade currentTrade = tradeList.get(tradeIterator);
 		
 		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
 		
 		for(int i = 0 ; i < keys.size(); i++) {
-			SecuritiesOhlcv currentOhlcv = ohlcvData.get(keys.get(i));
-			if( currentTrade.getBuyDate().equals( currentOhlcv.getDate() ) ) {
-				tradeOpen = true;
-			} else if(currentTrade.getSellDate().equals( currentOhlcv.getDate() ) ) {
-				tradeOpen = false;
+			SecuritiesOhlcv currentOhlcv = ohlcvData.get(keys.get(i));						// get today's OHLCV data
+			if( currentTrade.getBuyDate().equals( currentOhlcv.getDate() ) ) {				// if today is a buy day
+				tradeOpen = true;															// set a trade to open
 			}
 			
-			
-			
-			if( !ohlcvData.firstKey().equals(currentOhlcv.getDate()) ) {
-				DollarValue currentValue = valueMap.get(keys.get(i));
-				DollarValue previousValue = valueMap.get(keys.get(i-1));
+			if( !ohlcvData.firstKey().equals(currentOhlcv.getDate()) ) {					// skip day 1
+				DollarValue currentValue = valueMap.get(keys.get(i));						// getting today's value (will be calculated below
+				DollarValue previousValue = valueMap.get(keys.get(i-1));					// get yesterday's value
 				
-				if(tradeOpen) {
-					SecuritiesOhlcv previousOhlcv = ohlcvData.get(keys.get(i-1));
+				if(tradeOpen && !currentTrade.getBuyDate().equals( currentOhlcv.getDate() )) {	// if a trade has been opened previously, but not signaled to buy today
+																							// it doesn't buy today because the signal to buy doesn't come until close of today, so you'd have to buy on the open tomorrow
+					SecuritiesOhlcv previousOhlcv = ohlcvData.get(keys.get(i-1));			// get the previous ohlcv data
+																							// calc the change from yesterday's close to today's close
 					
-					double percentChange = currentOhlcv.getClose().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
+					if(currentTrade.getBuyDate().equals( previousOhlcv.getDate() )) {		// if the signal to buy came yesterday, then you bought at the open of today
+						percentChange = currentOhlcv.getClose().subtract( currentOhlcv.getOpen() ).doubleValue() / currentOhlcv.getOpen().doubleValue();
+					} else {																// if the trade is already open monitor the change from yestreday's close to today's close
+						percentChange = currentOhlcv.getClose().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
+					}
+																							// multiply the (percent change + 100%) by yesterday's value
+					currentValue.setDollarValue( new BigDecimal( previousValue.getDollarValue().doubleValue() * (1+percentChange) ) );
 					
-					currentValue.setDollarValue( new BigDecimal( previousValue.getDollarValue().doubleValue() * percentChange ) );
+				} else if (sellFlag) {														// A sell order needs to be executed
+					sellFlag=false;
+					SecuritiesOhlcv previousOhlcv = ohlcvData.get(keys.get(i-1));			// get the previous ohlcv data
+																							// sell orders are done on the open, so the change between yesterday's close and today's open needs to be captured
+					percentChange = currentOhlcv.getOpen().subtract( previousOhlcv.getClose() ).doubleValue() / previousOhlcv.getClose().doubleValue();
+					currentValue.setDollarValue( new BigDecimal( previousValue.getDollarValue().doubleValue() * (1+percentChange) ) );
 				} else {
 					currentValue.setDollarValue( previousValue.getDollarValue() );
+				}
+				
+				if(currentTrade.getSellDate().equals( currentOhlcv.getDate() ) ) {					// check for sell date at the end, because you wouldn't know until end of day, which means you'll sell tomorrow morning
+					tradeOpen = false;
+					tradeIterator++;
+					if(tradeIterator < tradeList.size()) {
+						currentTrade = tradeList.get(tradeIterator);
+					}
+					sellFlag = true;
 				}
 			}
 		}
