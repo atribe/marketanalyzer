@@ -32,6 +32,8 @@ public class DollarValue extends PersistableEntityInt implements DateCompImp{
 	/*
 	 * Constructors
 	 */
+	public DollarValue() {	
+	}
 	public DollarValue(Date date) {
 		this.date = date;
 	}

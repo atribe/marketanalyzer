@@ -102,7 +102,7 @@ public class BacktestLogic {
 				e.printStackTrace();
 			}
 			
-			if( yahooOhlcv != null ) {
+			if( yahooOhlcv != null && yahooOhlcv.size() > 0 ) {
 				secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
 			}
 		}
