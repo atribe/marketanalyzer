@@ -9,9 +9,10 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-        <spring.version>4.0.5.RELEASE</spring.version>
-        <hibernate.version>4.3.5.Final</hibernate.version>
-		<mysql.connector.version>5.1.21</mysql.connector.version>
+        <spring.version>4.1.1.RELEASE</spring.version>
+        <hibernate.version>4.3.6.Final</hibernate.version>
+		<mysql.connector.version>5.1.33</mysql.connector.version>
+		<jfreechart.version>1.0.19</jfreechart.version>
     </properties>
 
     <dependencies>
@@ -30,9 +31,15 @@
 			</exclusions>
         </dependency>
         <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+        
+        <dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>1.6.0.RELEASE</version>
+			<version>1.7.0.RELEASE</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-asm</artifactId>
@@ -113,7 +120,7 @@
         <dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
+			<version>2.5</version>
 		</dependency>
 		
 		<!-- OpenCSV for Yahoo data processing-->
@@ -127,17 +134,17 @@
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jcommon</artifactId>
-			<version>1.0.21</version>
+			<version>1.0.23</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
-			<version>1.0.17</version>
+			<version>${jfreechart.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
-			<version>1.0.17</version>
+			<version>${jfreechart.version}</version>
 			<classifier>sources</classifier>
 		</dependency>
 		
@@ -161,7 +168,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3.3</version>
+			<version>4.3.5</version>
 		</dependency>
 
 		
@@ -169,7 +176,7 @@
 		<dependency>
 		  <groupId>org.jsoup</groupId>
 		  <artifactId>jsoup</artifactId>
-		  <version>1.7.2</version>
+		  <version>1.8.1</version>
 		</dependency>
 
 		
