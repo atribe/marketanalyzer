@@ -90,6 +90,8 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Transient
 	protected SortedMap<Date, DollarValue> valueMap = new TreeMap<Date, DollarValue>();
 	
+	@Column(name="MODEL_NAME", insertable = false, updatable = false)
+	private String modelName;
 	/*
 	 * Not DB stored fields
 	 */
@@ -426,5 +428,11 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	}
 	public void setValueSet(SortedSet<DollarValue> valueSet) {
 		this.valueSet = valueSet;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}	
 }

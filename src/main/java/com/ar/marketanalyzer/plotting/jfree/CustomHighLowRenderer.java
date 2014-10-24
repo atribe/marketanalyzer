@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.indexbacktest.plotting;
+package com.ar.marketanalyzer.plotting.jfree;
 
 import org.jfree.chart.renderer.xy.HighLowRenderer;
 

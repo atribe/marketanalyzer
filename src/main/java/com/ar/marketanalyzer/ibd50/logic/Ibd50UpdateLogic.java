@@ -225,8 +225,9 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		List<StockOhlcv> ohlcvData = YahooOhlcvService.getStockFromYahoo(ticker, startDate);
-		
+		//TODO, killed this method and need to use the new one
+		//List<StockOhlcv> ohlcvData = YahooOhlcvService.getStockFromYahoo(ticker, startDate);
+		List<StockOhlcv> ohlcvData = null;
 		ohlcvService.batchInsert(ohlcvData);
 	}
 	

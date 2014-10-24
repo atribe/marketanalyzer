@@ -20,34 +20,32 @@
 						<img src="<c:url value="charts/OHLC" />" />
 					</div>
 				</div>
-				<div class="D_Day_Table">
-					<div class="sectionHeader"><h2>D Day Section</h2></div>
-					<h3>Nasdaq Distribution Days in the Last 120 Days</h3>
-					<div id="dDayChart" class="chart">
-						<img src="<c:url value="charts/dday" />" />
-					</div>
-					
-				<!-- D Day table stuff used for debugging
-					<table class="DDays">
+				<div class="modelList">
+					<table class="modelListTable">
+						<thead>
 						<tr>
-							<th>DB id</th>
-							<th>Date</th>
-							<th>Is a D Day?</th>
-							<th>Churn or Regular</th>
-							<th>D Day Count</th>
+							<th>Model ID</th>
+							<th>Symbol</th>
+							<th>Model Name</th>
+							<th>Initial Investment</th>
+							<th>Start Date</th>
+							<th>End Date</th>
 						</tr>
-						<c:forEach items="${dDayList}" var="indexCalcs">
+						</thead>
+						<tbody>
+					<c:forEach items="${modelList}" var="model">
 						<tr>
-							<td>${indexCalcs.id}</td>
-							<td>${indexCalcs.date}</td>
-							<td>${indexCalcs.distributionDay}</td>
-							<td>${indexCalcs.churnDay}</td>
-							<td>${indexCalcs.distributionDayCounter}</td>
+							<td>${model.id}</td>
+							<td>${model.symbol.symbol}</td>
+							<td>${model.modelName}</td>
+							<td>${model.initialInvestment}</td>
+							<td>${model.startDate}</td>
+							<td>${model.endDate}</td>
 						</tr>
-						</c:forEach>	
+					</c:forEach>
+						</tbody>
 					</table>
 				</div>
-			</div>
 			<!-- Footer Div (in mpFooter file-->
 				<jsp:include page="/WEB-INF/resources/jsptemplates/mpFooter.jsp" />
 			<!-- End Footer Div -->
