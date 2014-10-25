@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.ibd50.logic;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.dao.Ibd50WebDao;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
@@ -41,6 +44,12 @@ public class Ibd50UpdateLogic {
 	private Ibd50TrackingService trackingService;
 	@Autowired
 	private StockOhlcvService ohlcvService;
+	@Autowired
+	private YahooOhlcvService yahooService;
+	@Autowired
+	private SymbolServiceInterface symbolService;
+	@Autowired
+	private SecurityOhlcvServiceInterface secOhlcvService;
 	
 	public Ibd50UpdateLogic() {
 	}
@@ -146,11 +155,11 @@ public class Ibd50UpdateLogic {
 	private void addThisWeeksListToDB(List<Ibd50Rank> webIbd50) {
 		for(Ibd50Rank rankingRow : webIbd50) {										// Cycle through the each of row of the top 50
 			
-			Symbol rowTicker = rankingRow.getTicker();						// Getting the ticker out of the ranking
+			Symbol rowTicker = rankingRow.getTicker();						// Getting the symbol out of the ranking
 			
-			Symbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the ticker to the DB or getting the one in the db out
+			Symbol foundTicker = tsService.createOrFindDuplicate(rowTicker);	// Adding the symbol to the DB or getting the one in the db out
 			
-			rankingRow.setTicker(foundTicker);										// Set the found ticker to be the ticker for the row
+			rankingRow.setTicker(foundTicker);										// Set the found symbol to be the symbol for the row
 			
 																					// Check to see if the OHLCV data is up to date for this stock symbol
 			runOhlcvUpdate(foundTicker);											// add the last 6 months of OHLCV data to the db
@@ -203,7 +212,7 @@ public class Ibd50UpdateLogic {
 	 * @param row
 	 * @throws SQLException 
 	 */
-	private void runOhlcvUpdate(Symbol ticker) {
+	private void runOhlcvUpdate(Symbol symbol) {
 		final int monthsOfData = 6; 
 
 		List<StockOhlcv> currentOhlcvList;
@@ -211,7 +220,7 @@ public class Ibd50UpdateLogic {
 		LocalDate startDate;
 		
 		try {
-			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(ticker, ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
+			currentOhlcvList = ohlcvService.findByTickerAndDateAfter(symbol, ohlcvDesiredStartDate.toDate());	//see if there is anything in the db after 6 months ago from today
 			
 			//older data was found in the db
 			//so find the newest, the above query sorts so newest is at position 0
@@ -225,10 +234,17 @@ public class Ibd50UpdateLogic {
 			startDate = ohlcvDesiredStartDate;
 		}
 		
-		//TODO, killed this method and need to use the new one
-		//List<StockOhlcv> ohlcvData = YahooOhlcvService.getStockFromYahoo(ticker, startDate);
-		List<StockOhlcv> ohlcvData = null;
-		ohlcvService.batchInsert(ohlcvData);
+		List<YahooOHLCV> yahooOhlcv = null;
+		try {
+			yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), startDate);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if( yahooOhlcv != null && yahooOhlcv.size() > 0 ) {
+			secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
+		}
 	}
 	
 	private void updateOHLCVforInactiveTracker() {

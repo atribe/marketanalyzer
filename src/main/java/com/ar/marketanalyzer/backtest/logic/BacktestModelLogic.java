@@ -82,7 +82,7 @@ public class BacktestModelLogic {
 	}
 
 	private void saveModel() {
-		@SuppressWarnings("unused")
-		AbstractModel savedModel = modelService.create(model);
+		/*AbstractModel savedModel = */
+		modelService.create(model);
 	}
 }

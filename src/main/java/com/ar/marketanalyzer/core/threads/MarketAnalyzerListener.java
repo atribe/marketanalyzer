@@ -21,7 +21,7 @@ import com.ar.marketanalyzer.spring.init.PropCache;
  *   MarketAnalyzerBean, which handles the database initialization.
  */
 @Component
-public class marketAnalyzerListener implements ServletContextListener{
+public class MarketAnalyzerListener implements ServletContextListener{
 
 	@Autowired @Qualifier("IndexBacktestInit")
 	private Runnable indexBacktestBean;
@@ -30,7 +30,7 @@ public class marketAnalyzerListener implements ServletContextListener{
 	//private Runnable i50Bean;
 	
 	private Logger log = Logger.getLogger(this.getClass().getName());
-	protected static Logger staticLog = Logger.getLogger(marketAnalyzerListener.class.getName());
+	protected static Logger staticLog = Logger.getLogger(MarketAnalyzerListener.class.getName());
 	
 	@SuppressWarnings("unused")
 	private static Thread t1, t2;
