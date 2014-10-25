@@ -15,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
+import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 import com.ar.marketanalyzer.spring.init.PropCache;
 
 public class AppInitializer implements WebApplicationInitializer {
@@ -34,7 +34,7 @@ public class AppInitializer implements WebApplicationInitializer {
     	
     	WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));
-        servletContext.addListener(new marketAnalyzerListener());
+        servletContext.addListener(new MarketAnalyzerListener());
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(MAPPING_URL);
