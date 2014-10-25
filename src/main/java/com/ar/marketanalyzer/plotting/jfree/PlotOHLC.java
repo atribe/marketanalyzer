@@ -33,14 +33,14 @@ package com.ar.marketanalyzer.plotting.jfree;
 //import org.jfree.ui.TextAnchor;
 //import org.joda.time.LocalDate;
 //
-//import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
+//import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 
 public class PlotOHLC {
 	
 //	static Logger log = Logger.getLogger(PlotOHLC.class.getName());
 //	
 //	public static JFreeChart createChart(String symbol) {
-//		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
+//		if(MarketAnalyzerListener.dbInitThreadIsAlive()) {
 //			return null;
 //		} else {
 //			return createCombinedChart(symbol);

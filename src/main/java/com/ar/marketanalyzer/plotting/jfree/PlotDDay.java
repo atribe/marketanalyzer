@@ -15,7 +15,7 @@ package com.ar.marketanalyzer.plotting.jfree;
 //import org.jfree.data.xy.XYDataset;
 //import org.jfree.ui.RectangleInsets;
 //
-//import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
+//import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 //import com.ar.marketanalyzer.spring.init.PropCache;
 
 public class PlotDDay {
@@ -77,7 +77,7 @@ public class PlotDDay {
 //        TimeSeries s1 = new TimeSeries(symbol);
 //        
 //        //s1.add(new Day(10, 1, 2004), 10574);  
-//        if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+//        if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
 //        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
 //	        //Getting the d-dates from the database
 //	        IndexCalcsService  indexCalcsService = null;
@@ -110,7 +110,7 @@ public class PlotDDay {
 //	        TimeSeries s1 = new TimeSeries(symbol);
 //	        
 //	        //s1.add(new Day(10, 1, 2004), 10574);  
-//	        if(!marketAnalyzerListener.dbInitThreadIsAlive()) {
+//	        if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
 //	        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
 //		        //Getting the d-dates from the database
 //		        IndexCalcsService  indexCalcsService = new IndexCalcsService();
