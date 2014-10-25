@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.spring.config;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
-	private static final Logger logger = Logger.getLogger(WebMvcConfig.class);
+	private static final Logger logger = LogManager.getLogger(WebMvcConfig.class);
 	
 	@Bean
 	 public InternalResourceViewResolver configureInternalResourceViewResolver() {

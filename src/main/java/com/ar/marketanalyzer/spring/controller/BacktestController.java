@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.spring.controller;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 @Controller
 public class BacktestController {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(BacktestController.class.getName());
+	private static final Logger logger = LogManager.getLogger(BacktestController.class.getName());
 	private final String BASEURL = "backtest";
 
 	
@@ -25,7 +26,7 @@ public class BacktestController {
 	public String backtestPage(ModelMap m) {
 		
 		if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
-        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
+			logger.debug("Db Init Thread is not running, pulling D-day info from the DB");
 
 //        	//Creating a backtest service
 //        	BacktestService backtestService = new BacktestService();
@@ -45,7 +46,7 @@ public class BacktestController {
 //	    	backtests.add(backtestService.getCurrent("^SML"));
 //	    	m.addAttribute("backtests", backtests);
 		} else {
-        	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
+			logger.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
         }
 		
@@ -56,7 +57,7 @@ public class BacktestController {
 	@RequestMapping(value="/" + BASEURL + "/{symbol}", method = RequestMethod.GET)
     public String backtestPage(ModelMap m, @PathVariable String symbol) {
         if(!MarketAnalyzerListener.dbInitThreadIsAlive()) {
-        	log.debug("Db Init Thread is not running, pulling D-day info from the DB");
+        	logger.debug("Db Init Thread is not running, pulling D-day info from the DB");
 
         	//Creating a backtest service
 //        	BacktestService backtestService = new BacktestService();
@@ -69,7 +70,7 @@ public class BacktestController {
 //        	m.addAttribute("currentBacktest", backtestService.getCurrent(symbol));
         	
         } else {
-        	log.debug("Db Init Thread is running. Skipping D-day info from the DB");
+        	logger.debug("Db Init Thread is running. Skipping D-day info from the DB");
         	//Maybe do something here. Like a boolean so that the whole table is skipped and replaced with something else in the jsp.
         }
     

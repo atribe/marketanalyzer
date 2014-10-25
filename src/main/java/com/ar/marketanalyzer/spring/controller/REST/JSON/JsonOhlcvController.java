@@ -2,7 +2,10 @@ package com.ar.marketanalyzer.spring.controller.REST.JSON;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +24,7 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvSe
 public class JsonOhlcvController {
 	
 	//protected Logger logger = Logger.getLogger(getClass());
-	private static final Logger logger = Logger.getLogger(JsonOhlcvController.class);
+	private static final Logger logger = LogManager.getLogger(JsonOhlcvController.class);
 	
 	@Autowired
 	private SymbolService symbolService;

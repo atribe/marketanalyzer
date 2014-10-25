@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -24,7 +25,7 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceIn
 @PropertySource(value="classpath:common.properties")
 public class BacktestLogic {
 	/* Get actual class name to be printed on */
-	Logger log = Logger.getLogger(this.getClass().getName());
+	final Logger log = LogManager.getLogger(this.getClass().getName());
 	
 	@Resource
 	private Environment env;

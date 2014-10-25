@@ -3,7 +3,8 @@ package com.ar.marketanalyzer.core.threads;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	//@Autowired @Qualifier("IBD50InitRunnable")
 	//private Runnable i50Bean;
 	
-	private Logger log = Logger.getLogger(this.getClass().getName());
-	protected static Logger staticLog = Logger.getLogger(MarketAnalyzerListener.class.getName());
+	private static final Logger logger = LogManager.getLogger(MarketAnalyzerListener.class.getName());
 	
 	@SuppressWarnings("unused")
 	private static Thread t1, t2;
@@ -39,7 +39,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent sce) {
 
 		//Capturing the point when Tomcat is done booting up
-		log.debug("1.0 Tomcat has booted up");
+		logger.debug("1.0 Tomcat has booted up");
 		WebApplicationContextUtils
 			.getRequiredWebApplicationContext(sce.getServletContext())
 			.getAutowireCapableBeanFactory()
@@ -70,7 +70,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	public static boolean dbInitThreadIsAlive() {
 		// java.lang.Thread.State can be NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
 		String thread_name = PropCache.getCachedProps("threads.dbinit");
-		staticLog.debug("Checking thread state. Thread name: " + thread_name + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
+		logger.debug("Checking thread state. Thread name: " + thread_name + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
 		return t1.isAlive();
 	}
 }
