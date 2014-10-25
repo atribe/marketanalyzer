@@ -27,7 +27,7 @@ public class RootController {
         //the view name is the name of the jsp
         
         List<AbstractModel> modelList = modelService.getAll();
-        mav.addObject(modelList);
+        mav.addObject("modelList", modelList);
         
         mav.setViewName("index");
         return mav;

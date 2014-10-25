@@ -70,7 +70,7 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Column( name="initial_investment")
 	protected BigDecimal initialInvestment;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name="backtest_model_rule",
 				joinColumns={@JoinColumn(name="model_id")},
 				inverseJoinColumns={@JoinColumn(name="rule_id")})
@@ -79,11 +79,11 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Transient
 	protected SortedMap<Date, BuySellTrigger> buySellTriggers = new TreeMap<Date, BuySellTrigger>();
 
-	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	protected List<Trade> tradeList = new ArrayList<Trade>();
 	
 	
-	@OneToMany(mappedBy = "model", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "model", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@OrderBy("date")
 	protected SortedSet<DollarValue> valueSet = new TreeSet<DollarValue>();
 	

@@ -3,7 +3,7 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <%@page isELIgnored="false" %>
 <jsp:include page="/WEB-INF/resources/jsptemplates/mpHead.jsp" />
@@ -33,16 +33,16 @@
 						</tr>
 						</thead>
 						<tbody>
-					<c:forEach items="${modelList}" var="model">
+						<c:forEach var="backtestModel" items="${modelList}" >
 						<tr>
-							<td>${model.id}</td>
-							<td>${model.symbol.symbol}</td>
-							<td>${model.modelName}</td>
-							<td>${model.initialInvestment}</td>
-							<td>${model.startDate}</td>
-							<td>${model.endDate}</td>
+							<td><c:out value="${backtestModel.id}"/></td>
+							<td><c:out value="${backtestModel.symbol.symbol}"/></td>
+							<td><c:out value="${backtestModel.modelName}"/></td>
+							<td><c:out value="${backtestModel.initialInvestment}"/></td>
+							<td><c:out value="${backtestModel.startDate}"/></td>
+							<td><c:out value="${backtestModel.endDate}"/></td>
 						</tr>
-					</c:forEach>
+						</c:forEach>
 						</tbody>
 					</table>
 				</div>
