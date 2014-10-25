@@ -1,23 +1,18 @@
 package com.ar.marketanalyzer.spring.config;
 
-import java.util.Locale;
-
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.web.accept.ContentNegotiationManager;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @EnableWebMvc
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+	
+	private static final Logger logger = Logger.getLogger(WebMvcConfig.class);
 	
 	@Bean
 	 public InternalResourceViewResolver configureInternalResourceViewResolver() {

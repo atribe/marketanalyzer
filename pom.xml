@@ -5,7 +5,7 @@
 	<artifactId>marketanalyzer</artifactId>
 	<version>2.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>springapp Maven Webapp</name>
+	<name>Market Analyzer</name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
@@ -19,36 +19,19 @@
     <dependencies>
  
     	<!-- Spring -->
-    	<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
- 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
             <scope>runtime</scope>
-			<exclusions>
+            <exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
         </dependency>
-        <dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-        
+
         <dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
@@ -60,7 +43,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-oxm</artifactId>
+		    <version>${spring.version}</version>
+		</dependency>
         
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
         <!-- Hibernate -->
         <dependency>
 			<groupId>org.hibernate</groupId>
@@ -85,11 +80,18 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-            
+           
+        <dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+ 
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- DB related dependencies -->
@@ -147,7 +149,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version></version>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- Plotting -->

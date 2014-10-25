@@ -17,7 +17,8 @@ import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceIn
 public class RootController {
 	/* Get actual class name to be printed on */
 	static Logger log = Logger.getLogger(RootController.class.getName());
-
+	private static final Logger logger = Logger.getLogger(RootController.class);
+	
 	@Autowired
 	AbstractModelServiceInterface modelService;
 	

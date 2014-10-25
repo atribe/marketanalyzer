@@ -84,7 +84,7 @@ public class BacktestLogic {
 					LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
 					
-					if( desiredStartDate.isAfter(earliestDate) ) {								// If the last date is not before desired months ago
+					if( earliestDate.isAfter(desiredStartDate) ) {								// If the last date is not before desired months ago
 						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate) );	//Get from yahoo the gap
 					}
 					if( mostCurrentDate.isBefore( today )) {
