@@ -82,7 +82,6 @@ public class BacktestModelLogic {
 	}
 
 	private void saveModel() {
-		/*AbstractModel savedModel = */
 		modelService.create(model);
 	}
 }
