@@ -31,7 +31,7 @@ public class JsonOhlcvController {
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
 
-	@RequestMapping(value="{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@RequestMapping(value="symbol/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
 	public List<SecuritiesOhlcv> getOhclvInJSON(@PathVariable String symbol) {
 		logger.debug("Symbol passed to the ohlcv JSON controller is: " + symbol);
