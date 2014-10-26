@@ -8,19 +8,17 @@
   </Appenders>
   <Loggers>
     <Logger name="org.apache.log4j.xml" level="info"/>
-    <Root level="debug">
+    <Root level="DEBUG">
       <AppenderRef ref="STDOUT"/>
     </Root>
-    	<!-- 
-    	<logger name="com.jolbox" level="ERROR" additivity="false">
-			<AppenderRef ref="CONSOLE"/>
+    	<logger name="org.hibernate" level="INFO" additivity="false">
+			<AppenderRef ref="STDOUT"/>
 		</logger>
-		<logger name="org.hibernate" level="DEBUG" additivity="false">
-			<AppenderRef ref="CONSOLE"/>
+		<logger name="com.jolbox" level="ERROR" additivity="false">
+			<AppenderRef ref="STDOUT"/>
 		</logger>
-		<logger name="org.springframework" level="TRACE" additivity="false">
-			<AppenderRef ref="CONSOLE"/>
+		 <logger name="org.springframework" level="INFO" additivity="false">
+			<AppenderRef ref="STDOUT"/>
 		</logger>
-		 -->
   </Loggers>
 </Configuration>
