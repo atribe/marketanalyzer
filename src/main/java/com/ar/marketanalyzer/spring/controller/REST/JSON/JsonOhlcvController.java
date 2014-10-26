@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SymbolService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
+import com.ar.marketanalyzer.plotting.amcharts.AmChart;
 
 @RestController
 @RequestMapping("/json")
@@ -31,6 +33,16 @@ public class JsonOhlcvController {
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
 
+	@RequestMapping(value="amchart/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@ResponseBody
+	public AmChart getamchartJSON(@PathVariable String symbol) {
+		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
+		
+		AmChart chart = new AmChart();
+		logger.debug(chart);
+		return chart;
+	}
+	
 	@RequestMapping(value="symbol/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
 	public List<SecuritiesOhlcv> getOhclvInJSON(@PathVariable String symbol) {

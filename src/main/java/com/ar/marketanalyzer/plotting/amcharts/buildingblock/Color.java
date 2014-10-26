@@ -2,6 +2,10 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class Color implements Serializable{
 
     /**
@@ -13,11 +17,11 @@ public class Color implements Serializable{
 
     private String colorHexVal;
 
-    private Color() {};
-
-    private Color(String colorHexVal) {
-        this.colorHexVal = colorHexVal;
+    public Color() {};
+    public Color(String colorHexVal) {
+    	this.colorHexVal = colorHexVal;
     }
+
     public static Color create(String colorHexVal) {
         return new Color(colorHexVal);
     }
@@ -27,4 +31,10 @@ public class Color implements Serializable{
     public String toString() {
         return "#" + this.colorHexVal;
     }
+	public String getColorHexVal() {
+		return colorHexVal;
+	}
+	public void setColorHexVal(String colorHexVal) {
+		this.colorHexVal = colorHexVal;
+	}
 }
