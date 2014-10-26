@@ -18,9 +18,6 @@
 		<script src="<c:url value="js/amcharts/amcharts.js" />" type="text/javascript"></script>
         <script src="<c:url value="js/amcharts/serial.js" />" type="text/javascript"></script>
         <script src="<c:url value="js/amcharts/amstock.js" />" type="text/javascript"></script>
+        <script src="<c:url value="js/stockchart.js" />" type="text/javascript"></script>
         <link rel="stylesheet" href="<c:url value="css/amcharts/style.css" /> type="text/css">
-        
-        <script type="text/javascript">
-        	
-		</script>
 	</head>
