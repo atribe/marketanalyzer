@@ -6,6 +6,7 @@ import javax.xml.transform.Source;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -28,6 +30,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
 	private static final Logger logger = LogManager.getLogger(WebMvcConfig.class);
+	
+	@Autowired
+	private JacksonConfig jacksonConfig;
 	
 	@Bean
 	 public InternalResourceViewResolver configureInternalResourceViewResolver() {
@@ -48,6 +53,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/").setCachePeriod(31556926);
 	}
 	
+	//This is solely for the jacksonConfig and enabling prettyPrint of json output
 	@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
@@ -57,20 +63,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         converters.add(new ResourceHttpMessageConverter());
         converters.add(new SourceHttpMessageConverter<Source>());
         converters.add(new AllEncompassingFormHttpMessageConverter());
-        converters.add(jackson2Converter());
-    }
-
-    @Bean
-    public MappingJackson2HttpMessageConverter jackson2Converter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(objectMapper());
-        return converter;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        return objectMapper;
+        converters.add(jacksonConfig.jackson2Converter());
     }
 }

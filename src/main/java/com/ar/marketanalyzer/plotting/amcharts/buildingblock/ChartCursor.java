@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class ChartCursor implements Serializable {
     /**
 	 * 

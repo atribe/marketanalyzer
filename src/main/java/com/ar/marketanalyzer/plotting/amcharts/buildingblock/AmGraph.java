@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class AmGraph implements Serializable {
     private static final long serialVersionUID = 2423251527192647508L;
 	private String alphaField;

@@ -1,11 +1,13 @@
 package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonFormat(shape = JsonFormat.Shape.STRING)
+import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+
 @JsonInclude(Include.NON_EMPTY)
+@JsonSerialize(using = JacksonObjectToListSerializer.class)
 public class ValueAxis extends AxisBase {
     /**
 	 * 

@@ -10,6 +10,7 @@ import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartCursor;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartScrollbar;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ValueAxis;
 import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
