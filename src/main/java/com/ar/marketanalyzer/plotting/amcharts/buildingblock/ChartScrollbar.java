@@ -2,10 +2,12 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class ChartScrollbar implements Serializable {
     /**
 	 * 

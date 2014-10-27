@@ -1,13 +1,15 @@
 package com.ar.marketanalyzer.plotting.amcharts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.AmGraph;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.CategoryAxis;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartCursor;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartScrollbar;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ValueAxis;
-import com.ar.marketanalyzer.plotting.amcharts.data.DataProvider;
+import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -24,7 +26,7 @@ public class AmChart implements Serializable{
 	private ChartCursor chartCursor;
 	private String categoryField= "date";
 	private CategoryAxis categoryAxis;
-	private DataProvider dataProvider;
+	private List<OhlcData> dataProvider = new ArrayList<OhlcData>();
 	
 	public AmChart() {
 		valueAxis = new ValueAxis();
@@ -106,5 +108,14 @@ public class AmChart implements Serializable{
 	public void setCategoryAxis(CategoryAxis categoryAxis) {
 		this.categoryAxis = categoryAxis;
 	}
+
+	public List<OhlcData> getDataProvider() {
+		return dataProvider;
+	}
+
+	public void setDataProvider(List<OhlcData> dataProvider) {
+		this.dataProvider = dataProvider;
+	}
+
 
 }

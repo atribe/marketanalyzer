@@ -1,5 +1,9 @@
 package com.ar.marketanalyzer.plotting.amcharts.data;
 
-public interface DataProvider {
+import java.io.Serializable;
+import java.util.List;
 
+public interface DataProvider extends Serializable{
+	public List<? extends Object>getDataProvider();
+	public void setDataProvider(List<? extends Object> dataProvider);
 }

@@ -2,10 +2,12 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class AmGraph implements Serializable {
     private static final long serialVersionUID = 2423251527192647508L;
 	private String alphaField;
@@ -99,7 +101,7 @@ public class AmGraph implements Serializable {
 
     public AmGraph() {
     	id = "g1";
-    	proCandlesticks = true;
+    	setProCandlesticks(true);
     	balloonText = "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>";
     	closeField = "close";
     	fillColors = new Color("#7f8da9");
@@ -1153,6 +1155,12 @@ public class AmGraph implements Serializable {
         this.yField = yField;
         return this;
     }
+	public boolean isProCandlesticks() {
+		return proCandlesticks;
+	}
+	public void setProCandlesticks(boolean proCandlesticks) {
+		this.proCandlesticks = proCandlesticks;
+	}
 
 
 }

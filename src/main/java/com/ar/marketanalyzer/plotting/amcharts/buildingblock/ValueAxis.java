@@ -1,5 +1,11 @@
 package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonInclude(Include.NON_EMPTY)
 public class ValueAxis extends AxisBase {
     /**
 	 * 
@@ -36,6 +42,9 @@ public class ValueAxis extends AxisBase {
     private Boolean usePrefixes;
     private Boolean useScientificNotation;
 
+    public ValueAxis() {
+    	setPosition("left");
+    }
     /**
      * Radar chart only. Specifies distance from axis to the axis title (category)
      **/
