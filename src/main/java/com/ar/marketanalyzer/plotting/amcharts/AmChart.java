@@ -3,8 +3,11 @@ package com.ar.marketanalyzer.plotting.amcharts;
 import java.io.Serializable;
 
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.AmGraph;
+import com.ar.marketanalyzer.plotting.amcharts.buildingblock.CategoryAxis;
+import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartCursor;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartScrollbar;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ValueAxis;
+import com.ar.marketanalyzer.plotting.amcharts.data.DataProvider;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -18,12 +21,18 @@ public class AmChart implements Serializable{
 	private ValueAxis valueAxis;
 	private AmGraph graphs;
 	private ChartScrollbar chartScrollbar;
+	private ChartCursor chartCursor;
+	private String categoryField= "date";
+	private CategoryAxis categoryAxis;
+	private DataProvider dataProvider;
 	
 	public AmChart() {
 		valueAxis = new ValueAxis();
 		graphs = new AmGraph();
 		valueAxis.setPosition("left");
 		chartScrollbar = new ChartScrollbar();
+		chartCursor = new ChartCursor();
+		categoryAxis = new CategoryAxis();
 	}
 
 	public String getType() {
@@ -72,6 +81,30 @@ public class AmChart implements Serializable{
 
 	public void setChartScrollbar(ChartScrollbar chartScrollbar) {
 		this.chartScrollbar = chartScrollbar;
+	}
+
+	public ChartCursor getChartCursor() {
+		return chartCursor;
+	}
+
+	public void setChartCursor(ChartCursor chartCursor) {
+		this.chartCursor = chartCursor;
+	}
+
+	public String getCategoryField() {
+		return categoryField;
+	}
+
+	public void setCategoryField(String categoryField) {
+		this.categoryField = categoryField;
+	}
+
+	public CategoryAxis getCategoryAxis() {
+		return categoryAxis;
+	}
+
+	public void setCategoryAxis(CategoryAxis categoryAxis) {
+		this.categoryAxis = categoryAxis;
 	}
 
 }

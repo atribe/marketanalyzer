@@ -3,7 +3,11 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 import java.util.List;
 
 public class CategoryAxis extends AxisBase {
-    private Double autoRotateAngle;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4803679434236619905L;
+	private Double autoRotateAngle;
     private Double autoRotateCount;
     private Boolean autoWrap;
     private Boolean boldPeriodBeginning;
@@ -19,6 +23,9 @@ public class CategoryAxis extends AxisBase {
     private Boolean startOnAxis;
     private Boolean twoLineMode;
 
+    public CategoryAxis() {
+    	parseDates = true;
+    }
     /**
      * Angle of label rotation, if the number of series exceeds autoRotateCount and parseDates
      * is set to false.
@@ -210,5 +217,38 @@ public class CategoryAxis extends AxisBase {
         this.twoLineMode = twoLineMode;
         return this;
     }
+	public void setAutoRotateAngle(Double autoRotateAngle) {
+		this.autoRotateAngle = autoRotateAngle;
+	}
+	public void setAutoRotateCount(Double autoRotateCount) {
+		this.autoRotateCount = autoRotateCount;
+	}
+	public void setAutoWrap(Boolean autoWrap) {
+		this.autoWrap = autoWrap;
+	}
+	public void setBoldPeriodBeginning(Boolean boldPeriodBeginning) {
+		this.boldPeriodBeginning = boldPeriodBeginning;
+	}
+	public void setCenterLabelOnFullPeriod(Boolean centerLabelOnFullPeriod) {
+		this.centerLabelOnFullPeriod = centerLabelOnFullPeriod;
+	}
+	public void setEqualSpacing(Boolean equalSpacing) {
+		this.equalSpacing = equalSpacing;
+	}
+	public void setFirstDayOfWeek(Double firstDayOfWeek) {
+		this.firstDayOfWeek = firstDayOfWeek;
+	}
+	public void setMarkPeriodChange(Boolean markPeriodChange) {
+		this.markPeriodChange = markPeriodChange;
+	}
+	public void setParseDates(Boolean parseDates) {
+		this.parseDates = parseDates;
+	}
+	public void setStartOnAxis(Boolean startOnAxis) {
+		this.startOnAxis = startOnAxis;
+	}
+	public void setTwoLineMode(Boolean twoLineMode) {
+		this.twoLineMode = twoLineMode;
+	}
 
 }
