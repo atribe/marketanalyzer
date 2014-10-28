@@ -1,6 +1,5 @@
-package com.ar.marketanalyzer.plotting.amcharts;
+package com.ar.marketanalyzer.plotting.amcharts.charts;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,32 +9,24 @@ import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartCursor;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartScrollbar;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ValueAxis;
 import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class AmChart implements Serializable{
-	private static final long serialVersionUID = 4964647048251460744L;
+public class ProCandlestickChart extends AmChart {
 
-	private String type = "serial";
-	private String theme = "light";
-	private final String pathToImages = "js/amcharts/images/";
-	private ValueAxis valueAxis;
-	private AmGraph graphs;
-	private ChartScrollbar chartScrollbar;
-	private ChartCursor chartCursor;
-	private String categoryField= "date";
-	private CategoryAxis categoryAxis;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5501954688052682008L;
+
 	private List<OhlcData> dataProvider = new ArrayList<OhlcData>();
 	
-	public AmChart() {
-		valueAxis = new ValueAxis();
-		graphs = new AmGraph();
-		valueAxis.setPosition("left");
-		chartScrollbar = new ChartScrollbar();
-		chartCursor = new ChartCursor();
-		categoryAxis = new CategoryAxis();
+	public ProCandlestickChart() {
+		super();
+		setType("serial");
+		setTheme("light");
+		setCategoryField("date");
 	}
 
 	public String getType() {
@@ -113,10 +104,4 @@ public class AmChart implements Serializable{
 	public List<OhlcData> getDataProvider() {
 		return dataProvider;
 	}
-
-	public void setDataProvider(List<OhlcData> dataProvider) {
-		this.dataProvider = dataProvider;
-	}
-
-
 }

@@ -18,9 +18,8 @@ import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SymbolService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
-import com.ar.marketanalyzer.plotting.amcharts.AmChart;
+import com.ar.marketanalyzer.plotting.amcharts.charts.ProCandlestickChart;
 import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
-import com.ar.marketanalyzer.plotting.amcharts.data.OhlcDataProvider;
 
 @RestController
 @RequestMapping("/json")
@@ -36,10 +35,10 @@ public class JsonOhlcvController {
 
 	@RequestMapping(value="amchart/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
-	public AmChart getamchartJSON(@PathVariable String symbol) {
+	public ProCandlestickChart getamchartJSON(@PathVariable String symbol) {
 		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
 		
-		AmChart chart = new AmChart();
+		ProCandlestickChart chart = new ProCandlestickChart();
 		
 		java.util.Calendar cal = java.util.Calendar.getInstance();
 		OhlcData A = new OhlcData(new Date(cal.getTimeInMillis()), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
@@ -47,10 +46,10 @@ public class JsonOhlcvController {
 		OhlcData C = new OhlcData(new Date(cal.getTimeInMillis()-86400000*2), new BigDecimal(10.53), new BigDecimal(15.21), new BigDecimal(10.11), new BigDecimal(14.03));
 		OhlcData D = new OhlcData(new Date(cal.getTimeInMillis()-86400000*3), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
 		List<OhlcData> dataList = chart.getDataProvider();
-		dataList.add(A);
-		dataList.add(B);
-		dataList.add(C);
 		dataList.add(D);
+		dataList.add(C);
+		dataList.add(B);
+		dataList.add(A);
 		chart.setDataProvider(dataList);
 		logger.debug(chart);
 		return chart;

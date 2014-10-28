@@ -2,11 +2,14 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(Include.NON_EMPTY)
+@JsonSerialize(using = JacksonObjectToListSerializer.class)
 public class AmGraph implements Serializable {
     private static final long serialVersionUID = 2423251527192647508L;
 	private String alphaField;
@@ -102,15 +105,21 @@ public class AmGraph implements Serializable {
     	id = "g1";
     	setProCandlesticks(true);
     	balloonText = "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>";
-    	closeField = "close";
-    	fillColors = new Color("#7f8da9");
+    	
+    	openField = "open";
     	highField = "high";
-    	lineColor = new Color("#7f8da9");
-    	lineAlpha = 1.0;
+    	lowField = "low";
+    	closeField = "close";
+    	
     	fillAlphas = 0.9;
+    	fillColors = new Color("#7f8da9");
     	negativeFillColors = new Color("#db4c3c");
+    	
+    	lineAlpha = 1.0;
+    	lineColor = new Color("#7f8da9");
     	negativeLineColor = new Color("#db4c3c");
-    	openField = "Price";
+    	
+    	title = "Price:";
     	type = "candlestick"; //this could be an enum?
     	valueField = "close";
     	

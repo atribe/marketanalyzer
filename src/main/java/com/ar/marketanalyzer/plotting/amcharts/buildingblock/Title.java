@@ -2,6 +2,14 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonInclude(Include.NON_EMPTY)
+@JsonSerialize(using = JacksonObjectToListSerializer.class)
 public class Title implements Serializable {
     /**
 	 * 

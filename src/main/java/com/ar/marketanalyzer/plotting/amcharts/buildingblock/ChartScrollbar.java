@@ -2,11 +2,11 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(Include.NON_EMPTY)
 public class ChartScrollbar implements Serializable {
     /**
 	 * 
@@ -42,7 +42,8 @@ public class ChartScrollbar implements Serializable {
     private Double selectedGraphLineAlpha;
     private Color selectedGraphLineColor;
     private Boolean updateOnReleaseOnly;
-    private String graph;
+    @SuppressWarnings("unused")
+	private String graph;
 
     public ChartScrollbar() {
     	graph = "g1";

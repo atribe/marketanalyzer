@@ -3,7 +3,7 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
 
 @JsonInclude(Include.NON_EMPTY)

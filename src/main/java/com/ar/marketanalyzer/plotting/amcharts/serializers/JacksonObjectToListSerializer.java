@@ -6,28 +6,27 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ValueAxis;
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class JacksonObjectToListSerializer extends JsonSerializer<ValueAxis>{
+public class JacksonObjectToListSerializer extends JsonSerializer<Object>{
 
 	@Override
-	public void serialize(ValueAxis valueAxis, JsonGenerator jsonGenerator,SerializerProvider arg2) throws IOException, JsonProcessingException {
-		
+	public void serialize(Object amObject, JsonGenerator jsonGenerator,SerializerProvider arg2) throws IOException, JsonProcessingException {
+
 		jsonGenerator.writeStartArray();
 		jsonGenerator.writeStartObject();
 		try {
-			for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(ValueAxis.class).getPropertyDescriptors()){
+			for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(amObject.getClass()).getPropertyDescriptors()){
 
 			    // propertyEditor.getReadMethod() exposes the getter
 			    // btw, this may be null if you have a write-only property
 			    //System.out.println(propertyDescriptor.getReadMethod());
-				Object value = propertyDescriptor.getReadMethod().invoke(valueAxis);
+				Object value = propertyDescriptor.getReadMethod().invoke(amObject);
 				if(value != null && !propertyDescriptor.getName().equals("class")) {
-					
 					jsonGenerator.writeObjectField(propertyDescriptor.getName(), value);
 				}
 			}
@@ -49,5 +48,4 @@ public class JacksonObjectToListSerializer extends JsonSerializer<ValueAxis>{
 		
 		
 	}
-
 }

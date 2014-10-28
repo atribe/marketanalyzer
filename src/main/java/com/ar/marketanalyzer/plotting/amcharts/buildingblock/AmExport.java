@@ -2,20 +2,28 @@ package com.ar.marketanalyzer.plotting.amcharts.buildingblock;
 
 import java.io.Serializable;
 
+import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonInclude(Include.NON_EMPTY)
+@JsonSerialize(using = JacksonObjectToListSerializer.class)
 public class AmExport implements Serializable {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 5455744076411246140L;
 	private String bottom;
-    private Double buttonAlpha;
+    private double buttonAlpha;
     private String buttonIcon;
     private Color buttonRollOverColor;
     private String buttonTitle;
-    private Boolean exportJPG;
-    private Boolean exportPDF;
-    private Boolean exportPNG;
-    private Boolean exportSVG;
+    private boolean exportJPG;
+    private boolean exportPDF;
+    private boolean exportPNG;
+    private boolean exportSVG;
     private Color imageBackgroundColor;
     private String imageFileName;
     private String left;
@@ -38,7 +46,7 @@ public class AmExport implements Serializable {
     /**
      * Opacity of a button.
      **/
-    public Double getButtonAlpha() {
+    public double getButtonAlpha() {
         return buttonAlpha;
     }
     public AmExport setButtonAlpha(double buttonAlpha) {
@@ -82,7 +90,7 @@ public class AmExport implements Serializable {
     /**
      * Specifies if export of JPG should be enabled.
      **/
-    public Boolean getExportJPG() {
+    public boolean getExportJPG() {
         return exportJPG;
     }
     public AmExport setExportJPG(boolean exportJPG) {
@@ -93,7 +101,7 @@ public class AmExport implements Serializable {
     /**
      * Specifies if export of PDF should be enabled.
      **/
-    public Boolean getExportPDF() {
+    public boolean getExportPDF() {
         return exportPDF;
     }
     public AmExport setExportPDF(boolean exportPDF) {
@@ -104,7 +112,7 @@ public class AmExport implements Serializable {
     /**
      * Specifies if export of PNG should be enabled.
      **/
-    public Boolean getExportPNG() {
+    public boolean getExportPNG() {
         return exportPNG;
     }
     public AmExport setExportPNG(boolean exportPNG) {
@@ -115,7 +123,7 @@ public class AmExport implements Serializable {
     /**
      * Specifies if export of SVG should be enabled.
      **/
-    public Boolean getExportSVG() {
+    public boolean getExportSVG() {
         return exportSVG;
     }
     public AmExport setExportSVG(boolean exportSVG) {
