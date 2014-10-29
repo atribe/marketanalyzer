@@ -85,13 +85,15 @@ public class BacktestLogic {
 					LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
 					
+					List<YahooOHLCV> yahooList = null;
 					if( earliestDate.isAfter(desiredStartDate) ) {								// If the last date is not before desired months ago
-						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate) );	//Get from yahoo the gap
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate); //Get from yahoo the gap
+					} else if( mostCurrentDate.isBefore( today ) && !mostCurrentDate.equals(today)) {
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate, today);	//Get from yahoo the gap
 					}
-					if( mostCurrentDate.isBefore( today )) {
-						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate, today) );	//Get from yahoo the gap
+					if( yahooList != null) {
+						yahooOhlcv.addAll( yahooList );	
 					}
-					
 					// Need a check to see if it up to date as well
 				} catch (IllegalArgumentException|SecuritiesNotFound e) {
 					// Catch block if there is no Ohlcv data for the symbol in the DB

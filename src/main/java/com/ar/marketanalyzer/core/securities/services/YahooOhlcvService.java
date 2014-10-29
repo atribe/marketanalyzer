@@ -42,6 +42,10 @@ public class YahooOhlcvService {
 		
 		String url = generateURL(symbol, startDate, endDate);		// Generate URL
 		
+		if(url == null) {
+			return null;
+		}
+		
 		BufferedReader reader = callURL(url);
 		
 		return parseCSVtoObject(reader);
@@ -51,6 +55,10 @@ public class YahooOhlcvService {
 		LocalTime now = new LocalTime(); 						// temporary variable with the current time
 		if(now.getHourOfDay() == 0) {							// if it is between 12:00 am and 1:00 am
 			endDate = new LocalDate().minusDays(1);				// 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
+		}
+		
+		if(startDate.equals(endDate)) {
+			return null;
 		}
 
 		int a_startMonth, b_startDay, c_startYear;

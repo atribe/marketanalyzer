@@ -2,7 +2,10 @@ package com.ar.marketanalyzer.plotting.amcharts.data;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.plotting.amcharts.serializers.BigDecimalSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +31,14 @@ public class OhlcData extends Object{
 		this.high = high;
 		this.low = low;
 		this.close = close;
+	}
+	
+	public static List<OhlcData> convertSecuritiesOhlcvToOhlcData(List<SecuritiesOhlcv> ohlcvList) {
+		List<OhlcData> ohlcList = new ArrayList<OhlcData>();
+		for(SecuritiesOhlcv ohlcv: ohlcvList) {
+			ohlcList.add(0, new OhlcData(ohlcv.getDate(), ohlcv.getOpen(), ohlcv.getHigh(), ohlcv.getLow(), ohlcv.getClose()));
+		}
+		return ohlcList;
 	}
 	
 	public Date getDate() {

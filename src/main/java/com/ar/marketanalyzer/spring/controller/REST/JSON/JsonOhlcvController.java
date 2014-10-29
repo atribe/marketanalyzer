@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,18 +41,30 @@ public class JsonOhlcvController {
 		
 		ProCandlestickChart chart = new ProCandlestickChart();
 		
-		java.util.Calendar cal = java.util.Calendar.getInstance();
-		OhlcData A = new OhlcData(new Date(cal.getTimeInMillis()), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
-		OhlcData B = new OhlcData(new Date(cal.getTimeInMillis()-86400000), new BigDecimal(14.10), new BigDecimal(15.51), new BigDecimal(12.11), new BigDecimal(12.53));
-		OhlcData C = new OhlcData(new Date(cal.getTimeInMillis()-86400000*2), new BigDecimal(10.53), new BigDecimal(15.21), new BigDecimal(10.11), new BigDecimal(14.03));
-		OhlcData D = new OhlcData(new Date(cal.getTimeInMillis()-86400000*3), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
-		List<OhlcData> dataList = chart.getDataProvider();
-		dataList.add(D);
-		dataList.add(C);
-		dataList.add(B);
-		dataList.add(A);
-		chart.setDataProvider(dataList);
-		logger.debug(chart);
+//		java.util.Calendar cal = java.util.Calendar.getInstance();
+//		OhlcData A = new OhlcData(new Date(cal.getTimeInMillis()), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
+//		OhlcData B = new OhlcData(new Date(cal.getTimeInMillis()-86400000), new BigDecimal(14.10), new BigDecimal(15.51), new BigDecimal(12.11), new BigDecimal(12.53));
+//		OhlcData C = new OhlcData(new Date(cal.getTimeInMillis()-86400000*2), new BigDecimal(10.53), new BigDecimal(15.21), new BigDecimal(10.11), new BigDecimal(14.03));
+//		OhlcData D = new OhlcData(new Date(cal.getTimeInMillis()-86400000*3), new BigDecimal(13.53), new BigDecimal(15.21), new BigDecimal(11.11), new BigDecimal(14.03));
+//		List<OhlcData> dataList = chart.getDataProvider();
+//		dataList.add(D);
+//		dataList.add(C);
+//		dataList.add(B);
+//		dataList.add(A);
+//		chart.setDataProvider(dataList);
+		Symbol sym;
+		try {
+			sym = symbolService.findBySymbol("^IXIC");
+			LocalDate chartStartDate = new LocalDate().minusMonths(6);
+			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfter(sym, new Date(chartStartDate.toDateTimeAtStartOfDay().getMillis()));
+			chart.convertToDataProvider(data);
+			logger.debug("Newest Data Point: " + data.get(0));
+			logger.debug("Oldest Data Point: " + data.get(data.size()-1));
+		} catch (SecuritiesNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return chart;
 	}
 	

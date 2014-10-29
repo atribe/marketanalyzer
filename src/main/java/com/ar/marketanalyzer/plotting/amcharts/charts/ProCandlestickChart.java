@@ -3,6 +3,7 @@ package com.ar.marketanalyzer.plotting.amcharts.charts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.AmGraph;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.CategoryAxis;
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.ChartCursor;
@@ -103,5 +104,9 @@ public class ProCandlestickChart extends AmChart {
 
 	public List<OhlcData> getDataProvider() {
 		return dataProvider;
+	}
+	
+	public void convertToDataProvider(List<SecuritiesOhlcv> dataProvider) {
+		this.dataProvider = OhlcData.convertSecuritiesOhlcvToOhlcData(dataProvider);
 	}
 }
