@@ -8,7 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.SessionTrackingMode;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,7 +21,7 @@ import com.ar.marketanalyzer.spring.init.PropCache;
 
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(AppInitializer.class.getName());
+	private static final Logger logger = LogManager.getLogger(AppInitializer.class.getName());
 	private static final String CONFIG_LOCATION = "com.ar.marketanalyzer.spring.config";
 	private static final String MAPPING_URL = "/";
     
@@ -30,7 +31,7 @@ public class AppInitializer implements WebApplicationInitializer {
 	
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-    	log.trace("0.0 onStartup method is starting");
+    	logger.trace("0.0 onStartup method is starting");
     	
     	WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));

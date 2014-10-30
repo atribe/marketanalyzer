@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %-5p [%t] (%F:%L) - %m%n"/>
+      <!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" /> -->
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="org.apache.log4j.xml" level="info"/>
+    <Root level="DEBUG">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+    	<logger name="org.hibernate" level="INFO" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+		</logger>
+		<logger name="com.jolbox" level="ERROR" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+		</logger>
+		 <logger name="org.springframework" level="INFO" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+		</logger>
+  </Loggers>
+</Configuration>

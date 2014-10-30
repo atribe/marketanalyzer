@@ -114,10 +114,14 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol)
-			throws SecuritiesNotFound {
-		Symbol foundTickerSymbol = symbolService.findBySymbol(symbol.getSymbol());
-		
+	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound {
+		Symbol foundTickerSymbol = null;
+		if(symbol.getId() == null && symbol.getId() < 0) {
+			foundTickerSymbol = symbolService.findBySymbol(symbol.getSymbol());
+		} else {
+			foundTickerSymbol = symbol;
+		}
+			
 		if( foundTickerSymbol == null ) {
 			throw new SecuritiesNotFound("By Ticker search for " + symbol.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
 		}

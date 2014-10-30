@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.ibd50.logic;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -9,14 +10,14 @@ import org.springframework.stereotype.Component;
 public class IBD50Init {
 
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(IBD50Init.class.getName());
+	private static final Logger logger = LogManager.getLogger(IBD50Init.class.getName());
 	
 	@Autowired
 	private Ibd50UpdateLogic ibd50Update;
 	@Autowired
 	private IBD50StatsLogic ibd50Stats;
 	public void main() {
-		log.trace("Starting IBD50 DB init method");
+		logger.trace("Starting IBD50 DB init method");
 
 		updateFromIbd50Web();
 

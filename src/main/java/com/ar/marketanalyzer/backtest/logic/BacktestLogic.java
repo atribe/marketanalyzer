@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -24,7 +25,7 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceIn
 @PropertySource(value="classpath:common.properties")
 public class BacktestLogic {
 	/* Get actual class name to be printed on */
-	Logger log = Logger.getLogger(this.getClass().getName());
+	final Logger log = LogManager.getLogger(this.getClass().getName());
 	
 	@Resource
 	private Environment env;
@@ -84,13 +85,15 @@ public class BacktestLogic {
 					LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
 					
-					if( desiredStartDate.isAfter(earliestDate) ) {								// If the last date is not before desired months ago
-						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate) );	//Get from yahoo the gap
+					List<YahooOHLCV> yahooList = null;
+					if( desiredStartDate.isAfter(earliestDate) && !desiredStartDate.equals(earliestDate) ) {								// If the last date is not before desired months ago
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate.minusDays(1)); //Get from yahoo the gap
+					} else if( mostCurrentDate.isBefore( today ) && !mostCurrentDate.equals(today)) {
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
 					}
-					if( mostCurrentDate.isBefore( today )) {
-						yahooOhlcv.addAll( yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate, today) );	//Get from yahoo the gap
+					if( yahooList != null) {
+						yahooOhlcv.addAll( yahooList );	
 					}
-					
 					// Need a check to see if it up to date as well
 				} catch (IllegalArgumentException|SecuritiesNotFound e) {
 					// Catch block if there is no Ohlcv data for the symbol in the DB

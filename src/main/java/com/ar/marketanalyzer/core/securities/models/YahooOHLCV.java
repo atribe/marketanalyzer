@@ -16,6 +16,11 @@ public class YahooOHLCV {
 	 */
 	public YahooOHLCV() { }
 	
+	@Override
+	public String toString() {
+		return "Date:" + date + " Open: " + open + " High:" + high + " Low:" + low + " Close:" + close + " Volume:" + volume + " Symbol:" +symbol;
+	}
+	
 	public long getId() {
 		return id;
 	}

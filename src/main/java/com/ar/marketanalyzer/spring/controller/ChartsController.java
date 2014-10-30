@@ -4,7 +4,8 @@ package com.ar.marketanalyzer.spring.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 //import org.jfree.chart.ChartUtilities;
 //import org.jfree.chart.JFreeChart;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/charts")
 public class ChartsController {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(ChartsController.class.getName());
+	private static final Logger logger = LogManager.getLogger(ChartsController.class.getName());
 
 	@RequestMapping(value = "/dday", method = RequestMethod.GET)
 	public void drawDDayChart(HttpServletResponse response) {

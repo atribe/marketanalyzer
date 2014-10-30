@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
 public class Ibd50UpdateLogic {
 	
 	//logger
-	private Logger log = Logger.getLogger(this.getClass().getName());
+	private static final Logger logger = LogManager.getLogger(Ibd50UpdateLogic.class);
 	
 	private Ibd50WebDao webDao;
 	
@@ -141,7 +142,7 @@ public class Ibd50UpdateLogic {
 					trackingService.updateActivity(tracker);									// And update the tracker db
 				} catch (SecuritiesNotFound e) {
 					e.printStackTrace();
-					log.info("This shouldn't happen since I just updated the ohclv the line before this.");
+					logger.info("This shouldn't happen since I just updated the ohclv the line before this.");
 				}
 			}
 		}
@@ -170,7 +171,7 @@ public class Ibd50UpdateLogic {
 			try {
 				foundTracker = trackingService.findByActiveAndTicker(isActive, foundTicker);
 			} catch (SecuritiesNotFound e) {
-				log.info(e.getMessage());
+				logger.info(e.getMessage());
 				
 																					//Tracker not found
 				Ibd50Tracking newTracker = new Ibd50Tracking();						//create a new tracker
@@ -182,14 +183,14 @@ public class Ibd50UpdateLogic {
 					
 					newTracker.setJoinPrice(joinDayOhlcv.getClose());
 				} catch (SecuritiesNotFound e1) {
-					log.info(e.getMessage());
+					logger.info(e.getMessage());
 					e.printStackTrace();
 				}
 				
 				
 				foundTracker = trackingService.create(newTracker);					//add the new tracker to the db
 			} catch (Ibd50TooManyFound e) {
-				log.info(e.getMessage());
+				logger.info(e.getMessage());
 				e.printStackTrace();
 				break;
 			} 
@@ -227,7 +228,7 @@ public class Ibd50UpdateLogic {
 			StockOhlcv mostRecentDate = currentOhlcvList.get(0);
 			startDate = mostRecentDate.getLocalDate().plusDays(1); 		//Then add a day so we don't have duplicate data
 		} catch (SecuritiesNotFound e) {
-			log.info(e.getMessage());
+			logger.info(e.getMessage());
 			
 			//nothing was found in the db
 			//so set the furthest date back to be six months ago

@@ -26,7 +26,7 @@ package com.ar.marketanalyzer.plotting.jfree;
 //import org.jfree.ui.TextAnchor;
 //import org.joda.time.LocalDate;
 //
-//import com.ar.marketanalyzer.core.threads.marketAnalyzerListener;
+//import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 
 public class PlotModelResult {
 
@@ -36,7 +36,7 @@ public class PlotModelResult {
 //	private static BigDecimal minPrice;
 //
 //	public static JFreeChart createChart(String symbol) {
-//		if(marketAnalyzerListener.dbInitThreadIsAlive()) {
+//		if(MarketAnalyzerListener.dbInitThreadIsAlive()) {
 //			return null;
 //		} else {
 //			maxPrice=new BigDecimal(0);

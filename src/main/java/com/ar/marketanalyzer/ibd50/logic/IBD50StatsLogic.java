@@ -2,7 +2,8 @@ package com.ar.marketanalyzer.ibd50.logic;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
 public class IBD50StatsLogic {
 	
 	//logger
-	private Logger log = Logger.getLogger(this.getClass().getName());
+	private static final Logger logger = LogManager.getLogger(IBD50StatsLogic.class);
 	
 	@Autowired
 	private Ibd50CustomIndexService customIndexService;
@@ -126,7 +127,7 @@ public class IBD50StatsLogic {
 			
 		
 		} catch (SecuritiesNotFound e) {
-			log.info("Unable to populate custom index " + ibd50CustomIndex.getIndexName() + " because couldn't find any IBD50 Rankings in the specified range.");
+			logger.info("Unable to populate custom index " + ibd50CustomIndex.getIndexName() + " because couldn't find any IBD50 Rankings in the specified range.");
 			e.printStackTrace();
 		}
 	}
