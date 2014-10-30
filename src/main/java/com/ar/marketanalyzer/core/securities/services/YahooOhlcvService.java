@@ -57,7 +57,7 @@ public class YahooOhlcvService {
 			endDate = new LocalDate().minusDays(1);				// 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
 		}
 		
-		if(startDate.equals(endDate)) {
+		if(startDate.isAfter(endDate)) {
 			return null;
 		}
 

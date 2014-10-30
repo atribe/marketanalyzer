@@ -86,10 +86,10 @@ public class BacktestLogic {
 					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
 					
 					List<YahooOHLCV> yahooList = null;
-					if( earliestDate.isAfter(desiredStartDate) ) {								// If the last date is not before desired months ago
-						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate); //Get from yahoo the gap
+					if( desiredStartDate.isAfter(earliestDate) && !desiredStartDate.equals(earliestDate) ) {								// If the last date is not before desired months ago
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate.minusDays(1)); //Get from yahoo the gap
 					} else if( mostCurrentDate.isBefore( today ) && !mostCurrentDate.equals(today)) {
-						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate, today);	//Get from yahoo the gap
+						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
 					}
 					if( yahooList != null) {
 						yahooOhlcv.addAll( yahooList );	
