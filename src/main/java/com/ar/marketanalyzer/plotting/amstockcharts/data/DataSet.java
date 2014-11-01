@@ -1,10 +1,13 @@
-package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
+package com.ar.marketanalyzer.plotting.amstockcharts.data;
 
 import java.io.Serializable;
 import java.util.List;
 
+import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
 import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockEvent;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.FieldMapping;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -28,7 +31,7 @@ public class DataSet implements Serializable{
 	* Color of the data set. One of colors fromAmStockChart.colors array will be used if not set.
 	* Default Value: 
 	*/
-	 private String color;
+	 private Color color;
 	/**
 	* Whether this data set is selected for comparing. If you change this property, you should call stockChart.validateData() method in order the changes to be applied.
 	* Default Value: FALSE
@@ -38,12 +41,12 @@ public class DataSet implements Serializable{
 	* Data provider of the data set.
 	* Default Value: 
 	*/
-	 private Something dataProvider;
+	 private List<AmData> dataProvider;
 	/**
 	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for the StockGraph. Example: {fromField:""val1"", toField:""value""}.
 	* Default Value: 
 	*/
-	 private Something fieldMappings;
+	 private List<FieldMapping> fieldMappings;
 	/**
 	* Specifies whether this data set should be visible in ""compare to"" list.
 	* Default Value: TRUE
@@ -94,19 +97,19 @@ public class DataSet implements Serializable{
 		this.compared = compared;
 	}
 
-	public List<Object> getDataProvider() {
+	public List<AmData> getDataProvider() {
 		return dataProvider;
 	}
 
-	public void setDataProvider(List<Object> dataProvider) {
+	public void setDataProvider(List<AmData> dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 
-	public List<Object> getFieldMappings() {
+	public List<FieldMapping> getFieldMappings() {
 		return fieldMappings;
 	}
 
-	public void setFieldMappings(List<Object> fieldMappings) {
+	public void setFieldMappings(List<FieldMapping> fieldMappings) {
 		this.fieldMappings = fieldMappings;
 	}
 
@@ -126,11 +129,11 @@ public class DataSet implements Serializable{
 		this.showInSelect = showInSelect;
 	}
 
-	public List<Object> getStockEvents() {
+	public List<StockEvent> getStockEvents() {
 		return stockEvents;
 	}
 
-	public void setStockEvents(List<Object> stockEvents) {
+	public void setStockEvents(List<StockEvent> stockEvents) {
 		this.stockEvents = stockEvents;
 	}
 

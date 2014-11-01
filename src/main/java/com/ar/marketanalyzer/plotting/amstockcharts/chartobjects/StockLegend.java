@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
+package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amcharts.buildingblock.AmLegend;
 
@@ -31,6 +31,7 @@ public class StockLegend extends AmLegend{
 	* Default Value: [[value]]
 	*/
 	private String valueTextRegular;
+	
 	public String getPeriodValueTextComparing() {
 		return periodValueTextComparing;
 	}
@@ -52,6 +53,10 @@ public class StockLegend extends AmLegend{
 	public String getValueTextRegular() {
 		return valueTextRegular;
 	}
+	/**
+	* The text which will be displayed in the value portion of the legend. You can use tags like [[value]], [[open]], [[high]], [[low]], [[close]], [[percents]], [[description]].
+	* Default Value: [[value]]
+	*/
 	public void setValueTextRegular(String valueTextRegular) {
 		this.valueTextRegular = valueTextRegular;
 	}

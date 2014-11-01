@@ -1,8 +1,9 @@
-package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
+package com.ar.marketanalyzer.plotting.amstockcharts.data;
 
 import java.io.Serializable;
 
 import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -40,7 +41,7 @@ public class DataSetSelector implements Serializable{
 	* Possible values: ""right"", ""left"", ""top"", ""bottom"". ""top"" and ""bottom"" positions has a limitation - only one data set can be selected for comparing.
 	* Default Value: right, left, top, bottom
 	*/
-	 private String position;
+	 private Position position;
 	/**
 	* Text displayed near ""Select"" dropDown.
 	* Default Value: Select:
@@ -80,10 +81,10 @@ public class DataSetSelector implements Serializable{
 	public void setListHeight(double listHeight) {
 		this.listHeight = listHeight;
 	}
-	public String getPosition() {
+	public Position getPosition() {
 		return position;
 	}
-	public void setPosition(String position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 	public String getSelectText() {

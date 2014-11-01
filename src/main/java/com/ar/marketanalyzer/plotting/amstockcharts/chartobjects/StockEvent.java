@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
+package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -58,7 +58,7 @@ public class StockEvent implements Serializable {
 	* graph on which event will be displayed. You can use a reference to the stock graph object or id of the graph.
 	* Default Value: 
 	*/
-	 private Something graph;
+	 private StockGraph graph;
 	/**
 	* Roll-over background color.
 	* Default Value: #CC0000
@@ -146,10 +146,10 @@ public class StockEvent implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Something getGraph() {
+	public StockGraph getGraph() {
 		return graph;
 	}
-	public void setGraph(Something graph) {
+	public void setGraph(StockGraph graph) {
 		this.graph = graph;
 	}
 	public String getRollOverColor() {
