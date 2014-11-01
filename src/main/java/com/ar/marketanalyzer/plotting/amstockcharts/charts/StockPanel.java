@@ -1,6 +1,6 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.charts;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.Label;
@@ -9,7 +9,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.RecalculateToPercents;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class StockPanel extends AmSerialChart{
 
 	/**

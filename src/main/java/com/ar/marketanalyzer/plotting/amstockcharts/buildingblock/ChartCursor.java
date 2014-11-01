@@ -1,8 +1,11 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
 
-import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class ChartCursor {
 	/**
 	* If you set adjustment to -1, the balloon will be shown near previous, if you set it to 1 - near next data point.

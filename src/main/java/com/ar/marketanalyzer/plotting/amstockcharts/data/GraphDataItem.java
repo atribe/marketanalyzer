@@ -3,7 +3,10 @@ package com.ar.marketanalyzer.plotting.amstockcharts.data;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class GraphDataItem {
 
 	/**

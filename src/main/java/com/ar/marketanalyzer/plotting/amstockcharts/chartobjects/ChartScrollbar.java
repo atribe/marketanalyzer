@@ -2,7 +2,10 @@ package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class ChartScrollbar {
 
 	/**

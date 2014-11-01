@@ -1,9 +1,12 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class TrendLine {
 	/**
 	* Dash length.

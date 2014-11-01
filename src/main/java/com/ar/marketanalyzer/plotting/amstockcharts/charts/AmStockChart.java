@@ -1,9 +1,25 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.charts;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.AmExport;
+import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartScrollbarSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.LegendSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.PanelsSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.StockEventsSettings;
+import com.ar.marketanalyzer.plotting.amstockcharts.settings.ValueAxesSettings;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class AmStockChart {
 
 	/**
@@ -45,12 +61,12 @@ public class AmStockChart {
 	* Array of colors used by data sets if no color was set explicitly on data set itself.
 	* Default Value: [""#FF6600"", ""#FCD202"", ""#B0DE09"", ""#0D8ECF"", ""#2A0CD0"", ""#CD0D74"", ""#CC0000"", ""#00CC00"", ""#0000CC"", ""#DDDDDD"", ""#999999"", ""#333333"", ""#990000""]
 	*/
-	 private Array[Color] colors;
+	 private List<Color> colors;
 	/**
 	* Array of data sets selected for comparing.
 	* Default Value: 
 	*/
-	 private Array[DataSet] comparedDataSets;
+	 private List<DataSet> comparedDataSets;
 	/**
 	* Data provider of data set can have dates as Date Objects or as Strings. In case you use strings, you need to set data date format and the chart will parse dates to date objects. Check this page for date formatting strings.
 	* Please note that two-digit years (YY) is NOT supported in this setting.
@@ -61,7 +77,7 @@ public class AmStockChart {
 	* Array of DataSets.
 	* Default Value: 
 	*/
-	 private Array[DataSet] dataSets;
+	 private List<DataSet> dataSets;
 	/**
 	* DataSetSelector object. You can add it if you have more than one data set and want users to be able to select/compare them.
 	* Default Value: 
@@ -111,7 +127,7 @@ public class AmStockChart {
 	* Array of StockPanels (charts).
 	* Default Value: 
 	*/
-	 private Array[StockPanel] panels;
+	 private List<StockPanel> panels;
 	/**
 	* Settings for stock panels.
 	* Default Value: PanelsSettings
@@ -136,7 +152,7 @@ public class AmStockChart {
 	* Read-only. Current start date of the selected period. To set start/end dates, use stockChart.zoom(startDate, endDate) method.
 	* Default Value: 
 	*/
-	 private 0 startDate;
+	 private Date startDate;
 	/**
 	* Settings for stock events.
 	* Default Value: StockEventsSettings
@@ -162,5 +178,192 @@ public class AmStockChart {
 	* Default Value: FALSE
 	*/
 	 private boolean zoomOutOnDataSetChange;
+	public AmExport getAmExport() {
+		return amExport;
+	}
+	public void setAmExport(AmExport amExport) {
+		this.amExport = amExport;
+	}
+	public boolean isAnimationPlayed() {
+		return animationPlayed;
+	}
+	public void setAnimationPlayed(boolean animationPlayed) {
+		this.animationPlayed = animationPlayed;
+	}
+	public AmBalloon getBalloon() {
+		return balloon;
+	}
+	public void setBalloon(AmBalloon balloon) {
+		this.balloon = balloon;
+	}
+	public CategoryAxesSettings getCategoryAxesSettings() {
+		return categoryAxesSettings;
+	}
+	public void setCategoryAxesSettings(CategoryAxesSettings categoryAxesSettings) {
+		this.categoryAxesSettings = categoryAxesSettings;
+	}
+	public boolean isChartCreated() {
+		return chartCreated;
+	}
+	public void setChartCreated(boolean chartCreated) {
+		this.chartCreated = chartCreated;
+	}
+	public ChartCursorSettings getChartCursorSettings() {
+		return chartCursorSettings;
+	}
+	public void setChartCursorSettings(ChartCursorSettings chartCursorSettings) {
+		this.chartCursorSettings = chartCursorSettings;
+	}
+	public ChartScrollbarSettings getChartScrollbarSettings() {
+		return chartScrollbarSettings;
+	}
+	public void setChartScrollbarSettings(
+			ChartScrollbarSettings chartScrollbarSettings) {
+		this.chartScrollbarSettings = chartScrollbarSettings;
+	}
+	public List<Color> getColors() {
+		return colors;
+	}
+	public void setColors(List<Color> colors) {
+		this.colors = colors;
+	}
+	public List<DataSet> getComparedDataSets() {
+		return comparedDataSets;
+	}
+	public void setComparedDataSets(List<DataSet> comparedDataSets) {
+		this.comparedDataSets = comparedDataSets;
+	}
+	public String getDataDateFormat() {
+		return dataDateFormat;
+	}
+	public void setDataDateFormat(String dataDateFormat) {
+		this.dataDateFormat = dataDateFormat;
+	}
+	public List<DataSet> getDataSets() {
+		return dataSets;
+	}
+	public void setDataSets(List<DataSet> dataSets) {
+		this.dataSets = dataSets;
+	}
+	public DataSetSelector getDataSetSelector() {
+		return dataSetSelector;
+	}
+	public void setDataSetSelector(DataSetSelector dataSetSelector) {
+		this.dataSetSelector = dataSetSelector;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public Object getExportConfig() {
+		return exportConfig;
+	}
+	public void setExportConfig(Object exportConfig) {
+		this.exportConfig = exportConfig;
+	}
+	public boolean isExtendToFullPeriod() {
+		return extendToFullPeriod;
+	}
+	public void setExtendToFullPeriod(boolean extendToFullPeriod) {
+		this.extendToFullPeriod = extendToFullPeriod;
+	}
+	public double getFirstDayOfWeek() {
+		return firstDayOfWeek;
+	}
+	public void setFirstDayOfWeek(double firstDayOfWeek) {
+		this.firstDayOfWeek = firstDayOfWeek;
+	}
+	public boolean isGlueToTheEnd() {
+		return glueToTheEnd;
+	}
+	public void setGlueToTheEnd(boolean glueToTheEnd) {
+		this.glueToTheEnd = glueToTheEnd;
+	}
+	public LegendSettings getLegendSettings() {
+		return legendSettings;
+	}
+	public void setLegendSettings(LegendSettings legendSettings) {
+		this.legendSettings = legendSettings;
+	}
+	public DataSet getMainDataSet() {
+		return mainDataSet;
+	}
+	public void setMainDataSet(DataSet mainDataSet) {
+		this.mainDataSet = mainDataSet;
+	}
+	public boolean isMouseWheelScrollEnabled() {
+		return mouseWheelScrollEnabled;
+	}
+	public void setMouseWheelScrollEnabled(boolean mouseWheelScrollEnabled) {
+		this.mouseWheelScrollEnabled = mouseWheelScrollEnabled;
+	}
+	public List<StockPanel> getPanels() {
+		return panels;
+	}
+	public void setPanels(List<StockPanel> panels) {
+		this.panels = panels;
+	}
+	public PanelsSettings getPanelsSettings() {
+		return panelsSettings;
+	}
+	public void setPanelsSettings(PanelsSettings panelsSettings) {
+		this.panelsSettings = panelsSettings;
+	}
+	public String getPathToImages() {
+		return pathToImages;
+	}
+	public void setPathToImages(String pathToImages) {
+		this.pathToImages = pathToImages;
+	}
+	public PeriodSelector getPeriodSelector() {
+		return periodSelector;
+	}
+	public void setPeriodSelector(PeriodSelector periodSelector) {
+		this.periodSelector = periodSelector;
+	}
+	public AmSerialChart getScrollbarChart() {
+		return scrollbarChart;
+	}
+	public void setScrollbarChart(AmSerialChart scrollbarChart) {
+		this.scrollbarChart = scrollbarChart;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public StockEventsSettings getStockEventsSettings() {
+		return stockEventsSettings;
+	}
+	public void setStockEventsSettings(StockEventsSettings stockEventsSettings) {
+		this.stockEventsSettings = stockEventsSettings;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public ValueAxesSettings getValueAxesSettings() {
+		return valueAxesSettings;
+	}
+	public void setValueAxesSettings(ValueAxesSettings valueAxesSettings) {
+		this.valueAxesSettings = valueAxesSettings;
+	}
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	public boolean isZoomOutOnDataSetChange() {
+		return zoomOutOnDataSetChange;
+	}
+	public void setZoomOutOnDataSetChange(boolean zoomOutOnDataSetChange) {
+		this.zoomOutOnDataSetChange = zoomOutOnDataSetChange;
+	}
 
 }

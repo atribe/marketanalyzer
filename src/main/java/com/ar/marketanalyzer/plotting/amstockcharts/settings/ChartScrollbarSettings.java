@@ -4,7 +4,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PositionVertical;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class ChartScrollbarSettings {
 	/**
 	* Specifies whether number of gridCount is specified automatically, according to the axis size.

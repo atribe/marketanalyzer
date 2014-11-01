@@ -3,10 +3,9 @@ package com.ar.marketanalyzer.plotting.amstockcharts.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.ar.marketanalyzer.plotting.amcharts.data.OhlcData;
-import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockEvent;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.FieldMapping;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -41,7 +40,7 @@ public class DataSet implements Serializable{
 	* Data provider of the data set.
 	* Default Value: 
 	*/
-	 private List<AmData> dataProvider;
+	 private List<Object> dataProvider;
 	/**
 	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for the StockGraph. Example: {fromField:""val1"", toField:""value""}.
 	* Default Value: 
@@ -97,11 +96,11 @@ public class DataSet implements Serializable{
 		this.compared = compared;
 	}
 
-	public List<AmData> getDataProvider() {
+	public List<Object> getDataProvider() {
 		return dataProvider;
 	}
 
-	public void setDataProvider(List<AmData> dataProvider) {
+	public void setDataProvider(List<Object> dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 

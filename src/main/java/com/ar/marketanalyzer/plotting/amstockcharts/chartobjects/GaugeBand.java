@@ -1,7 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class GaugeBand {
 	/**
 	* Opacity of band fill. Will use axis.bandAlpha if not set any.

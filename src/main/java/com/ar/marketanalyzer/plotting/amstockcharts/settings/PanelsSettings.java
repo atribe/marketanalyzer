@@ -9,7 +9,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.enums.RecalculateToPercents;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.SmallPrefix;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.StartEffect;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Transparency;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class PanelsSettings {
 	/**
 	* The angle of the 3D part of plot area. This creates a 3D effect (if the depth3D is > 0).

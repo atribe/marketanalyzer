@@ -2,7 +2,10 @@ package com.ar.marketanalyzer.plotting.amstockcharts.settings;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.StockEventType;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class StockEventsSettings {
 
 	/**

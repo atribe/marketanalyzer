@@ -4,7 +4,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.enums.BulletType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.CompareGraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodValue;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class StockGraph extends AmGraph{
 
 	/**

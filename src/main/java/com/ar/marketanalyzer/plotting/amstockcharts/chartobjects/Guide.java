@@ -1,10 +1,13 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
-import java.sql.Date;
+import java.util.Date;
 
-import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class Guide {
 
 	/**

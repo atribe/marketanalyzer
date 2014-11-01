@@ -1,7 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
 
-import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class AmExport {
 
 	/**

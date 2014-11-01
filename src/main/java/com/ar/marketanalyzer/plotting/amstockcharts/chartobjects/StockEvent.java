@@ -1,10 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
-import com.ar.marketanalyzer.plotting.amcharts.enums.Color;
-import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.serializers.JacksonObjectToListSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

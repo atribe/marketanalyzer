@@ -4,7 +4,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.enums.Alignment;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.MarkerType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.SwitchType;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_EMPTY)
 public class LegendSettings {
 
 	/**
