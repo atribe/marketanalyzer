@@ -13,12 +13,12 @@ public class AxisBase {
 	* Specifies whether number of gridCount is specified automatically, acoarding to the axis size.
 	* Default Value: TRUE
 	*/
-	protected boolean autoGridCount;
+	protected Boolean autoGridCount;
 	/**
 	* Axis opacity. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double axisAlpha;
+	protected Double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: #000000
@@ -28,22 +28,22 @@ public class AxisBase {
 	* Thickness of the axis.
 	* Default Value: 1
 	*/
-	protected double axisThickness;
+	protected Double axisThickness;
 	/**
 	* Read-only. Returns x coordinate of the axis.
 	* Default Value: 
 	*/
-	protected double axisX;
+	protected Double axisX;
 	/**
 	* Read-only. Returns y coordinate of the axis.
 	* Default Value: 
 	*/
-	protected double axisY;
+	protected Double axisY;
 	/**
 	* Specifies if axis labels should be bold or not.
 	* Default Value: FALSE
 	*/
-	protected boolean boldLabels;
+	protected Boolean boldLabels;
 	/**
 	* Color of axis value labels. Will use chart's color if not set.
 	* Default Value: 
@@ -53,12 +53,12 @@ public class AxisBase {
 	* Length of a dash. 0 means line is not dashed.
 	* Default Value: 0
 	*/
-	protected double dashLength;
+	protected Double dashLength;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: 0
 	*/
-	protected double fillAlpha;
+	protected Double fillAlpha;
 	/**
 	* Fill color. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: #FFFFFF
@@ -68,12 +68,12 @@ public class AxisBase {
 	* Size of value labels text. Will use chart's fontSize if not set.
 	* Default Value: 
 	*/
-	protected double fontSize;
+	protected Double fontSize;
 	/**
 	* Opacity of grid lines.
 	* Default Value: 0.15
 	*/
-	protected double gridAlpha;
+	protected Double gridAlpha;
 	/**
 	* Color of grid lines.
 	* Default Value: #000000
@@ -83,12 +83,12 @@ public class AxisBase {
 	* Number of grid lines. In case this is value axis, or your categoryAxis parses dates, the number is approximate. The default value is 5. If you set autoGridCount to true, this property is ignored.
 	* Default Value: 5
 	*/
-	protected double gridCount;
+	protected Double gridCount;
 	/**
 	* Thickness of grid lines.
 	* Default Value: 1
 	*/
-	protected double gridThickness;
+	protected Double gridThickness;
 	/**
 	* The array of guides belonging to this axis.
 	* Default Value: []
@@ -98,72 +98,72 @@ public class AxisBase {
 	* If autoMargins of a chart is set to true, but you want this axis not to be measured when calculating margin, set ignoreAxisWidth to true.
 	* Default Value: FALSE
 	*/
-	protected boolean ignoreAxisWidth;
+	protected Boolean ignoreAxisWidth;
 	/**
 	* Specifies whether values should be placed inside or outside plot area.
 	* Default Value: FALSE
 	*/
-	protected boolean inside;
+	protected Boolean inside;
 	/**
 	* Frequency at which labels should be placed. Doesn't work for CategoryAxis if parseDates is set to true.
 	* Default Value: 1
 	*/
-	protected double labelFrequency;
+	protected Double labelFrequency;
 	/**
 	* You can use it to adjust position of axes labels. Works both withCategoryAxis and ValueAxis.
 	* Default Value: 0
 	*/
-	protected double labelOffset;
+	protected Double labelOffset;
 	/**
 	* Rotation angle of a label. Only horizontal axis' values can be rotated. If you set this for vertical axis, the setting will be ignored. Possible values from -90 to 90.
 	* Default Value: 0
 	*/
-	protected double labelRotation;
+	protected Double labelRotation;
 	/**
 	* Specifies whether axis displays category axis' labels and value axis' values.
 	* Default Value: TRUE
 	*/
-	protected boolean labelsEnabled;
+	protected Boolean labelsEnabled;
 	/**
 	* This property is used when calculating grid count (when autoGridCount is true). It specifies minimum cell width required for one span between grid lines.
 	* Default Value: 75
 	*/
-	protected double minHorizontalGap;
+	protected Double minHorizontalGap;
 	/**
 	* Opacity of minor grid. In order minor to be visible, you should set minorGridEnabled to true.
 	* Default Value: 0.07
 	*/
-	protected double minorGridAlpha;
+	protected Double minorGridAlpha;
 	/**
 	* Specifies if minor grid should be displayed.
 	* Default Value: FALSE
 	*/
-	protected boolean minorGridEnabled;
+	protected Boolean minorGridEnabled;
 	/**
 	* This property is used when calculating grid count (when autoGridCount is true). It specifies minimum cell height required for one span between grid lines.
 	* Default Value: 35
 	*/
-	protected double minVerticalGap;
+	protected Double minVerticalGap;
 	/**
 	* The distance of the axis to the plot area, in pixels. Negative values can also be used.
 	* Default Value: 0
 	*/
-	protected double offset;
+	protected Double offset;
 	/**
 	* Whether to show first axis label or not. This works properly only on ValueAxis. WithCategoryAxis it wont work 100%, it depends on the period, zooming, etc. There is no guaranteed way to force category axis to show or hide first label.
 	* Default Value: TRUE
 	*/
-	protected boolean showFirstLabel;
+	protected Boolean showFirstLabel;
 	/**
 	* Whether to show last axis label or not. This works properly only on ValueAxis. WithCategoryAxis it wont work 100%, it depends on the period, zooming, etc. There is no guaranteed way to force category axis to show or hide last label.
 	* Default Value: TRUE
 	*/
-	protected boolean showLastLabel;
+	protected Boolean showLastLabel;
 	/**
 	* Length of the tick marks.
 	* Default Value: 5
 	*/
-	protected double tickLength;
+	protected Double tickLength;
 	/**
 	* Title of the axis.
 	* Default Value: 
@@ -173,7 +173,7 @@ public class AxisBase {
 	* Specifies if title should be bold or not.
 	* Default Value: TRUE
 	*/
-	protected boolean titleBold;
+	protected Boolean titleBold;
 	/**
 	* Color of axis title. Will use text color of chart if not set any.
 	* Default Value: 
@@ -183,21 +183,21 @@ public class AxisBase {
 	* Font size of axis title. Will use font size of chart plus two pixels if not set any.
 	* Default Value: 
 	*/
-	protected double titleFontSize;
+	protected Double titleFontSize;
 	/**
 	* Axis opacity. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	public boolean isAutoGridCount() {
+	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
-	public void setAutoGridCount(boolean autoGridCount) {
+	public void setAutoGridCount(Boolean autoGridCount) {
 		this.autoGridCount = autoGridCount;
 	}
-	public double getAxisAlpha() {
+	public Double getAxisAlpha() {
 		return axisAlpha;
 	}
-	public void setAxisAlpha(double axisAlpha) {
+	public void setAxisAlpha(Double axisAlpha) {
 		this.axisAlpha = axisAlpha;
 	}
 	public Color getAxisColor() {
@@ -206,28 +206,28 @@ public class AxisBase {
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
 	}
-	public double getAxisThickness() {
+	public Double getAxisThickness() {
 		return axisThickness;
 	}
-	public void setAxisThickness(double axisThickness) {
+	public void setAxisThickness(Double axisThickness) {
 		this.axisThickness = axisThickness;
 	}
-	public double getAxisX() {
+	public Double getAxisX() {
 		return axisX;
 	}
-	public void setAxisX(double axisX) {
+	public void setAxisX(Double axisX) {
 		this.axisX = axisX;
 	}
-	public double getAxisY() {
+	public Double getAxisY() {
 		return axisY;
 	}
-	public void setAxisY(double axisY) {
+	public void setAxisY(Double axisY) {
 		this.axisY = axisY;
 	}
-	public boolean isBoldLabels() {
+	public Boolean isBoldLabels() {
 		return boldLabels;
 	}
-	public void setBoldLabels(boolean boldLabels) {
+	public void setBoldLabels(Boolean boldLabels) {
 		this.boldLabels = boldLabels;
 	}
 	public Color getColor() {
@@ -236,16 +236,16 @@ public class AxisBase {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
-	public double getFillAlpha() {
+	public Double getFillAlpha() {
 		return fillAlpha;
 	}
-	public void setFillAlpha(double fillAlpha) {
+	public void setFillAlpha(Double fillAlpha) {
 		this.fillAlpha = fillAlpha;
 	}
 	public Color getFillColor() {
@@ -254,16 +254,16 @@ public class AxisBase {
 	public void setFillColor(Color fillColor) {
 		this.fillColor = fillColor;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
-	public double getGridAlpha() {
+	public Double getGridAlpha() {
 		return gridAlpha;
 	}
-	public void setGridAlpha(double gridAlpha) {
+	public void setGridAlpha(Double gridAlpha) {
 		this.gridAlpha = gridAlpha;
 	}
 	public Color getGridColor() {
@@ -272,16 +272,16 @@ public class AxisBase {
 	public void setGridColor(Color gridColor) {
 		this.gridColor = gridColor;
 	}
-	public double getGridCount() {
+	public Double getGridCount() {
 		return gridCount;
 	}
-	public void setGridCount(double gridCount) {
+	public void setGridCount(Double gridCount) {
 		this.gridCount = gridCount;
 	}
-	public double getGridThickness() {
+	public Double getGridThickness() {
 		return gridThickness;
 	}
-	public void setGridThickness(double gridThickness) {
+	public void setGridThickness(Double gridThickness) {
 		this.gridThickness = gridThickness;
 	}
 	public List<Guide> getGuides() {
@@ -290,88 +290,88 @@ public class AxisBase {
 	public void setGuides(List<Guide> guides) {
 		this.guides = guides;
 	}
-	public boolean isIgnoreAxisWidth() {
+	public Boolean isIgnoreAxisWidth() {
 		return ignoreAxisWidth;
 	}
-	public void setIgnoreAxisWidth(boolean ignoreAxisWidth) {
+	public void setIgnoreAxisWidth(Boolean ignoreAxisWidth) {
 		this.ignoreAxisWidth = ignoreAxisWidth;
 	}
-	public boolean isInside() {
+	public Boolean isInside() {
 		return inside;
 	}
-	public void setInside(boolean inside) {
+	public void setInside(Boolean inside) {
 		this.inside = inside;
 	}
-	public double getLabelFrequency() {
+	public Double getLabelFrequency() {
 		return labelFrequency;
 	}
-	public void setLabelFrequency(double labelFrequency) {
+	public void setLabelFrequency(Double labelFrequency) {
 		this.labelFrequency = labelFrequency;
 	}
-	public double getLabelOffset() {
+	public Double getLabelOffset() {
 		return labelOffset;
 	}
-	public void setLabelOffset(double labelOffset) {
+	public void setLabelOffset(Double labelOffset) {
 		this.labelOffset = labelOffset;
 	}
-	public double getLabelRotation() {
+	public Double getLabelRotation() {
 		return labelRotation;
 	}
-	public void setLabelRotation(double labelRotation) {
+	public void setLabelRotation(Double labelRotation) {
 		this.labelRotation = labelRotation;
 	}
-	public boolean isLabelsEnabled() {
+	public Boolean isLabelsEnabled() {
 		return labelsEnabled;
 	}
-	public void setLabelsEnabled(boolean labelsEnabled) {
+	public void setLabelsEnabled(Boolean labelsEnabled) {
 		this.labelsEnabled = labelsEnabled;
 	}
-	public double getMinHorizontalGap() {
+	public Double getMinHorizontalGap() {
 		return minHorizontalGap;
 	}
-	public void setMinHorizontalGap(double minHorizontalGap) {
+	public void setMinHorizontalGap(Double minHorizontalGap) {
 		this.minHorizontalGap = minHorizontalGap;
 	}
-	public double getMinorGridAlpha() {
+	public Double getMinorGridAlpha() {
 		return minorGridAlpha;
 	}
-	public void setMinorGridAlpha(double minorGridAlpha) {
+	public void setMinorGridAlpha(Double minorGridAlpha) {
 		this.minorGridAlpha = minorGridAlpha;
 	}
-	public boolean isMinorGridEnabled() {
+	public Boolean isMinorGridEnabled() {
 		return minorGridEnabled;
 	}
-	public void setMinorGridEnabled(boolean minorGridEnabled) {
+	public void setMinorGridEnabled(Boolean minorGridEnabled) {
 		this.minorGridEnabled = minorGridEnabled;
 	}
-	public double getMinVerticalGap() {
+	public Double getMinVerticalGap() {
 		return minVerticalGap;
 	}
-	public void setMinVerticalGap(double minVerticalGap) {
+	public void setMinVerticalGap(Double minVerticalGap) {
 		this.minVerticalGap = minVerticalGap;
 	}
-	public double getOffset() {
+	public Double getOffset() {
 		return offset;
 	}
-	public void setOffset(double offset) {
+	public void setOffset(Double offset) {
 		this.offset = offset;
 	}
-	public boolean isShowFirstLabel() {
+	public Boolean isShowFirstLabel() {
 		return showFirstLabel;
 	}
-	public void setShowFirstLabel(boolean showFirstLabel) {
+	public void setShowFirstLabel(Boolean showFirstLabel) {
 		this.showFirstLabel = showFirstLabel;
 	}
-	public boolean isShowLastLabel() {
+	public Boolean isShowLastLabel() {
 		return showLastLabel;
 	}
-	public void setShowLastLabel(boolean showLastLabel) {
+	public void setShowLastLabel(Boolean showLastLabel) {
 		this.showLastLabel = showLastLabel;
 	}
-	public double getTickLength() {
+	public Double getTickLength() {
 		return tickLength;
 	}
-	public void setTickLength(double tickLength) {
+	public void setTickLength(Double tickLength) {
 		this.tickLength = tickLength;
 	}
 	public String getTitle() {
@@ -380,10 +380,10 @@ public class AxisBase {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public boolean isTitleBold() {
+	public Boolean isTitleBold() {
 		return titleBold;
 	}
-	public void setTitleBold(boolean titleBold) {
+	public void setTitleBold(Boolean titleBold) {
 		this.titleBold = titleBold;
 	}
 	public Color getTitleColor() {
@@ -392,10 +392,10 @@ public class AxisBase {
 	public void setTitleColor(Color titleColor) {
 		this.titleColor = titleColor;
 	}
-	public double getTitleFontSize() {
+	public Double getTitleFontSize() {
 		return titleFontSize;
 	}
-	public void setTitleFontSize(double titleFontSize) {
+	public void setTitleFontSize(Double titleFontSize) {
 		this.titleFontSize = titleFontSize;
 	}	
 }

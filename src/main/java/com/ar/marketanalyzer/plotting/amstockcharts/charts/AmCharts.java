@@ -11,7 +11,7 @@ public class AmCharts {
 	* Set it to true if you have base href set for your page. This will fix rendering problems in Firefox caused by base href.
 	* Default Value: FALSE
 	*/
-	private boolean baseHref;
+	private Boolean baseHref;
 	/**
 	* Array of day names, used when formatting dates (if categoryAxis.parseDates is set to true)
 	* Default Value: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -26,7 +26,7 @@ public class AmCharts {
 	* Delay in ms at which each chart on the page should be rendered. This is very handy if you have a lot of charts on the page and do not want to overload the device CPU.
 	* Default Value: 0
 	*/
-	private double processDelay;
+	private Double processDelay;
 	/**
 	* Array of short versions of day names, used when formatting dates (if categoryAxis.parseDates is set to true)
 	* Default Value: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -46,12 +46,12 @@ public class AmCharts {
 	* Set it to true if you want UTC time to be used instead of local time.
 	* Default Value: FALSE
 	*/
-	private boolean useUTC;
+	private Boolean useUTC;
 	
-	public boolean isBaseHref() {
+	public Boolean isBaseHref() {
 		return baseHref;
 	}
-	public void setBaseHref(boolean baseHref) {
+	public void setBaseHref(Boolean baseHref) {
 		this.baseHref = baseHref;
 	}
 	public List<String> getDayNames() {
@@ -66,10 +66,10 @@ public class AmCharts {
 	public void setMonthNames(List<String> monthNames) {
 		this.monthNames = monthNames;
 	}
-	public double getProcessDelay() {
+	public Double getProcessDelay() {
 		return processDelay;
 	}
-	public void setProcessDelay(double processDelay) {
+	public void setProcessDelay(Double processDelay) {
 		this.processDelay = processDelay;
 	}
 	public List<String> getShortDayNames() {
@@ -90,10 +90,10 @@ public class AmCharts {
 	public void setTheme(String theme) {
 		this.theme = theme;
 	}
-	public boolean isUseUTC() {
+	public Boolean isUseUTC() {
 		return useUTC;
 	}
-	public void setUseUTC(boolean useUTC) {
+	public void setUseUTC(Boolean useUTC) {
 		this.useUTC = useUTC;
 	}
 

@@ -31,7 +31,7 @@ public class AmStockChart {
 	* Specifies if animation was already played. Animation is only played once, when chart is rendered for the first time. If you want the animation to be repeated, set this property to false.
 	* Default Value: 
 	*/
-	private boolean animationPlayed;
+	private Boolean animationPlayed;
 	/**
 	* Balloon object.
 	* Default Value: AmBalloon
@@ -46,7 +46,7 @@ public class AmStockChart {
 	* Read-only. Indicates if the chart is created.
 	* Default Value: 
 	*/
-	private boolean chartCreated;
+	private Boolean chartCreated;
 	/**
 	* Chart cursor settings.
 	* Default Value: ChartCursorSettings
@@ -97,17 +97,17 @@ public class AmStockChart {
 	* Specifies if the chart should always display full first and last data item when data is grouped to a longer period if the chart is zoomed from the beginning or end of the data.
 	* Default Value: TRUE
 	*/
-	private boolean extendToFullPeriod;
+	private Boolean extendToFullPeriod;
 	/**
 	* Defines on which day week starts. 0 - Sunday, 1 - Monday...
 	* Default Value: 1
 	*/
-	private double firstDayOfWeek;
+	private Double firstDayOfWeek;
 	/**
 	* If set to true the scope of the data view will be set to the end after data update.
 	* Default Value: FALSE
 	*/
-	private boolean glueToTheEnd;
+	private Boolean glueToTheEnd;
 	/**
 	* Legend settings.
 	* Default Value: LegendSettings
@@ -122,7 +122,7 @@ public class AmStockChart {
 	* Specifies if scrolling of a chart with mouse wheel is enabled.
 	* Default Value: FALSE
 	*/
-	private boolean mouseWheelScrollEnabled;
+	private Boolean mouseWheelScrollEnabled;
 	/**
 	* Array of StockPanels (charts).
 	* Default Value: 
@@ -177,7 +177,7 @@ public class AmStockChart {
 	* Specifies whether the chart should zoom-out when main data set is changed.
 	* Default Value: FALSE
 	*/
-	private boolean zoomOutOnDataSetChange;
+	private Boolean zoomOutOnDataSetChange;
 	
 	/*
 	 * Constructors
@@ -195,10 +195,10 @@ public class AmStockChart {
 	public void setAmExport(AmExport amExport) {
 		this.amExport = amExport;
 	}
-	public boolean isAnimationPlayed() {
+	public Boolean isAnimationPlayed() {
 		return animationPlayed;
 	}
-	public void setAnimationPlayed(boolean animationPlayed) {
+	public void setAnimationPlayed(Boolean animationPlayed) {
 		this.animationPlayed = animationPlayed;
 	}
 	public AmBalloon getBalloon() {
@@ -213,10 +213,10 @@ public class AmStockChart {
 	public void setCategoryAxesSettings(CategoryAxesSettings categoryAxesSettings) {
 		this.categoryAxesSettings = categoryAxesSettings;
 	}
-	public boolean isChartCreated() {
+	public Boolean isChartCreated() {
 		return chartCreated;
 	}
-	public void setChartCreated(boolean chartCreated) {
+	public void setChartCreated(Boolean chartCreated) {
 		this.chartCreated = chartCreated;
 	}
 	public ChartCursorSettings getChartCursorSettings() {
@@ -274,22 +274,22 @@ public class AmStockChart {
 	public void setExportConfig(Object exportConfig) {
 		this.exportConfig = exportConfig;
 	}
-	public boolean isExtendToFullPeriod() {
+	public Boolean isExtendToFullPeriod() {
 		return extendToFullPeriod;
 	}
-	public void setExtendToFullPeriod(boolean extendToFullPeriod) {
+	public void setExtendToFullPeriod(Boolean extendToFullPeriod) {
 		this.extendToFullPeriod = extendToFullPeriod;
 	}
-	public double getFirstDayOfWeek() {
+	public Double getFirstDayOfWeek() {
 		return firstDayOfWeek;
 	}
-	public void setFirstDayOfWeek(double firstDayOfWeek) {
+	public void setFirstDayOfWeek(Double firstDayOfWeek) {
 		this.firstDayOfWeek = firstDayOfWeek;
 	}
-	public boolean isGlueToTheEnd() {
+	public Boolean isGlueToTheEnd() {
 		return glueToTheEnd;
 	}
-	public void setGlueToTheEnd(boolean glueToTheEnd) {
+	public void setGlueToTheEnd(Boolean glueToTheEnd) {
 		this.glueToTheEnd = glueToTheEnd;
 	}
 	public LegendSettings getLegendSettings() {
@@ -304,10 +304,10 @@ public class AmStockChart {
 	public void setMainDataSet(DataSet mainDataSet) {
 		this.mainDataSet = mainDataSet;
 	}
-	public boolean isMouseWheelScrollEnabled() {
+	public Boolean isMouseWheelScrollEnabled() {
 		return mouseWheelScrollEnabled;
 	}
-	public void setMouseWheelScrollEnabled(boolean mouseWheelScrollEnabled) {
+	public void setMouseWheelScrollEnabled(Boolean mouseWheelScrollEnabled) {
 		this.mouseWheelScrollEnabled = mouseWheelScrollEnabled;
 	}
 	public List<StockPanel> getPanels() {
@@ -370,10 +370,10 @@ public class AmStockChart {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	public boolean isZoomOutOnDataSetChange() {
+	public Boolean isZoomOutOnDataSetChange() {
 		return zoomOutOnDataSetChange;
 	}
-	public void setZoomOutOnDataSetChange(boolean zoomOutOnDataSetChange) {
+	public void setZoomOutOnDataSetChange(Boolean zoomOutOnDataSetChange) {
 		this.zoomOutOnDataSetChange = zoomOutOnDataSetChange;
 	}
 

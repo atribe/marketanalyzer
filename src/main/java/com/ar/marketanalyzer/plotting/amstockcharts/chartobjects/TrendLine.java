@@ -12,7 +12,7 @@ public class TrendLine {
 	* Dash length.
 	* Default Value: 0
 	*/
-	private double dashLength;
+	private Double dashLength;
 	/**
 	* String, equal to category value to which trend line should be drawn. It should be used if chart doesn't parse dates.
 	* Default Value: 
@@ -27,12 +27,12 @@ public class TrendLine {
 	* Value at which trend line should end.
 	* Default Value: 
 	*/
-	private double finalValue;
+	private Double finalValue;
 	/**
 	* Used by XY chart only. X value at which trend line should end.
 	* Default Value: 
 	*/
-	private double finalXValue;
+	private Double finalXValue;
 	/**
 	* Unique id of a Trend line. You don't need to set it, unless you want to.
 	* Default Value: 
@@ -52,22 +52,22 @@ public class TrendLine {
 	* Value from which trend line should start.
 	* Default Value: 
 	*/
-	private double initialValue;
+	private Double initialValue;
 	/**
 	* Used by XY chart only. X value from which trend line should start.
 	* Default Value: 
 	*/
-	private double initialXValue;
+	private Double initialXValue;
 	/**
 	* Used by Stock chart. If this property is set to true, this trend line won't be removed when clicked on eraser tool.
 	* Default Value: FALSE
 	*/
-	private boolean isProtected;
+	private Boolean isProtected;
 	/**
 	* Line opacity.
 	* Default Value: 1
 	*/
-	private double lineAlpha;
+	private Double lineAlpha;
 	/**
 	* Line color.
 	* Default Value: #00CC00
@@ -77,7 +77,7 @@ public class TrendLine {
 	* Line thickness.
 	* Default Value: 1
 	*/
-	private double lineThickness;
+	private Double lineThickness;
 	/**
 	* Value axis of the trend line. Will use first value axis of the chart if not set any. You can use a reference to the value axis object or id of value axis.
 	* Default Value: ValueAxis
@@ -88,10 +88,10 @@ public class TrendLine {
 	* Default Value: ValueAxis
 	*/
 	private ValueAxis valueAxisX;
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
 	public String getFinalCategory() {
@@ -106,16 +106,16 @@ public class TrendLine {
 	public void setFinalDate(Date finalDate) {
 		this.finalDate = finalDate;
 	}
-	public double getFinalValue() {
+	public Double getFinalValue() {
 		return finalValue;
 	}
-	public void setFinalValue(double finalValue) {
+	public void setFinalValue(Double finalValue) {
 		this.finalValue = finalValue;
 	}
-	public double getFinalXValue() {
+	public Double getFinalXValue() {
 		return finalXValue;
 	}
-	public void setFinalXValue(double finalXValue) {
+	public void setFinalXValue(Double finalXValue) {
 		this.finalXValue = finalXValue;
 	}
 	public String getId() {
@@ -136,28 +136,28 @@ public class TrendLine {
 	public void setInitialDate(Date initialDate) {
 		this.initialDate = initialDate;
 	}
-	public double getInitialValue() {
+	public Double getInitialValue() {
 		return initialValue;
 	}
-	public void setInitialValue(double initialValue) {
+	public void setInitialValue(Double initialValue) {
 		this.initialValue = initialValue;
 	}
-	public double getInitialXValue() {
+	public Double getInitialXValue() {
 		return initialXValue;
 	}
-	public void setInitialXValue(double initialXValue) {
+	public void setInitialXValue(Double initialXValue) {
 		this.initialXValue = initialXValue;
 	}
-	public boolean isProtected() {
+	public Boolean isProtected() {
 		return isProtected;
 	}
-	public void setProtected(boolean isProtected) {
+	public void setProtected(Boolean isProtected) {
 		this.isProtected = isProtected;
 	}
-	public double getLineAlpha() {
+	public Double getLineAlpha() {
 		return lineAlpha;
 	}
-	public void setLineAlpha(double lineAlpha) {
+	public void setLineAlpha(Double lineAlpha) {
 		this.lineAlpha = lineAlpha;
 	}
 	public Color getLineColor() {
@@ -166,10 +166,10 @@ public class TrendLine {
 	public void setLineColor(Color lineColor) {
 		this.lineColor = lineColor;
 	}
-	public double getLineThickness() {
+	public Double getLineThickness() {
 		return lineThickness;
 	}
-	public void setLineThickness(double lineThickness) {
+	public void setLineThickness(Double lineThickness) {
 		this.lineThickness = lineThickness;
 	}
 	public ValueAxis getValueAxis() {

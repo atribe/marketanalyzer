@@ -32,7 +32,7 @@ public class AmGraph {
 	* Specifies if the line graph should be placed behind column graphs
 	* Default Value: FALSE
 	*/
-	protected boolean behindColumns;
+	protected Boolean behindColumns;
 	/**
 	* Type of the bullets. Possible values are: ""none"", ""round"", ""square"", ""triangleUp"", ""triangleDown"", ""triangleLeft"", ""triangleRight"", ""bubble"", ""diamond"", ""xError"", ""yError"" and ""custom"".
 	* Default Value: none
@@ -42,7 +42,7 @@ public class AmGraph {
 	* Opacity of bullets. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double bulletAlpha;
+	protected Double bulletAlpha;
 	/**
 	* bulletAxis value is used when you are building error chart. Error chart is a regular serial or XY chart with bullet type set to ""xError"" or ""yError"". The graph should know which axis should be used to determine the size of this bullet - that's when bulletAxis should be set. Besides that, you should also set graph.errorField. You can also use other bullet types with this feature too. For example, if you set bulletAxis for XY chart, the size of a bullet will change as you zoom the chart.
 	* Default Value: 
@@ -52,7 +52,7 @@ public class AmGraph {
 	* Bullet border opacity.
 	* Default Value: 0
 	*/
-	protected double bulletBorderAlpha;
+	protected Double bulletBorderAlpha;
 	/**
 	* Bullet border color. Will use lineColor if not set.
 	* Default Value: 
@@ -62,7 +62,7 @@ public class AmGraph {
 	* Bullet border thickness.
 	* Default Value: 2
 	*/
-	protected double bulletBorderThickness;
+	protected Double bulletBorderThickness;
 	/**
 	* Bullet color. Will use lineColor if not set.
 	* Default Value: 
@@ -77,12 +77,12 @@ public class AmGraph {
 	* Bullet offset. Distance from the actual data point to the bullet. Can be used to place custom bullets above the columns.
 	* Default Value: 0
 	*/
-	protected double bulletOffset;
+	protected Double bulletOffset;
 	/**
 	* Bullet size.
 	* Default Value: 8
 	*/
-	protected double bulletSize;
+	protected Double bulletSize;
 	/**
 	* Name of the bullet size field in your dataProvider.
 	* Default Value: 
@@ -97,7 +97,7 @@ public class AmGraph {
 	* In case you want to place this graph's columns in front of other columns, set this to false. In case ""true"", the columns will be clustered next to each other.
 	* Default Value: TRUE
 	*/
-	protected boolean clustered;
+	protected Boolean clustered;
 	/**
 	* Color of value labels. Will use chart's color if not set.
 	* Default Value: 
@@ -112,22 +112,22 @@ public class AmGraph {
 	* You can specify custom column width for each graph individually. Value range is 0 - 1 (we set relative width, not pixel width here).
 	* Default Value: 
 	*/
-	protected double columnWidth;
+	protected Double columnWidth;
 	/**
 	* Specifies whether to connect data points if data is missing. The default value is true.
 	* Default Value: TRUE
 	*/
-	protected boolean connect;
+	protected Boolean connect;
 	/**
 	* Corner radius of column. It can be set both in pixels or in percents. The chart's depth and angle styles must be set to 0. The default value is 0. Note, cornerRadiusTop will be applied for all corners of the column, JavaScript charts do not have a possibility to set separate corner radius for top and bottom. As we want all the property names to be the same both on JS and Flex, we didn't change this too.
 	* Default Value: 0
 	*/
-	protected double cornerRadiusTop;
+	protected Double cornerRadiusTop;
 	/**
 	* If bulletsEnabled of ChartCurosor is true, a bullet on each graph follows the cursor. You can set opacity of each graphs bullet. In case you want to disable these bullets for a certain graph, set opacity to 0.
 	* Default Value: 1
 	*/
-	protected double cursorBulletAlpha;
+	protected Double cursorBulletAlpha;
 	/**
 	* Path to the image of custom bullet.
 	* Default Value: 
@@ -147,7 +147,7 @@ public class AmGraph {
 	* Dash length. If you set it to a value greater than 0, the graph line (or columns border) will be dashed.
 	* Default Value: 0
 	*/
-	protected double dashLength;
+	protected Double dashLength;
 	/**
 	* Name of the dash length field in your dataProvider. This property adds a possibility to change graphs’ line from solid to dashed on any data point. You can also make columns border dashed using this setting.
 	* Default Value: 
@@ -167,7 +167,7 @@ public class AmGraph {
 	* Opacity of fill. Plural form is used to keep the same property names as our Flex charts'. Flex charts can accept array of numbers to generate gradients. Although you can set array here, only first value of this array will be used.
 	* Default Value: 0
 	*/
-	protected double fillAlphas;
+	protected Double fillAlphas;
 	/**
 	* Fill color. Will use lineColor if not set. You can also set array of colors here.
 	* Default Value: 
@@ -192,12 +192,12 @@ public class AmGraph {
 	* Column width in pixels. If you set this property, columns will be of a fixed width and won't adjust to the available space.
 	* Default Value: 
 	*/
-	protected double fixedColumnWidth;
+	protected Double fixedColumnWidth;
 	/**
 	* Size of value labels text. Will use chart's fontSize if not set.
 	* Default Value: 
 	*/
-	protected double fontSize;
+	protected Double fontSize;
 	/**
 	* Orientation of the gradient fills (only for ""column"" graph type). Possible values are ""vertical"" and ""horizontal"".
 	* Default Value: vertical
@@ -207,12 +207,12 @@ public class AmGraph {
 	* Specifies whether the graph is hidden. Do not use this to show/hide the graph, use hideGraph(graph) and showGraph(graph) methods instead.
 	* Default Value: FALSE
 	*/
-	protected boolean hidden;
+	protected Boolean hidden;
 	/**
 	* If there are more data points than hideBulletsCount, the bullets will not be shown. 0 means the bullets will always be visible.
 	* Default Value: 0
 	*/
-	protected double hideBulletsCount;
+	protected Double hideBulletsCount;
 	/**
 	* Name of the high field (used by candlesticks and ohlc) in your dataProvider.
 	* Default Value: 
@@ -227,7 +227,7 @@ public class AmGraph {
 	* Whether to include this graph when calculating min and max value of the axis.
 	* Default Value: TRUE
 	*/
-	protected boolean includeInMinMax;
+	protected Boolean includeInMinMax;
 	/**
 	* Data label text anchor.
 	* Default Value: auto
@@ -243,7 +243,7 @@ public class AmGraph {
 	* Offset of data label.
 	* Default Value: 0
 	*/
-	protected double labelOffset;
+	protected Double labelOffset;
 	/**
 	* Position of value label. Possible values are: ""bottom"", ""top"", ""right"", ""left"", ""inside"", ""middle"". Sometimes position is changed by the chart, depending on a graph type, rotation, etc.
 	* Default Value: top
@@ -253,7 +253,7 @@ public class AmGraph {
 	* Rotation of a data label.
 	* Default Value: 0
 	*/
-	protected double labelRotation;
+	protected Double labelRotation;
 	/**
 	* Value label text. You can use tags like [[value]], [[description]], [[percents]], [[open]], [[category]].
 	* Default Value: 
@@ -263,7 +263,7 @@ public class AmGraph {
 	* Legend marker opacity. Will use lineAlpha if not set. Value range is 0 - 1.
 	* Default Value: 
 	*/
-	protected double legendAlpha;
+	protected Double legendAlpha;
 	/**
 	* Legend marker color. Will use lineColor if not set.
 	* Default Value: 
@@ -283,7 +283,7 @@ public class AmGraph {
 	* Opacity of the line (or column border). Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double lineAlpha;
+	protected Double lineAlpha;
 	/**
 	* Color of the line (or column border). If you do not set any, the color fromAmCoordinateChart.colors array will be used for each subsequent graph.
 	* Default Value: 
@@ -298,7 +298,7 @@ public class AmGraph {
 	* Specifies thickness of the graph line (or column border).
 	* Default Value: 1
 	*/
-	protected double lineThickness;
+	protected Double lineThickness;
 	/**
 	* Name of the low field (used by candlesticks and ohlc) in your dataProvider.
 	* Default Value: 
@@ -313,27 +313,27 @@ public class AmGraph {
 	* Specifies size of the bullet which value is the biggest (XY chart).
 	* Default Value: 50
 	*/
-	protected double maxBulletSize;
+	protected Double maxBulletSize;
 	/**
 	* Specifies minimum size of the bullet (XY chart).
 	* Default Value: 0
 	*/
-	protected double minBulletSize;
+	protected Double minBulletSize;
 	/**
 	* It is useful if you have really lots of data points. Based on this property the graph will omit some of the lines (if the distance between points is less that minDistance, in pixels). This will not affect the bullets or indicator in anyway, so the user will not see any difference (unless you set minValue to a bigger value, let say 5), but will increase performance as less lines will be drawn. By setting value to a bigger number you can also make your lines look less jagged.
 	* Default Value: 1
 	*/
-	protected double minDistance;
+	protected Double minDistance;
 	/**
 	* If you use different colors for your negative values, a graph below zero line is filled with negativeColor. With this property you can define a different base value at which colors should be changed to negative colors.
 	* Default Value: 0
 	*/
-	protected double negativeBase;
+	protected Double negativeBase;
 	/**
 	* Fill opacity of negative part of the graph. Will use fillAlphas if not set.
 	* Default Value: 
 	*/
-	protected double negativeFillAlphas;
+	protected Double negativeFillAlphas;
 	/**
 	* Fill color of negative part of the graph. Will use fillColors if not set.
 	* Default Value: 
@@ -343,7 +343,7 @@ public class AmGraph {
 	* Opacity of the negative portion of the line (or column border). Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double negativeLineAlpha;
+	protected Double negativeLineAlpha;
 	/**
 	* Color of the line (or column) when the values are negative. In case the graph type is candlestick or ohlc, negativeLineColor is used when close value is less then open value.
 	* Default Value: 
@@ -353,12 +353,12 @@ public class AmGraph {
 	* If you set it to true, column chart will begin new stack. This allows having Clustered and Stacked column/bar chart.
 	* Default Value: FALSE
 	*/
-	protected boolean newStack;
+	protected Boolean newStack;
 	/**
 	* In case you want to have a step line graph without risers, you should set this to true.
 	* Default Value: FALSE
 	*/
-	protected boolean noStepRisers;
+	protected Boolean noStepRisers;
 	/**
 	* Name of the open field (used by floating columns, candlesticks and ohlc) in your dataProvider.
 	* Default Value: 
@@ -378,7 +378,7 @@ public class AmGraph {
 	* This property can be used by step graphs - you can set how many periods one horizontal line should span.
 	* Default Value: 1
 	*/
-	protected double periodSpan;
+	protected Double periodSpan;
 	/**
 	* Specifies where data points should be placed - on the beginning of the period (day, hour, etc) or in the middle (only when parseDates property of categoryAxis is set to true). This setting affects Serial chart only. Possible values are ""start"", ""middle"" and ""end""
 	* Default Value: middle
@@ -388,22 +388,22 @@ public class AmGraph {
 	* Precision of values. Will use chart's precision if not set any.
 	* Default Value: 
 	*/
-	protected double precision;
+	protected Double precision;
 	/**
 	* If this is set to true, candlesticks will be colored in a different manner - if current close is less than current open, the candlestick will be empty, otherwise - filled with color. If previous close is less than current close, the candlestick will use positive color, otherwise - negative color.
 	* Default Value: FALSE
 	*/
-	protected boolean proCandlesticks;
+	protected Boolean proCandlesticks;
 	/**
 	* If graph's type is column and labelText is set, graph hides labels which do not fit into the column's space. If you don't want these labels to be hidden, set this to true.
 	* Default Value: FALSE
 	*/
-	protected boolean showAllValueLabels;
+	protected Boolean showAllValueLabels;
 	/**
 	* Specifies whether the value balloon of this graph is shown when mouse is over data item or chart's indicator is over some series.
 	* Default Value: TRUE
 	*/
-	protected boolean showBalloon;
+	protected Boolean showBalloon;
 	/**
 	* Specifies graphs value at which cursor is showed. This is only important for candlestick and ohlc charts, also if column chart has ""open"" value. Possible values are: ""open"", ""close"", ""high"", ""low"".
 	* Default Value: close
@@ -418,17 +418,17 @@ public class AmGraph {
 	* If you want mouse pointer to change to hand when hovering the graph, set this property to true.
 	* Default Value: FALSE
 	*/
-	protected boolean showHandOnHover;
+	protected Boolean showHandOnHover;
 	/**
 	* It can only be used together with topRadius (when columns look like cylinders). If you set it to true, the cylinder will be lowered down so that the center of it's bottom circle would be right on category axis.
 	* Default Value: FALSE
 	*/
-	protected boolean showOnAxis;
+	protected Boolean showOnAxis;
 	/**
 	* If the value axis of this graph has stack types like ""regular"" or ""100%"" You can exclude this graph from stacking.
 	* Default Value: TRUE
 	*/
-	protected boolean stackable;
+	protected Boolean stackable;
 	/**
 	* Step graph only. Specifies to which direction step should be drawn.
 	* Default Value: right
@@ -438,7 +438,7 @@ public class AmGraph {
 	* If you set it to false, the graph will not be hidden when user clicks on legend entry.
 	* Default Value: TRUE
 	*/
-	protected boolean switchable;
+	protected Boolean switchable;
 	/**
 	* Graph title.
 	* Default Value: 
@@ -448,7 +448,7 @@ public class AmGraph {
 	* If you set this to 1, columns will become cylinders (must set depth3D and angle properties of a chart to >0 values in order this to be visible). you can make columns look like cones (set topRadius to 0) or even like some glasses (set to bigger than 1). We strongly recommend setting grid opacity to 0 in order this to look good.
 	* Default Value: 
 	*/
-	protected double topRadius;
+	protected Double topRadius;
 	/**
 	* Type of the graph. Possible values are: ""line"", ""column"", ""step"", ""smoothedLine"", ""candlestick"", ""ohlc"". XY and Radar charts can only display ""line"" type graphs.
 	* Default Value: line
@@ -468,7 +468,7 @@ public class AmGraph {
 	* If negativeLineColor and/or negativeFillColors are set and useNegativeColorIfDown is set to true (default is false), the line, step and column graphs will use these colors for lines, bullets or columns if previous value is bigger than current value. In case you set openField for the graph, the graph will compare current value with openField value instead of comparing to previous value. Here is a demo.
 	* Default Value: FALSE
 	*/
-	protected boolean useNegativeColorIfDown;
+	protected Boolean useNegativeColorIfDown;
 	/**
 	* Specifies which value axis the graph will use. Will use the first value axis if not set. You can use reference to the real ValueAxis object or set value axis id.
 	* Default Value: ValueAxis
@@ -483,7 +483,7 @@ public class AmGraph {
 	* Specifies whether this graph should be shown in the Legend.
 	* Default Value: TRUE
 	*/
-	protected boolean visibleInLegend;
+	protected Boolean visibleInLegend;
 	/**
 	* XY chart only. A horizontal value axis object to attach graph to.
 	* Default Value: ValueAxis
@@ -539,10 +539,10 @@ public class AmGraph {
 	public void setBalloonText(String balloonText) {
 		this.balloonText = balloonText;
 	}
-	public boolean isBehindColumns() {
+	public Boolean isBehindColumns() {
 		return behindColumns;
 	}
-	public void setBehindColumns(boolean behindColumns) {
+	public void setBehindColumns(Boolean behindColumns) {
 		this.behindColumns = behindColumns;
 	}
 	public String getBullet() {
@@ -551,10 +551,10 @@ public class AmGraph {
 	public void setBullet(String bullet) {
 		this.bullet = bullet;
 	}
-	public double getBulletAlpha() {
+	public Double getBulletAlpha() {
 		return bulletAlpha;
 	}
-	public void setBulletAlpha(double bulletAlpha) {
+	public void setBulletAlpha(Double bulletAlpha) {
 		this.bulletAlpha = bulletAlpha;
 	}
 	public ValueAxis getBulletAxis() {
@@ -563,10 +563,10 @@ public class AmGraph {
 	public void setBulletAxis(ValueAxis bulletAxis) {
 		this.bulletAxis = bulletAxis;
 	}
-	public double getBulletBorderAlpha() {
+	public Double getBulletBorderAlpha() {
 		return bulletBorderAlpha;
 	}
-	public void setBulletBorderAlpha(double bulletBorderAlpha) {
+	public void setBulletBorderAlpha(Double bulletBorderAlpha) {
 		this.bulletBorderAlpha = bulletBorderAlpha;
 	}
 	public Color getBulletBorderColor() {
@@ -575,10 +575,10 @@ public class AmGraph {
 	public void setBulletBorderColor(Color bulletBorderColor) {
 		this.bulletBorderColor = bulletBorderColor;
 	}
-	public double getBulletBorderThickness() {
+	public Double getBulletBorderThickness() {
 		return bulletBorderThickness;
 	}
-	public void setBulletBorderThickness(double bulletBorderThickness) {
+	public void setBulletBorderThickness(Double bulletBorderThickness) {
 		this.bulletBorderThickness = bulletBorderThickness;
 	}
 	public Color getBulletColor() {
@@ -593,16 +593,16 @@ public class AmGraph {
 	public void setBulletField(String bulletField) {
 		this.bulletField = bulletField;
 	}
-	public double getBulletOffset() {
+	public Double getBulletOffset() {
 		return bulletOffset;
 	}
-	public void setBulletOffset(double bulletOffset) {
+	public void setBulletOffset(Double bulletOffset) {
 		this.bulletOffset = bulletOffset;
 	}
-	public double getBulletSize() {
+	public Double getBulletSize() {
 		return bulletSize;
 	}
-	public void setBulletSize(double bulletSize) {
+	public void setBulletSize(Double bulletSize) {
 		this.bulletSize = bulletSize;
 	}
 	public String getBulletSizeField() {
@@ -617,10 +617,10 @@ public class AmGraph {
 	public void setCloseField(String closeField) {
 		this.closeField = closeField;
 	}
-	public boolean isClustered() {
+	public Boolean isClustered() {
 		return clustered;
 	}
-	public void setClustered(boolean clustered) {
+	public void setClustered(Boolean clustered) {
 		this.clustered = clustered;
 	}
 	public Color getColor() {
@@ -635,28 +635,28 @@ public class AmGraph {
 	public void setColorField(String colorField) {
 		this.colorField = colorField;
 	}
-	public double getColumnWidth() {
+	public Double getColumnWidth() {
 		return columnWidth;
 	}
-	public void setColumnWidth(double columnWidth) {
+	public void setColumnWidth(Double columnWidth) {
 		this.columnWidth = columnWidth;
 	}
-	public boolean isConnect() {
+	public Boolean isConnect() {
 		return connect;
 	}
-	public void setConnect(boolean connect) {
+	public void setConnect(Boolean connect) {
 		this.connect = connect;
 	}
-	public double getCornerRadiusTop() {
+	public Double getCornerRadiusTop() {
 		return cornerRadiusTop;
 	}
-	public void setCornerRadiusTop(double cornerRadiusTop) {
+	public void setCornerRadiusTop(Double cornerRadiusTop) {
 		this.cornerRadiusTop = cornerRadiusTop;
 	}
-	public double getCursorBulletAlpha() {
+	public Double getCursorBulletAlpha() {
 		return cursorBulletAlpha;
 	}
-	public void setCursorBulletAlpha(double cursorBulletAlpha) {
+	public void setCursorBulletAlpha(Double cursorBulletAlpha) {
 		this.cursorBulletAlpha = cursorBulletAlpha;
 	}
 	public String getCustomBullet() {
@@ -677,10 +677,10 @@ public class AmGraph {
 	public void setCustomMarker(String customMarker) {
 		this.customMarker = customMarker;
 	}
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
 	public String getDashLengthField() {
@@ -701,10 +701,10 @@ public class AmGraph {
 	public void setErrorField(String errorField) {
 		this.errorField = errorField;
 	}
-	public double getFillAlphas() {
+	public Double getFillAlphas() {
 		return fillAlphas;
 	}
-	public void setFillAlphas(double fillAlphas) {
+	public void setFillAlphas(Double fillAlphas) {
 		this.fillAlphas = fillAlphas;
 	}
 	public Color getFillColors() {
@@ -731,16 +731,16 @@ public class AmGraph {
 	public void setFillToGraph(AmGraph fillToGraph) {
 		this.fillToGraph = fillToGraph;
 	}
-	public double getFixedColumnWidth() {
+	public Double getFixedColumnWidth() {
 		return fixedColumnWidth;
 	}
-	public void setFixedColumnWidth(double fixedColumnWidth) {
+	public void setFixedColumnWidth(Double fixedColumnWidth) {
 		this.fixedColumnWidth = fixedColumnWidth;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
 	public String getGradientOrientation() {
@@ -749,16 +749,16 @@ public class AmGraph {
 	public void setGradientOrientation(String gradientOrientation) {
 		this.gradientOrientation = gradientOrientation;
 	}
-	public boolean isHidden() {
+	public Boolean isHidden() {
 		return hidden;
 	}
-	public void setHidden(boolean hidden) {
+	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
 	}
-	public double getHideBulletsCount() {
+	public Double getHideBulletsCount() {
 		return hideBulletsCount;
 	}
-	public void setHideBulletsCount(double hideBulletsCount) {
+	public void setHideBulletsCount(Double hideBulletsCount) {
 		this.hideBulletsCount = hideBulletsCount;
 	}
 	public String getHighField() {
@@ -773,10 +773,10 @@ public class AmGraph {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public boolean isIncludeInMinMax() {
+	public Boolean isIncludeInMinMax() {
 		return includeInMinMax;
 	}
-	public void setIncludeInMinMax(boolean includeInMinMax) {
+	public void setIncludeInMinMax(Boolean includeInMinMax) {
 		this.includeInMinMax = includeInMinMax;
 	}
 	public String getLabelAnchor() {
@@ -791,10 +791,10 @@ public class AmGraph {
 	public void setLabelColorField(String labelColorField) {
 		this.labelColorField = labelColorField;
 	}
-	public double getLabelOffset() {
+	public Double getLabelOffset() {
 		return labelOffset;
 	}
-	public void setLabelOffset(double labelOffset) {
+	public void setLabelOffset(Double labelOffset) {
 		this.labelOffset = labelOffset;
 	}
 	public String getLabelPosition() {
@@ -803,10 +803,10 @@ public class AmGraph {
 	public void setLabelPosition(String labelPosition) {
 		this.labelPosition = labelPosition;
 	}
-	public double getLabelRotation() {
+	public Double getLabelRotation() {
 		return labelRotation;
 	}
-	public void setLabelRotation(double labelRotation) {
+	public void setLabelRotation(Double labelRotation) {
 		this.labelRotation = labelRotation;
 	}
 	public String getLabelText() {
@@ -815,10 +815,10 @@ public class AmGraph {
 	public void setLabelText(String labelText) {
 		this.labelText = labelText;
 	}
-	public double getLegendAlpha() {
+	public Double getLegendAlpha() {
 		return legendAlpha;
 	}
-	public void setLegendAlpha(double legendAlpha) {
+	public void setLegendAlpha(Double legendAlpha) {
 		this.legendAlpha = legendAlpha;
 	}
 	public Color getLegendColor() {
@@ -839,10 +839,10 @@ public class AmGraph {
 	public void setLegendValueText(String legendValueText) {
 		this.legendValueText = legendValueText;
 	}
-	public double getLineAlpha() {
+	public Double getLineAlpha() {
 		return lineAlpha;
 	}
-	public void setLineAlpha(double lineAlpha) {
+	public void setLineAlpha(Double lineAlpha) {
 		this.lineAlpha = lineAlpha;
 	}
 	public Color getLineColor() {
@@ -857,10 +857,10 @@ public class AmGraph {
 	public void setLineColorField(String lineColorField) {
 		this.lineColorField = lineColorField;
 	}
-	public double getLineThickness() {
+	public Double getLineThickness() {
 		return lineThickness;
 	}
-	public void setLineThickness(double lineThickness) {
+	public void setLineThickness(Double lineThickness) {
 		this.lineThickness = lineThickness;
 	}
 	public String getLowField() {
@@ -875,34 +875,34 @@ public class AmGraph {
 	public void setMarkerType(String markerType) {
 		this.markerType = markerType;
 	}
-	public double getMaxBulletSize() {
+	public Double getMaxBulletSize() {
 		return maxBulletSize;
 	}
-	public void setMaxBulletSize(double maxBulletSize) {
+	public void setMaxBulletSize(Double maxBulletSize) {
 		this.maxBulletSize = maxBulletSize;
 	}
-	public double getMinBulletSize() {
+	public Double getMinBulletSize() {
 		return minBulletSize;
 	}
-	public void setMinBulletSize(double minBulletSize) {
+	public void setMinBulletSize(Double minBulletSize) {
 		this.minBulletSize = minBulletSize;
 	}
-	public double getMinDistance() {
+	public Double getMinDistance() {
 		return minDistance;
 	}
-	public void setMinDistance(double minDistance) {
+	public void setMinDistance(Double minDistance) {
 		this.minDistance = minDistance;
 	}
-	public double getNegativeBase() {
+	public Double getNegativeBase() {
 		return negativeBase;
 	}
-	public void setNegativeBase(double negativeBase) {
+	public void setNegativeBase(Double negativeBase) {
 		this.negativeBase = negativeBase;
 	}
-	public double getNegativeFillAlphas() {
+	public Double getNegativeFillAlphas() {
 		return negativeFillAlphas;
 	}
-	public void setNegativeFillAlphas(double negativeFillAlphas) {
+	public void setNegativeFillAlphas(Double negativeFillAlphas) {
 		this.negativeFillAlphas = negativeFillAlphas;
 	}
 	public Color getNegativeFillColors() {
@@ -911,10 +911,10 @@ public class AmGraph {
 	public void setNegativeFillColors(Color negativeFillColors) {
 		this.negativeFillColors = negativeFillColors;
 	}
-	public double getNegativeLineAlpha() {
+	public Double getNegativeLineAlpha() {
 		return negativeLineAlpha;
 	}
-	public void setNegativeLineAlpha(double negativeLineAlpha) {
+	public void setNegativeLineAlpha(Double negativeLineAlpha) {
 		this.negativeLineAlpha = negativeLineAlpha;
 	}
 	public Color getNegativeLineColor() {
@@ -923,16 +923,16 @@ public class AmGraph {
 	public void setNegativeLineColor(Color negativeLineColor) {
 		this.negativeLineColor = negativeLineColor;
 	}
-	public boolean isNewStack() {
+	public Boolean isNewStack() {
 		return newStack;
 	}
-	public void setNewStack(boolean newStack) {
+	public void setNewStack(Boolean newStack) {
 		this.newStack = newStack;
 	}
-	public boolean isNoStepRisers() {
+	public Boolean isNoStepRisers() {
 		return noStepRisers;
 	}
-	public void setNoStepRisers(boolean noStepRisers) {
+	public void setNoStepRisers(Boolean noStepRisers) {
 		this.noStepRisers = noStepRisers;
 	}
 	public String getOpenField() {
@@ -953,10 +953,10 @@ public class AmGraph {
 	public void setPatternField(String patternField) {
 		this.patternField = patternField;
 	}
-	public double getPeriodSpan() {
+	public Double getPeriodSpan() {
 		return periodSpan;
 	}
-	public void setPeriodSpan(double periodSpan) {
+	public void setPeriodSpan(Double periodSpan) {
 		this.periodSpan = periodSpan;
 	}
 	public String getPointPosition() {
@@ -965,28 +965,28 @@ public class AmGraph {
 	public void setPointPosition(String pointPosition) {
 		this.pointPosition = pointPosition;
 	}
-	public double getPrecision() {
+	public Double getPrecision() {
 		return precision;
 	}
-	public void setPrecision(double precision) {
+	public void setPrecision(Double precision) {
 		this.precision = precision;
 	}
-	public boolean isProCandlesticks() {
+	public Boolean isProCandlesticks() {
 		return proCandlesticks;
 	}
-	public void setProCandlesticks(boolean proCandlesticks) {
+	public void setProCandlesticks(Boolean proCandlesticks) {
 		this.proCandlesticks = proCandlesticks;
 	}
-	public boolean isShowAllValueLabels() {
+	public Boolean isShowAllValueLabels() {
 		return showAllValueLabels;
 	}
-	public void setShowAllValueLabels(boolean showAllValueLabels) {
+	public void setShowAllValueLabels(Boolean showAllValueLabels) {
 		this.showAllValueLabels = showAllValueLabels;
 	}
-	public boolean isShowBalloon() {
+	public Boolean isShowBalloon() {
 		return showBalloon;
 	}
-	public void setShowBalloon(boolean showBalloon) {
+	public void setShowBalloon(Boolean showBalloon) {
 		this.showBalloon = showBalloon;
 	}
 	public String getShowBalloonAt() {
@@ -1001,22 +1001,22 @@ public class AmGraph {
 	public void setShowBulletsAt(String showBulletsAt) {
 		this.showBulletsAt = showBulletsAt;
 	}
-	public boolean isShowHandOnHover() {
+	public Boolean isShowHandOnHover() {
 		return showHandOnHover;
 	}
-	public void setShowHandOnHover(boolean showHandOnHover) {
+	public void setShowHandOnHover(Boolean showHandOnHover) {
 		this.showHandOnHover = showHandOnHover;
 	}
-	public boolean isShowOnAxis() {
+	public Boolean isShowOnAxis() {
 		return showOnAxis;
 	}
-	public void setShowOnAxis(boolean showOnAxis) {
+	public void setShowOnAxis(Boolean showOnAxis) {
 		this.showOnAxis = showOnAxis;
 	}
-	public boolean isStackable() {
+	public Boolean isStackable() {
 		return stackable;
 	}
-	public void setStackable(boolean stackable) {
+	public void setStackable(Boolean stackable) {
 		this.stackable = stackable;
 	}
 	public String getStepDirection() {
@@ -1025,10 +1025,10 @@ public class AmGraph {
 	public void setStepDirection(String stepDirection) {
 		this.stepDirection = stepDirection;
 	}
-	public boolean isSwitchable() {
+	public Boolean isSwitchable() {
 		return switchable;
 	}
-	public void setSwitchable(boolean switchable) {
+	public void setSwitchable(Boolean switchable) {
 		this.switchable = switchable;
 	}
 	public String getTitle() {
@@ -1037,10 +1037,10 @@ public class AmGraph {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public double getTopRadius() {
+	public Double getTopRadius() {
 		return topRadius;
 	}
-	public void setTopRadius(double topRadius) {
+	public void setTopRadius(Double topRadius) {
 		this.topRadius = topRadius;
 	}
 	public ChartTypeAm getType() {
@@ -1061,10 +1061,10 @@ public class AmGraph {
 	public void setUrlTarget(String urlTarget) {
 		this.urlTarget = urlTarget;
 	}
-	public boolean isUseNegativeColorIfDown() {
+	public Boolean isUseNegativeColorIfDown() {
 		return useNegativeColorIfDown;
 	}
-	public void setUseNegativeColorIfDown(boolean useNegativeColorIfDown) {
+	public void setUseNegativeColorIfDown(Boolean useNegativeColorIfDown) {
 		this.useNegativeColorIfDown = useNegativeColorIfDown;
 	}
 	public ValueAxis getValueAxis() {
@@ -1079,10 +1079,10 @@ public class AmGraph {
 	public void setValueField(String valueField) {
 		this.valueField = valueField;
 	}
-	public boolean isVisibleInLegend() {
+	public Boolean isVisibleInLegend() {
 		return visibleInLegend;
 	}
-	public void setVisibleInLegend(boolean visibleInLegend) {
+	public void setVisibleInLegend(Boolean visibleInLegend) {
 		this.visibleInLegend = visibleInLegend;
 	}
 	public ValueAxis getxAxis() {

@@ -13,7 +13,7 @@ public class GaugeAxis {
 	* Axis opacity.
 	* Default Value: 1
 	*/
-	private double axisAlpha;
+	private Double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: #000000
@@ -23,17 +23,17 @@ public class GaugeAxis {
 	* Thickness of the axis outline.
 	* Default Value: 1
 	*/
-	private double axisThickness;
+	private Double axisThickness;
 	/**
 	* Opacity of band fills.
 	* Default Value: 1
 	*/
-	private double bandAlpha;
+	private Double bandAlpha;
 	/**
 	* Opacity of band outlines.
 	* Default Value: 0
 	*/
-	private double bandOutlineAlpha;
+	private Double bandOutlineAlpha;
 	/**
 	* Color of band outlines.
 	* Default Value: #000000
@@ -43,17 +43,17 @@ public class GaugeAxis {
 	* Thickness of band outlines.
 	* Default Value: 0
 	*/
-	private double bandOutlineThickness;
+	private Double bandOutlineThickness;
 	/**
 	* Array of bands - GaugeBand objects. Bands are used to draw color fills between specified values.
 	* Default Value: 
 	*/
 	private List<GaugeBand> bands;
 	
-	public double getAxisAlpha() {
+	public Double getAxisAlpha() {
 		return axisAlpha;
 	}
-	public void setAxisAlpha(double axisAlpha) {
+	public void setAxisAlpha(Double axisAlpha) {
 		this.axisAlpha = axisAlpha;
 	}
 	public Color getAxisColor() {
@@ -62,22 +62,22 @@ public class GaugeAxis {
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
 	}
-	public double getAxisThickness() {
+	public Double getAxisThickness() {
 		return axisThickness;
 	}
-	public void setAxisThickness(double axisThickness) {
+	public void setAxisThickness(Double axisThickness) {
 		this.axisThickness = axisThickness;
 	}
-	public double getBandAlpha() {
+	public Double getBandAlpha() {
 		return bandAlpha;
 	}
-	public void setBandAlpha(double bandAlpha) {
+	public void setBandAlpha(Double bandAlpha) {
 		this.bandAlpha = bandAlpha;
 	}
-	public double getBandOutlineAlpha() {
+	public Double getBandOutlineAlpha() {
 		return bandOutlineAlpha;
 	}
-	public void setBandOutlineAlpha(double bandOutlineAlpha) {
+	public void setBandOutlineAlpha(Double bandOutlineAlpha) {
 		this.bandOutlineAlpha = bandOutlineAlpha;
 	}
 	public Color getBandOutlineColor() {
@@ -86,10 +86,10 @@ public class GaugeAxis {
 	public void setBandOutlineColor(Color bandOutlineColor) {
 		this.bandOutlineColor = bandOutlineColor;
 	}
-	public double getBandOutlineThickness() {
+	public Double getBandOutlineThickness() {
 		return bandOutlineThickness;
 	}
-	public void setBandOutlineThickness(double bandOutlineThickness) {
+	public void setBandOutlineThickness(Double bandOutlineThickness) {
 		this.bandOutlineThickness = bandOutlineThickness;
 	}
 	public List<GaugeBand> getBands() {
@@ -104,10 +104,10 @@ public class GaugeAxis {
 	public void setBottomText(String bottomText) {
 		this.bottomText = bottomText;
 	}
-	public boolean isBottomTextBold() {
+	public Boolean isBottomTextBold() {
 		return bottomTextBold;
 	}
-	public void setBottomTextBold(boolean bottomTextBold) {
+	public void setBottomTextBold(Boolean bottomTextBold) {
 		this.bottomTextBold = bottomTextBold;
 	}
 	public Color getBottomTextColor() {
@@ -116,52 +116,52 @@ public class GaugeAxis {
 	public void setBottomTextColor(Color bottomTextColor) {
 		this.bottomTextColor = bottomTextColor;
 	}
-	public double getBottomTextFontSize() {
+	public Double getBottomTextFontSize() {
 		return bottomTextFontSize;
 	}
-	public void setBottomTextFontSize(double bottomTextFontSize) {
+	public void setBottomTextFontSize(Double bottomTextFontSize) {
 		this.bottomTextFontSize = bottomTextFontSize;
 	}
-	public double getBottomTextYOffset() {
+	public Double getBottomTextYOffset() {
 		return bottomTextYOffset;
 	}
-	public void setBottomTextYOffset(double bottomTextYOffset) {
+	public void setBottomTextYOffset(Double bottomTextYOffset) {
 		this.bottomTextYOffset = bottomTextYOffset;
 	}
-	public double getCenterX() {
+	public Double getCenterX() {
 		return centerX;
 	}
-	public void setCenterX(double centerX) {
+	public void setCenterX(Double centerX) {
 		this.centerX = centerX;
 	}
-	public double getCenterY() {
+	public Double getCenterY() {
 		return centerY;
 	}
-	public void setCenterY(double centerY) {
+	public void setCenterY(Double centerY) {
 		this.centerY = centerY;
 	}
-	public double getEndAngle() {
+	public Double getEndAngle() {
 		return endAngle;
 	}
-	public void setEndAngle(double endAngle) {
+	public void setEndAngle(Double endAngle) {
 		this.endAngle = endAngle;
 	}
-	public double getEndValue() {
+	public Double getEndValue() {
 		return endValue;
 	}
-	public void setEndValue(double endValue) {
+	public void setEndValue(Double endValue) {
 		this.endValue = endValue;
 	}
-	public double getGridCount() {
+	public Double getGridCount() {
 		return gridCount;
 	}
-	public void setGridCount(double gridCount) {
+	public void setGridCount(Double gridCount) {
 		this.gridCount = gridCount;
 	}
-	public boolean isGridInside() {
+	public Boolean isGridInside() {
 		return gridInside;
 	}
-	public void setGridInside(boolean gridInside) {
+	public void setGridInside(Boolean gridInside) {
 		this.gridInside = gridInside;
 	}
 	public String getId() {
@@ -170,70 +170,70 @@ public class GaugeAxis {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public boolean isInside() {
+	public Boolean isInside() {
 		return inside;
 	}
-	public void setInside(boolean inside) {
+	public void setInside(Boolean inside) {
 		this.inside = inside;
 	}
-	public double getLabelFrequency() {
+	public Double getLabelFrequency() {
 		return labelFrequency;
 	}
-	public void setLabelFrequency(double labelFrequency) {
+	public void setLabelFrequency(Double labelFrequency) {
 		this.labelFrequency = labelFrequency;
 	}
-	public double getLabelOffset() {
+	public Double getLabelOffset() {
 		return labelOffset;
 	}
-	public void setLabelOffset(double labelOffset) {
+	public void setLabelOffset(Double labelOffset) {
 		this.labelOffset = labelOffset;
 	}
-	public double getMinorTickInterval() {
+	public Double getMinorTickInterval() {
 		return minorTickInterval;
 	}
-	public void setMinorTickInterval(double minorTickInterval) {
+	public void setMinorTickInterval(Double minorTickInterval) {
 		this.minorTickInterval = minorTickInterval;
 	}
-	public double getMinorTickLength() {
+	public Double getMinorTickLength() {
 		return minorTickLength;
 	}
-	public void setMinorTickLength(double minorTickLength) {
+	public void setMinorTickLength(Double minorTickLength) {
 		this.minorTickLength = minorTickLength;
 	}
-	public double getRadius() {
+	public Double getRadius() {
 		return radius;
 	}
-	public void setRadius(double radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
-	public boolean isShowFirstLabel() {
+	public Boolean isShowFirstLabel() {
 		return showFirstLabel;
 	}
-	public void setShowFirstLabel(boolean showFirstLabel) {
+	public void setShowFirstLabel(Boolean showFirstLabel) {
 		this.showFirstLabel = showFirstLabel;
 	}
-	public boolean isShowLastLabel() {
+	public Boolean isShowLastLabel() {
 		return showLastLabel;
 	}
-	public void setShowLastLabel(boolean showLastLabel) {
+	public void setShowLastLabel(Boolean showLastLabel) {
 		this.showLastLabel = showLastLabel;
 	}
-	public double getStartAngle() {
+	public Double getStartAngle() {
 		return startAngle;
 	}
-	public void setStartAngle(double startAngle) {
+	public void setStartAngle(Double startAngle) {
 		this.startAngle = startAngle;
 	}
-	public double getStartValue() {
+	public Double getStartValue() {
 		return startValue;
 	}
-	public void setStartValue(double startValue) {
+	public void setStartValue(Double startValue) {
 		this.startValue = startValue;
 	}
-	public double getTickAlpha() {
+	public Double getTickAlpha() {
 		return tickAlpha;
 	}
-	public void setTickAlpha(double tickAlpha) {
+	public void setTickAlpha(Double tickAlpha) {
 		this.tickAlpha = tickAlpha;
 	}
 	public Color getTickColor() {
@@ -242,16 +242,16 @@ public class GaugeAxis {
 	public void setTickColor(Color tickColor) {
 		this.tickColor = tickColor;
 	}
-	public double getTickLength() {
+	public Double getTickLength() {
 		return tickLength;
 	}
-	public void setTickLength(double tickLength) {
+	public void setTickLength(Double tickLength) {
 		this.tickLength = tickLength;
 	}
-	public double getTickThickness() {
+	public Double getTickThickness() {
 		return tickThickness;
 	}
-	public void setTickThickness(double tickThickness) {
+	public void setTickThickness(Double tickThickness) {
 		this.tickThickness = tickThickness;
 	}
 	public String getTopText() {
@@ -260,10 +260,10 @@ public class GaugeAxis {
 	public void setTopText(String topText) {
 		this.topText = topText;
 	}
-	public boolean isTopTextBold() {
+	public Boolean isTopTextBold() {
 		return topTextBold;
 	}
-	public void setTopTextBold(boolean topTextBold) {
+	public void setTopTextBold(Boolean topTextBold) {
 		this.topTextBold = topTextBold;
 	}
 	public Color getTopTextColor() {
@@ -272,16 +272,16 @@ public class GaugeAxis {
 	public void setTopTextColor(Color topTextColor) {
 		this.topTextColor = topTextColor;
 	}
-	public double getTopTextFontSize() {
+	public Double getTopTextFontSize() {
 		return topTextFontSize;
 	}
-	public void setTopTextFontSize(double topTextFontSize) {
+	public void setTopTextFontSize(Double topTextFontSize) {
 		this.topTextFontSize = topTextFontSize;
 	}
-	public double getTopTextYOffset() {
+	public Double getTopTextYOffset() {
 		return topTextYOffset;
 	}
-	public void setTopTextYOffset(double topTextYOffset) {
+	public void setTopTextYOffset(Double topTextYOffset) {
 		this.topTextYOffset = topTextYOffset;
 	}
 	public String getUnit() {
@@ -296,16 +296,16 @@ public class GaugeAxis {
 	public void setUnitPosition(String unitPosition) {
 		this.unitPosition = unitPosition;
 	}
-	public boolean isUsePrefixes() {
+	public Boolean isUsePrefixes() {
 		return usePrefixes;
 	}
-	public void setUsePrefixes(boolean usePrefixes) {
+	public void setUsePrefixes(Boolean usePrefixes) {
 		this.usePrefixes = usePrefixes;
 	}
-	public double getValueInterval() {
+	public Double getValueInterval() {
 		return valueInterval;
 	}
-	public void setValueInterval(double valueInterval) {
+	public void setValueInterval(Double valueInterval) {
 		this.valueInterval = valueInterval;
 	}
 	/**
@@ -317,7 +317,7 @@ public class GaugeAxis {
 	* Specifies if text should be bold.
 	* Default Value: TRUE
 	*/
-	private boolean bottomTextBold;
+	private Boolean bottomTextBold;
 	/**
 	* Bottom text color.
 	* Default Value: 
@@ -327,42 +327,42 @@ public class GaugeAxis {
 	* Font size of bottom text.
 	* Default Value: 
 	*/
-	private double bottomTextFontSize;
+	private Double bottomTextFontSize;
 	/**
 	* Y offset of bottom text.
 	* Default Value: 0
 	*/
-	private double bottomTextYOffset;
+	private Double bottomTextYOffset;
 	/**
 	* X position of the axis, relative to the center of the gauge.
 	* Default Value: 0
 	*/
-	private double centerX;
+	private Double centerX;
 	/**
 	* Y position of the axis, relative to the center of the gauge.
 	* Default Value: 0
 	*/
-	private double centerY;
+	private Double centerY;
 	/**
 	* Axis end angle. Valid values are from - 180 to 180.
 	* Default Value: 120
 	*/
-	private double endAngle;
+	private Double endAngle;
 	/**
 	* Axis end (max) value
 	* Default Value: 
 	*/
-	private double endValue;
+	private Double endValue;
 	/**
 	* Number of grid lines. Note, GaugeAxis doesn't adjust gridCount, so you should check your values and choose a proper gridCount which would result grids at round numbers.
 	* Default Value: 5
 	*/
-	private double gridCount;
+	private Double gridCount;
 	/**
 	* Specifies if grid should be drawn inside or outside the axis.
 	* Default Value: TRUE
 	*/
-	private boolean gridInside;
+	private Boolean gridInside;
 	/**
 	* Unique id of an axis.
 	* Default Value: 
@@ -372,57 +372,57 @@ public class GaugeAxis {
 	* Specifies if labels should be placed inside or outside the axis.
 	* Default Value: TRUE
 	*/
-	private boolean inside;
+	private Boolean inside;
 	/**
 	* Frequency of labels.
 	* Default Value: 1
 	*/
-	private double labelFrequency;
+	private Double labelFrequency;
 	/**
 	* Distance from axis to the labels.
 	* Default Value: 15
 	*/
-	private double labelOffset;
+	private Double labelOffset;
 	/**
 	* Interval, at which minor ticks should be placed.
 	* Default Value: 
 	*/
-	private double minorTickInterval;
+	private Double minorTickInterval;
 	/**
 	* Length of a minor tick.
 	* Default Value: 5
 	*/
-	private double minorTickLength;
+	private Double minorTickLength;
 	/**
 	* Axis radius.
 	* Default Value: 0.95
 	*/
-	private double radius;
+	private Double radius;
 	/**
 	* Specifies if the first label should be shown.
 	* Default Value: TRUE
 	*/
-	private boolean showFirstLabel;
+	private Boolean showFirstLabel;
 	/**
 	* Specifies if the last label should be shown.
 	* Default Value: TRUE
 	*/
-	private boolean showLastLabel;
+	private Boolean showLastLabel;
 	/**
 	* Axis start angle. Valid values are from - 180 to 180.
 	* Default Value: -120
 	*/
-	private double startAngle;
+	private Double startAngle;
 	/**
 	* Axis start (min) value.
 	* Default Value: 0
 	*/
-	private double startValue;
+	private Double startValue;
 	/**
 	* Opacity of axis ticks.
 	* Default Value: 1
 	*/
-	private double tickAlpha;
+	private Double tickAlpha;
 	/**
 	* Color of axis ticks.
 	* Default Value: #555555
@@ -432,12 +432,12 @@ public class GaugeAxis {
 	* Length of a major tick.
 	* Default Value: 10
 	*/
-	private double tickLength;
+	private Double tickLength;
 	/**
 	* Tick thickness.
 	* Default Value: 1
 	*/
-	private double tickThickness;
+	private Double tickThickness;
 	/**
 	* Text displayed above the axis center.
 	* Default Value: 
@@ -447,7 +447,7 @@ public class GaugeAxis {
 	* Specifies if text should be bold.
 	* Default Value: TRUE
 	*/
-	private boolean topTextBold;
+	private Boolean topTextBold;
 	/**
 	* Color of top text.
 	* Default Value: 
@@ -457,12 +457,12 @@ public class GaugeAxis {
 	* Font size of top text.
 	* Default Value: 
 	*/
-	private double topTextFontSize;
+	private Double topTextFontSize;
 	/**
 	* Y offset of top text.
 	* Default Value: 0
 	*/
-	private double topTextYOffset;
+	private Double topTextYOffset;
 	/**
 	* A string which can be placed next to axis labels.
 	* Default Value: 
@@ -477,11 +477,11 @@ public class GaugeAxis {
 	* Specifies if small and big numbers should use prefixes to make them more readable.
 	* Default Value: FALSE
 	*/
-	private boolean usePrefixes;
+	private Boolean usePrefixes;
 	/**
 	* Interval, at which ticks with values should be placed.
 	* Default Value: 
 	*/
-	private double valueInterval;
+	private Double valueInterval;
 
 }

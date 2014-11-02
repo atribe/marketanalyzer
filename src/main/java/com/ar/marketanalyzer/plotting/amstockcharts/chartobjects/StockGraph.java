@@ -15,7 +15,7 @@ public class StockGraph extends AmGraph{
 	* Specifies whether this graph will be compared if some data set is selected for comparing.
 	* Default Value: FALSE
 	*/
-	private boolean comparable;
+	private Boolean comparable;
 	/**
 	* Specifies a field to be used to generate comparing graph. Note, this field is not the one used in your dataProvider, but toField from FieldMapping object.
 	* Default Value: 
@@ -25,7 +25,7 @@ public class StockGraph extends AmGraph{
 	* If you set it to true, when data sets are compared, the graphs will use first value as a base value instead of using the first value of selected period.
 	* Default Value: FALSE
 	*/
-	private boolean compareFromStart;
+	private Boolean compareFromStart;
 	/**
 	* Balloon color of comparing graph.
 	* Default Value: 
@@ -50,7 +50,7 @@ public class StockGraph extends AmGraph{
 	* Opacity of bullet border of comparing graph.
 	* Default Value: 
 	*/
-	private double compareGraphBulletBorderAlpha;
+	private Double compareGraphBulletBorderAlpha;
 	/**
 	* Color of bullet border of comparing graph.
 	* Default Value: 
@@ -60,7 +60,7 @@ public class StockGraph extends AmGraph{
 	* Thickness of bullet border of comparing graph.
 	* Default Value: 
 	*/
-	private double compareGraphBulletBorderThickness;
+	private Double compareGraphBulletBorderThickness;
 	/**
 	* Color of compared graphs' bullets.
 	* Default Value: 
@@ -70,22 +70,22 @@ public class StockGraph extends AmGraph{
 	* Bullet size of comparing graph.
 	* Default Value: 
 	*/
-	private double compareGraphBulletSize;
+	private Double compareGraphBulletSize;
 	/**
 	* Corner radius of comparing graph (if type is column).
 	* Default Value: 
 	*/
-	private double compareGraphCornerRadiusTop;
+	private Double compareGraphCornerRadiusTop;
 	/**
 	* Dash length of compare graph.
 	* Default Value: 
 	*/
-	private double compareGraphDashLength;
+	private Double compareGraphDashLength;
 	/**
 	* Fill alpha of comparing graph.
 	* Default Value: 
 	*/
-	private double compareGraphFillAlphas;
+	private Double compareGraphFillAlphas;
 	/**
 	* Fill color of comparing graph.
 	* Default Value: 
@@ -95,12 +95,12 @@ public class StockGraph extends AmGraph{
 	* Opacity of comparing graph line.
 	* Default Value: 
 	*/
-	private double compareGraphLineAlpha;
+	private Double compareGraphLineAlpha;
 	/**
 	* Thickness of compare graph.
 	* Default Value: 
 	*/
-	private double compareGraphLineThickness;
+	private Double compareGraphLineThickness;
 	/**
 	* Type of comparing graph. Possible values are: line, column, step, smoothedLine.
 	* Default Value: line
@@ -110,7 +110,7 @@ public class StockGraph extends AmGraph{
 	* Specifies if compare graph is visible in legend.
 	* Default Value: TRUE
 	*/
-	private boolean compareGraphVisibleInLegend;
+	private Boolean compareGraphVisibleInLegend;
 	/**
 	* When data is grouped to periods, the graph must know which period value should be used. Possible values are: Open, Low, High, Close, Average and Sum.
 	* Default Value: Close
@@ -120,12 +120,12 @@ public class StockGraph extends AmGraph{
 	* Specifies if events of compared graphs should be shown.
 	* Default Value: FALSE
 	*/
-	private boolean showEventsOnComparedGraphs;
+	private Boolean showEventsOnComparedGraphs;
 	/**
 	* Specifies whether data set color should be used as this graph's lineColor.
 	* Default Value: TRUE
 	*/
-	private boolean useDataSetColors;
+	private Boolean useDataSetColors;
 	
 	/*
 	 * Constructors
@@ -151,7 +151,7 @@ public class StockGraph extends AmGraph{
 		this.negativeLineColor = slateRed;
 		this.negativeFillColors = slateRed;
 		
-		this.fillAlphas = 1;
+		this.fillAlphas = 1.0;
 		
 		this.useDataSetColors = false;
 		this.comparable = true;
@@ -172,10 +172,10 @@ public class StockGraph extends AmGraph{
 	/*
 	 * Getters and Setters
 	 */
-	public boolean isComparable() {
+	public Boolean isComparable() {
 		return comparable;
 	}
-	public void setComparable(boolean comparable) {
+	public void setComparable(Boolean comparable) {
 		this.comparable = comparable;
 	}
 	public String getCompareField() {
@@ -184,10 +184,10 @@ public class StockGraph extends AmGraph{
 	public void setCompareField(String compareField) {
 		this.compareField = compareField;
 	}
-	public boolean isCompareFromStart() {
+	public Boolean isCompareFromStart() {
 		return compareFromStart;
 	}
-	public void setCompareFromStart(boolean compareFromStart) {
+	public void setCompareFromStart(Boolean compareFromStart) {
 		this.compareFromStart = compareFromStart;
 	}
 	public Color getCompareGraphBalloonColor() {
@@ -214,11 +214,11 @@ public class StockGraph extends AmGraph{
 	public void setCompareGraphBullet(BulletType compareGraphBullet) {
 		this.compareGraphBullet = compareGraphBullet;
 	}
-	public double getCompareGraphBulletBorderAlpha() {
+	public Double getCompareGraphBulletBorderAlpha() {
 		return compareGraphBulletBorderAlpha;
 	}
 	public void setCompareGraphBulletBorderAlpha(
-			double compareGraphBulletBorderAlpha) {
+			Double compareGraphBulletBorderAlpha) {
 		this.compareGraphBulletBorderAlpha = compareGraphBulletBorderAlpha;
 	}
 	public Color getCompareGraphBulletBorderColor() {
@@ -227,11 +227,11 @@ public class StockGraph extends AmGraph{
 	public void setCompareGraphBulletBorderColor(Color compareGraphBulletBorderColor) {
 		this.compareGraphBulletBorderColor = compareGraphBulletBorderColor;
 	}
-	public double getCompareGraphBulletBorderThickness() {
+	public Double getCompareGraphBulletBorderThickness() {
 		return compareGraphBulletBorderThickness;
 	}
 	public void setCompareGraphBulletBorderThickness(
-			double compareGraphBulletBorderThickness) {
+			Double compareGraphBulletBorderThickness) {
 		this.compareGraphBulletBorderThickness = compareGraphBulletBorderThickness;
 	}
 	public Color getCompareGraphBulletColor() {
@@ -240,28 +240,28 @@ public class StockGraph extends AmGraph{
 	public void setCompareGraphBulletColor(Color compareGraphBulletColor) {
 		this.compareGraphBulletColor = compareGraphBulletColor;
 	}
-	public double getCompareGraphBulletSize() {
+	public Double getCompareGraphBulletSize() {
 		return compareGraphBulletSize;
 	}
-	public void setCompareGraphBulletSize(double compareGraphBulletSize) {
+	public void setCompareGraphBulletSize(Double compareGraphBulletSize) {
 		this.compareGraphBulletSize = compareGraphBulletSize;
 	}
-	public double getCompareGraphCornerRadiusTop() {
+	public Double getCompareGraphCornerRadiusTop() {
 		return compareGraphCornerRadiusTop;
 	}
-	public void setCompareGraphCornerRadiusTop(double compareGraphCornerRadiusTop) {
+	public void setCompareGraphCornerRadiusTop(Double compareGraphCornerRadiusTop) {
 		this.compareGraphCornerRadiusTop = compareGraphCornerRadiusTop;
 	}
-	public double getCompareGraphDashLength() {
+	public Double getCompareGraphDashLength() {
 		return compareGraphDashLength;
 	}
-	public void setCompareGraphDashLength(double compareGraphDashLength) {
+	public void setCompareGraphDashLength(Double compareGraphDashLength) {
 		this.compareGraphDashLength = compareGraphDashLength;
 	}
-	public double getCompareGraphFillAlphas() {
+	public Double getCompareGraphFillAlphas() {
 		return compareGraphFillAlphas;
 	}
-	public void setCompareGraphFillAlphas(double compareGraphFillAlphas) {
+	public void setCompareGraphFillAlphas(Double compareGraphFillAlphas) {
 		this.compareGraphFillAlphas = compareGraphFillAlphas;
 	}
 	public Color getCompareGraphFillColors() {
@@ -270,16 +270,16 @@ public class StockGraph extends AmGraph{
 	public void setCompareGraphFillColors(Color compareGraphFillColors) {
 		this.compareGraphFillColors = compareGraphFillColors;
 	}
-	public double getCompareGraphLineAlpha() {
+	public Double getCompareGraphLineAlpha() {
 		return compareGraphLineAlpha;
 	}
-	public void setCompareGraphLineAlpha(double compareGraphLineAlpha) {
+	public void setCompareGraphLineAlpha(Double compareGraphLineAlpha) {
 		this.compareGraphLineAlpha = compareGraphLineAlpha;
 	}
-	public double getCompareGraphLineThickness() {
+	public Double getCompareGraphLineThickness() {
 		return compareGraphLineThickness;
 	}
-	public void setCompareGraphLineThickness(double compareGraphLineThickness) {
+	public void setCompareGraphLineThickness(Double compareGraphLineThickness) {
 		this.compareGraphLineThickness = compareGraphLineThickness;
 	}
 	public CompareGraphType getCompareGraphType() {
@@ -288,10 +288,10 @@ public class StockGraph extends AmGraph{
 	public void setCompareGraphType(CompareGraphType compareGraphType) {
 		this.compareGraphType = compareGraphType;
 	}
-	public boolean isCompareGraphVisibleInLegend() {
+	public Boolean isCompareGraphVisibleInLegend() {
 		return compareGraphVisibleInLegend;
 	}
-	public void setCompareGraphVisibleInLegend(boolean compareGraphVisibleInLegend) {
+	public void setCompareGraphVisibleInLegend(Boolean compareGraphVisibleInLegend) {
 		this.compareGraphVisibleInLegend = compareGraphVisibleInLegend;
 	}
 	public PeriodValue getPeriodValue() {
@@ -300,16 +300,16 @@ public class StockGraph extends AmGraph{
 	public void setPeriodValue(PeriodValue periodValue) {
 		this.periodValue = periodValue;
 	}
-	public boolean isShowEventsOnComparedGraphs() {
+	public Boolean isShowEventsOnComparedGraphs() {
 		return showEventsOnComparedGraphs;
 	}
-	public void setShowEventsOnComparedGraphs(boolean showEventsOnComparedGraphs) {
+	public void setShowEventsOnComparedGraphs(Boolean showEventsOnComparedGraphs) {
 		this.showEventsOnComparedGraphs = showEventsOnComparedGraphs;
 	}
-	public boolean isUseDataSetColors() {
+	public Boolean isUseDataSetColors() {
 		return useDataSetColors;
 	}
-	public void setUseDataSetColors(boolean useDataSetColors) {
+	public void setUseDataSetColors(Boolean useDataSetColors) {
 		this.useDataSetColors = useDataSetColors;
 	}
 

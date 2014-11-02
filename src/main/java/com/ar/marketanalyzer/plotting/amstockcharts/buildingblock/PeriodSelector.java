@@ -27,19 +27,19 @@ public class PeriodSelector {
 	* Specifies if period buttons with date range bigger than available data should be hidden.
 	* Default Value: TRUE
 	*/
-	private boolean hideOutOfScopePeriods;
+	private Boolean hideOutOfScopePeriods;
 	/**
 	* Specifies whether period selector displays from and to date input fields.
 	* Default Value: TRUE
 	*/
-	private boolean inputFieldsEnabled;
+	private Boolean inputFieldsEnabled;
 	/**
 	* Width of date input fields, in pixels. Works only if period selector is horizontal.
 	* Default Value: 100
 	*/
-	private double inputFieldWidth;
+	private Double inputFieldWidth;
 	/**
-	* Array of predefined period objects. Period object has 4 properties - period, count, label and selected. Possible period values are: ss - seconds, mm - minutes, hh - hours, DD - days, MM - months and YYYY - years. property count specifies how many periods this button will select. label will be displayed on a button and selected is a boolean which specifies if this button is selected when chart is initialized or not. Example: {period:DD, count:10, label:10 days, selected:false}.
+	* Array of predefined period objects. Period object has 4 properties - period, count, label and selected. Possible period values are: ss - seconds, mm - minutes, hh - hours, DD - days, MM - months and YYYY - years. property count specifies how many periods this button will select. label will be displayed on a button and selected is a Boolean which specifies if this button is selected when chart is initialized or not. Example: {period:DD, count:10, label:10 days, selected:false}.
 	* Default Value: 
 	*/
 	private List<Period> periods;
@@ -57,7 +57,7 @@ public class PeriodSelector {
 	* Specifies whether predefined period buttons should select a period from the beginning or the end of the data.
 	* Default Value: FALSE
 	*/
-	private boolean selectFromStart;
+	private Boolean selectFromStart;
 	/**
 	* Text displayed next to to date input field.
 	* Default Value: To:
@@ -67,7 +67,7 @@ public class PeriodSelector {
 	* Width of a period selector, when position is left or right.
 	* Default Value: 180
 	*/
-	private double width;
+	private Double width;
 	
 	/*
 	 * Constructors
@@ -98,22 +98,22 @@ public class PeriodSelector {
 	public void setFromText(String fromText) {
 		this.fromText = fromText;
 	}
-	public boolean isHideOutOfScopePeriods() {
+	public Boolean isHideOutOfScopePeriods() {
 		return hideOutOfScopePeriods;
 	}
-	public void setHideOutOfScopePeriods(boolean hideOutOfScopePeriods) {
+	public void setHideOutOfScopePeriods(Boolean hideOutOfScopePeriods) {
 		this.hideOutOfScopePeriods = hideOutOfScopePeriods;
 	}
-	public boolean isInputFieldsEnabled() {
+	public Boolean isInputFieldsEnabled() {
 		return inputFieldsEnabled;
 	}
-	public void setInputFieldsEnabled(boolean inputFieldsEnabled) {
+	public void setInputFieldsEnabled(Boolean inputFieldsEnabled) {
 		this.inputFieldsEnabled = inputFieldsEnabled;
 	}
-	public double getInputFieldWidth() {
+	public Double getInputFieldWidth() {
 		return inputFieldWidth;
 	}
-	public void setInputFieldWidth(double inputFieldWidth) {
+	public void setInputFieldWidth(Double inputFieldWidth) {
 		this.inputFieldWidth = inputFieldWidth;
 	}
 	public List<Period> getPeriods() {
@@ -134,10 +134,10 @@ public class PeriodSelector {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	public boolean isSelectFromStart() {
+	public Boolean isSelectFromStart() {
 		return selectFromStart;
 	}
-	public void setSelectFromStart(boolean selectFromStart) {
+	public void setSelectFromStart(Boolean selectFromStart) {
 		this.selectFromStart = selectFromStart;
 	}
 	public String getToText() {
@@ -146,10 +146,10 @@ public class PeriodSelector {
 	public void setToText(String toText) {
 		this.toText = toText;
 	}
-	public double getWidth() {
+	public Double getWidth() {
 		return width;
 	}
-	public void setWidth(double width) {
+	public void setWidth(Double width) {
 		this.width = width;
 	}
 

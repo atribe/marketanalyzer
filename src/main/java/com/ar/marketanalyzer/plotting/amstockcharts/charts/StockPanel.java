@@ -28,12 +28,12 @@ public class StockPanel extends AmSerialChart{
 	* Specifies whether x button will be displayed near the panel. This button allows turning panel off.
 	* Default Value: FALSE
 	*/
-	private boolean allowTurningOff;
+	private Boolean allowTurningOff;
 	/**
 	* If true, drawing icons will be displayed in top-right corner.
 	* Default Value: FALSE
 	*/
-	private boolean drawingIconsEnabled;
+	private Boolean drawingIconsEnabled;
 	/**
 	* Specifies on which value axis user can draw trend lines. Set drawingIconsEnabled to true if you want drawing icons to be visible. First value axis will be used if not set here. You can use a reference to the value axis object or id of value axis.
 	* Default Value: 
@@ -43,17 +43,17 @@ public class StockPanel extends AmSerialChart{
 	* Specifies if all trend lines should be erased when erase button is clicked. If false, trend lines can be erased one by one.
 	* Default Value: FALSE
 	*/
-	private boolean eraseAll;
+	private Boolean eraseAll;
 	/**
 	* Size of trend line drawing icons. If you change this size, you should update icon images if you want them to look properly.
 	* Default Value: 18
 	*/
-	private double iconSize;
+	private Double iconSize;
 	/**
 	* Relative height of panel. Possible values 0 - 100.
 	* Default Value: 
 	*/
-	private double percentHeight;
+	private Double percentHeight;
 	/**
 	* Specifies from which date's value should be used as base when recalculating values to percent.
 	* Default Value: 
@@ -68,12 +68,12 @@ public class StockPanel extends AmSerialChart{
 	* Specifies whether this panel will show category axis.
 	* Default Value: TRUE
 	*/
-	private boolean showCategoryAxis;
+	private Boolean showCategoryAxis;
 	/**
 	* Specifies if compared graphs should be shown above or behind the main graph.
 	* Default Value: TRUE
 	*/
-	private boolean showComparedOnTop;
+	private Boolean showComparedOnTop;
 	/**
 	* Array of stock graphs.
 	* Default Value: 
@@ -93,7 +93,7 @@ public class StockPanel extends AmSerialChart{
 	* Trend line opacity.
 	* Default Value: 1
 	*/
-	private double trendLineAlpha;
+	private Double trendLineAlpha;
 	/**
 	* Trend line color.
 	* Default Value: #00CC00
@@ -103,12 +103,12 @@ public class StockPanel extends AmSerialChart{
 	* Trend line dash length.
 	* Default Value: 0
 	*/
-	private double trendLineDashLength;
+	private Double trendLineDashLength;
 	/**
 	* Trend line thickness.
 	* Default Value: 2
 	*/
-	private double trendLineThickness;
+	private Double trendLineThickness;
 	
 	/*
 	 * Constructors
@@ -116,7 +116,7 @@ public class StockPanel extends AmSerialChart{
 	public StockPanel() {
 		title = "Value";
 		showCategoryAxis = false;
-		percentHeight = 70;
+		percentHeight = 70.0;
 		
 		valueAxes = new ArrayList<ValueAxis>();
 		valueAxes.add( new ValueAxis("v1"));
@@ -142,16 +142,16 @@ public class StockPanel extends AmSerialChart{
 	public void setAllLabels(List<Label> allLabels) {
 		this.allLabels = allLabels;
 	}
-	public boolean isAllowTurningOff() {
+	public Boolean isAllowTurningOff() {
 		return allowTurningOff;
 	}
-	public void setAllowTurningOff(boolean allowTurningOff) {
+	public void setAllowTurningOff(Boolean allowTurningOff) {
 		this.allowTurningOff = allowTurningOff;
 	}
-	public boolean isDrawingIconsEnabled() {
+	public Boolean isDrawingIconsEnabled() {
 		return drawingIconsEnabled;
 	}
-	public void setDrawingIconsEnabled(boolean drawingIconsEnabled) {
+	public void setDrawingIconsEnabled(Boolean drawingIconsEnabled) {
 		this.drawingIconsEnabled = drawingIconsEnabled;
 	}
 	public ValueAxis getDrawOnAxis() {
@@ -160,22 +160,22 @@ public class StockPanel extends AmSerialChart{
 	public void setDrawOnAxis(ValueAxis drawOnAxis) {
 		this.drawOnAxis = drawOnAxis;
 	}
-	public boolean isEraseAll() {
+	public Boolean isEraseAll() {
 		return eraseAll;
 	}
-	public void setEraseAll(boolean eraseAll) {
+	public void setEraseAll(Boolean eraseAll) {
 		this.eraseAll = eraseAll;
 	}
-	public double getIconSize() {
+	public Double getIconSize() {
 		return iconSize;
 	}
-	public void setIconSize(double iconSize) {
+	public void setIconSize(Double iconSize) {
 		this.iconSize = iconSize;
 	}
-	public double getPercentHeight() {
+	public Double getPercentHeight() {
 		return percentHeight;
 	}
-	public void setPercentHeight(double percentHeight) {
+	public void setPercentHeight(Double percentHeight) {
 		this.percentHeight = percentHeight;
 	}
 	public Date getRecalculateFromDate() {
@@ -190,16 +190,16 @@ public class StockPanel extends AmSerialChart{
 	public void setRecalculateToPercents(RecalculateToPercents recalculateToPercents) {
 		this.recalculateToPercents = recalculateToPercents;
 	}
-	public boolean isShowCategoryAxis() {
+	public Boolean isShowCategoryAxis() {
 		return showCategoryAxis;
 	}
-	public void setShowCategoryAxis(boolean showCategoryAxis) {
+	public void setShowCategoryAxis(Boolean showCategoryAxis) {
 		this.showCategoryAxis = showCategoryAxis;
 	}
-	public boolean isShowComparedOnTop() {
+	public Boolean isShowComparedOnTop() {
 		return showComparedOnTop;
 	}
-	public void setShowComparedOnTop(boolean showComparedOnTop) {
+	public void setShowComparedOnTop(Boolean showComparedOnTop) {
 		this.showComparedOnTop = showComparedOnTop;
 	}
 	public List<StockGraph> getStockGraphs() {
@@ -220,10 +220,10 @@ public class StockPanel extends AmSerialChart{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public double getTrendLineAlpha() {
+	public Double getTrendLineAlpha() {
 		return trendLineAlpha;
 	}
-	public void setTrendLineAlpha(double trendLineAlpha) {
+	public void setTrendLineAlpha(Double trendLineAlpha) {
 		this.trendLineAlpha = trendLineAlpha;
 	}
 	public Color getTrendLineColor() {
@@ -232,16 +232,16 @@ public class StockPanel extends AmSerialChart{
 	public void setTrendLineColor(Color trendLineColor) {
 		this.trendLineColor = trendLineColor;
 	}
-	public double getTrendLineDashLength() {
+	public Double getTrendLineDashLength() {
 		return trendLineDashLength;
 	}
-	public void setTrendLineDashLength(double trendLineDashLength) {
+	public void setTrendLineDashLength(Double trendLineDashLength) {
 		this.trendLineDashLength = trendLineDashLength;
 	}
-	public double getTrendLineThickness() {
+	public Double getTrendLineThickness() {
 		return trendLineThickness;
 	}
-	public void setTrendLineThickness(double trendLineThickness) {
+	public void setTrendLineThickness(Double trendLineThickness) {
 		this.trendLineThickness = trendLineThickness;
 	}
 

@@ -36,7 +36,7 @@ public class DataSetSelector implements Serializable{
 	* The maximum height of the Compare to field in pixels.
 	* Default Value: 150
 	*/
-	 private double listHeight;
+	 private Double listHeight;
 	/**
 	* Possible values: ""right"", ""left"", ""top"", ""bottom"". ""top"" and ""bottom"" positions has a limitation - only one data set can be selected for comparing.
 	* Default Value: right, left, top, bottom
@@ -51,7 +51,7 @@ public class DataSetSelector implements Serializable{
 	* Width of a Data set selector, when position is ""left"" or ""right"".
 	* Default Value: 180
 	*/
-	 private double width;
+	 private Double width;
 	 
 	 public DataSetSelector() {
 		 
@@ -75,10 +75,10 @@ public class DataSetSelector implements Serializable{
 	public void setCompareText(String compareText) {
 		this.compareText = compareText;
 	}
-	public double getListHeight() {
+	public Double getListHeight() {
 		return listHeight;
 	}
-	public void setListHeight(double listHeight) {
+	public void setListHeight(Double listHeight) {
 		this.listHeight = listHeight;
 	}
 	public Position getPosition() {
@@ -93,10 +93,10 @@ public class DataSetSelector implements Serializable{
 	public void setSelectText(String selectText) {
 		this.selectText = selectText;
 	}
-	public double getWidth() {
+	public Double getWidth() {
 		return width;
 	}
-	public void setWidth(double width) {
+	public void setWidth(Double width) {
 		this.width = width;
 	}
 

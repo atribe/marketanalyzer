@@ -13,12 +13,12 @@ public class ValueAxesSettings {
 	* Specifies whether number for gridCount is specified automatically, according to the axis size.
 	* Default Value: TRUE
 	*/
-	private boolean autoGridCount;
+	private Boolean autoGridCount;
 	/**
 	* Axis opacity.
 	* Default Value: 0
 	*/
-	private double axisAlpha;
+	private Double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: 
@@ -28,7 +28,7 @@ public class ValueAxesSettings {
 	* Thickness of the axis.
 	* Default Value: 
 	*/
-	private double axisThickness;
+	private Double axisThickness;
 	/**
 	* Label color.
 	* Default Value: 
@@ -38,12 +38,12 @@ public class ValueAxesSettings {
 	* Length of a dash. By default, the grid line is not dashed.
 	* Default Value: 
 	*/
-	private double dashLength;
+	private Double dashLength;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with color.
 	* Default Value: 
 	*/
-	private double fillAlpha;
+	private Double fillAlpha;
 	/**
 	* Fill color. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: 
@@ -53,7 +53,7 @@ public class ValueAxesSettings {
 	* Opacity of grid lines.
 	* Default Value: 
 	*/
-	private double gridAlpha;
+	private Double gridAlpha;
 	/**
 	* Color of grid lines.
 	* Default Value: 
@@ -63,57 +63,57 @@ public class ValueAxesSettings {
 	* Approximate number of grid lines. autoGridCount should be set to false, otherwise this property will be ignored.
 	* Default Value: 
 	*/
-	private double gridCount;
+	private Double gridCount;
 	/**
 	* Thickness of grid lines.
 	* Default Value: 
 	*/
-	private double gridThickness;
+	private Double gridThickness;
 	/**
 	* Specifies whether guide values should be included when calculating min and max of the axis.
 	* Default Value: 
 	*/
-	private boolean includeGuidesInMinMax;
+	private Boolean includeGuidesInMinMax;
 	/**
 	* If true, the axis will include hidden graphs when calculating min and max values.
 	* Default Value: 
 	*/
-	private boolean includeHidden;
+	private Boolean includeHidden;
 	/**
 	* Specifies whether values should be placed inside or outside plot area. In case you set this to false, you'll have to adjust marginLeft or marginRight in [[PanelsSettings]] in order labels to be visible.
 	* Default Value: TRUE
 	*/
-	private boolean inside;
+	private Boolean inside;
 	/**
-	* Specifies whether values on axis can only be integers or both integers and doubles.
+	* Specifies whether values on axis can only be integers or both integers and Doubles.
 	* Default Value: 
 	*/
-	private boolean integersOnly;
+	private Boolean integersOnly;
 	/**
 	* Frequency at which labels should be placed.
 	* Default Value: 
 	*/
-	private double labelFrequency;
+	private Double labelFrequency;
 	/**
 	* Specifies whether value labels are displayed.
 	* Default Value: 
 	*/
-	private boolean labelsEnabled;
+	private Boolean labelsEnabled;
 	/**
 	* Set to true if value axis is logarithmic, false otherwise.
 	* Default Value: 
 	*/
-	private boolean logarithmic;
+	private Boolean logarithmic;
 	/**
 	* If set value axis scale (min and max numbers) will be multiplied by it. I.e. if set to 1.2 the scope of values will increase by 20%.
 	* Default Value: 
 	*/
-	private double minMaxMultiplier;
+	private Double minMaxMultiplier;
 	/**
 	* The distance of the axis to the plot area, in pixels. Useful if you have more then one axis on the same side.
 	* Default Value: 
 	*/
-	private double offset;
+	private Double offset;
 	/**
 	* Position of the value axis. Possible values are left and right.
 	* Default Value: 
@@ -123,17 +123,17 @@ public class ValueAxesSettings {
 	* Set to true if value axis is reversed (smaller values on top), false otherwise.
 	* Default Value: 
 	*/
-	private boolean reversed;
+	private Boolean reversed;
 	/**
 	* Specifies if first label of value axis should be displayed.
 	* Default Value: 
 	*/
-	private boolean showFirstLabel;
+	private Boolean showFirstLabel;
 	/**
 	* Specifies if last label of value axis should be displayed.
 	* Default Value: 
 	*/
-	private boolean showLastLabel;
+	private Boolean showLastLabel;
 	/**
 	* Stacking mode of the axis. Possible values are: none, regular, 100%, 3d.
 	* Default Value: 
@@ -143,7 +143,7 @@ public class ValueAxesSettings {
 	* Tick length.
 	* Default Value: 0
 	*/
-	private double tickLength;
+	private Double tickLength;
 	/**
 	* Unit which will be added to the value label.
 	* Default Value: 
@@ -154,16 +154,16 @@ public class ValueAxesSettings {
 	* Default Value: 
 	*/
 	private PositionHorizontal unitPosition;
-	public boolean isAutoGridCount() {
+	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
-	public void setAutoGridCount(boolean autoGridCount) {
+	public void setAutoGridCount(Boolean autoGridCount) {
 		this.autoGridCount = autoGridCount;
 	}
-	public double getAxisAlpha() {
+	public Double getAxisAlpha() {
 		return axisAlpha;
 	}
-	public void setAxisAlpha(double axisAlpha) {
+	public void setAxisAlpha(Double axisAlpha) {
 		this.axisAlpha = axisAlpha;
 	}
 	public Color getAxisColor() {
@@ -172,10 +172,10 @@ public class ValueAxesSettings {
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
 	}
-	public double getAxisThickness() {
+	public Double getAxisThickness() {
 		return axisThickness;
 	}
-	public void setAxisThickness(double axisThickness) {
+	public void setAxisThickness(Double axisThickness) {
 		this.axisThickness = axisThickness;
 	}
 	public Color getColor() {
@@ -184,16 +184,16 @@ public class ValueAxesSettings {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
-	public double getFillAlpha() {
+	public Double getFillAlpha() {
 		return fillAlpha;
 	}
-	public void setFillAlpha(double fillAlpha) {
+	public void setFillAlpha(Double fillAlpha) {
 		this.fillAlpha = fillAlpha;
 	}
 	public Color getFillColor() {
@@ -202,10 +202,10 @@ public class ValueAxesSettings {
 	public void setFillColor(Color fillColor) {
 		this.fillColor = fillColor;
 	}
-	public double getGridAlpha() {
+	public Double getGridAlpha() {
 		return gridAlpha;
 	}
-	public void setGridAlpha(double gridAlpha) {
+	public void setGridAlpha(Double gridAlpha) {
 		this.gridAlpha = gridAlpha;
 	}
 	public Color getGridColor() {
@@ -214,70 +214,70 @@ public class ValueAxesSettings {
 	public void setGridColor(Color gridColor) {
 		this.gridColor = gridColor;
 	}
-	public double getGridCount() {
+	public Double getGridCount() {
 		return gridCount;
 	}
-	public void setGridCount(double gridCount) {
+	public void setGridCount(Double gridCount) {
 		this.gridCount = gridCount;
 	}
-	public double getGridThickness() {
+	public Double getGridThickness() {
 		return gridThickness;
 	}
-	public void setGridThickness(double gridThickness) {
+	public void setGridThickness(Double gridThickness) {
 		this.gridThickness = gridThickness;
 	}
-	public boolean isIncludeGuidesInMinMax() {
+	public Boolean isIncludeGuidesInMinMax() {
 		return includeGuidesInMinMax;
 	}
-	public void setIncludeGuidesInMinMax(boolean includeGuidesInMinMax) {
+	public void setIncludeGuidesInMinMax(Boolean includeGuidesInMinMax) {
 		this.includeGuidesInMinMax = includeGuidesInMinMax;
 	}
-	public boolean isIncludeHidden() {
+	public Boolean isIncludeHidden() {
 		return includeHidden;
 	}
-	public void setIncludeHidden(boolean includeHidden) {
+	public void setIncludeHidden(Boolean includeHidden) {
 		this.includeHidden = includeHidden;
 	}
-	public boolean isInside() {
+	public Boolean isInside() {
 		return inside;
 	}
-	public void setInside(boolean inside) {
+	public void setInside(Boolean inside) {
 		this.inside = inside;
 	}
-	public boolean isIntegersOnly() {
+	public Boolean isIntegersOnly() {
 		return integersOnly;
 	}
-	public void setIntegersOnly(boolean integersOnly) {
+	public void setIntegersOnly(Boolean integersOnly) {
 		this.integersOnly = integersOnly;
 	}
-	public double getLabelFrequency() {
+	public Double getLabelFrequency() {
 		return labelFrequency;
 	}
-	public void setLabelFrequency(double labelFrequency) {
+	public void setLabelFrequency(Double labelFrequency) {
 		this.labelFrequency = labelFrequency;
 	}
-	public boolean isLabelsEnabled() {
+	public Boolean isLabelsEnabled() {
 		return labelsEnabled;
 	}
-	public void setLabelsEnabled(boolean labelsEnabled) {
+	public void setLabelsEnabled(Boolean labelsEnabled) {
 		this.labelsEnabled = labelsEnabled;
 	}
-	public boolean isLogarithmic() {
+	public Boolean isLogarithmic() {
 		return logarithmic;
 	}
-	public void setLogarithmic(boolean logarithmic) {
+	public void setLogarithmic(Boolean logarithmic) {
 		this.logarithmic = logarithmic;
 	}
-	public double getMinMaxMultiplier() {
+	public Double getMinMaxMultiplier() {
 		return minMaxMultiplier;
 	}
-	public void setMinMaxMultiplier(double minMaxMultiplier) {
+	public void setMinMaxMultiplier(Double minMaxMultiplier) {
 		this.minMaxMultiplier = minMaxMultiplier;
 	}
-	public double getOffset() {
+	public Double getOffset() {
 		return offset;
 	}
-	public void setOffset(double offset) {
+	public void setOffset(Double offset) {
 		this.offset = offset;
 	}
 	public PositionHorizontal getPosition() {
@@ -286,22 +286,22 @@ public class ValueAxesSettings {
 	public void setPosition(PositionHorizontal position) {
 		this.position = position;
 	}
-	public boolean isReversed() {
+	public Boolean isReversed() {
 		return reversed;
 	}
-	public void setReversed(boolean reversed) {
+	public void setReversed(Boolean reversed) {
 		this.reversed = reversed;
 	}
-	public boolean isShowFirstLabel() {
+	public Boolean isShowFirstLabel() {
 		return showFirstLabel;
 	}
-	public void setShowFirstLabel(boolean showFirstLabel) {
+	public void setShowFirstLabel(Boolean showFirstLabel) {
 		this.showFirstLabel = showFirstLabel;
 	}
-	public boolean isShowLastLabel() {
+	public Boolean isShowLastLabel() {
 		return showLastLabel;
 	}
-	public void setShowLastLabel(boolean showLastLabel) {
+	public void setShowLastLabel(Boolean showLastLabel) {
 		this.showLastLabel = showLastLabel;
 	}
 	public StackType getStackType() {
@@ -310,10 +310,10 @@ public class ValueAxesSettings {
 	public void setStackType(StackType stackType) {
 		this.stackType = stackType;
 	}
-	public double getTickLength() {
+	public Double getTickLength() {
 		return tickLength;
 	}
-	public void setTickLength(double tickLength) {
+	public void setTickLength(Double tickLength) {
 		this.tickLength = tickLength;
 	}
 	public String getUnit() {

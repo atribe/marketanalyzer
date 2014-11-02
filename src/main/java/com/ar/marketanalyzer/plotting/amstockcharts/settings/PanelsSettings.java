@@ -18,7 +18,7 @@ public class PanelsSettings {
 	* The angle of the 3D part of plot area. This creates a 3D effect (if the depth3D is > 0).
 	* Default Value: 
 	*/
-	 private double angle;
+	 private Double angle;
 	/**
 	* Opacity of panel background. Possible values are 1 and 0. Values like 0.5 will not make it half-transparent.
 	* Default Value: 0
@@ -33,12 +33,12 @@ public class PanelsSettings {
 	* The gap in pixels between two columns of the same category.
 	* Default Value: 
 	*/
-	 private double columnSpacing;
+	 private Double columnSpacing;
 	/**
 	* Relative width of columns. Valid values 0 - 1.
 	* Default Value: 
 	*/
-	 private double columnWidth;
+	 private Double columnWidth;
 	/**
 	* Position of amCharts link (free version only). Possible values are: top-left. top-right, bottom-left, bottom-right
 	* You can adjust the position of amcharts link so that it would not overlap with contents of your chart.
@@ -54,7 +54,7 @@ public class PanelsSettings {
 	* The depth of the 3D part of plot area. This creates a 3D effect (if the angle is > 0).
 	* Default Value: 
 	*/
-	 private double depth3D;
+	 private Double depth3D;
 	/**
 	* Font family.
 	* Default Value: 
@@ -69,42 +69,42 @@ public class PanelsSettings {
 	* Number of pixels between the container's bottom border and plot area.
 	* Default Value: 0
 	*/
-	 private double marginBottom;
+	 private Double marginBottom;
 	/**
 	* Number of pixels between the container's left border and plot area. If your left valueAxis values ar not placed inside the plot area, you should set marginLeft to 80 or some close value.
 	* Default Value: 0
 	*/
-	 private double marginLeft;
+	 private Double marginLeft;
 	/**
 	* Number of pixels between the container's left border and plot area. If your right valueAxis values ar not placed inside the plot area, you should set marginRight to 80 or some close value.
 	* Default Value: 0
 	*/
-	 private double marginRight;
+	 private Double marginRight;
 	/**
 	* Number of pixels between the container's top border and plot area.
 	* Default Value: 0
 	*/
-	 private double marginTop;
+	 private Double marginTop;
 	/**
 	* Gap between panels.
 	* Default Value: 8
 	*/
-	 private double panelSpacing;
+	 private Double panelSpacing;
 	/**
 	* This setting affects touch-screen devices only. If a chart is on a page, and panEventsEnabled are set to true, the page won't move if the user touches the chart first. If a chart is big enough and occupies all the screen of your touch device, the user won’t be able to move the page at all. That's why the default value is false. If you think that selecting or or panning the chart is a primary purpose of your chart users, you should set panEventsEnabled to true.
 	* Default Value: FALSE
 	*/
-	 private boolean panEventsEnabled;
+	 private Boolean panEventsEnabled;
 	/**
 	* Precision of percent values.
 	* Default Value: 
 	*/
-	 private double percentPrecision;
+	 private Double percentPrecision;
 	/**
 	* The opacity of plot area's border.
 	* Default Value: 
 	*/
-	 private double plotAreaBorderAlpha;
+	 private Double plotAreaBorderAlpha;
 	/**
 	* The color of the plot area's border.
 	* Default Value: 
@@ -114,7 +114,7 @@ public class PanelsSettings {
 	* Opacity of plot area fill.
 	* Default Value: 
 	*/
-	 private double plotAreaFillAlphas;
+	 private Double plotAreaFillAlphas;
 	/**
 	* Specifies the colors used to tint the background gradient fill of the plot area.
 	* Default Value: 
@@ -124,7 +124,7 @@ public class PanelsSettings {
 	* Precision of values. -1 means values will not be rounded and shown as they are.
 	* Default Value: 
 	*/
-	 private double precision;
+	 private Double precision;
 	/**
 	* Prefixes which are used to make big numbers shorter: 2M instead of 2000000, etc. Prefixes are used on value axes and in the legend. To enable prefixes, set usePrefixes property to true.
 	* Default Value: [{number:1e+3,prefix:k},{number:1e+6,prefix:M},{number:1e+9,prefix:G},{number:1e+12,prefix:T},{number:1e+15,prefix:P},{number:1e+18,prefix:E},{number:1e+21,prefix:Z},{number:1e+24,prefix:Y}]
@@ -144,17 +144,17 @@ public class PanelsSettings {
 	* Specifies whether the animation should be sequenced or all objects should appear at once.
 	* Default Value: 
 	*/
-	 private boolean sequencedAnimation;
+	 private Boolean sequencedAnimation;
 	/**
 	* The initial opacity of the column/line. If you set startDuration to a value higher than 0, the columns/lines will fade in from startAlpha.
 	* Default Value: 
 	*/
-	 private double startAlpha;
+	 private Double startAlpha;
 	/**
 	* Duration of the animation, in seconds.
 	* Default Value: 
 	*/
-	 private double startDuration;
+	 private Double startDuration;
 	/**
 	* Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: 
@@ -169,11 +169,11 @@ public class PanelsSettings {
 	* If true, prefixes will be used for big and small numbers.
 	* Default Value: 
 	*/
-	 private boolean usePrefixes;
-	public double getAngle() {
+	 private Boolean usePrefixes;
+	public Double getAngle() {
 		return angle;
 	}
-	public void setAngle(double angle) {
+	public void setAngle(Double angle) {
 		this.angle = angle;
 	}
 	public Transparency getBackgroundAlpha() {
@@ -188,16 +188,16 @@ public class PanelsSettings {
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
-	public double getColumnSpacing() {
+	public Double getColumnSpacing() {
 		return columnSpacing;
 	}
-	public void setColumnSpacing(double columnSpacing) {
+	public void setColumnSpacing(Double columnSpacing) {
 		this.columnSpacing = columnSpacing;
 	}
-	public double getColumnWidth() {
+	public Double getColumnWidth() {
 		return columnWidth;
 	}
-	public void setColumnWidth(double columnWidth) {
+	public void setColumnWidth(Double columnWidth) {
 		this.columnWidth = columnWidth;
 	}
 	public CreditsPosition getCreditsPosition() {
@@ -212,10 +212,10 @@ public class PanelsSettings {
 	public void setDecimalSeparator(String decimalSeparator) {
 		this.decimalSeparator = decimalSeparator;
 	}
-	public double getDepth3D() {
+	public Double getDepth3D() {
 		return depth3D;
 	}
-	public void setDepth3D(double depth3d) {
+	public void setDepth3D(Double depth3d) {
 		depth3D = depth3d;
 	}
 	public String getFontFamily() {
@@ -230,52 +230,52 @@ public class PanelsSettings {
 	public void setFontSize(String fontSize) {
 		this.fontSize = fontSize;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getPanelSpacing() {
+	public Double getPanelSpacing() {
 		return panelSpacing;
 	}
-	public void setPanelSpacing(double panelSpacing) {
+	public void setPanelSpacing(Double panelSpacing) {
 		this.panelSpacing = panelSpacing;
 	}
-	public boolean isPanEventsEnabled() {
+	public Boolean isPanEventsEnabled() {
 		return panEventsEnabled;
 	}
-	public void setPanEventsEnabled(boolean panEventsEnabled) {
+	public void setPanEventsEnabled(Boolean panEventsEnabled) {
 		this.panEventsEnabled = panEventsEnabled;
 	}
-	public double getPercentPrecision() {
+	public Double getPercentPrecision() {
 		return percentPrecision;
 	}
-	public void setPercentPrecision(double percentPrecision) {
+	public void setPercentPrecision(Double percentPrecision) {
 		this.percentPrecision = percentPrecision;
 	}
-	public double getPlotAreaBorderAlpha() {
+	public Double getPlotAreaBorderAlpha() {
 		return plotAreaBorderAlpha;
 	}
-	public void setPlotAreaBorderAlpha(double plotAreaBorderAlpha) {
+	public void setPlotAreaBorderAlpha(Double plotAreaBorderAlpha) {
 		this.plotAreaBorderAlpha = plotAreaBorderAlpha;
 	}
 	public Color getPlotAreaBorderColor() {
@@ -284,10 +284,10 @@ public class PanelsSettings {
 	public void setPlotAreaBorderColor(Color plotAreaBorderColor) {
 		this.plotAreaBorderColor = plotAreaBorderColor;
 	}
-	public double getPlotAreaFillAlphas() {
+	public Double getPlotAreaFillAlphas() {
 		return plotAreaFillAlphas;
 	}
-	public void setPlotAreaFillAlphas(double plotAreaFillAlphas) {
+	public void setPlotAreaFillAlphas(Double plotAreaFillAlphas) {
 		this.plotAreaFillAlphas = plotAreaFillAlphas;
 	}
 	public List<Color> getPlotAreaFillColors() {
@@ -296,10 +296,10 @@ public class PanelsSettings {
 	public void setPlotAreaFillColors(List<Color> plotAreaFillColors) {
 		this.plotAreaFillColors = plotAreaFillColors;
 	}
-	public double getPrecision() {
+	public Double getPrecision() {
 		return precision;
 	}
-	public void setPrecision(double precision) {
+	public void setPrecision(Double precision) {
 		this.precision = precision;
 	}
 	public List<BigPrefix> getPrefixesOfBigNumbers() {
@@ -320,22 +320,22 @@ public class PanelsSettings {
 	public void setRecalculateToPercents(RecalculateToPercents recalculateToPercents) {
 		this.recalculateToPercents = recalculateToPercents;
 	}
-	public boolean isSequencedAnimation() {
+	public Boolean isSequencedAnimation() {
 		return sequencedAnimation;
 	}
-	public void setSequencedAnimation(boolean sequencedAnimation) {
+	public void setSequencedAnimation(Boolean sequencedAnimation) {
 		this.sequencedAnimation = sequencedAnimation;
 	}
-	public double getStartAlpha() {
+	public Double getStartAlpha() {
 		return startAlpha;
 	}
-	public void setStartAlpha(double startAlpha) {
+	public void setStartAlpha(Double startAlpha) {
 		this.startAlpha = startAlpha;
 	}
-	public double getStartDuration() {
+	public Double getStartDuration() {
 		return startDuration;
 	}
-	public void setStartDuration(double startDuration) {
+	public void setStartDuration(Double startDuration) {
 		this.startDuration = startDuration;
 	}
 	public StartEffect getStartEffect() {
@@ -350,10 +350,10 @@ public class PanelsSettings {
 	public void setThousandsSeparator(String thousandsSeparator) {
 		this.thousandsSeparator = thousandsSeparator;
 	}
-	public boolean isUsePrefixes() {
+	public Boolean isUsePrefixes() {
 		return usePrefixes;
 	}
-	public void setUsePrefixes(boolean usePrefixes) {
+	public void setUsePrefixes(Boolean usePrefixes) {
 		this.usePrefixes = usePrefixes;
 	}
 

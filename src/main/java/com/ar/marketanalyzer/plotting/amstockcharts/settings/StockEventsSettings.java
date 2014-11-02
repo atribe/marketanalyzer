@@ -12,7 +12,7 @@ public class StockEventsSettings {
 	* Opacity of bullet background.
 	* Default Value: 1
 	*/
-	private double backgroundAlpha;
+	private Double backgroundAlpha;
 	/**
 	* Color of bullet background.
 	* Default Value: #DADADA
@@ -27,7 +27,7 @@ public class StockEventsSettings {
 	* Opacity of bullet border.
 	* Default Value: 1
 	*/
-	private double borderAlpha;
+	private Double borderAlpha;
 	/**
 	* Bullet border color.
 	* Default Value: #888888
@@ -49,10 +49,10 @@ public class StockEventsSettings {
 	*/
 	private StockEventType type;
 	
-	public double getBackgroundAlpha() {
+	public Double getBackgroundAlpha() {
 		return backgroundAlpha;
 	}
-	public void setBackgroundAlpha(double backgroundAlpha) {
+	public void setBackgroundAlpha(Double backgroundAlpha) {
 		this.backgroundAlpha = backgroundAlpha;
 	}
 	public Color getBackgroundColor() {
@@ -67,10 +67,10 @@ public class StockEventsSettings {
 	public void setBalloonColor(Color balloonColor) {
 		this.balloonColor = balloonColor;
 	}
-	public double getBorderAlpha() {
+	public Double getBorderAlpha() {
 		return borderAlpha;
 	}
-	public void setBorderAlpha(double borderAlpha) {
+	public void setBorderAlpha(Double borderAlpha) {
 		this.borderAlpha = borderAlpha;
 	}
 	public Color getBorderColor() {

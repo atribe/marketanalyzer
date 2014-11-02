@@ -27,11 +27,11 @@ public class AmLegend implements Serializable {
     /**
      * Used if chart is Serial or XY. In case true, margins of the legend are adjusted and made equal to chart's margins.
      */
-    private boolean autoMargins;
+    private Boolean autoMargins;
     /**
      * Opacity of legend's background. Value range is 0 - 1
      */
-    private double backgroundAlpha;
+    private Double backgroundAlpha;
     /**
      * Background color. You should set backgroundAlpha to >0 vallue in order background to be visible.
      */
@@ -39,7 +39,7 @@ public class AmLegend implements Serializable {
     /**
      * Opacity of chart's border. Value range is 0 - 1.
      */
-    private double borderAlpha;
+    private Double borderAlpha;
     /**
      * Color of legend's border. You should set borderAlpha >0 in order border to be visible.
      */
@@ -47,7 +47,7 @@ public class AmLegend implements Serializable {
     /**
      * In case legend position is set to "absolute", you can set distance from bottom of the chart, in pixels.
      */
-    private double bottom;
+    private Double bottom;
     /**
      * text color
      */
@@ -63,15 +63,15 @@ public class AmLegend implements Serializable {
     /**
      * Specifies if each of legend entry should be equal to the most wide entry. Won't look good if legend has more than one line.
      */
-    private boolean equalWidths;
+    private Boolean equalWidths;
     /**
      * Font size.
      */
-    private double fontSize;
+    private Double fontSize;
     /**
      * Horizontal space between legend item and left/right border.
      */
-    private double horizontalGap;
+    private Double horizontalGap;
     /**
      * The text which will be displayed in the legend. Tag [[title]] will be replaced with the title of the graph.
      */
@@ -79,31 +79,31 @@ public class AmLegend implements Serializable {
     /**
      * If width of the label is bigger than labelWidth, it will be wrapped.
      */
-    private double labelWidth;
+    private Double labelWidth;
     /**
      * In case legend position is set to "absolute", you can set distance from left side of the chart, in pixels.
      */
-    private double left;
+    private Double left;
     /**
      * Bottom margin.
      */
-    private double marginBottom;
+    private Double marginBottom;
     /**
      * Left margin. This property will be ignored if chart is Serial or XY and autoMargins property of the legend is true (default).
      */
-    private double marginLeft;
+    private Double marginLeft;
     /**
      * Right margin. This property will be ignored if chart is Serial or XY and autoMargins property of the legend is true (default).
      */
-    private double marginRight;
+    private Double marginRight;
     /**
      * Top margin.
      */
-    private double marginTop;
+    private Double marginTop;
     /**
      * Marker border opacity.
      */
-    private double markerBorderAlpha;
+    private Double markerBorderAlpha;
     /**
      * Marker border color. If not set, will use the same color as marker.
      */
@@ -111,7 +111,7 @@ public class AmLegend implements Serializable {
     /**
      * Thickness of the legend border. The default value (0) means the line will be a "hairline" (1 px). In case marker type is line, this style will be used for line thickness.
      */
-    private double markerBorderThickness;
+    private Double markerBorderThickness;
     /**
      * The color of the disabled marker (when the graph is hidden).
      */
@@ -119,11 +119,11 @@ public class AmLegend implements Serializable {
     /**
      * Space between legend marker and legend text, in pixels.
      */
-    private double markerLabelGap;
+    private Double markerLabelGap;
     /**
      * Size of the legend marker (key).
      */
-    private double markerSize;
+    private Double markerSize;
     /**
      * Shape of the legend marker (key). Possible values are: square, circle, diamond, triangleUp, triangleDown, triangleLeft, triangleDown, bubble, line, none.
      */
@@ -131,7 +131,7 @@ public class AmLegend implements Serializable {
     /**
      * Maximum number of columns in the legend. If Legend's position is set to "right" or "left", maxColumns is automatically set to 1.
      */
-    private double maxColumns;
+    private Double maxColumns;
     /**
      * The text which will be displayed in the value portion of the legend when user is not hovering above any data point. The tags should be made out of two parts - the name of a field (value / open / close / high / low) and the value of the period you want to be show - open / close / high / low / sum / average / count. For example: [[value.sum]] means that sum of all data points of value field in the selected period will be displayed.
      */
@@ -143,11 +143,11 @@ public class AmLegend implements Serializable {
     /**
      * Specifies whether legend entries should be placed in reversed order.
      */
-    private boolean reversedOrder;
+    private Boolean reversedOrder;
     /**
      * In case legend position is set to "absolute", you can set distance from right side of the chart, in pixels.
      */
-    private double right;
+    private Double right;
     /**
      * Legend item text color on roll-over.
      */
@@ -155,19 +155,19 @@ public class AmLegend implements Serializable {
     /**
      * When you roll-over the legend entry, all other graphs can reduce their opacity, so that the graph you rolled-over would be distinguished. This style specifies the opacity of the graphs.
      */
-    private double rollOverGraphAlpha;
+    private Double rollOverGraphAlpha;
     /**
      * You can use this property to turn all the legend entries off.
      */
-    private boolean showEntries;
+    private Boolean showEntries;
     /**
      * Horizontal space between legend items, in pixels.
      */
-    private double spacing;
+    private Double spacing;
     /**
      * Whether showing/hiding of graphs by clicking on the legend marker is enabled or not. In case legend is used with AmMap, this is set to false automatically.
      */
-    private boolean switchable;
+    private Boolean switchable;
     /**
      * Legend switch color.
      */
@@ -179,23 +179,23 @@ public class AmLegend implements Serializable {
     /**
      * If true, clicking on the text will show/hide balloon of the graph. Otherwise it will show/hide graph/slice, if switchable is set to true.
      */
-    private boolean textClickEnabled;
+    private Boolean textClickEnabled;
     /**
      * In case legend position is set to "absolute", you can set distance from top of the chart, in pixels.
      */
-    private double top;
+    private Double top;
     /**
      * Legend markers can mirror graph’s settings, displaying a line and a real bullet as in the graph itself. Set this property to true if you want to enable this feature.
      */
-    private boolean useGraphSettings;
+    private Boolean useGraphSettings;
     /**
      * Labels will use marker color if you set this to true.
      */
-    private boolean useMarkerColorForLabels;
+    private Boolean useMarkerColorForLabels;
     /**
      * Specifies if legend values should be use same color as corresponding markers.
      */
-    private boolean useMarkerColorForValues;
+    private Boolean useMarkerColorForValues;
     /**
      * Alignment of the value text. Possible values are "left" and "right".
      */
@@ -213,15 +213,15 @@ public class AmLegend implements Serializable {
     /**
      * Width of the value text.
      */
-    private double valueWidth;
+    private Double valueWidth;
     /**
      * Vertical space between legend items also between legend border and first and last legend row.
      */
-    private double verticalGap;
+    private Double verticalGap;
     /**
      * Width of a legend, when position is set to absolute.
      */
-    private double width;
+    private Double width;
     /**
      * Alignment of legend entries. Possible values are: "left", "center", "right".
      **/
@@ -243,10 +243,10 @@ public class AmLegend implements Serializable {
      * Used if chart is Serial or XY. In case true, margins of the legend are adjusted and
      * made equal to chart's margins.
      **/
-    public boolean getAutoMargins() {
+    public Boolean getAutoMargins() {
         return autoMargins;
     }
-    public AmLegend setAutoMargins(boolean autoMargins) {
+    public AmLegend setAutoMargins(Boolean autoMargins) {
         this.autoMargins = autoMargins;
         return this;
     }
@@ -254,10 +254,10 @@ public class AmLegend implements Serializable {
     /**
      * Opacity of legend's background. Value range is 0 - 1
      **/
-    public double getBackgroundAlpha() {
+    public Double getBackgroundAlpha() {
         return backgroundAlpha;
     }
-    public AmLegend setBackgroundAlpha(double backgroundAlpha) {
+    public AmLegend setBackgroundAlpha(Double backgroundAlpha) {
         this.backgroundAlpha = backgroundAlpha;
         return this;
     }
@@ -277,10 +277,10 @@ public class AmLegend implements Serializable {
     /**
      * Opacity of chart's border. Value range is 0 - 1.
      **/
-    public double getBorderAlpha() {
+    public Double getBorderAlpha() {
         return borderAlpha;
     }
-    public AmLegend setBorderAlpha(double borderAlpha) {
+    public AmLegend setBorderAlpha(Double borderAlpha) {
         this.borderAlpha = borderAlpha;
         return this;
     }
@@ -300,10 +300,10 @@ public class AmLegend implements Serializable {
      * In case legend position is set to "absolute", you can set distance from bottom of
      * the chart, in pixels.
      **/
-    public double getBottom() {
+    public Double getBottom() {
         return bottom;
     }
-    public AmLegend setBottom(double bottom) {
+    public AmLegend setBottom(Double bottom) {
         this.bottom = bottom;
         return this;
     }
@@ -347,10 +347,10 @@ public class AmLegend implements Serializable {
      * Specifies if each of legend entry should be equal to the most wide entry. Won't look
      * good if legend has more than one line.
      **/
-    public boolean getEqualWidths() {
+    public Boolean getEqualWidths() {
         return equalWidths;
     }
-    public AmLegend setEqualWidths(boolean equalWidths) {
+    public AmLegend setEqualWidths(Boolean equalWidths) {
         this.equalWidths = equalWidths;
         return this;
     }
@@ -358,10 +358,10 @@ public class AmLegend implements Serializable {
     /**
      * Font size.
      **/
-    public double getFontSize() {
+    public Double getFontSize() {
         return fontSize;
     }
-    public AmLegend setFontSize(double fontSize) {
+    public AmLegend setFontSize(Double fontSize) {
         this.fontSize = fontSize;
         return this;
     }
@@ -369,10 +369,10 @@ public class AmLegend implements Serializable {
     /**
      * Horizontal space between legend item and left/right border.
      **/
-    public double getHorizontalGap() {
+    public Double getHorizontalGap() {
         return horizontalGap;
     }
-    public AmLegend setHorizontalGap(double horizontalGap) {
+    public AmLegend setHorizontalGap(Double horizontalGap) {
         this.horizontalGap = horizontalGap;
         return this;
     }
@@ -393,10 +393,10 @@ public class AmLegend implements Serializable {
      * In case legend position is set to "absolute", you can set distance from left side
      * of the chart, in pixels.
      **/
-    public double getLeft() {
+    public Double getLeft() {
         return left;
     }
-    public AmLegend setLeft(double left) {
+    public AmLegend setLeft(Double left) {
         this.left = left;
         return this;
     }
@@ -404,10 +404,10 @@ public class AmLegend implements Serializable {
     /**
      * Bottom margin.
      **/
-    public double getMarginBottom() {
+    public Double getMarginBottom() {
         return marginBottom;
     }
-    public AmLegend setMarginBottom(double marginBottom) {
+    public AmLegend setMarginBottom(Double marginBottom) {
         this.marginBottom = marginBottom;
         return this;
     }
@@ -416,10 +416,10 @@ public class AmLegend implements Serializable {
      * Left margin. This property will be ignored if chart is Serial or XY and autoMargins
      * property of the legend is true (default).
      **/
-    public double getMarginLeft() {
+    public Double getMarginLeft() {
         return marginLeft;
     }
-    public AmLegend setMarginLeft(double marginLeft) {
+    public AmLegend setMarginLeft(Double marginLeft) {
         this.marginLeft = marginLeft;
         return this;
     }
@@ -428,10 +428,10 @@ public class AmLegend implements Serializable {
      * Right margin. This property will be ignored if chart is Serial or XY and autoMargins
      * property of the legend is true (default).
      **/
-    public double getMarginRight() {
+    public Double getMarginRight() {
         return marginRight;
     }
-    public AmLegend setMarginRight(double marginRight) {
+    public AmLegend setMarginRight(Double marginRight) {
         this.marginRight = marginRight;
         return this;
     }
@@ -439,10 +439,10 @@ public class AmLegend implements Serializable {
     /**
      * Top margin.
      **/
-    public double getMarginTop() {
+    public Double getMarginTop() {
         return marginTop;
     }
-    public AmLegend setMarginTop(double marginTop) {
+    public AmLegend setMarginTop(Double marginTop) {
         this.marginTop = marginTop;
         return this;
     }
@@ -450,10 +450,10 @@ public class AmLegend implements Serializable {
     /**
      * Marker border opacity.
      **/
-    public double getMarkerBorderAlpha() {
+    public Double getMarkerBorderAlpha() {
         return markerBorderAlpha;
     }
-    public AmLegend setMarkerBorderAlpha(double markerBorderAlpha) {
+    public AmLegend setMarkerBorderAlpha(Double markerBorderAlpha) {
         this.markerBorderAlpha = markerBorderAlpha;
         return this;
     }
@@ -473,10 +473,10 @@ public class AmLegend implements Serializable {
      * Thickness of the legend border. The default value (0) means the line will be a "hairline"
      * (1 px). In case marker type is line, this style will be used for line thickness.
      **/
-    public double getMarkerBorderThickness() {
+    public Double getMarkerBorderThickness() {
         return markerBorderThickness;
     }
-    public AmLegend setMarkerBorderThickness(double markerBorderThickness) {
+    public AmLegend setMarkerBorderThickness(Double markerBorderThickness) {
         this.markerBorderThickness = markerBorderThickness;
         return this;
     }
@@ -495,10 +495,10 @@ public class AmLegend implements Serializable {
     /**
      * Space between legend marker and legend text, in pixels.
      **/
-    public double getMarkerLabelGap() {
+    public Double getMarkerLabelGap() {
         return markerLabelGap;
     }
-    public AmLegend setMarkerLabelGap(double markerLabelGap) {
+    public AmLegend setMarkerLabelGap(Double markerLabelGap) {
         this.markerLabelGap = markerLabelGap;
         return this;
     }
@@ -506,10 +506,10 @@ public class AmLegend implements Serializable {
     /**
      * Size of the legend marker (key).
      **/
-    public double getMarkerSize() {
+    public Double getMarkerSize() {
         return markerSize;
     }
-    public AmLegend setMarkerSize(double markerSize) {
+    public AmLegend setMarkerSize(Double markerSize) {
         this.markerSize = markerSize;
         return this;
     }
@@ -530,10 +530,10 @@ public class AmLegend implements Serializable {
      * Maximum number of columns in the legend. If Legend's position is set to "right" or
      * "left", maxColumns is automatically set to 1.
      **/
-    public double getMaxColumns() {
+    public Double getMaxColumns() {
         return maxColumns;
     }
-    public AmLegend setMaxColumns(double maxColumns) {
+    public AmLegend setMaxColumns(Double maxColumns) {
         this.maxColumns = maxColumns;
         return this;
     }
@@ -571,10 +571,10 @@ public class AmLegend implements Serializable {
     /**
      * Specifies whether legend entries should be placed in reversed order.
      **/
-    public boolean getReversedOrder() {
+    public Boolean getReversedOrder() {
         return reversedOrder;
     }
-    public AmLegend setReversedOrder(boolean reversedOrder) {
+    public AmLegend setReversedOrder(Boolean reversedOrder) {
         this.reversedOrder = reversedOrder;
         return this;
     }
@@ -583,10 +583,10 @@ public class AmLegend implements Serializable {
      * In case legend position is set to "absolute", you can set distance from right side
      * of the chart, in pixels.
      **/
-    public double getRight() {
+    public Double getRight() {
         return right;
     }
-    public AmLegend setRight(double right) {
+    public AmLegend setRight(Double right) {
         this.right = right;
         return this;
     }
@@ -607,10 +607,10 @@ public class AmLegend implements Serializable {
      * that the graph you rolled-over would be distinguished. This style specifies the opacity
      * of the graphs.
      **/
-    public double getRollOverGraphAlpha() {
+    public Double getRollOverGraphAlpha() {
         return rollOverGraphAlpha;
     }
-    public AmLegend setRollOverGraphAlpha(double rollOverGraphAlpha) {
+    public AmLegend setRollOverGraphAlpha(Double rollOverGraphAlpha) {
         this.rollOverGraphAlpha = rollOverGraphAlpha;
         return this;
     }
@@ -618,10 +618,10 @@ public class AmLegend implements Serializable {
     /**
      * You can use this property to turn all the legend entries off.
      **/
-    public boolean getShowEntries() {
+    public Boolean getShowEntries() {
         return showEntries;
     }
-    public AmLegend setShowEntries(boolean showEntries) {
+    public AmLegend setShowEntries(Boolean showEntries) {
         this.showEntries = showEntries;
         return this;
     }
@@ -629,10 +629,10 @@ public class AmLegend implements Serializable {
     /**
      * Horizontal space between legend items, in pixels.
      **/
-    public double getSpacing() {
+    public Double getSpacing() {
         return spacing;
     }
-    public AmLegend setSpacing(double spacing) {
+    public AmLegend setSpacing(Double spacing) {
         this.spacing = spacing;
         return this;
     }
@@ -641,10 +641,10 @@ public class AmLegend implements Serializable {
      * Whether showing/hiding of graphs by clicking on the legend marker is enabled or not.
      * In case legend is used with AmMap, this is set to false automatically.
      **/
-    public boolean getSwitchable() {
+    public Boolean getSwitchable() {
         return switchable;
     }
-    public AmLegend setSwitchable(boolean switchable) {
+    public AmLegend setSwitchable(Boolean switchable) {
         this.switchable = switchable;
         return this;
     }
@@ -676,10 +676,10 @@ public class AmLegend implements Serializable {
      * If true, clicking on the text will show/hide balloon of the graph. Otherwise it will
      * show/hide graph/slice, if switchable is set to true.
      **/
-    public boolean getTextClickEnabled() {
+    public Boolean getTextClickEnabled() {
         return textClickEnabled;
     }
-    public AmLegend setTextClickEnabled(boolean textClickEnabled) {
+    public AmLegend setTextClickEnabled(Boolean textClickEnabled) {
         this.textClickEnabled = textClickEnabled;
         return this;
     }
@@ -688,10 +688,10 @@ public class AmLegend implements Serializable {
      * In case legend position is set to "absolute", you can set distance from top of the
      * chart, in pixels.
      **/
-    public double getTop() {
+    public Double getTop() {
         return top;
     }
-    public AmLegend setTop(double top) {
+    public AmLegend setTop(Double top) {
         this.top = top;
         return this;
     }
@@ -700,10 +700,10 @@ public class AmLegend implements Serializable {
      * Legend markers can mirror graphâ€™s settings, displaying a line and a real bullet as
      * in the graph itself. Set this property to true if you want to enable this feature.
      **/
-    public boolean getUseGraphSettings() {
+    public Boolean getUseGraphSettings() {
         return useGraphSettings;
     }
-    public AmLegend setUseGraphSettings(boolean useGraphSettings) {
+    public AmLegend setUseGraphSettings(Boolean useGraphSettings) {
         this.useGraphSettings = useGraphSettings;
         return this;
     }
@@ -711,10 +711,10 @@ public class AmLegend implements Serializable {
     /**
      * Labels will use marker color if you set this to true.
      **/
-    public boolean getUseMarkerColorForLabels() {
+    public Boolean getUseMarkerColorForLabels() {
         return useMarkerColorForLabels;
     }
-    public AmLegend setUseMarkerColorForLabels(boolean useMarkerColorForLabels) {
+    public AmLegend setUseMarkerColorForLabels(Boolean useMarkerColorForLabels) {
         this.useMarkerColorForLabels = useMarkerColorForLabels;
         return this;
     }
@@ -722,10 +722,10 @@ public class AmLegend implements Serializable {
     /**
      * Specifies if legend values should be use same color as corresponding markers.
      **/
-    public boolean getUseMarkerColorForValues() {
+    public Boolean getUseMarkerColorForValues() {
         return useMarkerColorForValues;
     }
-    public AmLegend setUseMarkerColorForValues(boolean useMarkerColorForValues) {
+    public AmLegend setUseMarkerColorForValues(Boolean useMarkerColorForValues) {
         this.useMarkerColorForValues = useMarkerColorForValues;
         return this;
     }
@@ -756,10 +756,10 @@ public class AmLegend implements Serializable {
     /**
      * Width of the value text.
      **/
-    public double getValueWidth() {
+    public Double getValueWidth() {
         return valueWidth;
     }
-    public AmLegend setValueWidth(double valueWidth) {
+    public AmLegend setValueWidth(Double valueWidth) {
         this.valueWidth = valueWidth;
         return this;
     }
@@ -768,10 +768,10 @@ public class AmLegend implements Serializable {
      * Vertical space between legend items also between legend border and first and last
      * legend row.
      **/
-    public double getVerticalGap() {
+    public Double getVerticalGap() {
         return verticalGap;
     }
-    public AmLegend setVerticalGap(double verticalGap) {
+    public AmLegend setVerticalGap(Double verticalGap) {
         this.verticalGap = verticalGap;
         return this;
     }
@@ -779,17 +779,17 @@ public class AmLegend implements Serializable {
     /**
      * Width of a legend, when position is set to absolute.
      **/
-    public double getWidth() {
+    public Double getWidth() {
         return width;
     }
-    public AmLegend setWidth(double width) {
+    public AmLegend setWidth(Double width) {
         this.width = width;
         return this;
     }
-	public double getLabelWidth() {
+	public Double getLabelWidth() {
 		return labelWidth;
 	}
-	public void setLabelWidth(double labelWidth) {
+	public void setLabelWidth(Double labelWidth) {
 		this.labelWidth = labelWidth;
 	}
 

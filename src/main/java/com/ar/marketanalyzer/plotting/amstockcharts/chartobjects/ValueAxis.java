@@ -11,17 +11,17 @@ public class ValueAxis extends AxisBase{
 	* Radar chart only. Specifies distance from axis to the axis title (category)
 	* Default Value: 10
 	*/
-	private double axisTitleOffset;
+	private Double axisTitleOffset;
 	/**
 	* Read-only. Coordinate of the base value.
 	* Default Value: 
 	*/
-	private double baseCoord;
+	private Double baseCoord;
 	/**
 	* Specifies base value of the axis.
 	* Default Value: 0
 	*/
-	private double baseValue;
+	private Double baseValue;
 	/**
 	* If your values represents time units, and you want value axis labels to be formatted as duration, you have to set the duration unit. Possible values are: ""ss"", ""mm"", ""hh"" and ""DD"".
 	* Default Value: 
@@ -46,51 +46,51 @@ public class ValueAxis extends AxisBase{
 	* Specifies whether guide values should be included when calculating min and max of the axis.
 	* Default Value: FALSE
 	*/
-	private boolean includeGuidesInMinMax;
+	private Boolean includeGuidesInMinMax;
 	/**
 	* If true, the axis will include hidden graphs when calculating min and max values.
 	* Default Value: FALSE
 	*/
-	private boolean includeHidden;
+	private Boolean includeHidden;
 	/**
-	* Specifies whether values on axis can only be integers or both integers and doubles.
+	* Specifies whether values on axis can only be integers or both integers and Doubles.
 	* You can use this function to format Value axis labels. This function is called and these parameters are passed: 
 	* labelFunction(value, valueText, valueAxis);
 	* Where value is numeric value, valueText is formatted string and valueAxis is a reference to valueAxis object. 
 	* Your function should return string.
 	* Default Value: FALSE
 	*/
-	private boolean integersOnly;
+	private Boolean integersOnly;
 	/**
 	* Specifies if this value axis' scale should be logarithmic.
 	* Default Value: FALSE
 	*/
-	private boolean logarithmic;
+	private Boolean logarithmic;
 	/**
 	* Read-only. Maximum value of the axis.
 	* Default Value: 
 	*/
-	private double max;
+	private Double max;
 	/**
 	* If you don't want max value to be calculated by the chart, set it using this property. This value might still be adjusted so that it would be possible to draw grid at rounded intervals.
 	* Default Value: 
 	*/
-	private double maximum;
+	private Double maximum;
 	/**
 	* Read-only. Minimum value of the axis.
 	* Default Value: 
 	*/
-	private double min;
+	private Double min;
 	/**
 	* If you don't want min value to be calculated by the chart, set it using this property. This value might still be adjusted so that it would be possible to draw grid at rounded intervals.
 	* Default Value: 
 	*/
-	private double minimum;
+	private Double minimum;
 	/**
 	* If set value axis scale (min and max numbers) will be multiplied by it. I.e. if set to 1.2 the scope of values will increase by 20%.
 	* Default Value: 1
 	*/
-	private double minMaxMultiplier;
+	private Double minMaxMultiplier;
 	/**
 	* Possible values are: ""top"", ""bottom"", ""left"", ""right"". If axis is vertical, default position is ""left"". If axis is horizontal, default position is ""bottom"".
 	* Default Value: left
@@ -100,22 +100,22 @@ public class ValueAxis extends AxisBase{
 	* Precision (number of decimals) of values.
 	* Default Value: 
 	*/
-	private double precision;
+	private Double precision;
 	/**
 	* Radar chart only. Specifies if categories (axes' titles) should be displayed near axes)
 	* Default Value: TRUE
 	*/
-	private boolean radarCategoriesEnabled;
+	private Boolean radarCategoriesEnabled;
 	/**
 	* Specifies if graphs's values should be recalculated to percents.
 	* Default Value: FALSE
 	*/
-	private boolean recalculateToPercents;
+	private Boolean recalculateToPercents;
 	/**
 	* Specifies if value axis should be reversed (smaller values on top).
 	* Default Value: FALSE
 	*/
-	private boolean reversed;
+	private Boolean reversed;
 	/**
 	* Stacking mode of the axis. Possible values are: ""none"", ""regular"", ""100%"", ""3d"".
 	Note, only graphs of one type will be stacked.
@@ -126,12 +126,12 @@ public class ValueAxis extends AxisBase{
 	* Read-only. Value difference between two grid lines.
 	* Default Value: 
 	*/
-	private double step;
+	private Double step;
 	/**
 	* In case you synchronize one value axis with another, you need to set the synchronization multiplier. Use synchronizeWithAxis method to set with which axis it should be synced.
 	* Default Value: 
 	*/
-	private double synchronizationMultiplier;
+	private Double synchronizationMultiplier;
 	/**
 	* One value axis can be synchronized with another value axis. You can use both reference to your axis or id of the axis here. You should set synchronizationMultiplyer in order for this to work.
 	* Default Value: 
@@ -151,7 +151,7 @@ public class ValueAxis extends AxisBase{
 	* This allows you to have logarithmic value axis and have zero values in the data. You must set it to >0 value in order to work.
 	* Default Value: 0
 	*/
-	private double treatZeroAs;
+	private Double treatZeroAs;
 	/**
 	* Unit which will be added to the value label.
 	* Default Value: 
@@ -166,14 +166,14 @@ public class ValueAxis extends AxisBase{
 	* If true, prefixes will be used for big and small numbers. You can set arrays of prefixes directly to the chart object via prefixesOfSmallNumbers and prefixesOfBigNumbers.
 	* Default Value: FALSE
 	*/
-	private boolean usePrefixes;
+	private Boolean usePrefixes;
 	/**
 	* If true, values will always be formatted using scientific notation (5e+8, 5e-8...) Otherwise only values bigger then 1e+21 and smaller then 1e-7 will be displayed in scientific notation.
 	* Default Value: FALSE
 	*/
-	private boolean useScientificNotation;
+	private Boolean useScientificNotation;
 	public ValueAxis() { 
-		dashLength = 5;
+		dashLength = 5.0;
 	}
 	
 	public ValueAxis(String id) {
@@ -181,22 +181,22 @@ public class ValueAxis extends AxisBase{
 
 		this.id = id;
 	}
-	public double getAxisTitleOffset() {
+	public Double getAxisTitleOffset() {
 		return axisTitleOffset;
 	}
-	public void setAxisTitleOffset(double axisTitleOffset) {
+	public void setAxisTitleOffset(Double axisTitleOffset) {
 		this.axisTitleOffset = axisTitleOffset;
 	}
-	public double getBaseCoord() {
+	public Double getBaseCoord() {
 		return baseCoord;
 	}
-	public void setBaseCoord(double baseCoord) {
+	public void setBaseCoord(Double baseCoord) {
 		this.baseCoord = baseCoord;
 	}
-	public double getBaseValue() {
+	public Double getBaseValue() {
 		return baseValue;
 	}
-	public void setBaseValue(double baseValue) {
+	public void setBaseValue(Double baseValue) {
 		this.baseValue = baseValue;
 	}
 	public String getDuration() {
@@ -223,58 +223,58 @@ public class ValueAxis extends AxisBase{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public boolean isIncludeGuidesInMinMax() {
+	public Boolean isIncludeGuidesInMinMax() {
 		return includeGuidesInMinMax;
 	}
-	public void setIncludeGuidesInMinMax(boolean includeGuidesInMinMax) {
+	public void setIncludeGuidesInMinMax(Boolean includeGuidesInMinMax) {
 		this.includeGuidesInMinMax = includeGuidesInMinMax;
 	}
-	public boolean isIncludeHidden() {
+	public Boolean isIncludeHidden() {
 		return includeHidden;
 	}
-	public void setIncludeHidden(boolean includeHidden) {
+	public void setIncludeHidden(Boolean includeHidden) {
 		this.includeHidden = includeHidden;
 	}
-	public boolean isIntegersOnly() {
+	public Boolean isIntegersOnly() {
 		return integersOnly;
 	}
-	public void setIntegersOnly(boolean integersOnly) {
+	public void setIntegersOnly(Boolean integersOnly) {
 		this.integersOnly = integersOnly;
 	}
-	public boolean isLogarithmic() {
+	public Boolean isLogarithmic() {
 		return logarithmic;
 	}
-	public void setLogarithmic(boolean logarithmic) {
+	public void setLogarithmic(Boolean logarithmic) {
 		this.logarithmic = logarithmic;
 	}
-	public double getMax() {
+	public Double getMax() {
 		return max;
 	}
-	public void setMax(double max) {
+	public void setMax(Double max) {
 		this.max = max;
 	}
-	public double getMaximum() {
+	public Double getMaximum() {
 		return maximum;
 	}
-	public void setMaximum(double maximum) {
+	public void setMaximum(Double maximum) {
 		this.maximum = maximum;
 	}
-	public double getMin() {
+	public Double getMin() {
 		return min;
 	}
-	public void setMin(double min) {
+	public void setMin(Double min) {
 		this.min = min;
 	}
-	public double getMinimum() {
+	public Double getMinimum() {
 		return minimum;
 	}
-	public void setMinimum(double minimum) {
+	public void setMinimum(Double minimum) {
 		this.minimum = minimum;
 	}
-	public double getMinMaxMultiplier() {
+	public Double getMinMaxMultiplier() {
 		return minMaxMultiplier;
 	}
-	public void setMinMaxMultiplier(double minMaxMultiplier) {
+	public void setMinMaxMultiplier(Double minMaxMultiplier) {
 		this.minMaxMultiplier = minMaxMultiplier;
 	}
 	public String getPosition() {
@@ -283,28 +283,28 @@ public class ValueAxis extends AxisBase{
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public double getPrecision() {
+	public Double getPrecision() {
 		return precision;
 	}
-	public void setPrecision(double precision) {
+	public void setPrecision(Double precision) {
 		this.precision = precision;
 	}
-	public boolean isRadarCategoriesEnabled() {
+	public Boolean isRadarCategoriesEnabled() {
 		return radarCategoriesEnabled;
 	}
-	public void setRadarCategoriesEnabled(boolean radarCategoriesEnabled) {
+	public void setRadarCategoriesEnabled(Boolean radarCategoriesEnabled) {
 		this.radarCategoriesEnabled = radarCategoriesEnabled;
 	}
-	public boolean isRecalculateToPercents() {
+	public Boolean isRecalculateToPercents() {
 		return recalculateToPercents;
 	}
-	public void setRecalculateToPercents(boolean recalculateToPercents) {
+	public void setRecalculateToPercents(Boolean recalculateToPercents) {
 		this.recalculateToPercents = recalculateToPercents;
 	}
-	public boolean isReversed() {
+	public Boolean isReversed() {
 		return reversed;
 	}
-	public void setReversed(boolean reversed) {
+	public void setReversed(Boolean reversed) {
 		this.reversed = reversed;
 	}
 	public String getStackType() {
@@ -313,16 +313,16 @@ public class ValueAxis extends AxisBase{
 	public void setStackType(String stackType) {
 		this.stackType = stackType;
 	}
-	public double getStep() {
+	public Double getStep() {
 		return step;
 	}
-	public void setStep(double step) {
+	public void setStep(Double step) {
 		this.step = step;
 	}
-	public double getSynchronizationMultiplier() {
+	public Double getSynchronizationMultiplier() {
 		return synchronizationMultiplier;
 	}
-	public void setSynchronizationMultiplier(double synchronizationMultiplier) {
+	public void setSynchronizationMultiplier(Double synchronizationMultiplier) {
 		this.synchronizationMultiplier = synchronizationMultiplier;
 	}
 	public ValueAxis getSynchronizeWith() {
@@ -343,10 +343,10 @@ public class ValueAxis extends AxisBase{
 	public void setTotalTextColor(Color totalTextColor) {
 		this.totalTextColor = totalTextColor;
 	}
-	public double getTreatZeroAs() {
+	public Double getTreatZeroAs() {
 		return treatZeroAs;
 	}
-	public void setTreatZeroAs(double treatZeroAs) {
+	public void setTreatZeroAs(Double treatZeroAs) {
 		this.treatZeroAs = treatZeroAs;
 	}
 	public String getUnit() {
@@ -361,16 +361,16 @@ public class ValueAxis extends AxisBase{
 	public void setUnitPosition(String unitPosition) {
 		this.unitPosition = unitPosition;
 	}
-	public boolean isUsePrefixes() {
+	public Boolean isUsePrefixes() {
 		return usePrefixes;
 	}
-	public void setUsePrefixes(boolean usePrefixes) {
+	public void setUsePrefixes(Boolean usePrefixes) {
 		this.usePrefixes = usePrefixes;
 	}
-	public boolean isUseScientificNotation() {
+	public Boolean isUseScientificNotation() {
 		return useScientificNotation;
 	}
-	public void setUseScientificNotation(boolean useScientificNotation) {
+	public void setUseScientificNotation(Boolean useScientificNotation) {
 		this.useScientificNotation = useScientificNotation;
 	}
 

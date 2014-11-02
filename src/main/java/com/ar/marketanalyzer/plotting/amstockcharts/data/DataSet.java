@@ -4,16 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ar.marketanalyzer.plotting.amcharts.serializers.JacksonObjectToListSerializer;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockEvent;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.FieldMapping;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonInclude(Include.NON_EMPTY)
-@JsonSerialize(using = JacksonObjectToListSerializer.class)
+@JsonInclude(Include.NON_NULL)
 public class DataSet implements Serializable{
 	
 	private static final long serialVersionUID = 7291671568463102235L;
@@ -36,7 +33,7 @@ public class DataSet implements Serializable{
 	* Whether this data set is selected for comparing. If you change this property, you should call stockChart.validateData() method in order the changes to be applied.
 	* Default Value: FALSE
 	*/
-	private boolean compared;
+	private Boolean compared;
 	/**
 	* Data provider of the data set.
 	* Default Value: 
@@ -51,12 +48,12 @@ public class DataSet implements Serializable{
 	* Specifies whether this data set should be visible in ""compare to"" list.
 	* Default Value: TRUE
 	*/
-	private boolean showInCompare;
+	private Boolean showInCompare;
 	/**
 	* Specifies whether this data set should be visible in ""select"" dropdown.
 	* Default Value: TRUE
 	*/
-	private boolean showInSelect;
+	private Boolean showInSelect;
 	/**
 	* Array of StockEvent objects.
 	* Default Value: 
@@ -125,11 +122,11 @@ public class DataSet implements Serializable{
 		this.color = color;
 	}
 
-	public boolean isCompared() {
+	public Boolean isCompared() {
 		return compared;
 	}
 
-	public void setCompared(boolean compared) {
+	public void setCompared(Boolean compared) {
 		this.compared = compared;
 	}
 
@@ -149,19 +146,19 @@ public class DataSet implements Serializable{
 		this.fieldMappings = fieldMappings;
 	}
 
-	public boolean isShowInCompare() {
+	public Boolean isShowInCompare() {
 		return showInCompare;
 	}
 
-	public void setShowInCompare(boolean showInCompare) {
+	public void setShowInCompare(Boolean showInCompare) {
 		this.showInCompare = showInCompare;
 	}
 
-	public boolean isShowInSelect() {
+	public Boolean isShowInSelect() {
 		return showInSelect;
 	}
 
-	public void setShowInSelect(boolean showInSelect) {
+	public void setShowInSelect(Boolean showInSelect) {
 		this.showInSelect = showInSelect;
 	}
 

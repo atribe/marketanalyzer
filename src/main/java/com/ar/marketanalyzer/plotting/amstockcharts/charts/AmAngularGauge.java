@@ -16,7 +16,7 @@ public class AmAngularGauge extends AmChart{
 	* Uses the whole space of the canvas to draw the gauge.
 	* Default Value: TRUE
 	*/
-	private boolean adjustSize;
+	private Boolean adjustSize;
 	/**
 	* Array of arrows.
 	* Default Value: 
@@ -31,17 +31,17 @@ public class AmAngularGauge extends AmChart{
 	* In case you use gauge to create a clock, set this to true.
 	* Default Value: FALSE
 	*/
-	private boolean clockWiseOnly;
+	private Boolean clockWiseOnly;
 	/**
 	* Gauge face opacity.
 	* Default Value: 0
 	*/
-	private double faceAlpha;
+	private Double faceAlpha;
 	/**
 	* Gauge face border opacity.
 	* Default Value: 0
 	*/
-	private double faceBorderAlpha;
+	private Double faceBorderAlpha;
 	/**
 	* Gauge face border color.
 	* Default Value: #555555
@@ -51,7 +51,7 @@ public class AmAngularGauge extends AmChart{
 	* Gauge face border width.
 	* Default Value: 1
 	*/
-	private double faceBorderWidth;
+	private Double faceBorderWidth;
 	/**
 	* Gauge face color, requires faceAlpha > 0
 	* Default Value: #FAFAFA
@@ -66,51 +66,51 @@ public class AmAngularGauge extends AmChart{
 	* Gauge's horizontal position in pixel, origin is the center. Centered by default.
 	* Default Value: 
 	*/
-	private double gaugeX;
+	private Double gaugeX;
 	/**
 	* Gauge's vertical position in pixel, origin is the center. Centered by default.
 	* Default Value: 
 	*/
-	private double gaugeY;
+	private Double gaugeY;
 	/**
 	* Bottom spacing between chart and container.
 	* Default Value: 10
 	*/
-	private double marginBottom;
+	private Double marginBottom;
 	/**
 	* Left-hand spacing between chart and container.
 	* Default Value: 10
 	*/
-	private double marginLeft;
+	private Double marginLeft;
 	/**
 	* Right-hand spacing between chart and container.
 	* Default Value: 10
 	*/
-	private double marginRight;
+	private Double marginRight;
 	/**
 	* Top spacing between chart and container.
 	* Default Value: 10
 	*/
-	private double marginTop;
+	private Double marginTop;
 	/**
 	* Minimum radius of a gauge.
 	* Default Value: 10
 	*/
-	private double minRadius;
+	private Double minRadius;
 	/**
 	* Duration of arrow animation.
 	* Default Value: 1
 	*/
-	private double startDuration;
+	private Double startDuration;
 	/**
 	* Transition effect of the arrows, possible effects: easeOutSine, easeInSine, elastic, bounce.
 	* Default Value: easeInSine
 	*/
 	private StartEffect startEffect;
-	public boolean isAdjustSize() {
+	public Boolean isAdjustSize() {
 		return adjustSize;
 	}
-	public void setAdjustSize(boolean adjustSize) {
+	public void setAdjustSize(Boolean adjustSize) {
 		this.adjustSize = adjustSize;
 	}
 	public List<GaugeArrow> getArrows() {
@@ -125,22 +125,22 @@ public class AmAngularGauge extends AmChart{
 	public void setAxes(List<GaugeAxis> axes) {
 		this.axes = axes;
 	}
-	public boolean isClockWiseOnly() {
+	public Boolean isClockWiseOnly() {
 		return clockWiseOnly;
 	}
-	public void setClockWiseOnly(boolean clockWiseOnly) {
+	public void setClockWiseOnly(Boolean clockWiseOnly) {
 		this.clockWiseOnly = clockWiseOnly;
 	}
-	public double getFaceAlpha() {
+	public Double getFaceAlpha() {
 		return faceAlpha;
 	}
-	public void setFaceAlpha(double faceAlpha) {
+	public void setFaceAlpha(Double faceAlpha) {
 		this.faceAlpha = faceAlpha;
 	}
-	public double getFaceBorderAlpha() {
+	public Double getFaceBorderAlpha() {
 		return faceBorderAlpha;
 	}
-	public void setFaceBorderAlpha(double faceBorderAlpha) {
+	public void setFaceBorderAlpha(Double faceBorderAlpha) {
 		this.faceBorderAlpha = faceBorderAlpha;
 	}
 	public Color getFaceBorderColor() {
@@ -149,10 +149,10 @@ public class AmAngularGauge extends AmChart{
 	public void setFaceBorderColor(Color faceBorderColor) {
 		this.faceBorderColor = faceBorderColor;
 	}
-	public double getFaceBorderWidth() {
+	public Double getFaceBorderWidth() {
 		return faceBorderWidth;
 	}
-	public void setFaceBorderWidth(double faceBorderWidth) {
+	public void setFaceBorderWidth(Double faceBorderWidth) {
 		this.faceBorderWidth = faceBorderWidth;
 	}
 	public Color getFaceColor() {
@@ -167,52 +167,52 @@ public class AmAngularGauge extends AmChart{
 	public void setFacePattern(Object facePattern) {
 		this.facePattern = facePattern;
 	}
-	public double getGaugeX() {
+	public Double getGaugeX() {
 		return gaugeX;
 	}
-	public void setGaugeX(double gaugeX) {
+	public void setGaugeX(Double gaugeX) {
 		this.gaugeX = gaugeX;
 	}
-	public double getGaugeY() {
+	public Double getGaugeY() {
 		return gaugeY;
 	}
-	public void setGaugeY(double gaugeY) {
+	public void setGaugeY(Double gaugeY) {
 		this.gaugeY = gaugeY;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getMinRadius() {
+	public Double getMinRadius() {
 		return minRadius;
 	}
-	public void setMinRadius(double minRadius) {
+	public void setMinRadius(Double minRadius) {
 		this.minRadius = minRadius;
 	}
-	public double getStartDuration() {
+	public Double getStartDuration() {
 		return startDuration;
 	}
-	public void setStartDuration(double startDuration) {
+	public void setStartDuration(Double startDuration) {
 		this.startDuration = startDuration;
 	}
 	public StartEffect getStartEffect() {

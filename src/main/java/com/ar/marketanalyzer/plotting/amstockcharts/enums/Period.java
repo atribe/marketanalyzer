@@ -1,5 +1,9 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class Period {
 
 	private PeriodEnum period;

@@ -16,17 +16,17 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* The angle of the 3D part of plot area. This creates a 3D effect (if the ""depth3D"" is > 0).
 	* Default Value: 0
 	*/
-	protected double angle;
+	protected Double angle;
 	/**
 	* Space left from axis labels/title to the chart's outside border, if autoMargins set to true.
 	* Default Value: 10
 	*/
-	protected double autoMarginOffset;
+	protected Double autoMarginOffset;
 	/**
 	* Specifies if margins of a chart should be calculated automatically so that labels of axes would fit. The chart will adjust only margins with axes. Other margins will use values set with marginRight, marginTop, marginLeft and marginBottom properties.
 	* Default Value: TRUE
 	*/
-	protected boolean autoMargins;
+	protected Boolean autoMargins;
 	/**
 	* Cursor of a chart.
 	* Default Value: 
@@ -41,37 +41,37 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* The depth of the 3D part of plot area. This creates a 3D effect (if the ""angle"" is > 0).
 	* Default Value: 0
 	*/
-	protected double depth3D;
+	protected Double depth3D;
 	/**
 	* Number of pixels between the container's bottom border and plot area. This space can be used for bottom axis' values. If autoMargin is true and bottom side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	protected double marginBottom;
+	protected Double marginBottom;
 	/**
 	* Number of pixels between the container's left border and plot area. This space can be used for left axis' values. If autoMargin is true and left side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	protected double marginLeft;
+	protected Double marginLeft;
 	/**
 	* Number of pixels between the container's right border and plot area. This space can be used for Right axis' values. If autoMargin is true and right side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	protected double marginRight;
+	protected Double marginRight;
 	/**
 	* Flag which should be set to false if you need margins to be recalculated on next chart.validateNow() call.
 	* Default Value: FALSE
 	*/
-	protected boolean marginsUpdated;
+	protected Boolean marginsUpdated;
 	/**
 	* Number of pixels between the container's top border and plot area. This space can be used for top axis' values. If autoMargin is true and top side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	protected double marginTop;
+	protected Double marginTop;
 	/**
 	* The opacity of plot area's border. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	protected double plotAreaBorderAlpha;
+	protected Double plotAreaBorderAlpha;
 	/**
 	* The color of the plot area's border. Note, the it is invisible by default, as plotAreaBorderAlpha default value is 0. Set it to a value higher than 0 to make it visible.
 	* Default Value: #000000
@@ -81,7 +81,7 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* Opacity of plot area. Plural form is used to keep the same property names as our Flex charts'. Flex charts can accept array of numbers to generate gradients. Although you can set array here, only first value of this array will be used.
 	* Default Value: 0
 	*/
-	protected double plotAreaFillAlphas;
+	protected Double plotAreaFillAlphas;
 	/**
 	* You can set both one color if you need a solid color or array of colors to generate gradients, for example: [""#000000"", ""#0000CC""]
 	* Default Value: #FFFFFF
@@ -91,7 +91,7 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* If you are using gradients to fill the plot area, you can use this property to set gradient angle. The only allowed values are horizontal and vertical: 0, 90, 180, 270.
 	* Default Value: 0
 	*/
-	protected double plotAreaGradientAngle;
+	protected Double plotAreaGradientAngle;
 	/**
 	* Array of trend lines added to a chart. You can add trend lines to a chart using this array or access already existing trend lines
 	* Default Value: 
@@ -101,7 +101,7 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* Opacity of zoom-out button background.
 	* Default Value: 0
 	*/
-	protected double zoomOutButtonAlpha;
+	protected Double zoomOutButtonAlpha;
 	/**
 	* Zoom-out button background color.
 	* Default Value: #e5e5e5
@@ -116,39 +116,39 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* Size of zoom-out button image
 	* Default Value: 17
 	*/
-	protected double zoomOutButtonImageSize;
+	protected Double zoomOutButtonImageSize;
 	/**
 	* Padding around the text and image.
 	* Default Value: 8
 	*/
-	protected double zoomOutButtonPadding;
+	protected Double zoomOutButtonPadding;
 	/**
 	* Opacity of zoom-out button background when mouse is over it.
 	* Default Value: 1
 	*/
-	protected double zoomOutButtonRollOverAlpha;
+	protected Double zoomOutButtonRollOverAlpha;
 	/**
 	* Text in the zoom-out button.
 	* Default Value: Show all
 	*/
 	protected String zoomOutText;
 	
-	public double getAngle() {
+	public Double getAngle() {
 		return angle;
 	}
-	public void setAngle(double angle) {
+	public void setAngle(Double angle) {
 		this.angle = angle;
 	}
-	public double getAutoMarginOffset() {
+	public Double getAutoMarginOffset() {
 		return autoMarginOffset;
 	}
-	public void setAutoMarginOffset(double autoMarginOffset) {
+	public void setAutoMarginOffset(Double autoMarginOffset) {
 		this.autoMarginOffset = autoMarginOffset;
 	}
-	public boolean isAutoMargins() {
+	public Boolean isAutoMargins() {
 		return autoMargins;
 	}
-	public void setAutoMargins(boolean autoMargins) {
+	public void setAutoMargins(Boolean autoMargins) {
 		this.autoMargins = autoMargins;
 	}
 	public ChartCursor getChartCursor() {
@@ -163,46 +163,46 @@ public class AmRectangularChart extends AmCoordinateChart {
 	public void setChartScrollbar(ChartScrollbar chartScrollbar) {
 		this.chartScrollbar = chartScrollbar;
 	}
-	public double getDepth3D() {
+	public Double getDepth3D() {
 		return depth3D;
 	}
-	public void setDepth3D(double depth3d) {
+	public void setDepth3D(Double depth3d) {
 		depth3D = depth3d;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public boolean isMarginsUpdated() {
+	public Boolean isMarginsUpdated() {
 		return marginsUpdated;
 	}
-	public void setMarginsUpdated(boolean marginsUpdated) {
+	public void setMarginsUpdated(Boolean marginsUpdated) {
 		this.marginsUpdated = marginsUpdated;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getPlotAreaBorderAlpha() {
+	public Double getPlotAreaBorderAlpha() {
 		return plotAreaBorderAlpha;
 	}
-	public void setPlotAreaBorderAlpha(double plotAreaBorderAlpha) {
+	public void setPlotAreaBorderAlpha(Double plotAreaBorderAlpha) {
 		this.plotAreaBorderAlpha = plotAreaBorderAlpha;
 	}
 	public Color getPlotAreaBorderColor() {
@@ -211,10 +211,10 @@ public class AmRectangularChart extends AmCoordinateChart {
 	public void setPlotAreaBorderColor(Color plotAreaBorderColor) {
 		this.plotAreaBorderColor = plotAreaBorderColor;
 	}
-	public double getPlotAreaFillAlphas() {
+	public Double getPlotAreaFillAlphas() {
 		return plotAreaFillAlphas;
 	}
-	public void setPlotAreaFillAlphas(double plotAreaFillAlphas) {
+	public void setPlotAreaFillAlphas(Double plotAreaFillAlphas) {
 		this.plotAreaFillAlphas = plotAreaFillAlphas;
 	}
 	public Color getPlotAreaFillColors() {
@@ -223,10 +223,10 @@ public class AmRectangularChart extends AmCoordinateChart {
 	public void setPlotAreaFillColors(Color plotAreaFillColors) {
 		this.plotAreaFillColors = plotAreaFillColors;
 	}
-	public double getPlotAreaGradientAngle() {
+	public Double getPlotAreaGradientAngle() {
 		return plotAreaGradientAngle;
 	}
-	public void setPlotAreaGradientAngle(double plotAreaGradientAngle) {
+	public void setPlotAreaGradientAngle(Double plotAreaGradientAngle) {
 		this.plotAreaGradientAngle = plotAreaGradientAngle;
 	}
 	public List<TrendLine> getTrendLines() {
@@ -235,10 +235,10 @@ public class AmRectangularChart extends AmCoordinateChart {
 	public void setTrendLines(List<TrendLine> trendLines) {
 		this.trendLines = trendLines;
 	}
-	public double getZoomOutButtonAlpha() {
+	public Double getZoomOutButtonAlpha() {
 		return zoomOutButtonAlpha;
 	}
-	public void setZoomOutButtonAlpha(double zoomOutButtonAlpha) {
+	public void setZoomOutButtonAlpha(Double zoomOutButtonAlpha) {
 		this.zoomOutButtonAlpha = zoomOutButtonAlpha;
 	}
 	public Color getZoomOutButtonColor() {
@@ -253,22 +253,22 @@ public class AmRectangularChart extends AmCoordinateChart {
 	public void setZoomOutButtonImage(String zoomOutButtonImage) {
 		this.zoomOutButtonImage = zoomOutButtonImage;
 	}
-	public double getZoomOutButtonImageSize() {
+	public Double getZoomOutButtonImageSize() {
 		return zoomOutButtonImageSize;
 	}
-	public void setZoomOutButtonImageSize(double zoomOutButtonImageSize) {
+	public void setZoomOutButtonImageSize(Double zoomOutButtonImageSize) {
 		this.zoomOutButtonImageSize = zoomOutButtonImageSize;
 	}
-	public double getZoomOutButtonPadding() {
+	public Double getZoomOutButtonPadding() {
 		return zoomOutButtonPadding;
 	}
-	public void setZoomOutButtonPadding(double zoomOutButtonPadding) {
+	public void setZoomOutButtonPadding(Double zoomOutButtonPadding) {
 		this.zoomOutButtonPadding = zoomOutButtonPadding;
 	}
-	public double getZoomOutButtonRollOverAlpha() {
+	public Double getZoomOutButtonRollOverAlpha() {
 		return zoomOutButtonRollOverAlpha;
 	}
-	public void setZoomOutButtonRollOverAlpha(double zoomOutButtonRollOverAlpha) {
+	public void setZoomOutButtonRollOverAlpha(Double zoomOutButtonRollOverAlpha) {
 		this.zoomOutButtonRollOverAlpha = zoomOutButtonRollOverAlpha;
 	}
 	public String getZoomOutText() {

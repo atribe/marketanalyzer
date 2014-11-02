@@ -10,7 +10,7 @@ public class AmFunnelChart extends AmSlicedChart{
 	* The angle of the 3D part of the chart. This creates a 3D effect (if the ""depth3D"" is > 0).
 	* Default Value: 0
 	*/
-	private double angle;
+	private Double angle;
 	/**
 	* Balloon text. The following tags can be used: [[value]], [[title]], [[percents]], [[description]] or any other field name from your data provider. HTML tags can also be used.
 	* Default Value: [[title]]: [[value]]\n[[description]]
@@ -25,7 +25,7 @@ public class AmFunnelChart extends AmSlicedChart{
 	* The depth of funnel/pyramid. Set angle to >0 value in order this to work. Note, neckHeight/neckWidth will become 0 if you set these properties to bigger than 0 values.
 	* Default Value: 0
 	*/
-	private double depth3D;
+	private Double depth3D;
 	/**
 	* Specifies where labels should be placed. Allowed values are left / center / right. If you set left or right, you should increase left or right margin in order labels to be visible.
 	* Default Value: center
@@ -50,7 +50,7 @@ public class AmFunnelChart extends AmSlicedChart{
 	* Outline opacity. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	private double outlineAlpha;
+	private Double outlineAlpha;
 	/**
 	* Specifies the distance by which slice should be pulled when user clicks on it.
 	* Default Value: 30
@@ -60,27 +60,26 @@ public class AmFunnelChart extends AmSlicedChart{
 	* If rotate is set to true, the funnel will be rotated and will became a pyramid.
 	* Default Value: FALSE
 	*/
-	private boolean rotate;
+	private Boolean rotate;
 	/**
 	* Initial x coordinate of slices. They will animate to the final x position from this one.
 	* Default Value: 0
 	*/
-	private double startX;
+	private Double startX;
 	/**
 	* Initial y coordinate of slices. They will animate to the final y position from this one.
 	* Default Value: 0
 	*/
-	private double startY;
+	private Double startY;
 	/**
 	* By default, the height of a slice represents it's value. However you might want the area of a slice to represent value - set this property to ""area"" then.
 	* Default Value: height
 	*/
 	private String valueRepresents;
-	
-	public double getAngle() {
+	public Double getAngle() {
 		return angle;
 	}
-	public void setAngle(double angle) {
+	public void setAngle(Double angle) {
 		this.angle = angle;
 	}
 	public String getBalloonText() {
@@ -95,10 +94,10 @@ public class AmFunnelChart extends AmSlicedChart{
 	public void setBaseWidth(String baseWidth) {
 		this.baseWidth = baseWidth;
 	}
-	public double getDepth3D() {
+	public Double getDepth3D() {
 		return depth3D;
 	}
-	public void setDepth3D(double depth3d) {
+	public void setDepth3D(Double depth3d) {
 		depth3D = depth3d;
 	}
 	public String getLabelPosition() {
@@ -125,10 +124,10 @@ public class AmFunnelChart extends AmSlicedChart{
 	public void setNeckWidth(String neckWidth) {
 		this.neckWidth = neckWidth;
 	}
-	public double getOutlineAlpha() {
+	public Double getOutlineAlpha() {
 		return outlineAlpha;
 	}
-	public void setOutlineAlpha(double outlineAlpha) {
+	public void setOutlineAlpha(Double outlineAlpha) {
 		this.outlineAlpha = outlineAlpha;
 	}
 	public String getPullDistance() {
@@ -137,22 +136,22 @@ public class AmFunnelChart extends AmSlicedChart{
 	public void setPullDistance(String pullDistance) {
 		this.pullDistance = pullDistance;
 	}
-	public boolean isRotate() {
+	public Boolean getRotate() {
 		return rotate;
 	}
-	public void setRotate(boolean rotate) {
+	public void setRotate(Boolean rotate) {
 		this.rotate = rotate;
 	}
-	public double getStartX() {
+	public Double getStartX() {
 		return startX;
 	}
-	public void setStartX(double startX) {
+	public void setStartX(Double startX) {
 		this.startX = startX;
 	}
-	public double getStartY() {
+	public Double getStartY() {
 		return startY;
 	}
-	public void setStartY(double startY) {
+	public void setStartY(Double startY) {
 		this.startY = startY;
 	}
 	public String getValueRepresents() {
@@ -162,5 +161,4 @@ public class AmFunnelChart extends AmSlicedChart{
 		this.valueRepresents = valueRepresents;
 	}
 	
-
 }

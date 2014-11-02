@@ -6,7 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class DataProviderOHLCV implements DataProviderInterface{
 
 	private String symbol;
@@ -15,7 +18,7 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	private BigDecimal high;
 	private BigDecimal low;
 	private BigDecimal close;
-	private long volume;
+	private Long volume;
 	private BigDecimal value;
 	
 	/*
@@ -24,7 +27,7 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	public DataProviderOHLCV() {
 		
 	}
-	public DataProviderOHLCV(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume) {
+	public DataProviderOHLCV(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, Long volume) {
 		this.symbol = symbol;
 		this.date = date;
 		this.open = open;
@@ -91,10 +94,10 @@ public class DataProviderOHLCV implements DataProviderInterface{
 		this.close = close;
 		this.value = close;
 	}
-	public long getVolume() {
+	public Long getVolume() {
 		return volume;
 	}
-	public void setVolume(long volume) {
+	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
 	public BigDecimal getValue() {

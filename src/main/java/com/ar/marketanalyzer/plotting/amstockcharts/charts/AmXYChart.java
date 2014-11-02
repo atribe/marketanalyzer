@@ -10,34 +10,34 @@ public class AmXYChart extends AmRectangularChart{
 	* Specifies if Scrollbar of X axis (horizontal) should be hidden.
 	* Default Value: FALSE
 	*/
-	private boolean hideXScrollbar;
+	private Boolean hideXScrollbar;
 	/**
 	* Specifies if Scrollbar of Y axis (vertical) should be hidden.
 	* Default Value: FALSE
 	*/
-	private boolean hideYScrollbar;
+	private Boolean hideYScrollbar;
 	/**
 	* Maximum zoom factor of the chart.
 	* Default Value: 20
 	*/
-	private double maxZoomFactor;
+	private Double maxZoomFactor;
 	
-	public boolean isHideXScrollbar() {
+	public Boolean isHideXScrollbar() {
 		return hideXScrollbar;
 	}
-	public void setHideXScrollbar(boolean hideXScrollbar) {
+	public void setHideXScrollbar(Boolean hideXScrollbar) {
 		this.hideXScrollbar = hideXScrollbar;
 	}
-	public boolean isHideYScrollbar() {
+	public Boolean isHideYScrollbar() {
 		return hideYScrollbar;
 	}
-	public void setHideYScrollbar(boolean hideYScrollbar) {
+	public void setHideYScrollbar(Boolean hideYScrollbar) {
 		this.hideYScrollbar = hideYScrollbar;
 	}
-	public double getMaxZoomFactor() {
+	public Double getMaxZoomFactor() {
 		return maxZoomFactor;
 	}
-	public void setMaxZoomFactor(double maxZoomFactor) {
+	public void setMaxZoomFactor(Double maxZoomFactor) {
 		this.maxZoomFactor = maxZoomFactor;
 	}
 }

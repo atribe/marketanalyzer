@@ -14,12 +14,12 @@ public class Guide {
 	* If you set it to true, the guide will be displayed above the graphs.
 	* Default Value: FALSE
 	*/
-	private boolean above;
+	private Boolean above;
 	/**
 	* Radar chart only. Specifies angle at which guide should start. Affects only fills, not lines.
 	* Default Value: 
 	*/
-	private double angle;
+	private Double angle;
 	/**
 	* Baloon fill color.
 	* Default Value: 
@@ -34,7 +34,7 @@ public class Guide {
 	* Specifies if label should be bold or not.
 	* Default Value: FALSE
 	*/
-	private boolean boldLabel;
+	private Boolean boldLabel;
 	/**
 	* Category of the guide (in case the guide is for category axis).
 	* Default Value: 
@@ -49,7 +49,7 @@ public class Guide {
 	* Dash length.
 	* Default Value: 
 	*/
-	private double dashLength;
+	private Double dashLength;
 	/**
 	* Date of the guide (in case the guide is for category axis and parseDates is set to true).
 	* Default Value: 
@@ -59,12 +59,12 @@ public class Guide {
 	* Works if a guide is added to CategoryAxis and this axis is non-date-based. If you set it to true, the guide will start (or be placed, if it's not a fill) on the beginning of the category cell and will end at the end of toCategory cell.
 	* Default Value: FALSE
 	*/
-	private boolean expand;
+	private Boolean expand;
 	/**
 	* Fill opacity. Value range is 0 - 1.
 	* Default Value: 
 	*/
-	private double fillAlpha;
+	private Double fillAlpha;
 	/**
 	* Fill color.
 	* Default Value: 
@@ -74,7 +74,7 @@ public class Guide {
 	* Font size of guide label.
 	* Default Value: 
 	*/
-	private double fontSize;
+	private Double fontSize;
 	/**
 	* Unique id of a Guide. You don't need to set it, unless you want to.
 	* Default Value: 
@@ -84,7 +84,7 @@ public class Guide {
 	* Specifies whether label should be placed inside or outside plot area.
 	* Default Value: 
 	*/
-	private boolean inside;
+	private Boolean inside;
 	/**
 	* The label which will be displayed near the guide.
 	* Default Value: 
@@ -94,12 +94,12 @@ public class Guide {
 	* Rotation angle of a guide label.
 	* Default Value: 
 	*/
-	private double labelRotation;
+	private Double labelRotation;
 	/**
 	* Line opacity.
 	* Default Value: 
 	*/
-	private double lineAlpha;
+	private Double lineAlpha;
 	/**
 	* Line color.
 	* Default Value: 
@@ -109,7 +109,7 @@ public class Guide {
 	* Line thickness.
 	* Default Value: 
 	*/
-	private double lineThickness;
+	private Double lineThickness;
 	/**
 	* Position of guide label. Possible values are ""left"" or ""right"" for horizontal axis and ""top"" or ""bottom"" for vertical axis.
 	* Default Value: 
@@ -119,12 +119,12 @@ public class Guide {
 	* Tick length.
 	* Default Value: 
 	*/
-	private double tickLength;
+	private Double tickLength;
 	/**
 	* Radar chart only. Specifies angle at which guide should end. Affects only fills, not lines.
 	* Default Value: 
 	*/
-	private double toAngle;
+	private Double toAngle;
 	/**
 	* ""To"" category of the guide (in case the guide is for category axis).
 	* Default Value: 
@@ -139,28 +139,28 @@ public class Guide {
 	* ""To"" value of the guide (in case the guide is for value axis).
 	* Default Value: 
 	*/
-	private double toValue;
+	private Double toValue;
 	/**
 	* Value of the guide (in case the guide is for value axis).
 	* Default Value: 
 	*/
-	private double value;
+	private Double value;
 	/**
 	* Value axis of a guide. As you can add guides directly to the chart, you might need to specify which which value axis should be used.
 	* Default Value: 
 	*/
 	private ValueAxis valueAxis;
 	
-	public boolean isAbove() {
+	public Boolean isAbove() {
 		return above;
 	}
-	public void setAbove(boolean above) {
+	public void setAbove(Boolean above) {
 		this.above = above;
 	}
-	public double getAngle() {
+	public Double getAngle() {
 		return angle;
 	}
-	public void setAngle(double angle) {
+	public void setAngle(Double angle) {
 		this.angle = angle;
 	}
 	public Color getBalloonColor() {
@@ -175,10 +175,10 @@ public class Guide {
 	public void setBalloonText(String balloonText) {
 		this.balloonText = balloonText;
 	}
-	public boolean isBoldLabel() {
+	public Boolean isBoldLabel() {
 		return boldLabel;
 	}
-	public void setBoldLabel(boolean boldLabel) {
+	public void setBoldLabel(Boolean boldLabel) {
 		this.boldLabel = boldLabel;
 	}
 	public String getCategory() {
@@ -193,10 +193,10 @@ public class Guide {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
 	public Date getDate() {
@@ -205,16 +205,16 @@ public class Guide {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public boolean isExpand() {
+	public Boolean isExpand() {
 		return expand;
 	}
-	public void setExpand(boolean expand) {
+	public void setExpand(Boolean expand) {
 		this.expand = expand;
 	}
-	public double getFillAlpha() {
+	public Double getFillAlpha() {
 		return fillAlpha;
 	}
-	public void setFillAlpha(double fillAlpha) {
+	public void setFillAlpha(Double fillAlpha) {
 		this.fillAlpha = fillAlpha;
 	}
 	public Color getFillColor() {
@@ -223,10 +223,10 @@ public class Guide {
 	public void setFillColor(Color fillColor) {
 		this.fillColor = fillColor;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
 	public String getId() {
@@ -235,10 +235,10 @@ public class Guide {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public boolean isInside() {
+	public Boolean isInside() {
 		return inside;
 	}
-	public void setInside(boolean inside) {
+	public void setInside(Boolean inside) {
 		this.inside = inside;
 	}
 	public String getLabel() {
@@ -247,16 +247,16 @@ public class Guide {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public double getLabelRotation() {
+	public Double getLabelRotation() {
 		return labelRotation;
 	}
-	public void setLabelRotation(double labelRotation) {
+	public void setLabelRotation(Double labelRotation) {
 		this.labelRotation = labelRotation;
 	}
-	public double getLineAlpha() {
+	public Double getLineAlpha() {
 		return lineAlpha;
 	}
-	public void setLineAlpha(double lineAlpha) {
+	public void setLineAlpha(Double lineAlpha) {
 		this.lineAlpha = lineAlpha;
 	}
 	public Color getLineColor() {
@@ -265,10 +265,10 @@ public class Guide {
 	public void setLineColor(Color lineColor) {
 		this.lineColor = lineColor;
 	}
-	public double getLineThickness() {
+	public Double getLineThickness() {
 		return lineThickness;
 	}
-	public void setLineThickness(double lineThickness) {
+	public void setLineThickness(Double lineThickness) {
 		this.lineThickness = lineThickness;
 	}
 	public Position getPosition() {
@@ -277,16 +277,16 @@ public class Guide {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	public double getTickLength() {
+	public Double getTickLength() {
 		return tickLength;
 	}
-	public void setTickLength(double tickLength) {
+	public void setTickLength(Double tickLength) {
 		this.tickLength = tickLength;
 	}
-	public double getToAngle() {
+	public Double getToAngle() {
 		return toAngle;
 	}
-	public void setToAngle(double toAngle) {
+	public void setToAngle(Double toAngle) {
 		this.toAngle = toAngle;
 	}
 	public String getToCategory() {
@@ -301,16 +301,16 @@ public class Guide {
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
-	public double getToValue() {
+	public Double getToValue() {
 		return toValue;
 	}
-	public void setToValue(double toValue) {
+	public void setToValue(Double toValue) {
 		this.toValue = toValue;
 	}
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 	public ValueAxis getValueAxis() {

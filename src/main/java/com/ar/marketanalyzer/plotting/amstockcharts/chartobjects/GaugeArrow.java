@@ -11,17 +11,17 @@ public class GaugeArrow {
 	* Opacity of an arrow.
 	* Default Value: 1
 	*/
-	private double alpha;
+	private Double alpha;
 	/**
 	* Axis of the arrow. You can use reference to the axis or id of the axis. If you don't set any axis, the first axis of a chart will be used.
 	* Default Value: GaugeAxis
 	*/
 	private GaugeAxis axis;
 	
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
 	public GaugeAxis getAxis() {
@@ -30,16 +30,16 @@ public class GaugeArrow {
 	public void setAxis(GaugeAxis axis) {
 		this.axis = axis;
 	}
-	public double getBorderAlpha() {
+	public Double getBorderAlpha() {
 		return borderAlpha;
 	}
-	public void setBorderAlpha(double borderAlpha) {
+	public void setBorderAlpha(Double borderAlpha) {
 		this.borderAlpha = borderAlpha;
 	}
-	public boolean isClockWiseOnly() {
+	public Boolean isClockWiseOnly() {
 		return clockWiseOnly;
 	}
-	public void setClockWiseOnly(boolean clockWiseOnly) {
+	public void setClockWiseOnly(Boolean clockWiseOnly) {
 		this.clockWiseOnly = clockWiseOnly;
 	}
 	public Color getColor() {
@@ -54,64 +54,64 @@ public class GaugeArrow {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public double getInnerRadius() {
+	public Double getInnerRadius() {
 		return innerRadius;
 	}
-	public void setInnerRadius(double innerRadius) {
+	public void setInnerRadius(Double innerRadius) {
 		this.innerRadius = innerRadius;
 	}
-	public double getNailAlpha() {
+	public Double getNailAlpha() {
 		return nailAlpha;
 	}
-	public void setNailAlpha(double nailAlpha) {
+	public void setNailAlpha(Double nailAlpha) {
 		this.nailAlpha = nailAlpha;
 	}
-	public double getNailBorderAlpha() {
+	public Double getNailBorderAlpha() {
 		return nailBorderAlpha;
 	}
-	public void setNailBorderAlpha(double nailBorderAlpha) {
+	public void setNailBorderAlpha(Double nailBorderAlpha) {
 		this.nailBorderAlpha = nailBorderAlpha;
 	}
-	public double getNailBorderThickness() {
+	public Double getNailBorderThickness() {
 		return nailBorderThickness;
 	}
-	public void setNailBorderThickness(double nailBorderThickness) {
+	public void setNailBorderThickness(Double nailBorderThickness) {
 		this.nailBorderThickness = nailBorderThickness;
 	}
-	public double getNailRadius() {
+	public Double getNailRadius() {
 		return nailRadius;
 	}
-	public void setNailRadius(double nailRadius) {
+	public void setNailRadius(Double nailRadius) {
 		this.nailRadius = nailRadius;
 	}
-	public double getRadius() {
+	public Double getRadius() {
 		return radius;
 	}
-	public void setRadius(double radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
-	public double getStartWidth() {
+	public Double getStartWidth() {
 		return startWidth;
 	}
-	public void setStartWidth(double startWidth) {
+	public void setStartWidth(Double startWidth) {
 		this.startWidth = startWidth;
 	}
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 	/**
 	* Opacity of arrow border.
 	* Default Value: 1
 	*/
-	private double borderAlpha;
+	private Double borderAlpha;
 	/**
 	* In case you need the arrow to rotate only clock-wise, set this property to true.
 	* Default Value: FALSE
 	*/
-	private boolean clockWiseOnly;
+	private Boolean clockWiseOnly;
 	/**
 	* Color of an arrow.
 	* Default Value: #000000
@@ -126,41 +126,41 @@ public class GaugeArrow {
 	* Inner radius of an arrow.
 	* Default Value: 0
 	*/
-	private double innerRadius;
+	private Double innerRadius;
 	/**
 	* Opacity of a nail, holding the arrow.
 	* Default Value: 1
 	*/
-	private double nailAlpha;
+	private Double nailAlpha;
 	/**
 	* Opacity of nail border.
 	* Default Value: 0
 	*/
-	private double nailBorderAlpha;
+	private Double nailBorderAlpha;
 	/**
 	* Thickness of nail border.
 	* Default Value: 1
 	*/
-	private double nailBorderThickness;
+	private Double nailBorderThickness;
 	/**
 	* Radius of a nail, holding the arrow.
 	* Default Value: 8
 	*/
-	private double nailRadius;
+	private Double nailRadius;
 	/**
 	* Radius of an arrow.
 	* Default Value: 0.9
 	*/
-	private double radius;
+	private Double radius;
 	/**
 	* Width of arrow root.
 	* Default Value: 8
 	*/
-	private double startWidth;
+	private Double startWidth;
 	/**
 	* Value to which the arrow should point at.
 	* Default Value: 
 	*/
-	private double value;
+	private Double value;
 
 }

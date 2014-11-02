@@ -23,7 +23,7 @@ public class StockEvent implements Serializable {
 	* Opacity of bullet background.
 	* Default Value: 1
 	*/
-	 private double backgroundAlpha;
+	 private Double backgroundAlpha;
 	/**
 	* Color of bullet background.
 	* Default Value: #DADADA
@@ -33,7 +33,7 @@ public class StockEvent implements Serializable {
 	* Opacity of bullet border.
 	* Default Value: 1
 	*/
-	 private double borderAlpha;
+	 private Double borderAlpha;
 	/**
 	* Bullet border color.
 	* Default Value: #888888
@@ -73,7 +73,7 @@ public class StockEvent implements Serializable {
 	* Specifies if the event should be displayed on category axis
 	* Default Value: FALSE
 	*/
-	 private boolean showOnAxis;
+	 private Boolean showOnAxis;
 	/**
 	* Letter which will be displayed on the event. Not all types can display letters. ""text"" type can display longer texts.
 	* Default Value: 
@@ -98,16 +98,16 @@ public class StockEvent implements Serializable {
 	* Allows placing event bullets at specified value.
 	* Default Value: 
 	*/
-	 private double value;
+	 private Double value;
 	 
 	 public StockEvent() {
 		 
 	 }
 	 
-	public double getBackgroundAlpha() {
+	public Double getBackgroundAlpha() {
 		return backgroundAlpha;
 	}
-	public void setBackgroundAlpha(double backgroundAlpha) {
+	public void setBackgroundAlpha(Double backgroundAlpha) {
 		this.backgroundAlpha = backgroundAlpha;
 	}
 	public Color getBackgroundColor() {
@@ -116,10 +116,10 @@ public class StockEvent implements Serializable {
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
-	public double getBorderAlpha() {
+	public Double getBorderAlpha() {
 		return borderAlpha;
 	}
-	public void setBorderAlpha(double borderAlpha) {
+	public void setBorderAlpha(Double borderAlpha) {
 		this.borderAlpha = borderAlpha;
 	}
 	public Color getBorderColor() {
@@ -164,10 +164,10 @@ public class StockEvent implements Serializable {
 	public void setShowAt(String showAt) {
 		this.showAt = showAt;
 	}
-	public boolean isShowOnAxis() {
+	public Boolean isShowOnAxis() {
 		return showOnAxis;
 	}
-	public void setShowOnAxis(boolean showOnAxis) {
+	public void setShowOnAxis(Boolean showOnAxis) {
 		this.showOnAxis = showOnAxis;
 	}
 	public String getText() {
@@ -194,10 +194,10 @@ public class StockEvent implements Serializable {
 	public void setUrlTarget(String urlTarget) {
 		this.urlTarget = urlTarget;
 	}
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

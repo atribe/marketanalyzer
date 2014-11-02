@@ -19,17 +19,17 @@ public class ChartCursorSettings {
 	* Specifies if bullet for each graph will follow the cursor.
 	* Default Value: 
 	*/
-	private boolean bulletsEnabled;
+	private Boolean bulletsEnabled;
 	/**
 	* Size of bullets, following the cursor.
 	* Default Value: 
 	*/
-	private double bulletSize;
+	private Double bulletSize;
 	/**
 	* Opacity of the category balloon.
 	* Default Value: 
 	*/
-	private double categoryBalloonAlpha;
+	private Double categoryBalloonAlpha;
 	/**
 	* Color of the category balloon.
 	* Default Value: 
@@ -44,12 +44,12 @@ public class ChartCursorSettings {
 	* Specifies whether category balloon is enabled.
 	* Default Value: 
 	*/
-	private boolean categoryBalloonEnabled;
+	private Boolean categoryBalloonEnabled;
 	/**
 	* Opacity of the cursor line.
 	* Default Value: 
 	*/
-	private double cursorAlpha;
+	private Double cursorAlpha;
 	/**
 	* Color of the cursor line.
 	* Default Value: 
@@ -64,42 +64,42 @@ public class ChartCursorSettings {
 	* Set this to false if you don't want chart cursor to appear in your charts.
 	* Default Value: TRUE
 	*/
-	private boolean enabled;
+	private Boolean enabled;
 	/**
 	* Size of a graph's bullet (if available) at the cursor position. If you don't want the bullet to change it's size, set this property to 1.
 	* Default Value: 1.7
 	*/
-	private double graphBulletSize;
+	private Double graphBulletSize;
 	/**
 	* If this is set to true, the user will be able to pan the chart instead of zooming.
 	* Default Value: 
 	*/
-	private boolean pan;
+	private Boolean pan;
 	/**
 	* Specifies whether value balloons are enabled. In case they are not, the balloons might be displayed anyway, when the user rolls-over the column or bullet.
 	* Default Value: FALSE
 	*/
-	private boolean valueBalloonsEnabled;
+	private Boolean valueBalloonsEnabled;
 	/**
 	* Opacity of value line. Will use cursorAlpha value if not set.
 	* Default Value: 
 	*/
-	private double valueLineAlpha;
+	private Double valueLineAlpha;
 	/**
 	* Specifies if value balloon next to value axis labels should be displayed. If you have more than one axis, set valueLineAxis property ofChartCursor to indicate which axis should display the balloon.
 	* Default Value: FALSE
 	*/
-	private boolean valueLineBalloonEnabled;
+	private Boolean valueLineBalloonEnabled;
 	/**
 	* Specifies if cursor of Serial chart should display horizontal (or vertical if chart is rotated) line. This line might help users to compare distant values of a chart. You can also enable value balloon on this line by setting valueLineAxis property of ChartCursor.
 	* Default Value: FALSE
 	*/
-	private boolean valueLineEnabled;
+	private Boolean valueLineEnabled;
 	/**
 	* Specifies if the user can zoom-in the chart. If pan is set to true, zoomable is switched to false automatically.
 	* Default Value: 
 	*/
-	private boolean zoomable;
+	private Boolean zoomable;
 	
 	/*
 	 * Constructors 
@@ -117,22 +117,22 @@ public class ChartCursorSettings {
 	public void setBalloonPointerOrientation(String balloonPointerOrientation) {
 		this.balloonPointerOrientation = balloonPointerOrientation;
 	}
-	public boolean isBulletsEnabled() {
+	public Boolean isBulletsEnabled() {
 		return bulletsEnabled;
 	}
-	public void setBulletsEnabled(boolean bulletsEnabled) {
+	public void setBulletsEnabled(Boolean bulletsEnabled) {
 		this.bulletsEnabled = bulletsEnabled;
 	}
-	public double getBulletSize() {
+	public Double getBulletSize() {
 		return bulletSize;
 	}
-	public void setBulletSize(double bulletSize) {
+	public void setBulletSize(Double bulletSize) {
 		this.bulletSize = bulletSize;
 	}
-	public double getCategoryBalloonAlpha() {
+	public Double getCategoryBalloonAlpha() {
 		return categoryBalloonAlpha;
 	}
-	public void setCategoryBalloonAlpha(double categoryBalloonAlpha) {
+	public void setCategoryBalloonAlpha(Double categoryBalloonAlpha) {
 		this.categoryBalloonAlpha = categoryBalloonAlpha;
 	}
 	public Color getCategoryBalloonColor() {
@@ -148,16 +148,16 @@ public class ChartCursorSettings {
 			List<DateFormat> categoryBalloonDateFormats) {
 		this.categoryBalloonDateFormats = categoryBalloonDateFormats;
 	}
-	public boolean isCategoryBalloonEnabled() {
+	public Boolean isCategoryBalloonEnabled() {
 		return categoryBalloonEnabled;
 	}
-	public void setCategoryBalloonEnabled(boolean categoryBalloonEnabled) {
+	public void setCategoryBalloonEnabled(Boolean categoryBalloonEnabled) {
 		this.categoryBalloonEnabled = categoryBalloonEnabled;
 	}
-	public double getCursorAlpha() {
+	public Double getCursorAlpha() {
 		return cursorAlpha;
 	}
-	public void setCursorAlpha(double cursorAlpha) {
+	public void setCursorAlpha(Double cursorAlpha) {
 		this.cursorAlpha = cursorAlpha;
 	}
 	public Color getCursorColor() {
@@ -172,52 +172,52 @@ public class ChartCursorSettings {
 	public void setCursorPosition(TextAlignment cursorPosition) {
 		this.cursorPosition = cursorPosition;
 	}
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	public double getGraphBulletSize() {
+	public Double getGraphBulletSize() {
 		return graphBulletSize;
 	}
-	public void setGraphBulletSize(double graphBulletSize) {
+	public void setGraphBulletSize(Double graphBulletSize) {
 		this.graphBulletSize = graphBulletSize;
 	}
-	public boolean isPan() {
+	public Boolean isPan() {
 		return pan;
 	}
-	public void setPan(boolean pan) {
+	public void setPan(Boolean pan) {
 		this.pan = pan;
 	}
-	public boolean isValueBalloonsEnabled() {
+	public Boolean isValueBalloonsEnabled() {
 		return valueBalloonsEnabled;
 	}
-	public void setValueBalloonsEnabled(boolean valueBalloonsEnabled) {
+	public void setValueBalloonsEnabled(Boolean valueBalloonsEnabled) {
 		this.valueBalloonsEnabled = valueBalloonsEnabled;
 	}
-	public double getValueLineAlpha() {
+	public Double getValueLineAlpha() {
 		return valueLineAlpha;
 	}
-	public void setValueLineAlpha(double valueLineAlpha) {
+	public void setValueLineAlpha(Double valueLineAlpha) {
 		this.valueLineAlpha = valueLineAlpha;
 	}
-	public boolean isValueLineBalloonEnabled() {
+	public Boolean isValueLineBalloonEnabled() {
 		return valueLineBalloonEnabled;
 	}
-	public void setValueLineBalloonEnabled(boolean valueLineBalloonEnabled) {
+	public void setValueLineBalloonEnabled(Boolean valueLineBalloonEnabled) {
 		this.valueLineBalloonEnabled = valueLineBalloonEnabled;
 	}
-	public boolean isValueLineEnabled() {
+	public Boolean isValueLineEnabled() {
 		return valueLineEnabled;
 	}
-	public void setValueLineEnabled(boolean valueLineEnabled) {
+	public void setValueLineEnabled(Boolean valueLineEnabled) {
 		this.valueLineEnabled = valueLineEnabled;
 	}
-	public boolean isZoomable() {
+	public Boolean isZoomable() {
 		return zoomable;
 	}
-	public void setZoomable(boolean zoomable) {
+	public void setZoomable(Boolean zoomable) {
 		this.zoomable = zoomable;
 	}
 

@@ -13,7 +13,7 @@ public class GraphDataItem {
 	* Opacity of the data item.
 	* Default Value: 
 	*/
-	 private double alpha;
+	 private Double alpha;
 	/**
 	* Bullet type.
 	* Default Value: 
@@ -23,7 +23,7 @@ public class GraphDataItem {
 	* Bullet size.
 	* Default Value: 
 	*/
-	 private double bulletSize;
+	 private Double bulletSize;
 	/**
 	* Category value.
 	* Default Value: 
@@ -78,17 +78,17 @@ public class GraphDataItem {
 	* x coordinate of the data item.
 	* Default Value: 
 	*/
-	 private double x;
+	 private Double x;
 	/**
 	* y coordinate of the data item.
 	* Default Value: 
 	*/
-	 private double y;
+	 private Double y;
 	 
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
 	public String getBullet() {
@@ -97,10 +97,10 @@ public class GraphDataItem {
 	public void setBullet(String bullet) {
 		this.bullet = bullet;
 	}
-	public double getBulletSize() {
+	public Double getBulletSize() {
 		return bulletSize;
 	}
-	public void setBulletSize(double bulletSize) {
+	public void setBulletSize(Double bulletSize) {
 		this.bulletSize = bulletSize;
 	}
 	public String getCategory() {
@@ -163,16 +163,16 @@ public class GraphDataItem {
 	public void setValues(Object values) {
 		this.values = values;
 	}
-	public double getX() {
+	public Double getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(Double x) {
 		this.x = x;
 	}
-	public double getY() {
+	public Double getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(Double y) {
 		this.y = y;
 	}
 }

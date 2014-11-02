@@ -28,17 +28,17 @@ public class AmSerialChart extends AmRectangularChart{
 	* The gap in pixels between two columns of the same category.
 	* Default Value: 5
 	*/
-	protected double columnSpacing;
+	protected Double columnSpacing;
 	/**
 	* Space between 3D stacked columns.
 	* Default Value: 0
 	*/
-	protected double columnSpacing3D;
+	protected Double columnSpacing3D;
 	/**
 	* Relative width of columns. Value range is 0 - 1.
 	* Default Value: 0.8
 	*/
-	protected double columnWidth;
+	protected Double columnWidth;
 	/**
 	* Even if your chart parses dates, you can pass them as strings in your data – all you need to do is to set data date format and the chart will parse dates to date objects. Check this page for available formats.
 	* Please note that two-digit years (YY) is NOT supported in this setting.
@@ -54,37 +54,37 @@ public class AmSerialChart extends AmRectangularChart{
 	* Read-only. Category index to which the chart is currently displayed.
 	* Default Value: 
 	*/
-	protected double endIndex;
+	protected Double endIndex;
 	/**
 	* Maximum number of series allowed to select.
 	* Default Value: 
 	*/
-	protected double maxSelectedSeries;
+	protected Double maxSelectedSeries;
 	/**
 	* The longest time span allowed to select (in milliseconds) for example, 259200000 will limit selection to 3 days. Works if equalSpacing is set to false (default).
 	* Default Value: 
 	*/
-	protected double maxSelectedTime;
+	protected Double maxSelectedTime;
 	/**
 	* The shortest time span allowed to select (in milliseconds) for example, 1000 will limit selection to 1 second. Works if equalSpacing is set to false (default).
 	* Default Value: 0
 	*/
-	protected double minSelectedTime;
+	protected Double minSelectedTime;
 	/**
 	* Specifies if scrolling of a chart with mouse wheel is enabled. If you press shift while rotating mouse wheel, the chart will zoom-in/out.
 	* Default Value: FALSE
 	*/
-	protected boolean mouseWheelScrollEnabled;
+	protected Boolean mouseWheelScrollEnabled;
 	/**
 	* Specifies if zooming of a chart with mouse wheel is enabled. If you press shift while rotating mouse wheel, the chart will scroll.
 	* Default Value: FALSE
 	*/
-	protected boolean mouseWheelZoomEnabled;
+	protected Boolean mouseWheelZoomEnabled;
 	/**
 	* If you set this to true, the chart will be rotated by 90 degrees (the columns will become bars).
 	* Default Value: FALSE
 	*/
-	protected boolean rotate;
+	protected Boolean rotate;
 	/**
 	* Read-only. If category axis parses dates startDate indicates date from which the chart is currently displayed.
 	* Default Value: 
@@ -94,12 +94,12 @@ public class AmSerialChart extends AmRectangularChart{
 	* Read-only. Category index from which the chart is currently displayed.
 	* Default Value: 
 	*/
-	protected double startIndex;
+	protected Double startIndex;
 	/**
 	* Specifies if chart should zoom-out when data is updated.
 	* Default Value: TRUE
 	*/
-	protected boolean zoomOutOnDataUpdate;
+	protected Boolean zoomOutOnDataUpdate;
 	
 	/*
 	 * Constructors
@@ -130,22 +130,22 @@ public class AmSerialChart extends AmRectangularChart{
 	public void setCategoryField(String categoryField) {
 		this.categoryField = categoryField;
 	}
-	public double getColumnSpacing() {
+	public Double getColumnSpacing() {
 		return columnSpacing;
 	}
-	public void setColumnSpacing(double columnSpacing) {
+	public void setColumnSpacing(Double columnSpacing) {
 		this.columnSpacing = columnSpacing;
 	}
-	public double getColumnSpacing3D() {
+	public Double getColumnSpacing3D() {
 		return columnSpacing3D;
 	}
-	public void setColumnSpacing3D(double columnSpacing3D) {
+	public void setColumnSpacing3D(Double columnSpacing3D) {
 		this.columnSpacing3D = columnSpacing3D;
 	}
-	public double getColumnWidth() {
+	public Double getColumnWidth() {
 		return columnWidth;
 	}
-	public void setColumnWidth(double columnWidth) {
+	public void setColumnWidth(Double columnWidth) {
 		this.columnWidth = columnWidth;
 	}
 	public String getDataDateFormat() {
@@ -160,46 +160,46 @@ public class AmSerialChart extends AmRectangularChart{
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	public double getEndIndex() {
+	public Double getEndIndex() {
 		return endIndex;
 	}
-	public void setEndIndex(double endIndex) {
+	public void setEndIndex(Double endIndex) {
 		this.endIndex = endIndex;
 	}
-	public double getMaxSelectedSeries() {
+	public Double getMaxSelectedSeries() {
 		return maxSelectedSeries;
 	}
-	public void setMaxSelectedSeries(double maxSelectedSeries) {
+	public void setMaxSelectedSeries(Double maxSelectedSeries) {
 		this.maxSelectedSeries = maxSelectedSeries;
 	}
-	public double getMaxSelectedTime() {
+	public Double getMaxSelectedTime() {
 		return maxSelectedTime;
 	}
-	public void setMaxSelectedTime(double maxSelectedTime) {
+	public void setMaxSelectedTime(Double maxSelectedTime) {
 		this.maxSelectedTime = maxSelectedTime;
 	}
-	public double getMinSelectedTime() {
+	public Double getMinSelectedTime() {
 		return minSelectedTime;
 	}
-	public void setMinSelectedTime(double minSelectedTime) {
+	public void setMinSelectedTime(Double minSelectedTime) {
 		this.minSelectedTime = minSelectedTime;
 	}
-	public boolean isMouseWheelScrollEnabled() {
+	public Boolean isMouseWheelScrollEnabled() {
 		return mouseWheelScrollEnabled;
 	}
-	public void setMouseWheelScrollEnabled(boolean mouseWheelScrollEnabled) {
+	public void setMouseWheelScrollEnabled(Boolean mouseWheelScrollEnabled) {
 		this.mouseWheelScrollEnabled = mouseWheelScrollEnabled;
 	}
-	public boolean isMouseWheelZoomEnabled() {
+	public Boolean isMouseWheelZoomEnabled() {
 		return mouseWheelZoomEnabled;
 	}
-	public void setMouseWheelZoomEnabled(boolean mouseWheelZoomEnabled) {
+	public void setMouseWheelZoomEnabled(Boolean mouseWheelZoomEnabled) {
 		this.mouseWheelZoomEnabled = mouseWheelZoomEnabled;
 	}
-	public boolean isRotate() {
+	public Boolean isRotate() {
 		return rotate;
 	}
-	public void setRotate(boolean rotate) {
+	public void setRotate(Boolean rotate) {
 		this.rotate = rotate;
 	}
 	public Date getStartDate() {
@@ -208,16 +208,16 @@ public class AmSerialChart extends AmRectangularChart{
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public double getStartIndex() {
+	public Double getStartIndex() {
 		return startIndex;
 	}
-	public void setStartIndex(double startIndex) {
+	public void setStartIndex(Double startIndex) {
 		this.startIndex = startIndex;
 	}
-	public boolean isZoomOutOnDataUpdate() {
+	public Boolean isZoomOutOnDataUpdate() {
 		return zoomOutOnDataUpdate;
 	}
-	public void setZoomOutOnDataUpdate(boolean zoomOutOnDataUpdate) {
+	public void setZoomOutOnDataUpdate(Boolean zoomOutOnDataUpdate) {
 		this.zoomOutOnDataUpdate = zoomOutOnDataUpdate;
 	}
 

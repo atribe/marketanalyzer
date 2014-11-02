@@ -32,7 +32,7 @@ public class AmCoordinateChart extends AmChart{
 	* Specifies if grid should be drawn above the graphs or below. Will not work properly with 3D charts.
 	* Default Value: FALSE
 	*/
-	protected boolean gridAboveGraphs;
+	protected Boolean gridAboveGraphs;
 	/**
 	* Instead of adding guides to the axes, you can push all of them to this array. In case guide has category or date defined, it will automatically will be assigned to the category axis. Otherwise to first value axis, unless you specify a different valueAxis for the guide.
 	* Default Value: []
@@ -42,17 +42,17 @@ public class AmCoordinateChart extends AmChart{
 	* Specifies whether the animation should be sequenced or all objects should appear at once.
 	* Default Value: TRUE
 	*/
-	protected boolean sequencedAnimation;
+	protected Boolean sequencedAnimation;
 	/**
 	* The initial opacity of the column/line. If you set startDuration to a value higher than 0, the columns/lines will fade in from startAlpha. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double startAlpha;
+	protected Double startAlpha;
 	/**
 	* Duration of the animation, in seconds.
 	* Default Value: 0
 	*/
-	protected double startDuration;
+	protected Double startDuration;
 	/**
 	* Animation effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: elastic
@@ -87,10 +87,10 @@ public class AmCoordinateChart extends AmChart{
 	public void setGraphs(List<AmGraph> graphs) {
 		this.graphs = graphs;
 	}
-	public boolean isGridAboveGraphs() {
+	public Boolean isGridAboveGraphs() {
 		return gridAboveGraphs;
 	}
-	public void setGridAboveGraphs(boolean gridAboveGraphs) {
+	public void setGridAboveGraphs(Boolean gridAboveGraphs) {
 		this.gridAboveGraphs = gridAboveGraphs;
 	}
 	public List<Guide> getGuides() {
@@ -99,22 +99,22 @@ public class AmCoordinateChart extends AmChart{
 	public void setGuides(List<Guide> guides) {
 		this.guides = guides;
 	}
-	public boolean isSequencedAnimation() {
+	public Boolean isSequencedAnimation() {
 		return sequencedAnimation;
 	}
-	public void setSequencedAnimation(boolean sequencedAnimation) {
+	public void setSequencedAnimation(Boolean sequencedAnimation) {
 		this.sequencedAnimation = sequencedAnimation;
 	}
-	public double getStartAlpha() {
+	public Double getStartAlpha() {
 		return startAlpha;
 	}
-	public void setStartAlpha(double startAlpha) {
+	public void setStartAlpha(Double startAlpha) {
 		this.startAlpha = startAlpha;
 	}
-	public double getStartDuration() {
+	public Double getStartDuration() {
 		return startDuration;
 	}
-	public void setStartDuration(double startDuration) {
+	public void setStartDuration(Double startDuration) {
 		this.startDuration = startDuration;
 	}
 	public StartEffect getStartEffect() {

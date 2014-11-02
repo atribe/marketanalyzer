@@ -14,12 +14,12 @@ public class CategoryAxesSettings {
 	* Specifies whether number of gridCount is specified automatically, according to the axis size.
 	* Default Value: TRUE
 	*/
-	 private boolean autoGridCount;
+	 private Boolean autoGridCount;
 	/**
 	* Axis opacity.
 	* Default Value: 0
 	*/
-	 private double axisAlpha;
+	 private Double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: 
@@ -29,12 +29,12 @@ public class CategoryAxesSettings {
 	* Height of category axes. Set it to 0 if you set inside property to true.
 	* Default Value: 28
 	*/
-	 private double axisHeight;
+	 private Double axisHeight;
 	/**
 	* Thickness of the axis.
 	* Default Value: 
 	*/
-	 private double axisThickness;
+	 private Double axisThickness;
 	/**
 	* Text color.
 	* Default Value: 
@@ -44,7 +44,7 @@ public class CategoryAxesSettings {
 	* Length of a dash.
 	* Default Value: 
 	*/
-	 private double dashLength;
+	 private Double dashLength;
 	/**
 	* Date formats of different periods. Possible period values: fff - milliseconds, ss - seconds, mm - minutes, hh - hours, DD - days, MM - months, WW - weeks, YYYY - years. Check this page for date formatting strings.
 	* Default Value: 
@@ -54,12 +54,12 @@ public class CategoryAxesSettings {
 	* If you want data points to be placed at equal intervals (omiting dates with no data), set equalSpacing to true.
 	* Default Value: FALSE
 	*/
-	 private boolean equalSpacing;
+	 private Boolean equalSpacing;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with fillColor.
 	* Default Value: 
 	*/
-	 private double fillAlpha;
+	 private Double fillAlpha;
 	/**
 	* Fill color. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: 
@@ -69,12 +69,12 @@ public class CategoryAxesSettings {
 	* Text size.
 	* Default Value: 
 	*/
-	 private double fontSize;
+	 private Double fontSize;
 	/**
 	* Opacity of grid lines.
 	* Default Value: 
 	*/
-	 private double gridAlpha;
+	 private Double gridAlpha;
 	/**
 	* Color of grid lines.
 	* Default Value: 
@@ -84,12 +84,12 @@ public class CategoryAxesSettings {
 	* Approximate number of grid lines. You should set autoGridCount to false in order this property not to be ignored.
 	* Default Value: 10
 	*/
-	 private double gridCount;
+	 private Double gridCount;
 	/**
 	* Thickness of grid lines.
 	* Default Value: 
 	*/
-	 private double gridThickness;
+	 private Double gridThickness;
 	/**
 	* Periods to which data will be gruoped in case there are more data items in the selected period than specified in maxSeries property.
 	* Default Value: [""ss"", ""10ss"", ""30ss"", ""mm"", ""10mm"", ""30mm"", ""hh"", ""DD"", ""WW"", ""MM"", ""YYYY""]
@@ -99,32 +99,32 @@ public class CategoryAxesSettings {
 	* Specifies whether values should be placed inside or outside of plot area.
 	* Default Value: FALSE
 	*/
-	 private boolean inside;
+	 private Boolean inside;
 	/**
 	* Rotation angle of a label.
 	* Default Value: 
 	*/
-	 private double labelRotation;
+	 private Double labelRotation;
 	/**
 	* Specifies whether axis displays category axis' labels and value axis' values.
 	* Default Value: TRUE
 	*/
-	 private boolean labelsEnabled;
+	 private Boolean labelsEnabled;
 	/**
 	* Specifies if period period should be marked with a different date format.
 	* Default Value: TRUE
 	*/
-	 private boolean markPeriodChange;
+	 private Boolean markPeriodChange;
 	/**
 	* Maximum series shown at a time. In case there are more data points in the selection than maxSeries, the chart will group data to longer periods, for example - you have 250 days in the selection, and maxSeries is 150 - the chart will group data to weeks.
 	* Default Value: 150
 	*/
-	 private double maxSeries;
+	 private Double maxSeries;
 	/**
 	* This property is used when calculating grid count. It specifies minimum cell width required for one span between grid lines.
 	* Default Value: 75
 	*/
-	 private double minHorizontalGap;
+	 private Double minHorizontalGap;
 	/**
 	* Specifies the shortest period of your data. fff - millisecond, ss - second, mm - minute, hh - hour, DD - day, MM - month, YYYY - year.
 	* It's also possible to supply a number for increments, i.e. ""15mm"" which will instruct the chart that your data is supplied in 15 minute increments.
@@ -140,27 +140,27 @@ public class CategoryAxesSettings {
 	* Specifies whether the graph should start on axis or not. In case you display columns, it is recommended to set this to false. startOnAxis can be set to true only if equalSpacing is set to true.
 	* Default Value: FALSE
 	*/
-	 private boolean startOnAxis;
+	 private Boolean startOnAxis;
 	/**
 	* Tick length.
 	* Default Value: 0
 	*/
-	 private double tickLength;
+	 private Double tickLength;
 	/**
 	* Works only when parseDates is set to true and equalSpacing is false. If you set it to true, at the position where bigger period changes, category axis will display date strings of bot small and big period, in two rows.
 	* Default Value: FALSE
 	*/
-	 private boolean twoLineMode;
-	public boolean isAutoGridCount() {
+	 private Boolean twoLineMode;
+	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
-	public void setAutoGridCount(boolean autoGridCount) {
+	public void setAutoGridCount(Boolean autoGridCount) {
 		this.autoGridCount = autoGridCount;
 	}
-	public double getAxisAlpha() {
+	public Double getAxisAlpha() {
 		return axisAlpha;
 	}
-	public void setAxisAlpha(double axisAlpha) {
+	public void setAxisAlpha(Double axisAlpha) {
 		this.axisAlpha = axisAlpha;
 	}
 	public Color getAxisColor() {
@@ -169,16 +169,16 @@ public class CategoryAxesSettings {
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
 	}
-	public double getAxisHeight() {
+	public Double getAxisHeight() {
 		return axisHeight;
 	}
-	public void setAxisHeight(double axisHeight) {
+	public void setAxisHeight(Double axisHeight) {
 		this.axisHeight = axisHeight;
 	}
-	public double getAxisThickness() {
+	public Double getAxisThickness() {
 		return axisThickness;
 	}
-	public void setAxisThickness(double axisThickness) {
+	public void setAxisThickness(Double axisThickness) {
 		this.axisThickness = axisThickness;
 	}
 	public Color getColor() {
@@ -187,10 +187,10 @@ public class CategoryAxesSettings {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getDashLength() {
+	public Double getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(double dashLength) {
+	public void setDashLength(Double dashLength) {
 		this.dashLength = dashLength;
 	}
 	public List<DateFormat> getDateFormats() {
@@ -199,16 +199,16 @@ public class CategoryAxesSettings {
 	public void setDateFormats(List<DateFormat> dateFormats) {
 		this.dateFormats = dateFormats;
 	}
-	public boolean isEqualSpacing() {
+	public Boolean isEqualSpacing() {
 		return equalSpacing;
 	}
-	public void setEqualSpacing(boolean equalSpacing) {
+	public void setEqualSpacing(Boolean equalSpacing) {
 		this.equalSpacing = equalSpacing;
 	}
-	public double getFillAlpha() {
+	public Double getFillAlpha() {
 		return fillAlpha;
 	}
-	public void setFillAlpha(double fillAlpha) {
+	public void setFillAlpha(Double fillAlpha) {
 		this.fillAlpha = fillAlpha;
 	}
 	public Color getFillColor() {
@@ -217,16 +217,16 @@ public class CategoryAxesSettings {
 	public void setFillColor(Color fillColor) {
 		this.fillColor = fillColor;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
-	public double getGridAlpha() {
+	public Double getGridAlpha() {
 		return gridAlpha;
 	}
-	public void setGridAlpha(double gridAlpha) {
+	public void setGridAlpha(Double gridAlpha) {
 		this.gridAlpha = gridAlpha;
 	}
 	public Color getGridColor() {
@@ -235,16 +235,16 @@ public class CategoryAxesSettings {
 	public void setGridColor(Color gridColor) {
 		this.gridColor = gridColor;
 	}
-	public double getGridCount() {
+	public Double getGridCount() {
 		return gridCount;
 	}
-	public void setGridCount(double gridCount) {
+	public void setGridCount(Double gridCount) {
 		this.gridCount = gridCount;
 	}
-	public double getGridThickness() {
+	public Double getGridThickness() {
 		return gridThickness;
 	}
-	public void setGridThickness(double gridThickness) {
+	public void setGridThickness(Double gridThickness) {
 		this.gridThickness = gridThickness;
 	}
 	public List<String> getGroupToPeriods() {
@@ -253,40 +253,40 @@ public class CategoryAxesSettings {
 	public void setGroupToPeriods(List<String> groupToPeriods) {
 		this.groupToPeriods = groupToPeriods;
 	}
-	public boolean isInside() {
+	public Boolean isInside() {
 		return inside;
 	}
-	public void setInside(boolean inside) {
+	public void setInside(Boolean inside) {
 		this.inside = inside;
 	}
-	public double getLabelRotation() {
+	public Double getLabelRotation() {
 		return labelRotation;
 	}
-	public void setLabelRotation(double labelRotation) {
+	public void setLabelRotation(Double labelRotation) {
 		this.labelRotation = labelRotation;
 	}
-	public boolean isLabelsEnabled() {
+	public Boolean isLabelsEnabled() {
 		return labelsEnabled;
 	}
-	public void setLabelsEnabled(boolean labelsEnabled) {
+	public void setLabelsEnabled(Boolean labelsEnabled) {
 		this.labelsEnabled = labelsEnabled;
 	}
-	public boolean isMarkPeriodChange() {
+	public Boolean isMarkPeriodChange() {
 		return markPeriodChange;
 	}
-	public void setMarkPeriodChange(boolean markPeriodChange) {
+	public void setMarkPeriodChange(Boolean markPeriodChange) {
 		this.markPeriodChange = markPeriodChange;
 	}
-	public double getMaxSeries() {
+	public Double getMaxSeries() {
 		return maxSeries;
 	}
-	public void setMaxSeries(double maxSeries) {
+	public void setMaxSeries(Double maxSeries) {
 		this.maxSeries = maxSeries;
 	}
-	public double getMinHorizontalGap() {
+	public Double getMinHorizontalGap() {
 		return minHorizontalGap;
 	}
-	public void setMinHorizontalGap(double minHorizontalGap) {
+	public void setMinHorizontalGap(Double minHorizontalGap) {
 		this.minHorizontalGap = minHorizontalGap;
 	}
 	public String getMinPeriod() {
@@ -301,22 +301,22 @@ public class CategoryAxesSettings {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public boolean isStartOnAxis() {
+	public Boolean isStartOnAxis() {
 		return startOnAxis;
 	}
-	public void setStartOnAxis(boolean startOnAxis) {
+	public void setStartOnAxis(Boolean startOnAxis) {
 		this.startOnAxis = startOnAxis;
 	}
-	public double getTickLength() {
+	public Double getTickLength() {
 		return tickLength;
 	}
-	public void setTickLength(double tickLength) {
+	public void setTickLength(Double tickLength) {
 		this.tickLength = tickLength;
 	}
-	public boolean isTwoLineMode() {
+	public Boolean isTwoLineMode() {
 		return twoLineMode;
 	}
-	public void setTwoLineMode(boolean twoLineMode) {
+	public void setTwoLineMode(Boolean twoLineMode) {
 		this.twoLineMode = twoLineMode;
 	}
 

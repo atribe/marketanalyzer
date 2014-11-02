@@ -19,12 +19,12 @@ public class LegendSettings {
 	* Specifies if each legend entry should take the same space as the longest legend entry.
 	* Default Value: FALSE
 	*/
-	private boolean equalWidths;
+	private Boolean equalWidths;
 	/**
 	* Horizontal space between legend item and left/right border.
 	* Default Value: 
 	*/
-	private double horizontalGap;
+	private Double horizontalGap;
 	/**
 	* The text which will be displayed in the legend. Tag [[title]] will be replaced with the title of the graph.
 	* Default Value: 
@@ -34,17 +34,17 @@ public class LegendSettings {
 	* Space below the last row of the legend, in pixels.
 	* Default Value: 0
 	*/
-	private double marginBottom;
+	private Double marginBottom;
 	/**
 	* Space above the first row of the legend, in pixels.
 	* Default Value: 0
 	*/
-	private double marginTop;
+	private Double marginTop;
 	/**
 	* Opacity of marker border.
 	* Default Value: 
 	*/
-	private double markerBorderAlpha;
+	private Double markerBorderAlpha;
 	/**
 	* Marker border color.
 	* Default Value: 
@@ -54,7 +54,7 @@ public class LegendSettings {
 	* Thickness of the legend border.
 	* Default Value: 
 	*/
-	private double markerBorderThickness;
+	private Double markerBorderThickness;
 	/**
 	* The color of the disabled marker (when the graph is hidden).
 	* Default Value: 
@@ -64,12 +64,12 @@ public class LegendSettings {
 	* Space between legend marker and legend text, in pixels.
 	* Default Value: 
 	*/
-	private double markerLabelGap;
+	private Double markerLabelGap;
 	/**
 	* Size of the legend marker (key).
 	* Default Value: 
 	*/
-	private double markerSize;
+	private Double markerSize;
 	/**
 	* Shape of the legend marker (key). Possible values are: square, circle, diamond, triangleUp, triangleDown, triangleLeft, triangleDown, bubble, none
 	* Default Value: 
@@ -79,7 +79,7 @@ public class LegendSettings {
 	* Specifies whether legend entries should be placed in reversed order.
 	* Default Value: 
 	*/
-	private boolean reversedOrder;
+	private Boolean reversedOrder;
 	/**
 	* Legend item text color on roll-over.
 	* Default Value: 
@@ -89,12 +89,12 @@ public class LegendSettings {
 	* When you roll-over the legend entry, all other graphs can reduce their opacity, so that the graph you rolled-over would be distinguished. This property specifies the opacity of the graphs.
 	* Default Value: 
 	*/
-	private double rollOverGraphAlpha;
+	private Double rollOverGraphAlpha;
 	/**
 	* Whether showing/hiding of graphs by clicking on the legend marker is enabled or not.
 	* Default Value: 
 	*/
-	private boolean switchable;
+	private Boolean switchable;
 	/**
 	* Legend switch color.
 	* Default Value: 
@@ -109,12 +109,12 @@ public class LegendSettings {
 	* Specifies whether the legend text is clickable or not. Clicking on legend text can show/hide value balloons if they are enabled.
 	* Default Value: FALSE
 	*/
-	private boolean textClickEnabled;
+	private Boolean textClickEnabled;
 	/**
 	* Specifies if legend labels should be use same color as corresponding markers.
 	* Default Value: 
 	*/
-	private boolean useMarkerColorForLabels;
+	private Boolean useMarkerColorForLabels;
 	/**
 	* The text which will be displayed in the value portion of the legend when graph is comparable and at least one dataSet is selected for comparing. You can use tags like [[value]], [[open]], [[high]], [[low]], [[close]], [[percents]], [[description]].
 	* Default Value: 
@@ -129,28 +129,28 @@ public class LegendSettings {
 	* Width of the value text. Increase this value if your values do not fit in the allocated space.
 	* Default Value: 
 	*/
-	private double valueWidth;
+	private Double valueWidth;
 	/**
 	* Vertical space between legend items, in pixels.
 	* Default Value: 
 	*/
-	private double verticalGap;
+	private Double verticalGap;
 	public Alignment getAlign() {
 		return align;
 	}
 	public void setAlign(Alignment align) {
 		this.align = align;
 	}
-	public boolean isEqualWidths() {
+	public Boolean isEqualWidths() {
 		return equalWidths;
 	}
-	public void setEqualWidths(boolean equalWidths) {
+	public void setEqualWidths(Boolean equalWidths) {
 		this.equalWidths = equalWidths;
 	}
-	public double getHorizontalGap() {
+	public Double getHorizontalGap() {
 		return horizontalGap;
 	}
-	public void setHorizontalGap(double horizontalGap) {
+	public void setHorizontalGap(Double horizontalGap) {
 		this.horizontalGap = horizontalGap;
 	}
 	public String getLabelText() {
@@ -159,22 +159,22 @@ public class LegendSettings {
 	public void setLabelText(String labelText) {
 		this.labelText = labelText;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getMarkerBorderAlpha() {
+	public Double getMarkerBorderAlpha() {
 		return markerBorderAlpha;
 	}
-	public void setMarkerBorderAlpha(double markerBorderAlpha) {
+	public void setMarkerBorderAlpha(Double markerBorderAlpha) {
 		this.markerBorderAlpha = markerBorderAlpha;
 	}
 	public Color getMarkerBorderColor() {
@@ -183,10 +183,10 @@ public class LegendSettings {
 	public void setMarkerBorderColor(Color markerBorderColor) {
 		this.markerBorderColor = markerBorderColor;
 	}
-	public double getMarkerBorderThickness() {
+	public Double getMarkerBorderThickness() {
 		return markerBorderThickness;
 	}
-	public void setMarkerBorderThickness(double markerBorderThickness) {
+	public void setMarkerBorderThickness(Double markerBorderThickness) {
 		this.markerBorderThickness = markerBorderThickness;
 	}
 	public Color getMarkerDisabledColor() {
@@ -195,16 +195,16 @@ public class LegendSettings {
 	public void setMarkerDisabledColor(Color markerDisabledColor) {
 		this.markerDisabledColor = markerDisabledColor;
 	}
-	public double getMarkerLabelGap() {
+	public Double getMarkerLabelGap() {
 		return markerLabelGap;
 	}
-	public void setMarkerLabelGap(double markerLabelGap) {
+	public void setMarkerLabelGap(Double markerLabelGap) {
 		this.markerLabelGap = markerLabelGap;
 	}
-	public double getMarkerSize() {
+	public Double getMarkerSize() {
 		return markerSize;
 	}
-	public void setMarkerSize(double markerSize) {
+	public void setMarkerSize(Double markerSize) {
 		this.markerSize = markerSize;
 	}
 	public MarkerType getMarkerType() {
@@ -213,10 +213,10 @@ public class LegendSettings {
 	public void setMarkerType(MarkerType markerType) {
 		this.markerType = markerType;
 	}
-	public boolean isReversedOrder() {
+	public Boolean isReversedOrder() {
 		return reversedOrder;
 	}
-	public void setReversedOrder(boolean reversedOrder) {
+	public void setReversedOrder(Boolean reversedOrder) {
 		this.reversedOrder = reversedOrder;
 	}
 	public Color getRollOverColor() {
@@ -225,16 +225,16 @@ public class LegendSettings {
 	public void setRollOverColor(Color rollOverColor) {
 		this.rollOverColor = rollOverColor;
 	}
-	public double getRollOverGraphAlpha() {
+	public Double getRollOverGraphAlpha() {
 		return rollOverGraphAlpha;
 	}
-	public void setRollOverGraphAlpha(double rollOverGraphAlpha) {
+	public void setRollOverGraphAlpha(Double rollOverGraphAlpha) {
 		this.rollOverGraphAlpha = rollOverGraphAlpha;
 	}
-	public boolean isSwitchable() {
+	public Boolean isSwitchable() {
 		return switchable;
 	}
-	public void setSwitchable(boolean switchable) {
+	public void setSwitchable(Boolean switchable) {
 		this.switchable = switchable;
 	}
 	public Color getSwitchColor() {
@@ -249,16 +249,16 @@ public class LegendSettings {
 	public void setSwitchType(SwitchType switchType) {
 		this.switchType = switchType;
 	}
-	public boolean isTextClickEnabled() {
+	public Boolean isTextClickEnabled() {
 		return textClickEnabled;
 	}
-	public void setTextClickEnabled(boolean textClickEnabled) {
+	public void setTextClickEnabled(Boolean textClickEnabled) {
 		this.textClickEnabled = textClickEnabled;
 	}
-	public boolean isUseMarkerColorForLabels() {
+	public Boolean isUseMarkerColorForLabels() {
 		return useMarkerColorForLabels;
 	}
-	public void setUseMarkerColorForLabels(boolean useMarkerColorForLabels) {
+	public void setUseMarkerColorForLabels(Boolean useMarkerColorForLabels) {
 		this.useMarkerColorForLabels = useMarkerColorForLabels;
 	}
 	public String getValueTextComparing() {
@@ -273,16 +273,16 @@ public class LegendSettings {
 	public void setValueTextRegular(String valueTextRegular) {
 		this.valueTextRegular = valueTextRegular;
 	}
-	public double getValueWidth() {
+	public Double getValueWidth() {
 		return valueWidth;
 	}
-	public void setValueWidth(double valueWidth) {
+	public void setValueWidth(Double valueWidth) {
 		this.valueWidth = valueWidth;
 	}
-	public double getVerticalGap() {
+	public Double getVerticalGap() {
 		return verticalGap;
 	}
-	public void setVerticalGap(double verticalGap) {
+	public void setVerticalGap(Double verticalGap) {
 		this.verticalGap = verticalGap;
 	}
 

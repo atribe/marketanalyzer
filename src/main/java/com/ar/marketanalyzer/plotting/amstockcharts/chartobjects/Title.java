@@ -10,12 +10,12 @@ public class Title {
 	* Opacity of a title.
 	* Default Value: 1
 	*/
-	private double alpha;
+	private Double alpha;
 	/**
 	* Specifies if title should be bold or not.
 	* Default Value: FALSE
 	*/
-	private boolean bold;
+	private Boolean bold;
 	/**
 	* Text color of a title.
 	* Default Value: 
@@ -30,23 +30,23 @@ public class Title {
 	* Text size of a title.
 	* Default Value: 
 	*/
-	private double size;
+	private Double size;
 	/**
 	* Text of a title.
 	* Default Value: 
 	*/
 	private String text;
 	
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
-	public boolean isBold() {
+	public Boolean isBold() {
 		return bold;
 	}
-	public void setBold(boolean bold) {
+	public void setBold(Boolean bold) {
 		this.bold = bold;
 	}
 	public Color getColor() {
@@ -61,10 +61,10 @@ public class Title {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public double getSize() {
+	public Double getSize() {
 		return size;
 	}
-	public void setSize(double size) {
+	public void setSize(Double size) {
 		this.size = size;
 	}
 	public String getText() {

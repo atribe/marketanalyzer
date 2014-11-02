@@ -11,7 +11,7 @@ public class Slice {
 	* Opacity of a slice.
 	* Default Value: 
 	*/
-	private double alpha;
+	private Double alpha;
 	/**
 	* Color of a slice.
 	* Default Value: 
@@ -31,17 +31,17 @@ public class Slice {
 	* Specifies whether the slice is hidden
 	* Default Value: 
 	*/
-	private boolean hidden;
+	private Boolean hidden;
 	/**
 	* Percent value of a slice.
 	* Default Value: 
 	*/
-	private double percents;
+	private Double percents;
 	/**
 	* Specifies whether the slice is pulled or not.
 	* Default Value: 
 	*/
-	private boolean pulled;
+	private Boolean pulled;
 	/**
 	* Slice title
 	* Default Value: 
@@ -56,16 +56,16 @@ public class Slice {
 	* Value of a slice
 	* Default Value: 
 	*/
-	private double value;
+	private Double value;
 	/**
 	* specifies whether this slice has a legend entry
 	* Default Value: 
 	*/
-	private boolean visibleInLegend;
-	public double getAlpha() {
+	private Boolean visibleInLegend;
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
 	public Color getColor() {
@@ -86,22 +86,22 @@ public class Slice {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public boolean isHidden() {
+	public Boolean isHidden() {
 		return hidden;
 	}
-	public void setHidden(boolean hidden) {
+	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
 	}
-	public double getPercents() {
+	public Double getPercents() {
 		return percents;
 	}
-	public void setPercents(double percents) {
+	public void setPercents(Double percents) {
 		this.percents = percents;
 	}
-	public boolean isPulled() {
+	public Boolean isPulled() {
 		return pulled;
 	}
-	public void setPulled(boolean pulled) {
+	public void setPulled(Boolean pulled) {
 		this.pulled = pulled;
 	}
 	public String getTitle() {
@@ -116,16 +116,16 @@ public class Slice {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
-	public boolean isVisibleInLegend() {
+	public Boolean isVisibleInLegend() {
 		return visibleInLegend;
 	}
-	public void setVisibleInLegend(boolean visibleInLegend) {
+	public void setVisibleInLegend(Boolean visibleInLegend) {
 		this.visibleInLegend = visibleInLegend;
 	}
 

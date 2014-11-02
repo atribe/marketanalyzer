@@ -15,27 +15,27 @@ public class AmRadarChart extends AmCoordinateChart {
 	* Bottom margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginBottom;
+	private Double marginBottom;
 	/**
 	* Left margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginLeft;
+	private Double marginLeft;
 	/**
 	* Right margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginRight;
+	private Double marginRight;
 	/**
 	* Top margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginTop;
+	private Double marginTop;
 	/**
 	* Radius of a radar.
 	* Default Value: 0.35
 	*/
-	private double radius;
+	private Double radius;
 	
 	public String getCategoryField() {
 		return categoryField;
@@ -43,34 +43,34 @@ public class AmRadarChart extends AmCoordinateChart {
 	public void setCategoryField(String categoryField) {
 		this.categoryField = categoryField;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getRadius() {
+	public Double getRadius() {
 		return radius;
 	}
-	public void setRadius(double radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
 

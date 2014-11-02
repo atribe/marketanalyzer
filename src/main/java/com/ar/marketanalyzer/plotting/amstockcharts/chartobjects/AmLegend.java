@@ -18,12 +18,12 @@ public class AmLegend {
 	* Used if chart is Serial or XY. In case true, margins of the legend are adjusted and made equal to chart's margins.
 	* Default Value: TRUE
 	*/
-	 private boolean autoMargins;
+	 private Boolean autoMargins;
 	/**
 	* Opacity of legend's background. Value range is 0 - 1
 	* Default Value: 0
 	*/
-	 private double backgroundAlpha;
+	 private Double backgroundAlpha;
 	/**
 	* Background color. You should set backgroundAlpha to >0 vallue in order background to be visible.
 	* Default Value: #FFFFFF
@@ -33,7 +33,7 @@ public class AmLegend {
 	* Opacity of chart's border. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	 private double borderAlpha;
+	 private Double borderAlpha;
 	/**
 	* Color of legend's border. You should set borderAlpha >0 in order border to be visible.
 	* Default Value: #000000
@@ -43,7 +43,7 @@ public class AmLegend {
 	* In case legend position is set to ""absolute"", you can set distance from bottom of the chart, in pixels.
 	* Default Value: 
 	*/
-	 private double bottom;
+	 private Double bottom;
 	/**
 	* Text color.
 	* Default Value: #000000
@@ -63,17 +63,17 @@ public class AmLegend {
 	* Specifies if each of legend entry should be equal to the most wide entry. Won't look good if legend has more than one line.
 	* Default Value: TRUE
 	*/
-	 private boolean equalWidths;
+	 private Boolean equalWidths;
 	/**
 	* Font size.
 	* Default Value: 11
 	*/
-	 private double fontSize;
+	 private Double fontSize;
 	/**
 	* Horizontal space between legend item and left/right border.
 	* Default Value: 0
 	*/
-	 private double horizontalGap;
+	 private Double horizontalGap;
 	/**
 	* The text which will be displayed in the legend. Tag [[title]] will be replaced with the title of the graph.
 	* Default Value: [[title]]
@@ -83,37 +83,37 @@ public class AmLegend {
 	* If width of the label is bigger than labelWidth, it will be wrapped.
 	* Default Value: 
 	*/
-	 private double labelWidth;
+	 private Double labelWidth;
 	/**
 	* In case legend position is set to ""absolute"", you can set distance from left side of the chart, in pixels.
 	* Default Value: 
 	*/
-	 private double left;
+	 private Double left;
 	/**
 	* Bottom margin.
 	* Default Value: 0
 	*/
-	 private double marginBottom;
+	 private Double marginBottom;
 	/**
 	* Left margin. This property will be ignored if chart is Serial or XY and autoMargins property of the legend is true (default).
 	* Default Value: 20
 	*/
-	 private double marginLeft;
+	 private Double marginLeft;
 	/**
 	* Right margin. This property will be ignored if chart is Serial or XY and autoMargins property of the legend is true (default).
 	* Default Value: 20
 	*/
-	 private double marginRight;
+	 private Double marginRight;
 	/**
 	* Top margin.
 	* Default Value: 0
 	*/
-	 private double marginTop;
+	 private Double marginTop;
 	/**
 	* Marker border opacity.
 	* Default Value: 1
 	*/
-	 private double markerBorderAlpha;
+	 private Double markerBorderAlpha;
 	/**
 	* Marker border color. If not set, will use the same color as marker.
 	* Default Value: 
@@ -123,7 +123,7 @@ public class AmLegend {
 	* Thickness of the legend border. The default value (0) means the line will be a ""hairline"" (1 px). In case marker type is line, this style will be used for line thickness.
 	* Default Value: 1
 	*/
-	 private double markerBorderThickness;
+	 private Double markerBorderThickness;
 	/**
 	* The color of the disabled marker (when the graph is hidden).
 	* Default Value: #AAB3B3
@@ -133,12 +133,12 @@ public class AmLegend {
 	* Space between legend marker and legend text, in pixels.
 	* Default Value: 5
 	*/
-	 private double markerLabelGap;
+	 private Double markerLabelGap;
 	/**
 	* Size of the legend marker (key).
 	* Default Value: 16
 	*/
-	 private double markerSize;
+	 private Double markerSize;
 	/**
 	* Shape of the legend marker (key). Possible values are: square, circle, diamond, triangleUp, triangleDown, triangleLeft, triangleDown, bubble, line, none.
 	* Default Value: square
@@ -148,7 +148,7 @@ public class AmLegend {
 	* Maximum number of columns in the legend. If Legend's position is set to ""right"" or ""left"", maxColumns is automatically set to 1.
 	* Default Value: 
 	*/
-	 private double maxColumns;
+	 private Double maxColumns;
 	/**
 	* The text which will be displayed in the value portion of the legend when user is not hovering above any data point. The tags should be made out of two parts - the name of a field (value / open / close / high / low) and the value of the period you want to be show - open / close / high / low / sum / average / count. For example: [[value.sum]] means that sum of all data points of value field in the selected period will be displayed.
 	* Default Value: 
@@ -163,12 +163,12 @@ public class AmLegend {
 	* Specifies whether legend entries should be placed in reversed order.
 	* Default Value: FALSE
 	*/
-	 private boolean reversedOrder;
+	 private Boolean reversedOrder;
 	/**
 	* In case legend position is set to ""absolute"", you can set distance from right side of the chart, in pixels.
 	* Default Value: 
 	*/
-	 private double right;
+	 private Double right;
 	/**
 	* Legend item text color on roll-over.
 	* Default Value: #CC0000
@@ -178,22 +178,22 @@ public class AmLegend {
 	* When you roll-over the legend entry, all other graphs can reduce their opacity, so that the graph you rolled-over would be distinguished. This style specifies the opacity of the graphs.
 	* Default Value: 1
 	*/
-	 private double rollOverGraphAlpha;
+	 private Double rollOverGraphAlpha;
 	/**
 	* You can use this property to turn all the legend entries off.
 	* Default Value: TRUE
 	*/
-	 private boolean showEntries;
+	 private Boolean showEntries;
 	/**
 	* Horizontal space between legend items, in pixels.
 	* Default Value: 10
 	*/
-	 private double spacing;
+	 private Double spacing;
 	/**
 	* Whether showing/hiding of graphs by clicking on the legend marker is enabled or not. In case legend is used with AmMap, this is set to false automatically.
 	* Default Value: TRUE
 	*/
-	 private boolean switchable;
+	 private Boolean switchable;
 	/**
 	* Legend switch color.
 	* Default Value: #FFFFFF
@@ -208,27 +208,27 @@ public class AmLegend {
 	* If true, clicking on the text will show/hide balloon of the graph. Otherwise it will show/hide graph/slice, if switchable is set to true.
 	* Default Value: FALSE
 	*/
-	 private boolean textClickEnabled;
+	 private Boolean textClickEnabled;
 	/**
 	* In case legend position is set to ""absolute"", you can set distance from top of the chart, in pixels.
 	* Default Value: 
 	*/
-	 private double top;
+	 private Double top;
 	/**
 	* Legend markers can mirror graph’s settings, displaying a line and a real bullet as in the graph itself. Set this property to true if you want to enable this feature.
 	* Default Value: FALSE
 	*/
-	 private boolean useGraphSettings;
+	 private Boolean useGraphSettings;
 	/**
 	* Labels will use marker color if you set this to true.
 	* Default Value: FALSE
 	*/
-	 private boolean useMarkerColorForLabels;
+	 private Boolean useMarkerColorForLabels;
 	/**
 	* Specifies if legend values should be use same color as corresponding markers.
 	* Default Value: FALSE
 	*/
-	 private boolean useMarkerColorForValues;
+	 private Boolean useMarkerColorForValues;
 	/**
 	* Alignment of the value text. Possible values are ""left"" and ""right"".
 	* Default Value: right
@@ -248,33 +248,33 @@ public class AmLegend {
 	* Width of the value text.
 	* Default Value: 50
 	*/
-	 private double valueWidth;
+	 private Double valueWidth;
 	/**
 	* Vertical space between legend items also between legend border and first and last legend row.
 	* Default Value: 10
 	*/
-	 private double verticalGap;
+	 private Double verticalGap;
 	/**
 	* Width of a legend, when position is set to absolute.
 	* Default Value: 
 	*/
-	 private double width;
+	 private Double width;
 	public String getAlign() {
 		return align;
 	}
 	public void setAlign(String align) {
 		this.align = align;
 	}
-	public boolean isAutoMargins() {
+	public Boolean isAutoMargins() {
 		return autoMargins;
 	}
-	public void setAutoMargins(boolean autoMargins) {
+	public void setAutoMargins(Boolean autoMargins) {
 		this.autoMargins = autoMargins;
 	}
-	public double getBackgroundAlpha() {
+	public Double getBackgroundAlpha() {
 		return backgroundAlpha;
 	}
-	public void setBackgroundAlpha(double backgroundAlpha) {
+	public void setBackgroundAlpha(Double backgroundAlpha) {
 		this.backgroundAlpha = backgroundAlpha;
 	}
 	public Color getBackgroundColor() {
@@ -283,10 +283,10 @@ public class AmLegend {
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
-	public double getBorderAlpha() {
+	public Double getBorderAlpha() {
 		return borderAlpha;
 	}
-	public void setBorderAlpha(double borderAlpha) {
+	public void setBorderAlpha(Double borderAlpha) {
 		this.borderAlpha = borderAlpha;
 	}
 	public Color getBorderColor() {
@@ -295,10 +295,10 @@ public class AmLegend {
 	public void setBorderColor(Color borderColor) {
 		this.borderColor = borderColor;
 	}
-	public double getBottom() {
+	public Double getBottom() {
 		return bottom;
 	}
-	public void setBottom(double bottom) {
+	public void setBottom(Double bottom) {
 		this.bottom = bottom;
 	}
 	public Color getColor() {
@@ -319,22 +319,22 @@ public class AmLegend {
 	public void setDivId(String divId) {
 		this.divId = divId;
 	}
-	public boolean isEqualWidths() {
+	public Boolean isEqualWidths() {
 		return equalWidths;
 	}
-	public void setEqualWidths(boolean equalWidths) {
+	public void setEqualWidths(Boolean equalWidths) {
 		this.equalWidths = equalWidths;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
-	public double getHorizontalGap() {
+	public Double getHorizontalGap() {
 		return horizontalGap;
 	}
-	public void setHorizontalGap(double horizontalGap) {
+	public void setHorizontalGap(Double horizontalGap) {
 		this.horizontalGap = horizontalGap;
 	}
 	public String getLabelText() {
@@ -343,46 +343,46 @@ public class AmLegend {
 	public void setLabelText(String labelText) {
 		this.labelText = labelText;
 	}
-	public double getLabelWidth() {
+	public Double getLabelWidth() {
 		return labelWidth;
 	}
-	public void setLabelWidth(double labelWidth) {
+	public void setLabelWidth(Double labelWidth) {
 		this.labelWidth = labelWidth;
 	}
-	public double getLeft() {
+	public Double getLeft() {
 		return left;
 	}
-	public void setLeft(double left) {
+	public void setLeft(Double left) {
 		this.left = left;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getMarkerBorderAlpha() {
+	public Double getMarkerBorderAlpha() {
 		return markerBorderAlpha;
 	}
-	public void setMarkerBorderAlpha(double markerBorderAlpha) {
+	public void setMarkerBorderAlpha(Double markerBorderAlpha) {
 		this.markerBorderAlpha = markerBorderAlpha;
 	}
 	public Color getMarkerBorderColor() {
@@ -391,10 +391,10 @@ public class AmLegend {
 	public void setMarkerBorderColor(Color markerBorderColor) {
 		this.markerBorderColor = markerBorderColor;
 	}
-	public double getMarkerBorderThickness() {
+	public Double getMarkerBorderThickness() {
 		return markerBorderThickness;
 	}
-	public void setMarkerBorderThickness(double markerBorderThickness) {
+	public void setMarkerBorderThickness(Double markerBorderThickness) {
 		this.markerBorderThickness = markerBorderThickness;
 	}
 	public Color getMarkerDisabledColor() {
@@ -403,16 +403,16 @@ public class AmLegend {
 	public void setMarkerDisabledColor(Color markerDisabledColor) {
 		this.markerDisabledColor = markerDisabledColor;
 	}
-	public double getMarkerLabelGap() {
+	public Double getMarkerLabelGap() {
 		return markerLabelGap;
 	}
-	public void setMarkerLabelGap(double markerLabelGap) {
+	public void setMarkerLabelGap(Double markerLabelGap) {
 		this.markerLabelGap = markerLabelGap;
 	}
-	public double getMarkerSize() {
+	public Double getMarkerSize() {
 		return markerSize;
 	}
-	public void setMarkerSize(double markerSize) {
+	public void setMarkerSize(Double markerSize) {
 		this.markerSize = markerSize;
 	}
 	public String getMarkerType() {
@@ -421,10 +421,10 @@ public class AmLegend {
 	public void setMarkerType(String markerType) {
 		this.markerType = markerType;
 	}
-	public double getMaxColumns() {
+	public Double getMaxColumns() {
 		return maxColumns;
 	}
-	public void setMaxColumns(double maxColumns) {
+	public void setMaxColumns(Double maxColumns) {
 		this.maxColumns = maxColumns;
 	}
 	public String getPeriodValueText() {
@@ -439,16 +439,16 @@ public class AmLegend {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public boolean isReversedOrder() {
+	public Boolean isReversedOrder() {
 		return reversedOrder;
 	}
-	public void setReversedOrder(boolean reversedOrder) {
+	public void setReversedOrder(Boolean reversedOrder) {
 		this.reversedOrder = reversedOrder;
 	}
-	public double getRight() {
+	public Double getRight() {
 		return right;
 	}
-	public void setRight(double right) {
+	public void setRight(Double right) {
 		this.right = right;
 	}
 	public Color getRollOverColor() {
@@ -457,28 +457,28 @@ public class AmLegend {
 	public void setRollOverColor(Color rollOverColor) {
 		this.rollOverColor = rollOverColor;
 	}
-	public double getRollOverGraphAlpha() {
+	public Double getRollOverGraphAlpha() {
 		return rollOverGraphAlpha;
 	}
-	public void setRollOverGraphAlpha(double rollOverGraphAlpha) {
+	public void setRollOverGraphAlpha(Double rollOverGraphAlpha) {
 		this.rollOverGraphAlpha = rollOverGraphAlpha;
 	}
-	public boolean isShowEntries() {
+	public Boolean isShowEntries() {
 		return showEntries;
 	}
-	public void setShowEntries(boolean showEntries) {
+	public void setShowEntries(Boolean showEntries) {
 		this.showEntries = showEntries;
 	}
-	public double getSpacing() {
+	public Double getSpacing() {
 		return spacing;
 	}
-	public void setSpacing(double spacing) {
+	public void setSpacing(Double spacing) {
 		this.spacing = spacing;
 	}
-	public boolean isSwitchable() {
+	public Boolean isSwitchable() {
 		return switchable;
 	}
-	public void setSwitchable(boolean switchable) {
+	public void setSwitchable(Boolean switchable) {
 		this.switchable = switchable;
 	}
 	public Color getSwitchColor() {
@@ -493,34 +493,34 @@ public class AmLegend {
 	public void setSwitchType(String switchType) {
 		this.switchType = switchType;
 	}
-	public boolean isTextClickEnabled() {
+	public Boolean isTextClickEnabled() {
 		return textClickEnabled;
 	}
-	public void setTextClickEnabled(boolean textClickEnabled) {
+	public void setTextClickEnabled(Boolean textClickEnabled) {
 		this.textClickEnabled = textClickEnabled;
 	}
-	public double getTop() {
+	public Double getTop() {
 		return top;
 	}
-	public void setTop(double top) {
+	public void setTop(Double top) {
 		this.top = top;
 	}
-	public boolean isUseGraphSettings() {
+	public Boolean isUseGraphSettings() {
 		return useGraphSettings;
 	}
-	public void setUseGraphSettings(boolean useGraphSettings) {
+	public void setUseGraphSettings(Boolean useGraphSettings) {
 		this.useGraphSettings = useGraphSettings;
 	}
-	public boolean isUseMarkerColorForLabels() {
+	public Boolean isUseMarkerColorForLabels() {
 		return useMarkerColorForLabels;
 	}
-	public void setUseMarkerColorForLabels(boolean useMarkerColorForLabels) {
+	public void setUseMarkerColorForLabels(Boolean useMarkerColorForLabels) {
 		this.useMarkerColorForLabels = useMarkerColorForLabels;
 	}
-	public boolean isUseMarkerColorForValues() {
+	public Boolean isUseMarkerColorForValues() {
 		return useMarkerColorForValues;
 	}
-	public void setUseMarkerColorForValues(boolean useMarkerColorForValues) {
+	public void setUseMarkerColorForValues(Boolean useMarkerColorForValues) {
 		this.useMarkerColorForValues = useMarkerColorForValues;
 	}
 	public String getValueAlign() {
@@ -541,22 +541,22 @@ public class AmLegend {
 	public void setValueText(String valueText) {
 		this.valueText = valueText;
 	}
-	public double getValueWidth() {
+	public Double getValueWidth() {
 		return valueWidth;
 	}
-	public void setValueWidth(double valueWidth) {
+	public void setValueWidth(Double valueWidth) {
 		this.valueWidth = valueWidth;
 	}
-	public double getVerticalGap() {
+	public Double getVerticalGap() {
 		return verticalGap;
 	}
-	public void setVerticalGap(double verticalGap) {
+	public void setVerticalGap(Double verticalGap) {
 		this.verticalGap = verticalGap;
 	}
-	public double getWidth() {
+	public Double getWidth() {
 		return width;
 	}
-	public void setWidth(double width) {
+	public void setWidth(Double width) {
 		this.width = width;
 	}
 

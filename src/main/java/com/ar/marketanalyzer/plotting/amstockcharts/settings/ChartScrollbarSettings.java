@@ -13,12 +13,12 @@ public class ChartScrollbarSettings {
 	* Specifies whether number of gridCount is specified automatically, according to the axis size.
 	* Default Value: TRUE
 	*/
-	private boolean autoGridCount;
+	private Boolean autoGridCount;
 	/**
 	* Background opacity.
 	* Default Value: 
 	*/
-	private double backgroundAlpha;
+	private Double backgroundAlpha;
 	/**
 	* Background color of the scrollbar.
 	* Default Value: 
@@ -33,22 +33,22 @@ public class ChartScrollbarSettings {
 	* Height of resize grip image. Note, you should also update the image in amcharts/images folder if you don't want it to be distorted because of resizing.
 	* Default Value: 18
 	*/
-	private double dragIconHeight;
+	private Double dragIconHeight;
 	/**
 	* Width of resize grip image. Note, you should also update the image in amcharts/images folder if you don't want it to be distorted because of resizing.
 	* Default Value: 11
 	*/
-	private double dragIconWidth;
+	private Double dragIconWidth;
 	/**
 	* Set false if you don't need scrollbar.
 	* Default Value: TRUE
 	*/
-	private boolean enabled;
+	private Boolean enabled;
 	/**
 	* Font size.
 	* Default Value: 
 	*/
-	private double fontSize;
+	private Double fontSize;
 	/**
 	* Specifies which graph will be displayed in the scrollbar.
 	* This is the graph ID.
@@ -59,7 +59,7 @@ public class ChartScrollbarSettings {
 	* Graph fill opacity.
 	* Default Value: 
 	*/
-	private double graphFillAlpha;
+	private Double graphFillAlpha;
 	/**
 	* Graph fill color.
 	* Default Value: 
@@ -69,7 +69,7 @@ public class ChartScrollbarSettings {
 	* Graph line opacity.
 	* Default Value: 
 	*/
-	private double graphLineAlpha;
+	private Double graphLineAlpha;
 	/**
 	* Graph line color.
 	* Default Value: 
@@ -84,7 +84,7 @@ public class ChartScrollbarSettings {
 	* Grid opacity.
 	* Default Value: 
 	*/
-	private double gridAlpha;
+	private Double gridAlpha;
 	/**
 	* Grid color.
 	* Default Value: 
@@ -94,22 +94,22 @@ public class ChartScrollbarSettings {
 	* Grid count. You should set autoGridCount to false in order this property to work.
 	* Default Value: 
 	*/
-	private double gridCount;
+	private Double gridCount;
 	/**
 	* Height of scrollbar, in pixels.
 	* Default Value: 40
 	*/
-	private double height;
+	private Double height;
 	/**
 	* Specifies whether resize grips are hidden when mouse is away from the scrollbar.
 	* Default Value: FALSE
 	*/
-	private boolean hideResizeGrips;
+	private Boolean hideResizeGrips;
 	/**
 	* Specifies if category axis of scrollbar should mark period change with a different date format.
 	* Default Value: 
 	*/
-	private boolean markPeriodChange;
+	private Boolean markPeriodChange;
 	/**
 	* Position of a scrollbar. Possible values are top and bottom.
 	* Default Value: bottom
@@ -119,12 +119,12 @@ public class ChartScrollbarSettings {
 	* Duration of scrolling, when the user clicks on scrollbar's background, in seconds. Note, updateOnReleaseOnly should be set to false in order animation to happen.
 	* Default Value: 
 	*/
-	private double scrollDuration;
+	private Double scrollDuration;
 	/**
 	* Selected background opacity.
 	* Default Value: 
 	*/
-	private double selectedBackgroundAlpha;
+	private Double selectedBackgroundAlpha;
 	/**
 	* Selected background color.
 	* Default Value: 
@@ -134,7 +134,7 @@ public class ChartScrollbarSettings {
 	* Selected graph'sfill opacity.
 	* Default Value: 
 	*/
-	private double selectedGraphFillAlpha;
+	private Double selectedGraphFillAlpha;
 	/**
 	* Selected graph'sfill color.
 	* Default Value: 
@@ -144,7 +144,7 @@ public class ChartScrollbarSettings {
 	* Selected graph'sline opacity.
 	* Default Value: 
 	*/
-	private double selectedGraphLineAlpha;
+	private Double selectedGraphLineAlpha;
 	/**
 	* Selected graph's line color.
 	* Default Value: 
@@ -154,7 +154,7 @@ public class ChartScrollbarSettings {
 	* Specifies if the chart should be updated while dragging/resizing the scrollbar or only at the moment when user releases mouse button. Usefull when working with large data sets.
 	* Default Value: TRUE
 	*/
-	private boolean updateOnReleaseOnly;
+	private Boolean updateOnReleaseOnly;
 	/**
 	* This is very important feature for those, who work with large data sets. 
 	* You can tell ChartScrollbarwhat period it should use for it's graph and save
@@ -166,16 +166,16 @@ public class ChartScrollbarSettings {
 	*/
 	private PeriodEnum usePeriod;
 	
-	public boolean isAutoGridCount() {
+	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
-	public void setAutoGridCount(boolean autoGridCount) {
+	public void setAutoGridCount(Boolean autoGridCount) {
 		this.autoGridCount = autoGridCount;
 	}
-	public double getBackgroundAlpha() {
+	public Double getBackgroundAlpha() {
 		return backgroundAlpha;
 	}
-	public void setBackgroundAlpha(double backgroundAlpha) {
+	public void setBackgroundAlpha(Double backgroundAlpha) {
 		this.backgroundAlpha = backgroundAlpha;
 	}
 	public Color getBackgroundColor() {
@@ -190,28 +190,28 @@ public class ChartScrollbarSettings {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getDragIconHeight() {
+	public Double getDragIconHeight() {
 		return dragIconHeight;
 	}
-	public void setDragIconHeight(double dragIconHeight) {
+	public void setDragIconHeight(Double dragIconHeight) {
 		this.dragIconHeight = dragIconHeight;
 	}
-	public double getDragIconWidth() {
+	public Double getDragIconWidth() {
 		return dragIconWidth;
 	}
-	public void setDragIconWidth(double dragIconWidth) {
+	public void setDragIconWidth(Double dragIconWidth) {
 		this.dragIconWidth = dragIconWidth;
 	}
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	public double getFontSize() {
+	public Double getFontSize() {
 		return fontSize;
 	}
-	public void setFontSize(double fontSize) {
+	public void setFontSize(Double fontSize) {
 		this.fontSize = fontSize;
 	}
 	public String getGraph() {
@@ -220,10 +220,10 @@ public class ChartScrollbarSettings {
 	public void setGraph(String graph) {
 		this.graph = graph;
 	}
-	public double getGraphFillAlpha() {
+	public Double getGraphFillAlpha() {
 		return graphFillAlpha;
 	}
-	public void setGraphFillAlpha(double graphFillAlpha) {
+	public void setGraphFillAlpha(Double graphFillAlpha) {
 		this.graphFillAlpha = graphFillAlpha;
 	}
 	public Color getGraphFillColor() {
@@ -232,10 +232,10 @@ public class ChartScrollbarSettings {
 	public void setGraphFillColor(Color graphFillColor) {
 		this.graphFillColor = graphFillColor;
 	}
-	public double getGraphLineAlpha() {
+	public Double getGraphLineAlpha() {
 		return graphLineAlpha;
 	}
-	public void setGraphLineAlpha(double graphLineAlpha) {
+	public void setGraphLineAlpha(Double graphLineAlpha) {
 		this.graphLineAlpha = graphLineAlpha;
 	}
 	public Color getGraphLineColor() {
@@ -250,10 +250,10 @@ public class ChartScrollbarSettings {
 	public void setGraphType(GraphType graphType) {
 		this.graphType = graphType;
 	}
-	public double getGridAlpha() {
+	public Double getGridAlpha() {
 		return gridAlpha;
 	}
-	public void setGridAlpha(double gridAlpha) {
+	public void setGridAlpha(Double gridAlpha) {
 		this.gridAlpha = gridAlpha;
 	}
 	public Color getGridColor() {
@@ -262,28 +262,28 @@ public class ChartScrollbarSettings {
 	public void setGridColor(Color gridColor) {
 		this.gridColor = gridColor;
 	}
-	public double getGridCount() {
+	public Double getGridCount() {
 		return gridCount;
 	}
-	public void setGridCount(double gridCount) {
+	public void setGridCount(Double gridCount) {
 		this.gridCount = gridCount;
 	}
-	public double getHeight() {
+	public Double getHeight() {
 		return height;
 	}
-	public void setHeight(double height) {
+	public void setHeight(Double height) {
 		this.height = height;
 	}
-	public boolean isHideResizeGrips() {
+	public Boolean isHideResizeGrips() {
 		return hideResizeGrips;
 	}
-	public void setHideResizeGrips(boolean hideResizeGrips) {
+	public void setHideResizeGrips(Boolean hideResizeGrips) {
 		this.hideResizeGrips = hideResizeGrips;
 	}
-	public boolean isMarkPeriodChange() {
+	public Boolean isMarkPeriodChange() {
 		return markPeriodChange;
 	}
-	public void setMarkPeriodChange(boolean markPeriodChange) {
+	public void setMarkPeriodChange(Boolean markPeriodChange) {
 		this.markPeriodChange = markPeriodChange;
 	}
 	public PositionVertical getPosition() {
@@ -292,16 +292,16 @@ public class ChartScrollbarSettings {
 	public void setPosition(PositionVertical position) {
 		this.position = position;
 	}
-	public double getScrollDuration() {
+	public Double getScrollDuration() {
 		return scrollDuration;
 	}
-	public void setScrollDuration(double scrollDuration) {
+	public void setScrollDuration(Double scrollDuration) {
 		this.scrollDuration = scrollDuration;
 	}
-	public double getSelectedBackgroundAlpha() {
+	public Double getSelectedBackgroundAlpha() {
 		return selectedBackgroundAlpha;
 	}
-	public void setSelectedBackgroundAlpha(double selectedBackgroundAlpha) {
+	public void setSelectedBackgroundAlpha(Double selectedBackgroundAlpha) {
 		this.selectedBackgroundAlpha = selectedBackgroundAlpha;
 	}
 	public Color getSelectedBackgroundColor() {
@@ -310,10 +310,10 @@ public class ChartScrollbarSettings {
 	public void setSelectedBackgroundColor(Color selectedBackgroundColor) {
 		this.selectedBackgroundColor = selectedBackgroundColor;
 	}
-	public double getSelectedGraphFillAlpha() {
+	public Double getSelectedGraphFillAlpha() {
 		return selectedGraphFillAlpha;
 	}
-	public void setSelectedGraphFillAlpha(double selectedGraphFillAlpha) {
+	public void setSelectedGraphFillAlpha(Double selectedGraphFillAlpha) {
 		this.selectedGraphFillAlpha = selectedGraphFillAlpha;
 	}
 	public Color getSelectedGraphFillColor() {
@@ -322,10 +322,10 @@ public class ChartScrollbarSettings {
 	public void setSelectedGraphFillColor(Color selectedGraphFillColor) {
 		this.selectedGraphFillColor = selectedGraphFillColor;
 	}
-	public double getSelectedGraphLineAlpha() {
+	public Double getSelectedGraphLineAlpha() {
 		return selectedGraphLineAlpha;
 	}
-	public void setSelectedGraphLineAlpha(double selectedGraphLineAlpha) {
+	public void setSelectedGraphLineAlpha(Double selectedGraphLineAlpha) {
 		this.selectedGraphLineAlpha = selectedGraphLineAlpha;
 	}
 	public Color getSelectedGraphLineColor() {
@@ -334,10 +334,10 @@ public class ChartScrollbarSettings {
 	public void setSelectedGraphLineColor(Color selectedGraphLineColor) {
 		this.selectedGraphLineColor = selectedGraphLineColor;
 	}
-	public boolean isUpdateOnReleaseOnly() {
+	public Boolean isUpdateOnReleaseOnly() {
 		return updateOnReleaseOnly;
 	}
-	public void setUpdateOnReleaseOnly(boolean updateOnReleaseOnly) {
+	public void setUpdateOnReleaseOnly(Boolean updateOnReleaseOnly) {
 		this.updateOnReleaseOnly = updateOnReleaseOnly;
 	}
 	public PeriodEnum getUsePeriod() {

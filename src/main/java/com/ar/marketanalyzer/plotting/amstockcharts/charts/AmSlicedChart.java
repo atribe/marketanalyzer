@@ -15,7 +15,7 @@ public class AmSlicedChart extends AmChart{
 	* Opacity of all slices.
 	* Default Value: 1
 	*/
-	protected double alpha;
+	protected Double alpha;
 	/**
 	* Name of the field in chart's dataProvider which holds slice's alpha.
 	* Default Value: 
@@ -30,7 +30,7 @@ public class AmSlicedChart extends AmChart{
 	* Lightness increase of each subsequent slice. This is only useful if baseColor is set. Use negative values for darker colors. Value range is from -255 to 255.
 	* Default Value: 30
 	*/
-	protected double brightnessStep;
+	protected Double brightnessStep;
 	/**
 	* Read-only. Array of Slice objects.
 	* Default Value: 
@@ -60,7 +60,7 @@ public class AmSlicedChart extends AmChart{
 	* Opacity of the group slice. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double groupedAlpha;
+	protected Double groupedAlpha;
 	/**
 	* Color of the group slice. The default value is not set - this means the next available color from colors array will be used.
 	* Default Value: 
@@ -75,7 +75,7 @@ public class AmSlicedChart extends AmChart{
 	* If this is set to true, the group slice will be pulled out when the chart loads.
 	* Default Value: FALSE
 	*/
-	protected boolean groupedPulled;
+	protected Boolean groupedPulled;
 	/**
 	* Title of the group slice.
 	* Default Value: Other
@@ -85,17 +85,17 @@ public class AmSlicedChart extends AmChart{
 	* If there is more than one slice whose percentage of the pie is less than this number, those slices will be grouped together into one slice. This is the other slice. It will always be the last slice in a pie.
 	* Default Value: 0
 	*/
-	protected double groupPercent;
+	protected Double groupPercent;
 	/**
 	* Slices with percent less then hideLabelsPercent won't display labels This is useful to avoid cluttering up the chart, if you have a lot of small slices. 0 means all labels will be shown.
 	* Default Value: 0
 	*/
-	protected double hideLabelsPercent;
+	protected Double hideLabelsPercent;
 	/**
 	* Opacity of a hovered slice. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	protected double hoverAlpha;
+	protected Double hoverAlpha;
 	/**
 	* You can use it to format data labels in any way you want. Chart will call this method and will pass Slice object and formatted text as attributes. This function should return string which will be displayed as label.
 	* Default Value: 
@@ -105,12 +105,12 @@ public class AmSlicedChart extends AmChart{
 	* Specifies whether data labels are visible.
 	* Default Value: TRUE
 	*/
-	protected boolean labelsEnabled;
+	protected Boolean labelsEnabled;
 	/**
 	* Label tick opacity. Value range is 0 - 1.
 	* Default Value: 0.2
 	*/
-	protected double labelTickAlpha;
+	protected Double labelTickAlpha;
 	/**
 	* Label tick color.
 	* Default Value: #000000
@@ -120,32 +120,32 @@ public class AmSlicedChart extends AmChart{
 	* Bottom margin of the chart.
 	* Default Value: 10
 	*/
-	protected double marginBottom;
+	protected Double marginBottom;
 	/**
 	* Left margin of the chart.
 	* Default Value: 0
 	*/
-	protected double marginLeft;
+	protected Double marginLeft;
 	/**
 	* Right margin of the chart.
 	* Default Value: 0
 	*/
-	protected double marginRight;
+	protected Double marginRight;
 	/**
 	* Top margin of the chart.
 	* Default Value: 10
 	*/
-	protected double marginTop;
+	protected Double marginTop;
 	/**
 	* If width of the label is bigger than maxLabelWidth, it will be wrapped.
 	* Default Value: 200
 	*/
-	protected double maxLabelWidth;
+	protected Double maxLabelWidth;
 	/**
 	* Outline opacity. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	protected double outlineAlpha;
+	protected Double outlineAlpha;
 	/**
 	* Outline color.
 	* Default Value: #FFFFFF
@@ -155,14 +155,14 @@ public class AmSlicedChart extends AmChart{
 	* Pie outline thickness.
 	* Default Value: 1
 	*/
-	protected double outlineThickness;
+	protected Double outlineThickness;
 	/**
 	* Field name in your data provider which holds pattern information. Value of pattern should be object with url, width, height of an image, optionally it might have x, y, randomX and randomY values. For example: {url:../amcharts/patterns/black/pattern1.png, width:4, height:4}. Check amcharts/patterns folder for some patterns. You can create your own patterns and use them. Note, x, y, randomX and randomY properties won't work with IE8 and older. 3D bar/Pie charts won't work properly with patterns.
 	* Default Value: 
 	*/
 	protected String patternField;
 	/**
-	* Name of the field in chart's dataProvider which holds a boolean value telling the chart whether this slice must be pulled or not.
+	* Name of the field in chart's dataProvider which holds a Boolean value telling the chart whether this slice must be pulled or not.
 	* Default Value: 
 	*/
 	protected String pulledField;
@@ -170,7 +170,7 @@ public class AmSlicedChart extends AmChart{
 	* Pull out duration, in seconds.
 	* Default Value: 1
 	*/
-	protected double pullOutDuration;
+	protected Double pullOutDuration;
 	/**
 	* Pull out effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: bounce
@@ -180,22 +180,22 @@ public class AmSlicedChart extends AmChart{
 	* If this is set to true, only one slice can be pulled out at a time. If the viewer clicks on a slice, any other pulled-out slice will be pulled in.
 	* Default Value: FALSE
 	*/
-	protected boolean pullOutOnlyOne;
+	protected Boolean pullOutOnlyOne;
 	/**
 	* Specifies whether the animation should be sequenced or all slices should appear at once.
 	* Default Value: TRUE
 	*/
-	protected boolean sequencedAnimation;
+	protected Boolean sequencedAnimation;
 	/**
 	* Initial opacity of all slices. Slices will fade in from startAlpha.
 	* Default Value: 0
 	*/
-	protected double startAlpha;
+	protected Double startAlpha;
 	/**
 	* Duration of the animation, in seconds.
 	* Default Value: 1
 	*/
-	protected double startDuration;
+	protected Double startDuration;
 	/**
 	* Animation effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: bounce
@@ -222,15 +222,15 @@ public class AmSlicedChart extends AmChart{
 	*/
 	protected String valueField;
 	/**
-	* Name of the field in chart's dataProvider which holds boolean variable defining whether this data item should have an entry in the legend.
+	* Name of the field in chart's dataProvider which holds Boolean variable defining whether this data item should have an entry in the legend.
 	* Default Value: 
 	*/
 	protected String visibleInLegendField;
 	
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
 	public String getAlphaField() {
@@ -245,10 +245,10 @@ public class AmSlicedChart extends AmChart{
 	public void setBaseColor(Color baseColor) {
 		this.baseColor = baseColor;
 	}
-	public double getBrightnessStep() {
+	public Double getBrightnessStep() {
 		return brightnessStep;
 	}
-	public void setBrightnessStep(double brightnessStep) {
+	public void setBrightnessStep(Double brightnessStep) {
 		this.brightnessStep = brightnessStep;
 	}
 	public List<Slice> getChartData() {
@@ -281,10 +281,10 @@ public class AmSlicedChart extends AmChart{
 	public void setGradientRatio(List<Double> gradientRatio) {
 		this.gradientRatio = gradientRatio;
 	}
-	public double getGroupedAlpha() {
+	public Double getGroupedAlpha() {
 		return groupedAlpha;
 	}
-	public void setGroupedAlpha(double groupedAlpha) {
+	public void setGroupedAlpha(Double groupedAlpha) {
 		this.groupedAlpha = groupedAlpha;
 	}
 	public Color getGroupedColor() {
@@ -299,10 +299,10 @@ public class AmSlicedChart extends AmChart{
 	public void setGroupedDescription(String groupedDescription) {
 		this.groupedDescription = groupedDescription;
 	}
-	public boolean isGroupedPulled() {
+	public Boolean isGroupedPulled() {
 		return groupedPulled;
 	}
-	public void setGroupedPulled(boolean groupedPulled) {
+	public void setGroupedPulled(Boolean groupedPulled) {
 		this.groupedPulled = groupedPulled;
 	}
 	public String getGroupedTitle() {
@@ -311,22 +311,22 @@ public class AmSlicedChart extends AmChart{
 	public void setGroupedTitle(String groupedTitle) {
 		this.groupedTitle = groupedTitle;
 	}
-	public double getGroupPercent() {
+	public Double getGroupPercent() {
 		return groupPercent;
 	}
-	public void setGroupPercent(double groupPercent) {
+	public void setGroupPercent(Double groupPercent) {
 		this.groupPercent = groupPercent;
 	}
-	public double getHideLabelsPercent() {
+	public Double getHideLabelsPercent() {
 		return hideLabelsPercent;
 	}
-	public void setHideLabelsPercent(double hideLabelsPercent) {
+	public void setHideLabelsPercent(Double hideLabelsPercent) {
 		this.hideLabelsPercent = hideLabelsPercent;
 	}
-	public double getHoverAlpha() {
+	public Double getHoverAlpha() {
 		return hoverAlpha;
 	}
-	public void setHoverAlpha(double hoverAlpha) {
+	public void setHoverAlpha(Double hoverAlpha) {
 		this.hoverAlpha = hoverAlpha;
 	}
 	public String getLabelFunction() {
@@ -335,16 +335,16 @@ public class AmSlicedChart extends AmChart{
 	public void setLabelFunction(String labelFunction) {
 		this.labelFunction = labelFunction;
 	}
-	public boolean isLabelsEnabled() {
+	public Boolean isLabelsEnabled() {
 		return labelsEnabled;
 	}
-	public void setLabelsEnabled(boolean labelsEnabled) {
+	public void setLabelsEnabled(Boolean labelsEnabled) {
 		this.labelsEnabled = labelsEnabled;
 	}
-	public double getLabelTickAlpha() {
+	public Double getLabelTickAlpha() {
 		return labelTickAlpha;
 	}
-	public void setLabelTickAlpha(double labelTickAlpha) {
+	public void setLabelTickAlpha(Double labelTickAlpha) {
 		this.labelTickAlpha = labelTickAlpha;
 	}
 	public Color getLabelTickColor() {
@@ -353,40 +353,40 @@ public class AmSlicedChart extends AmChart{
 	public void setLabelTickColor(Color labelTickColor) {
 		this.labelTickColor = labelTickColor;
 	}
-	public double getMarginBottom() {
+	public Double getMarginBottom() {
 		return marginBottom;
 	}
-	public void setMarginBottom(double marginBottom) {
+	public void setMarginBottom(Double marginBottom) {
 		this.marginBottom = marginBottom;
 	}
-	public double getMarginLeft() {
+	public Double getMarginLeft() {
 		return marginLeft;
 	}
-	public void setMarginLeft(double marginLeft) {
+	public void setMarginLeft(Double marginLeft) {
 		this.marginLeft = marginLeft;
 	}
-	public double getMarginRight() {
+	public Double getMarginRight() {
 		return marginRight;
 	}
-	public void setMarginRight(double marginRight) {
+	public void setMarginRight(Double marginRight) {
 		this.marginRight = marginRight;
 	}
-	public double getMarginTop() {
+	public Double getMarginTop() {
 		return marginTop;
 	}
-	public void setMarginTop(double marginTop) {
+	public void setMarginTop(Double marginTop) {
 		this.marginTop = marginTop;
 	}
-	public double getMaxLabelWidth() {
+	public Double getMaxLabelWidth() {
 		return maxLabelWidth;
 	}
-	public void setMaxLabelWidth(double maxLabelWidth) {
+	public void setMaxLabelWidth(Double maxLabelWidth) {
 		this.maxLabelWidth = maxLabelWidth;
 	}
-	public double getOutlineAlpha() {
+	public Double getOutlineAlpha() {
 		return outlineAlpha;
 	}
-	public void setOutlineAlpha(double outlineAlpha) {
+	public void setOutlineAlpha(Double outlineAlpha) {
 		this.outlineAlpha = outlineAlpha;
 	}
 	public Color getOutlineColor() {
@@ -395,10 +395,10 @@ public class AmSlicedChart extends AmChart{
 	public void setOutlineColor(Color outlineColor) {
 		this.outlineColor = outlineColor;
 	}
-	public double getOutlineThickness() {
+	public Double getOutlineThickness() {
 		return outlineThickness;
 	}
-	public void setOutlineThickness(double outlineThickness) {
+	public void setOutlineThickness(Double outlineThickness) {
 		this.outlineThickness = outlineThickness;
 	}
 	public String getPatternField() {
@@ -413,10 +413,10 @@ public class AmSlicedChart extends AmChart{
 	public void setPulledField(String pulledField) {
 		this.pulledField = pulledField;
 	}
-	public double getPullOutDuration() {
+	public Double getPullOutDuration() {
 		return pullOutDuration;
 	}
-	public void setPullOutDuration(double pullOutDuration) {
+	public void setPullOutDuration(Double pullOutDuration) {
 		this.pullOutDuration = pullOutDuration;
 	}
 	public StartEffect getPullOutEffect() {
@@ -425,28 +425,28 @@ public class AmSlicedChart extends AmChart{
 	public void setPullOutEffect(StartEffect pullOutEffect) {
 		this.pullOutEffect = pullOutEffect;
 	}
-	public boolean isPullOutOnlyOne() {
+	public Boolean isPullOutOnlyOne() {
 		return pullOutOnlyOne;
 	}
-	public void setPullOutOnlyOne(boolean pullOutOnlyOne) {
+	public void setPullOutOnlyOne(Boolean pullOutOnlyOne) {
 		this.pullOutOnlyOne = pullOutOnlyOne;
 	}
-	public boolean isSequencedAnimation() {
+	public Boolean isSequencedAnimation() {
 		return sequencedAnimation;
 	}
-	public void setSequencedAnimation(boolean sequencedAnimation) {
+	public void setSequencedAnimation(Boolean sequencedAnimation) {
 		this.sequencedAnimation = sequencedAnimation;
 	}
-	public double getStartAlpha() {
+	public Double getStartAlpha() {
 		return startAlpha;
 	}
-	public void setStartAlpha(double startAlpha) {
+	public void setStartAlpha(Double startAlpha) {
 		this.startAlpha = startAlpha;
 	}
-	public double getStartDuration() {
+	public Double getStartDuration() {
 		return startDuration;
 	}
-	public void setStartDuration(double startDuration) {
+	public void setStartDuration(Double startDuration) {
 		this.startDuration = startDuration;
 	}
 	public StartEffect getStartEffect() {

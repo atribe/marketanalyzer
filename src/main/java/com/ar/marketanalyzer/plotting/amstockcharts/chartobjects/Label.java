@@ -16,12 +16,12 @@ public class Label {
 	* 
 	* Default Value: 1
 	*/
-	private double alpha;
+	private Double alpha;
 	/**
 	* Specifies if label is bold or not.
 	* Default Value: FALSE
 	*/
-	private boolean bold;
+	private Boolean bold;
 	/**
 	* Color of a label.
 	* Default Value: 
@@ -36,12 +36,12 @@ public class Label {
 	* Rotation angle.
 	* Default Value: 0
 	*/
-	private double rotation;
+	private Double rotation;
 	/**
 	* Text size.
 	* Default Value: 
 	*/
-	private double size;
+	private Double size;
 	/**
 	* Text of a label.
 	* Default Value: 
@@ -56,28 +56,28 @@ public class Label {
 	* X position of a label.
 	* Default Value: 
 	*/
-	private double x;
+	private Double x;
 	/**
 	* y position of a label.
 	* Default Value: 
 	*/
-	private double y;
+	private Double y;
 	public String getAlign() {
 		return align;
 	}
 	public void setAlign(String align) {
 		this.align = align;
 	}
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
-	public boolean isBold() {
+	public Boolean isBold() {
 		return bold;
 	}
-	public void setBold(boolean bold) {
+	public void setBold(Boolean bold) {
 		this.bold = bold;
 	}
 	public Color getColor() {
@@ -92,16 +92,16 @@ public class Label {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public double getRotation() {
+	public Double getRotation() {
 		return rotation;
 	}
-	public void setRotation(double rotation) {
+	public void setRotation(Double rotation) {
 		this.rotation = rotation;
 	}
-	public double getSize() {
+	public Double getSize() {
 		return size;
 	}
-	public void setSize(double size) {
+	public void setSize(Double size) {
 		this.size = size;
 	}
 	public String getText() {
@@ -116,16 +116,16 @@ public class Label {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public double getX() {
+	public Double getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(Double x) {
 		this.x = x;
 	}
-	public double getY() {
+	public Double getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(Double y) {
 		this.y = y;
 	}
 }

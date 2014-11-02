@@ -10,7 +10,7 @@ public class GaugeBand {
 	* Opacity of band fill. Will use axis.bandAlpha if not set any.
 	* Default Value: 
 	*/
-	private double alpha;
+	private Double alpha;
 	/**
 	* When rolled-over, band will display balloon if you set some text for this property.
 	* Default Value: 
@@ -25,7 +25,7 @@ public class GaugeBand {
 	* End value of a fill.
 	* Default Value: 
 	*/
-	private double endValue;
+	private Double endValue;
 	/**
 	* Unique id of a band.
 	* Default Value: 
@@ -35,12 +35,12 @@ public class GaugeBand {
 	* Inner radius of a band. If not set any, the band will end with the end of minor ticks. Set 0 if you want the band to be drawn to the axis center.
 	* Default Value: 
 	*/
-	private double innerRadius;
+	private Double innerRadius;
 	
-	public double getAlpha() {
+	public Double getAlpha() {
 		return alpha;
 	}
-	public void setAlpha(double alpha) {
+	public void setAlpha(Double alpha) {
 		this.alpha = alpha;
 	}
 	public String getBalloonText() {
@@ -55,10 +55,10 @@ public class GaugeBand {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public double getEndValue() {
+	public Double getEndValue() {
 		return endValue;
 	}
-	public void setEndValue(double endValue) {
+	public void setEndValue(Double endValue) {
 		this.endValue = endValue;
 	}
 	public String getId() {
@@ -67,33 +67,33 @@ public class GaugeBand {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public double getInnerRadius() {
+	public Double getInnerRadius() {
 		return innerRadius;
 	}
-	public void setInnerRadius(double innerRadius) {
+	public void setInnerRadius(Double innerRadius) {
 		this.innerRadius = innerRadius;
 	}
-	public double getRadius() {
+	public Double getRadius() {
 		return radius;
 	}
-	public void setRadius(double radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
-	public double getStartValue() {
+	public Double getStartValue() {
 		return startValue;
 	}
-	public void setStartValue(double startValue) {
+	public void setStartValue(Double startValue) {
 		this.startValue = startValue;
 	}
 	/**
 	* Band radius. If not set any, the band will start with the axis outline.
 	* Default Value: 
 	*/
-	private double radius;
+	private Double radius;
 	/**
 	* Start value of a fill.
 	* Default Value: 
 	*/
-	private double startValue;
+	private Double startValue;
 
 }

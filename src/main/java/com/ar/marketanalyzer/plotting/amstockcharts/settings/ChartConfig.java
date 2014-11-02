@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector;
-import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.charts.StockPanel;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
@@ -12,7 +11,10 @@ import com.ar.marketanalyzer.plotting.amstockcharts.enums.AmTheme;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class ChartConfig {
 
 	private ChartTypeAm type;
@@ -38,9 +40,7 @@ public class ChartConfig {
 		
 		chartScrollbarSettings = new ChartScrollbarSettings();
 		
-		StockPanel panelTest = panels.get(0);
-		StockGraph graphTest = (StockGraph)panelTest.getStockGraphs().get(0);
-		String graphId = graphTest.getId();
+		String graphId = panels.get(0).getStockGraphs().get(0).getId();
 		
 		chartScrollbarSettings.setGraph(graphId);
 		chartScrollbarSettings.setGraphType(GraphType.LINE);

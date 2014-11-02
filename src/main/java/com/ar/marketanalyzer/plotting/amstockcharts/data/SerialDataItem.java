@@ -25,12 +25,12 @@ public class SerialDataItem {
 	* Time stamp of a series date. Avalable only if parseDates property of CategoryAxis is set to true.
 	* Default Value: 
 	*/
-	private double time;
+	private Double time;
 	/**
 	* Coordinate (horizontal or vertical, depends on chart's rotate property) of the series.
 	* Default Value: 
 	*/
-	private double x;
+	private Double x;
 
 	public Object getAxes() {
 		return axes;
@@ -50,16 +50,16 @@ public class SerialDataItem {
 	public void setDataContext(Object dataContext) {
 		this.dataContext = dataContext;
 	}
-	public double getTime() {
+	public Double getTime() {
 		return time;
 	}
-	public void setTime(double time) {
+	public void setTime(Double time) {
 		this.time = time;
 	}
-	public double getX() {
+	public Double getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(Double x) {
 		this.x = x;
 	}
 }
