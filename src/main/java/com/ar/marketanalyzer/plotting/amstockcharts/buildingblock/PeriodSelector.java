@@ -1,8 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.buildingblock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Period;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -66,6 +68,24 @@ public class PeriodSelector {
 	* Default Value: 180
 	*/
 	private double width;
+	
+	/*
+	 * Constructors
+	 */
+	public PeriodSelector() {
+		position = Position.BOTTOM;
+		
+		periods = new ArrayList<Period>();
+		periods.add( new Period(PeriodEnum.DD, 10, "10 days") );
+		periods.add( new Period(PeriodEnum.MM, true, 1, "1 month") );
+		periods.add( new Period(PeriodEnum.YYYY, 1, "1 year") );
+		periods.add( new Period(PeriodEnum.YTD, "YTD") );
+		periods.add( new Period(PeriodEnum.MAX, "MAX") );
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public String getDateFormat() {
 		return dateFormat;
 	}

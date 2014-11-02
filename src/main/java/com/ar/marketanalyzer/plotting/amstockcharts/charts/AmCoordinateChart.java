@@ -17,57 +17,58 @@ public class AmCoordinateChart extends AmChart{
 	* Read-only. Array, holding processed chart's data.
 	* Default Value: 
 	*/
-	private List<Object> chartData;
+	protected List<Object> chartData;
 	/**
 	* Text color.
 	* Default Value: #000000
 	*/
-	private List<Color> colors;
+	protected List<Color> colors;
 	/**
 	* The array of graphs belonging to this chart.
 	* Default Value: 
 	*/
-	private List<AmGraph> graphs;
+	protected List<AmGraph> graphs;
 	/**
 	* Specifies if grid should be drawn above the graphs or below. Will not work properly with 3D charts.
 	* Default Value: FALSE
 	*/
-	private boolean gridAboveGraphs;
+	protected boolean gridAboveGraphs;
 	/**
 	* Instead of adding guides to the axes, you can push all of them to this array. In case guide has category or date defined, it will automatically will be assigned to the category axis. Otherwise to first value axis, unless you specify a different valueAxis for the guide.
 	* Default Value: []
 	*/
-	private List<Guide> guides;
+	protected List<Guide> guides;
 	/**
 	* Specifies whether the animation should be sequenced or all objects should appear at once.
 	* Default Value: TRUE
 	*/
-	private boolean sequencedAnimation;
+	protected boolean sequencedAnimation;
 	/**
 	* The initial opacity of the column/line. If you set startDuration to a value higher than 0, the columns/lines will fade in from startAlpha. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	private double startAlpha;
+	protected double startAlpha;
 	/**
 	* Duration of the animation, in seconds.
 	* Default Value: 0
 	*/
-	private double startDuration;
+	protected double startDuration;
 	/**
 	* Animation effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: elastic
 	*/
-	private StartEffect startEffect;
+	protected StartEffect startEffect;
 	/**
 	* Target of url.
 	* Default Value: _self
 	*/
-	private String urlTarget;
+	protected String urlTarget;
 	/**
 	* The array of value axes. Chart creates one value axis automatically, so if you need only one value axis, you don't need to create it.
 	* Default Value: ValueAxis
 	*/
-	private List<ValueAxis> valueAxes;
+	protected List<ValueAxis> valueAxes;
+	
 	public List<Object> getChartData() {
 		return chartData;
 	}

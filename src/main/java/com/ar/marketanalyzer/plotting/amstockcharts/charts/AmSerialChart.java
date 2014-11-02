@@ -13,93 +13,105 @@ public class AmSerialChart extends AmRectangularChart{
 	* Date format of the graph balloon (if chart parses dates and you don't use chartCursor).
 	* Default Value: MMM DD, YYYY
 	*/
-	private String balloonDateFormat;
+	protected String balloonDateFormat;
 	/**
 	* Read-only. Chart creates category axis itself. If you want to change some properties, you should get this axis from the chart and set properties to this object.
 	* Default Value: CategoryAxis
 	*/
-	private CategoryAxis categoryAxis;
+	protected CategoryAxis categoryAxis;
 	/**
 	* Category field name tells the chart the name of the field in your dataProvider object which will be used for category axis values.
 	* Default Value: 
 	*/
-	private String categoryField;
+	protected String categoryField;
 	/**
 	* The gap in pixels between two columns of the same category.
 	* Default Value: 5
 	*/
-	private double columnSpacing;
+	protected double columnSpacing;
 	/**
 	* Space between 3D stacked columns.
 	* Default Value: 0
 	*/
-	private double columnSpacing3D;
+	protected double columnSpacing3D;
 	/**
 	* Relative width of columns. Value range is 0 - 1.
 	* Default Value: 0.8
 	*/
-	private double columnWidth;
+	protected double columnWidth;
 	/**
 	* Even if your chart parses dates, you can pass them as strings in your data – all you need to do is to set data date format and the chart will parse dates to date objects. Check this page for available formats.
 	* Please note that two-digit years (YY) is NOT supported in this setting.
 	* Default Value: 
 	*/
-	private String dataDateFormat;
+	protected String dataDateFormat;
 	/**
 	* Read-only. If category axis parses dates endDate indicates date to which the chart is currently displayed.
 	* Default Value: 
 	*/
-	private Date endDate;
+	protected Date endDate;
 	/**
 	* Read-only. Category index to which the chart is currently displayed.
 	* Default Value: 
 	*/
-	private double endIndex;
+	protected double endIndex;
 	/**
 	* Maximum number of series allowed to select.
 	* Default Value: 
 	*/
-	private double maxSelectedSeries;
+	protected double maxSelectedSeries;
 	/**
 	* The longest time span allowed to select (in milliseconds) for example, 259200000 will limit selection to 3 days. Works if equalSpacing is set to false (default).
 	* Default Value: 
 	*/
-	private double maxSelectedTime;
+	protected double maxSelectedTime;
 	/**
 	* The shortest time span allowed to select (in milliseconds) for example, 1000 will limit selection to 1 second. Works if equalSpacing is set to false (default).
 	* Default Value: 0
 	*/
-	private double minSelectedTime;
+	protected double minSelectedTime;
 	/**
 	* Specifies if scrolling of a chart with mouse wheel is enabled. If you press shift while rotating mouse wheel, the chart will zoom-in/out.
 	* Default Value: FALSE
 	*/
-	private boolean mouseWheelScrollEnabled;
+	protected boolean mouseWheelScrollEnabled;
 	/**
 	* Specifies if zooming of a chart with mouse wheel is enabled. If you press shift while rotating mouse wheel, the chart will scroll.
 	* Default Value: FALSE
 	*/
-	private boolean mouseWheelZoomEnabled;
+	protected boolean mouseWheelZoomEnabled;
 	/**
 	* If you set this to true, the chart will be rotated by 90 degrees (the columns will become bars).
 	* Default Value: FALSE
 	*/
-	private boolean rotate;
+	protected boolean rotate;
 	/**
 	* Read-only. If category axis parses dates startDate indicates date from which the chart is currently displayed.
 	* Default Value: 
 	*/
-	private Date startDate;
+	protected Date startDate;
 	/**
 	* Read-only. Category index from which the chart is currently displayed.
 	* Default Value: 
 	*/
-	private double startIndex;
+	protected double startIndex;
 	/**
 	* Specifies if chart should zoom-out when data is updated.
 	* Default Value: TRUE
 	*/
-	private boolean zoomOutOnDataUpdate;
+	protected boolean zoomOutOnDataUpdate;
+	
+	/*
+	 * Constructors
+	 */
+	public AmSerialChart() {
+		super();
+	}
+	
+	
+	/*
+	 * Getters and Setters
+	 */
 	public String getBalloonDateFormat() {
 		return balloonDateFormat;
 	}

@@ -1,8 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.charts;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.CategoryAxis;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.Label;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
@@ -106,6 +108,31 @@ public class StockPanel extends AmSerialChart{
 	* Default Value: 2
 	*/
 	private double trendLineThickness;
+	
+	/*
+	 * Constructors
+	 */
+	public StockPanel() {
+		title = "Value";
+		showCategoryAxis = false;
+		percentHeight = 70;
+		
+		valueAxes = new ArrayList<ValueAxis>();
+		valueAxes.add( new ValueAxis("v1"));
+		
+		categoryAxis = new CategoryAxis();
+		
+		stockGraphs = new ArrayList<StockGraph>();
+		StockGraph g1 = new StockGraph();
+		stockGraphs.add(g1);
+		
+		stockLegend = new StockLegend();
+	}
+	
+	
+	/*
+	 * Getters and Setters
+	 */
 	public List<Label> getAllLabels() {
 		return allLabels;
 	}

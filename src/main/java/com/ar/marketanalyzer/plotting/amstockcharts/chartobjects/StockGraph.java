@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.BulletType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.CompareGraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodValue;
@@ -125,6 +126,45 @@ public class StockGraph extends AmGraph{
 	* Default Value: TRUE
 	*/
 	private boolean useDataSetColors;
+	
+	/*
+	 * Constructors
+	 */
+	public StockGraph() {
+	
+	}
+	public StockGraph(ChartTypeAm type, String id) {
+		this.type = type;
+		this.id = id;
+		
+		this.openField = "open";
+		this.closeField = "close";
+		this.highField = "high";
+		this.lowField = "low";
+		this.valueField = "close";
+		
+		Color slateBlue = new Color("7F8DA9");
+		this.lineColor = slateBlue;
+		this.fillColors = slateBlue;
+		
+		Color slateRed = new Color("DB4C3C");
+		this.negativeLineColor = slateRed;
+		this.negativeFillColors = slateRed;
+		
+		this.fillAlphas = 1;
+		
+		this.useDataSetColors = false;
+		this.comparable = true;
+		this.compareField = "value";
+		
+		this.showBalloon = false;
+		
+		this.proCandlesticks = true;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public boolean isComparable() {
 		return comparable;
 	}

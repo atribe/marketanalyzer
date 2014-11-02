@@ -172,7 +172,15 @@ public class ValueAxis extends AxisBase{
 	* Default Value: FALSE
 	*/
 	private boolean useScientificNotation;
+	public ValueAxis() { 
+		dashLength = 5;
+	}
+	
+	public ValueAxis(String id) {
+		this();
 
+		this.id = id;
+	}
 	public double getAxisTitleOffset() {
 		return axisTitleOffset;
 	}

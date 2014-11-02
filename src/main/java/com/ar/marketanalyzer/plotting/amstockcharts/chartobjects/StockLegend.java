@@ -35,6 +35,17 @@ public class StockLegend extends AmLegend{
 	*/
 	private String valueTextRegular;
 	
+	/*
+	 * Constructors
+	 */
+	public StockLegend() {
+		valueTextRegular = "undefined";
+		periodValueTextComparing = "[[percents.value.close]]%";
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public String getPeriodValueTextComparing() {
 		return periodValueTextComparing;
 	}

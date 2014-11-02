@@ -16,122 +16,122 @@ public class AmRectangularChart extends AmCoordinateChart {
 	* The angle of the 3D part of plot area. This creates a 3D effect (if the ""depth3D"" is > 0).
 	* Default Value: 0
 	*/
-	private double angle;
+	protected double angle;
 	/**
 	* Space left from axis labels/title to the chart's outside border, if autoMargins set to true.
 	* Default Value: 10
 	*/
-	private double autoMarginOffset;
+	protected double autoMarginOffset;
 	/**
 	* Specifies if margins of a chart should be calculated automatically so that labels of axes would fit. The chart will adjust only margins with axes. Other margins will use values set with marginRight, marginTop, marginLeft and marginBottom properties.
 	* Default Value: TRUE
 	*/
-	private boolean autoMargins;
+	protected boolean autoMargins;
 	/**
 	* Cursor of a chart.
 	* Default Value: 
 	*/
-	private ChartCursor chartCursor;
+	protected ChartCursor chartCursor;
 	/**
 	* Chart's scrollbar.
 	* Default Value: 
 	*/
-	private ChartScrollbar chartScrollbar;
+	protected ChartScrollbar chartScrollbar;
 	/**
 	* The depth of the 3D part of plot area. This creates a 3D effect (if the ""angle"" is > 0).
 	* Default Value: 0
 	*/
-	private double depth3D;
+	protected double depth3D;
 	/**
 	* Number of pixels between the container's bottom border and plot area. This space can be used for bottom axis' values. If autoMargin is true and bottom side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	private double marginBottom;
+	protected double marginBottom;
 	/**
 	* Number of pixels between the container's left border and plot area. This space can be used for left axis' values. If autoMargin is true and left side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	private double marginLeft;
+	protected double marginLeft;
 	/**
 	* Number of pixels between the container's right border and plot area. This space can be used for Right axis' values. If autoMargin is true and right side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	private double marginRight;
+	protected double marginRight;
 	/**
 	* Flag which should be set to false if you need margins to be recalculated on next chart.validateNow() call.
 	* Default Value: FALSE
 	*/
-	private boolean marginsUpdated;
+	protected boolean marginsUpdated;
 	/**
 	* Number of pixels between the container's top border and plot area. This space can be used for top axis' values. If autoMargin is true and top side has axis, this property is ignored.
 	* Default Value: 20
 	*/
-	private double marginTop;
+	protected double marginTop;
 	/**
 	* The opacity of plot area's border. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	private double plotAreaBorderAlpha;
+	protected double plotAreaBorderAlpha;
 	/**
 	* The color of the plot area's border. Note, the it is invisible by default, as plotAreaBorderAlpha default value is 0. Set it to a value higher than 0 to make it visible.
 	* Default Value: #000000
 	*/
-	private Color plotAreaBorderColor;
+	protected Color plotAreaBorderColor;
 	/**
 	* Opacity of plot area. Plural form is used to keep the same property names as our Flex charts'. Flex charts can accept array of numbers to generate gradients. Although you can set array here, only first value of this array will be used.
 	* Default Value: 0
 	*/
-	private double plotAreaFillAlphas;
+	protected double plotAreaFillAlphas;
 	/**
 	* You can set both one color if you need a solid color or array of colors to generate gradients, for example: [""#000000"", ""#0000CC""]
 	* Default Value: #FFFFFF
 	*/
-	private Color plotAreaFillColors;
+	protected Color plotAreaFillColors;
 	/**
 	* If you are using gradients to fill the plot area, you can use this property to set gradient angle. The only allowed values are horizontal and vertical: 0, 90, 180, 270.
 	* Default Value: 0
 	*/
-	private double plotAreaGradientAngle;
+	protected double plotAreaGradientAngle;
 	/**
 	* Array of trend lines added to a chart. You can add trend lines to a chart using this array or access already existing trend lines
 	* Default Value: 
 	*/
-	private List<TrendLine> trendLines;
+	protected List<TrendLine> trendLines;
 	/**
 	* Opacity of zoom-out button background.
 	* Default Value: 0
 	*/
-	private double zoomOutButtonAlpha;
+	protected double zoomOutButtonAlpha;
 	/**
 	* Zoom-out button background color.
 	* Default Value: #e5e5e5
 	*/
-	private Color zoomOutButtonColor;
+	protected Color zoomOutButtonColor;
 	/**
 	* Name of zoom-out button image. In the images folder there is another lens image, called lensWhite.png. You might want to have white lens when background is dark. Or you can simply use your own image.
 	* Default Value: lens.png
 	*/
-	private String zoomOutButtonImage;
+	protected String zoomOutButtonImage;
 	/**
 	* Size of zoom-out button image
 	* Default Value: 17
 	*/
-	private double zoomOutButtonImageSize;
+	protected double zoomOutButtonImageSize;
 	/**
 	* Padding around the text and image.
 	* Default Value: 8
 	*/
-	private double zoomOutButtonPadding;
+	protected double zoomOutButtonPadding;
 	/**
 	* Opacity of zoom-out button background when mouse is over it.
 	* Default Value: 1
 	*/
-	private double zoomOutButtonRollOverAlpha;
+	protected double zoomOutButtonRollOverAlpha;
 	/**
 	* Text in the zoom-out button.
 	* Default Value: Show all
 	*/
-	private String zoomOutText;
+	protected String zoomOutText;
 	
 	public double getAngle() {
 		return angle;

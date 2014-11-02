@@ -100,6 +100,17 @@ public class ChartCursorSettings {
 	* Default Value: 
 	*/
 	private boolean zoomable;
+	
+	/*
+	 * Constructors 
+	 */
+	public ChartCursorSettings() {
+		
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public String getBalloonPointerOrientation() {
 		return balloonPointerOrientation;
 	}

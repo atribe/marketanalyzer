@@ -15,217 +15,218 @@ public class AmSlicedChart extends AmChart{
 	* Opacity of all slices.
 	* Default Value: 1
 	*/
-	private double alpha;
+	protected double alpha;
 	/**
 	* Name of the field in chart's dataProvider which holds slice's alpha.
 	* Default Value: 
 	*/
-	private String alphaField;
+	protected String alphaField;
 	/**
 	* Color of the first slice. All the other will be colored with darker or brighter colors.
 	* Default Value: 
 	*/
-	private Color baseColor;
+	protected Color baseColor;
 	/**
 	* Lightness increase of each subsequent slice. This is only useful if baseColor is set. Use negative values for darker colors. Value range is from -255 to 255.
 	* Default Value: 30
 	*/
-	private double brightnessStep;
+	protected double brightnessStep;
 	/**
 	* Read-only. Array of Slice objects.
 	* Default Value: 
 	*/
-	private List<Slice> chartData;
+	protected List<Slice> chartData;
 	/**
 	* Name of the field in chart's dataProvider which holds slice's color.
 	* Default Value: 
 	*/
-	private String colorField;
+	protected String colorField;
 	/**
 	* Specifies the colors of the slices, if the slice color is not set. If there are more slices than colors in this array, the chart picks random color.
 	* Default Value: [#FF0F00, #FF6600, #FF9E01, #FCD202, #F8FF01, #B0DE09, #04D215, #0D8ECF, #0D52D1, #2A0CD0, #8A0CCF, #CD0D74, #754DEB, #DDDDDD, #999999, #333333, #000000, #57032A, #CA9726, #990000, #4B0C25]
 	*/
-	private List<Color> colors;
+	protected List<Color> colors;
 	/**
 	* Name of the field in chart's dataProvider which holds a string with description.
 	* Default Value: 
 	*/
-	private String descriptionField;
+	protected String descriptionField;
 	/**
 	* Example: [0,10]. Will make slices to be filled with color gradients.
 	* Default Value: []
 	*/
-	private List<Double> gradientRatio;
+	protected List<Double> gradientRatio;
 	/**
 	* Opacity of the group slice. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	private double groupedAlpha;
+	protected double groupedAlpha;
 	/**
 	* Color of the group slice. The default value is not set - this means the next available color from colors array will be used.
 	* Default Value: 
 	*/
-	private Color groupedColor;
+	protected Color groupedColor;
 	/**
 	* Description of the group slice.
 	* Default Value: 
 	*/
-	private String groupedDescription;
+	protected String groupedDescription;
 	/**
 	* If this is set to true, the group slice will be pulled out when the chart loads.
 	* Default Value: FALSE
 	*/
-	private boolean groupedPulled;
+	protected boolean groupedPulled;
 	/**
 	* Title of the group slice.
 	* Default Value: Other
 	*/
-	private String groupedTitle;
+	protected String groupedTitle;
 	/**
 	* If there is more than one slice whose percentage of the pie is less than this number, those slices will be grouped together into one slice. This is the other slice. It will always be the last slice in a pie.
 	* Default Value: 0
 	*/
-	private double groupPercent;
+	protected double groupPercent;
 	/**
 	* Slices with percent less then hideLabelsPercent won't display labels This is useful to avoid cluttering up the chart, if you have a lot of small slices. 0 means all labels will be shown.
 	* Default Value: 0
 	*/
-	private double hideLabelsPercent;
+	protected double hideLabelsPercent;
 	/**
 	* Opacity of a hovered slice. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	private double hoverAlpha;
+	protected double hoverAlpha;
 	/**
 	* You can use it to format data labels in any way you want. Chart will call this method and will pass Slice object and formatted text as attributes. This function should return string which will be displayed as label.
 	* Default Value: 
 	*/
-	private String labelFunction;
+	protected String labelFunction;
 	/**
 	* Specifies whether data labels are visible.
 	* Default Value: TRUE
 	*/
-	private boolean labelsEnabled;
+	protected boolean labelsEnabled;
 	/**
 	* Label tick opacity. Value range is 0 - 1.
 	* Default Value: 0.2
 	*/
-	private double labelTickAlpha;
+	protected double labelTickAlpha;
 	/**
 	* Label tick color.
 	* Default Value: #000000
 	*/
-	private Color labelTickColor;
+	protected Color labelTickColor;
 	/**
 	* Bottom margin of the chart.
 	* Default Value: 10
 	*/
-	private double marginBottom;
+	protected double marginBottom;
 	/**
 	* Left margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginLeft;
+	protected double marginLeft;
 	/**
 	* Right margin of the chart.
 	* Default Value: 0
 	*/
-	private double marginRight;
+	protected double marginRight;
 	/**
 	* Top margin of the chart.
 	* Default Value: 10
 	*/
-	private double marginTop;
+	protected double marginTop;
 	/**
 	* If width of the label is bigger than maxLabelWidth, it will be wrapped.
 	* Default Value: 200
 	*/
-	private double maxLabelWidth;
+	protected double maxLabelWidth;
 	/**
 	* Outline opacity. Value range is 0 - 1.
 	* Default Value: 0
 	*/
-	private double outlineAlpha;
+	protected double outlineAlpha;
 	/**
 	* Outline color.
 	* Default Value: #FFFFFF
 	*/
-	private Color outlineColor;
+	protected Color outlineColor;
 	/**
 	* Pie outline thickness.
 	* Default Value: 1
 	*/
-	private double outlineThickness;
+	protected double outlineThickness;
 	/**
 	* Field name in your data provider which holds pattern information. Value of pattern should be object with url, width, height of an image, optionally it might have x, y, randomX and randomY values. For example: {url:../amcharts/patterns/black/pattern1.png, width:4, height:4}. Check amcharts/patterns folder for some patterns. You can create your own patterns and use them. Note, x, y, randomX and randomY properties won't work with IE8 and older. 3D bar/Pie charts won't work properly with patterns.
 	* Default Value: 
 	*/
-	private String patternField;
+	protected String patternField;
 	/**
 	* Name of the field in chart's dataProvider which holds a boolean value telling the chart whether this slice must be pulled or not.
 	* Default Value: 
 	*/
-	private String pulledField;
+	protected String pulledField;
 	/**
 	* Pull out duration, in seconds.
 	* Default Value: 1
 	*/
-	private double pullOutDuration;
+	protected double pullOutDuration;
 	/**
 	* Pull out effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: bounce
 	*/
-	private StartEffect pullOutEffect;
+	protected StartEffect pullOutEffect;
 	/**
 	* If this is set to true, only one slice can be pulled out at a time. If the viewer clicks on a slice, any other pulled-out slice will be pulled in.
 	* Default Value: FALSE
 	*/
-	private boolean pullOutOnlyOne;
+	protected boolean pullOutOnlyOne;
 	/**
 	* Specifies whether the animation should be sequenced or all slices should appear at once.
 	* Default Value: TRUE
 	*/
-	private boolean sequencedAnimation;
+	protected boolean sequencedAnimation;
 	/**
 	* Initial opacity of all slices. Slices will fade in from startAlpha.
 	* Default Value: 0
 	*/
-	private double startAlpha;
+	protected double startAlpha;
 	/**
 	* Duration of the animation, in seconds.
 	* Default Value: 1
 	*/
-	private double startDuration;
+	protected double startDuration;
 	/**
 	* Animation effect. Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: bounce
 	*/
-	private StartEffect startEffect;
+	protected StartEffect startEffect;
 	/**
 	* Name of the field in chart's dataProvider which holds slice's title.
 	* Default Value: 
 	*/
-	private String titleField;
+	protected String titleField;
 	/**
 	* Name of the field in chart's dataProvider which holds url which would be accessed if the user clicks on a slice.
 	* Default Value: 
 	*/
-	private String urlField;
+	protected String urlField;
 	/**
 	* If url is specified for a slice, it will be opened when user clicks on it. urlTarget specifies target of this url. Use _blank if you want url to be opened in a new window.
 	* Default Value: _self
 	*/
-	private String urlTarget;
+	protected String urlTarget;
 	/**
 	* Name of the field in chart's dataProvider which holds slice's value.
 	* Default Value: 
 	*/
-	private String valueField;
+	protected String valueField;
 	/**
 	* Name of the field in chart's dataProvider which holds boolean variable defining whether this data item should have an entry in the legend.
 	* Default Value: 
 	*/
-	private String visibleInLegendField;
+	protected String visibleInLegendField;
+	
 	public double getAlpha() {
 		return alpha;
 	}

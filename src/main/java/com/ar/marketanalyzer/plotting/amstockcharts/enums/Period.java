@@ -1,24 +1,50 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
-public enum Period {
-	fff("fff"),
-	ss("ss"),
-	mm("mm"),
-	hh("hh"),
-	DD("DD"),
-	WW("WW"),
-	MM("MM"),
-	YYYY("YYYY");
+public class Period {
+
+	private PeriodEnum period;
+	private Boolean selected;
+	private Integer count;
+	private String label;
 	
-	private final String period;
-	
-	Period(String period) {
+	public Period() {
+		
+	}
+	public Period(PeriodEnum period, String label) {
+		this(period, null, label); 
+	}
+	public Period(PeriodEnum period, Integer count, String label) {
+		this(period, null, count, label);
+	}
+	public Period(PeriodEnum period, Boolean selected, Integer count, String label) {
 		this.period = period;
+		this.selected = selected;
+		this.count = count;
+		this.label = label;
 	}
 	
-	@Override
-	public String toString() {
+	public PeriodEnum getPeriod() {
 		return period;
 	}
-	
+	public void setPeriod(PeriodEnum period) {
+		this.period = period;
+	}
+	public Boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(Boolean selected) {
+		this.selected = selected;
+	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
 }

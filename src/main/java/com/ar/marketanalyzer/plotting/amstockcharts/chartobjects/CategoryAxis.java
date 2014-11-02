@@ -3,7 +3,7 @@ package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.DateFormat;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.Period;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -100,7 +100,7 @@ public class CategoryAxis extends AxisBase{
 	* It's also possible to supply a number for increments, i.e. 15mm which will instruct the chart that your data is supplied in 15 minute increments.
 	* Default Value: DD
 	*/
-	private Period minPeriod;
+	private PeriodEnum minPeriod;
 	/**
 	* In case your category axis values are Date objects, set this to true. In this case the chart will parse dates and will place your data points at irregular intervals. If you want dates to be parsed, but data points to be placed at equal intervals, set both parseDates and equalSpacing to true.
 	* Default Value: FALSE
@@ -127,6 +127,16 @@ public class CategoryAxis extends AxisBase{
 	*/
 	private boolean twoLineMode;
 	
+	/*
+	 * Constructors
+	 */
+	public CategoryAxis() {
+		dashLength = 5;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public double getAutoRotateAngle() {
 		return autoRotateAngle;
 	}
@@ -217,10 +227,10 @@ public class CategoryAxis extends AxisBase{
 	public void setMarkPeriodChange(boolean markPeriodChange) {
 		this.markPeriodChange = markPeriodChange;
 	}
-	public Period getMinPeriod() {
+	public PeriodEnum getMinPeriod() {
 		return minPeriod;
 	}
-	public void setMinPeriod(Period minPeriod) {
+	public void setMinPeriod(PeriodEnum minPeriod) {
 		this.minPeriod = minPeriod;
 	}
 	public boolean isParseDates() {

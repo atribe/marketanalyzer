@@ -13,177 +13,177 @@ public class AxisBase {
 	* Specifies whether number of gridCount is specified automatically, acoarding to the axis size.
 	* Default Value: TRUE
 	*/
-	private boolean autoGridCount;
+	protected boolean autoGridCount;
 	/**
 	* Axis opacity. Value range is 0 - 1.
 	* Default Value: 1
 	*/
-	private double axisAlpha;
+	protected double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: #000000
 	*/
-	private Color axisColor;
+	protected Color axisColor;
 	/**
 	* Thickness of the axis.
 	* Default Value: 1
 	*/
-	private double axisThickness;
+	protected double axisThickness;
 	/**
 	* Read-only. Returns x coordinate of the axis.
 	* Default Value: 
 	*/
-	private double axisX;
+	protected double axisX;
 	/**
 	* Read-only. Returns y coordinate of the axis.
 	* Default Value: 
 	*/
-	private double axisY;
+	protected double axisY;
 	/**
 	* Specifies if axis labels should be bold or not.
 	* Default Value: FALSE
 	*/
-	private boolean boldLabels;
+	protected boolean boldLabels;
 	/**
 	* Color of axis value labels. Will use chart's color if not set.
 	* Default Value: 
 	*/
-	private Color color;
+	protected Color color;
 	/**
 	* Length of a dash. 0 means line is not dashed.
 	* Default Value: 0
 	*/
-	private double dashLength;
+	protected double dashLength;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: 0
 	*/
-	private double fillAlpha;
+	protected double fillAlpha;
 	/**
 	* Fill color. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: #FFFFFF
 	*/
-	private Color fillColor;
+	protected Color fillColor;
 	/**
 	* Size of value labels text. Will use chart's fontSize if not set.
 	* Default Value: 
 	*/
-	private double fontSize;
+	protected double fontSize;
 	/**
 	* Opacity of grid lines.
 	* Default Value: 0.15
 	*/
-	private double gridAlpha;
+	protected double gridAlpha;
 	/**
 	* Color of grid lines.
 	* Default Value: #000000
 	*/
-	private Color gridColor;
+	protected Color gridColor;
 	/**
 	* Number of grid lines. In case this is value axis, or your categoryAxis parses dates, the number is approximate. The default value is 5. If you set autoGridCount to true, this property is ignored.
 	* Default Value: 5
 	*/
-	private double gridCount;
+	protected double gridCount;
 	/**
 	* Thickness of grid lines.
 	* Default Value: 1
 	*/
-	private double gridThickness;
+	protected double gridThickness;
 	/**
 	* The array of guides belonging to this axis.
 	* Default Value: []
 	*/
-	private List<Guide> guides;
+	protected List<Guide> guides;
 	/**
 	* If autoMargins of a chart is set to true, but you want this axis not to be measured when calculating margin, set ignoreAxisWidth to true.
 	* Default Value: FALSE
 	*/
-	private boolean ignoreAxisWidth;
+	protected boolean ignoreAxisWidth;
 	/**
 	* Specifies whether values should be placed inside or outside plot area.
 	* Default Value: FALSE
 	*/
-	private boolean inside;
+	protected boolean inside;
 	/**
 	* Frequency at which labels should be placed. Doesn't work for CategoryAxis if parseDates is set to true.
 	* Default Value: 1
 	*/
-	private double labelFrequency;
+	protected double labelFrequency;
 	/**
 	* You can use it to adjust position of axes labels. Works both withCategoryAxis and ValueAxis.
 	* Default Value: 0
 	*/
-	private double labelOffset;
+	protected double labelOffset;
 	/**
 	* Rotation angle of a label. Only horizontal axis' values can be rotated. If you set this for vertical axis, the setting will be ignored. Possible values from -90 to 90.
 	* Default Value: 0
 	*/
-	private double labelRotation;
+	protected double labelRotation;
 	/**
 	* Specifies whether axis displays category axis' labels and value axis' values.
 	* Default Value: TRUE
 	*/
-	private boolean labelsEnabled;
+	protected boolean labelsEnabled;
 	/**
 	* This property is used when calculating grid count (when autoGridCount is true). It specifies minimum cell width required for one span between grid lines.
 	* Default Value: 75
 	*/
-	private double minHorizontalGap;
+	protected double minHorizontalGap;
 	/**
 	* Opacity of minor grid. In order minor to be visible, you should set minorGridEnabled to true.
 	* Default Value: 0.07
 	*/
-	private double minorGridAlpha;
+	protected double minorGridAlpha;
 	/**
 	* Specifies if minor grid should be displayed.
 	* Default Value: FALSE
 	*/
-	private boolean minorGridEnabled;
+	protected boolean minorGridEnabled;
 	/**
 	* This property is used when calculating grid count (when autoGridCount is true). It specifies minimum cell height required for one span between grid lines.
 	* Default Value: 35
 	*/
-	private double minVerticalGap;
+	protected double minVerticalGap;
 	/**
 	* The distance of the axis to the plot area, in pixels. Negative values can also be used.
 	* Default Value: 0
 	*/
-	private double offset;
+	protected double offset;
 	/**
 	* Whether to show first axis label or not. This works properly only on ValueAxis. WithCategoryAxis it wont work 100%, it depends on the period, zooming, etc. There is no guaranteed way to force category axis to show or hide first label.
 	* Default Value: TRUE
 	*/
-	private boolean showFirstLabel;
+	protected boolean showFirstLabel;
 	/**
 	* Whether to show last axis label or not. This works properly only on ValueAxis. WithCategoryAxis it wont work 100%, it depends on the period, zooming, etc. There is no guaranteed way to force category axis to show or hide last label.
 	* Default Value: TRUE
 	*/
-	private boolean showLastLabel;
+	protected boolean showLastLabel;
 	/**
 	* Length of the tick marks.
 	* Default Value: 5
 	*/
-	private double tickLength;
+	protected double tickLength;
 	/**
 	* Title of the axis.
 	* Default Value: 
 	*/
-	private String title;
+	protected String title;
 	/**
 	* Specifies if title should be bold or not.
 	* Default Value: TRUE
 	*/
-	private boolean titleBold;
+	protected boolean titleBold;
 	/**
 	* Color of axis title. Will use text color of chart if not set any.
 	* Default Value: 
 	*/
-	private Color titleColor;
+	protected Color titleColor;
 	/**
 	* Font size of axis title. Will use font size of chart plus two pixels if not set any.
 	* Default Value: 
 	*/
-	private double titleFontSize;
+	protected double titleFontSize;
 	/**
 	* Axis opacity. Value range is 0 - 1.
 	* Default Value: 1

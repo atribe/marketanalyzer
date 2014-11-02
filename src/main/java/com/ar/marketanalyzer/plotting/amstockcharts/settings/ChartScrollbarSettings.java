@@ -1,8 +1,8 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.settings;
 
-import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PositionVertical;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -51,9 +51,10 @@ public class ChartScrollbarSettings {
 	private double fontSize;
 	/**
 	* Specifies which graph will be displayed in the scrollbar.
+	* This is the graph ID.
 	* Default Value: 
 	*/
-	private AmGraph graph;
+	private String graph;
 	/**
 	* Graph fill opacity.
 	* Default Value: 
@@ -155,10 +156,16 @@ public class ChartScrollbarSettings {
 	*/
 	private boolean updateOnReleaseOnly;
 	/**
-	* This is very important feature for those, who work with large data sets. You can tell ChartScrollbarwhat period it should use for it's graph and save a lot of time for rendering of this graph. For example, if your minPeriod is DD (days), set usePeriod = WW (weeks) and you will have 7 times less data points in scrollbar's graph. Note, the period you specify here should be set inCategoryAxesSettings.groupToPeriods.
+	* This is very important feature for those, who work with large data sets. 
+	* You can tell ChartScrollbarwhat period it should use for it's graph and save
+	* a lot of time for rendering of this graph. For example, if your minPeriod
+	* is DD (days), set usePeriod = WW (weeks) and you will have 7 times less data
+	* points in scrollbar's graph. Note, the period you specify here should be set
+	* inCategoryAxesSettings.groupToPeriods.
 	* Default Value: 
 	*/
-	private String usePeriod;
+	private PeriodEnum usePeriod;
+	
 	public boolean isAutoGridCount() {
 		return autoGridCount;
 	}
@@ -207,10 +214,10 @@ public class ChartScrollbarSettings {
 	public void setFontSize(double fontSize) {
 		this.fontSize = fontSize;
 	}
-	public AmGraph getGraph() {
+	public String getGraph() {
 		return graph;
 	}
-	public void setGraph(AmGraph graph) {
+	public void setGraph(String graph) {
 		this.graph = graph;
 	}
 	public double getGraphFillAlpha() {
@@ -333,10 +340,10 @@ public class ChartScrollbarSettings {
 	public void setUpdateOnReleaseOnly(boolean updateOnReleaseOnly) {
 		this.updateOnReleaseOnly = updateOnReleaseOnly;
 	}
-	public String getUsePeriod() {
+	public PeriodEnum getUsePeriod() {
 		return usePeriod;
 	}
-	public void setUsePeriod(String usePeriod) {
+	public void setUsePeriod(PeriodEnum usePeriod) {
 		this.usePeriod = usePeriod;
 	}
 

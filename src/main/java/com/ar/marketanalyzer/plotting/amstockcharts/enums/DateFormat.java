@@ -2,21 +2,21 @@ package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 
 public class DateFormat {
-	private Period period;
+	private PeriodEnum period;
 	private String format;
 	
 	public DateFormat() {
 		
 	}
-	public DateFormat(Period period, String format) {
+	public DateFormat(PeriodEnum period, String format) {
 		this.period = period;
 		this.format = format;
 	}
 	
-	public Period getPeriod() {
+	public PeriodEnum getPeriod() {
 		return period;
 	}
-	public void setPeriod(Period period) {
+	public void setPeriod(PeriodEnum period) {
 		this.period = period;
 	}
 	public String getFormat() {
