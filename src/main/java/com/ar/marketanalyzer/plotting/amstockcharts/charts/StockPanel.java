@@ -9,6 +9,7 @@ import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.Label;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.RecalculateToPercents;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -77,7 +78,7 @@ public class StockPanel extends AmSerialChart{
 	* Array of stock graphs.
 	* Default Value: 
 	*/
-	private List<StockGraph> stockGraphs;
+	private List<StockGraph> stockGraphs = new ArrayList<StockGraph>();
 	/**
 	* Stock chart legend.
 	* Default Value: 
@@ -122,11 +123,13 @@ public class StockPanel extends AmSerialChart{
 		
 		categoryAxis = new CategoryAxis();
 		
-		stockGraphs = new ArrayList<StockGraph>();
-		StockGraph g1 = new StockGraph();
-		stockGraphs.add(g1);
-		
 		stockLegend = new StockLegend();
+	}
+	public StockPanel(ChartTypeAm type) {
+		this();
+		
+		StockGraph g1 = new StockGraph(type, "plot1");
+		stockGraphs.add(g1);
 	}
 	
 	

@@ -161,6 +161,13 @@ public class StockGraph extends AmGraph{
 		
 		this.proCandlesticks = true;
 	}
+	/*
+	 * Helper Functions
+	 */
+	@Override
+	public String toString() {
+		return id;
+	}
 	
 	/*
 	 * Getters and Setters

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.charts.StockPanel;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
@@ -32,11 +33,16 @@ public class ChartConfig {
 		theme = AmTheme.LIGHT;
 		this.pathToImages = "js/amcharts/images/";
 		
-		StockPanel p1 = new StockPanel();
+		StockPanel p1 = new StockPanel(type);
 		panels.add(p1);
 		
 		chartScrollbarSettings = new ChartScrollbarSettings();
-		chartScrollbarSettings.setGraph(p1.getGraphs().get(0).getId());
+		
+		StockPanel panelTest = panels.get(0);
+		StockGraph graphTest = (StockGraph)panelTest.getStockGraphs().get(0);
+		String graphId = graphTest.getId();
+		
+		chartScrollbarSettings.setGraph(graphId);
 		chartScrollbarSettings.setGraphType(GraphType.LINE);
 		chartScrollbarSettings.setUsePeriod(PeriodEnum.WW);
 		
