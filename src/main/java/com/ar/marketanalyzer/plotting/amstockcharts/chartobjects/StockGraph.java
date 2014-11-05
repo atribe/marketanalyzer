@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.BulletType;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.CompareGraphType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodValue;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -32,7 +32,7 @@ public class StockGraph extends AmGraph{
 	*/
 	private Color compareGraphBalloonColor;
 	/**
-	* If you set some function, the graph will call it and pass GraphDataItem and AmGraph object to it. This function should return a string which will be displayed in a balloon. This will be used for graphs from compared data sets only. Use balloonFunction for main data set's graphs.
+	* If you set some function, the graph will call it and passï¿½GraphDataItemï¿½andï¿½AmGraphï¿½object to it. This function should return a string which will be displayed in a balloon. This will be used for graphs from compared data sets only. Use balloonFunction for main data set's graphs.
 	* Default Value: 
 	*/
 	private String compareGraphBalloonFunction;
@@ -131,12 +131,25 @@ public class StockGraph extends AmGraph{
 	 * Constructors
 	 */
 	public StockGraph() {
-	
+		
 	}
-	public StockGraph(ChartTypeAm type, String id) {
-		this.type = type;
+	public StockGraph(GraphType graphType, String id) {
+		this();
+		
+		this.type = graphType;
 		this.id = id;
 		
+		
+	}
+	public StockGraph(GraphType graphType) {
+		this();
+		
+		this.type = graphType;
+	}
+	/*
+	 * Helper Functions
+	 */
+	public void setValueGraphSettings() {
 		this.openField = "open";
 		this.closeField = "close";
 		this.highField = "high";
@@ -161,9 +174,13 @@ public class StockGraph extends AmGraph{
 		
 		this.proCandlesticks = true;
 	}
-	/*
-	 * Helper Functions
-	 */
+	public void setVolumeGraphSettings() {
+		this.valueField = "volume";
+		this.showBalloon = false;
+		this.fillAlphas = 1.0;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return id;

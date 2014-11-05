@@ -66,6 +66,10 @@ public class ChartCursorSettings {
 	*/
 	private Boolean enabled;
 	/**
+	 * This is set in the multiple dataset example, but it is not referenced in the documentation.
+	 */
+	private Boolean fullWidth;
+	/**
 	* Size of a graph's bullet (if available) at the cursor position. If you don't want the bullet to change it's size, set this property to 1.
 	* Default Value: 1.7
 	*/
@@ -86,12 +90,12 @@ public class ChartCursorSettings {
 	*/
 	private Double valueLineAlpha;
 	/**
-	* Specifies if value balloon next to value axis labels should be displayed. If you have more than one axis, set valueLineAxis property ofChartCursor to indicate which axis should display the balloon.
+	* Specifies if value balloon next to value axis labels should be displayed. If you have more than one axis, set valueLineAxis property ofChartCursorï¿½to indicate which axis should display the balloon.
 	* Default Value: FALSE
 	*/
 	private Boolean valueLineBalloonEnabled;
 	/**
-	* Specifies if cursor of Serial chart should display horizontal (or vertical if chart is rotated) line. This line might help users to compare distant values of a chart. You can also enable value balloon on this line by setting valueLineAxis property of ChartCursor.
+	* Specifies if cursor of Serial chart should display horizontal (or vertical if chart is rotated) line. This line might help users to compare distant values of a chart. You can also enable value balloon on this line by setting valueLineAxis property ofï¿½ChartCursor.
 	* Default Value: FALSE
 	*/
 	private Boolean valueLineEnabled;
@@ -178,6 +182,20 @@ public class ChartCursorSettings {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+	/**
+	 * @return the fullWidth
+	 */
+	public Boolean getFullWidth() {
+		return fullWidth;
+	}
+
+	/**
+	 * @param fullWidth the fullWidth to set
+	 */
+	public void setFullWidth(Boolean fullWidth) {
+		this.fullWidth = fullWidth;
+	}
+
 	public Double getGraphBulletSize() {
 		return graphBulletSize;
 	}

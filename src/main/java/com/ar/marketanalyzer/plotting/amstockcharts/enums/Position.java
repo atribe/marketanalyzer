@@ -1,10 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum Position {
-	BOTTOM("bottom"),
-	LEFT("left"),
-	TOP("top"),
-	RIGHT("right");
+	bottom("bottom"),
+	left("left"),
+	top("top"),
+	right("right");
 	
 	private final String position;
 	

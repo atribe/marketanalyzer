@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum Alignment {
-	LEFT("left"),
-	CENTER("center"),
-	RIGHT("right");
+	left("left"),
+	center("center"),
+	right("right");
 	
 	private final String alignment;
 	

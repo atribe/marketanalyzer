@@ -1,6 +1,6 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
-import com.ar.marketanalyzer.plotting.amcharts.buildingblock.AmLegend;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.MarkerType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -39,8 +39,7 @@ public class StockLegend extends AmLegend{
 	 * Constructors
 	 */
 	public StockLegend() {
-		valueTextRegular = "undefined";
-		periodValueTextComparing = "[[percents.value.close]]%";
+		
 	}
 	
 	/*
@@ -73,6 +72,11 @@ public class StockLegend extends AmLegend{
 	*/
 	public void setValueTextRegular(String valueTextRegular) {
 		this.valueTextRegular = valueTextRegular;
+	}
+
+	public void setMarkerType(MarkerType none) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

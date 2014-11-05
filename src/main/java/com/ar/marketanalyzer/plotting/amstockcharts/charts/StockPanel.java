@@ -9,8 +9,8 @@ import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.Label;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.RecalculateToPercents;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class StockPanel extends AmSerialChart{
 
 	/**
-	* Array of Labels. Example of label object, with all possible properties:
+	* Array ofï¿½Labels. Example of label object, with all possible properties:
 	{x: 20, y: 20, text: this is label, align: left, size: 12, color: #CC0000, alpha: 1, rotation: 0, bold: true, url: http://www.amcharts.com}
 	* Default Value: []
 	*/
@@ -85,7 +85,7 @@ public class StockPanel extends AmSerialChart{
 	*/
 	private StockLegend stockLegend;
 	/**
-	* A title of a panel. Note,StockLegend should be added in order title to be displayed.
+	* A title of a panel. Note,StockLegendï¿½should be added in order title to be displayed.
 	* Default Value: 
 	*/
 	private String title;
@@ -114,21 +114,17 @@ public class StockPanel extends AmSerialChart{
 	 * Constructors
 	 */
 	public StockPanel() {
-		title = "Value";
-		showCategoryAxis = false;
-		percentHeight = 70.0;
 		
 		valueAxes = new ArrayList<ValueAxis>();
-		valueAxes.add( new ValueAxis("v1"));
 		
 		categoryAxis = new CategoryAxis();
 		
 		stockLegend = new StockLegend();
 	}
-	public StockPanel(ChartTypeAm type) {
+	public StockPanel(GraphType graphType) {
 		this();
 		
-		StockGraph g1 = new StockGraph(type, "plot1");
+		StockGraph g1 = new StockGraph(graphType, "plot1");
 		stockGraphs.add(g1);
 	}
 	

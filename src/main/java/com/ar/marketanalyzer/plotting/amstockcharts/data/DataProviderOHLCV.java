@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties({"symbol"})
 @JsonInclude(Include.NON_NULL)
 public class DataProviderOHLCV implements DataProviderInterface{
 
@@ -41,10 +43,10 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	/*
 	 * Helper Methods
 	 */
-	@Override
-	public String getTitle() {
-		return this.symbol;
-	}
+//	@Override
+//	public String getTitle() {
+//		return this.symbol;
+//	}
 	
 	public static List<DataProviderInterface> convertSecuritiesOhlcvToDataProviderOHLCV(List<SecuritiesOhlcv> ohlcvList) {
 		List<DataProviderInterface> dataProviderList = new ArrayList<DataProviderInterface>();

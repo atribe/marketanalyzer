@@ -2,6 +2,7 @@ package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -19,7 +20,7 @@ public class AmGraph {
 	*/
 	protected Color balloonColor;
 	/**
-	* If you set some function, the graph will call it and pass GraphDataItem and AmGraph object to it. This function should return a string which will be displayed in a balloon.
+	* If you set some function, the graph will call it and passï¿½GraphDataItemï¿½and AmGraph object to it. This function should return a string which will be displayed in a balloon.
 	* Default Value: 
 	*/
 	protected String balloonFunction;
@@ -149,7 +150,7 @@ public class AmGraph {
 	*/
 	protected Double dashLength;
 	/**
-	* Name of the dash length field in your dataProvider. This property adds a possibility to change graphs’ line from solid to dashed on any data point. You can also make columns border dashed using this setting.
+	* Name of the dash length field in your dataProvider. This property adds a possibility to change graphsï¿½ line from solid to dashed on any data point. You can also make columns border dashed using this setting.
 	* Default Value: 
 	*/
 	protected String dashLengthField;
@@ -174,12 +175,12 @@ public class AmGraph {
 	*/
 	protected Color fillColors;
 	/**
-	* Name of the fill colors field in your dataProvider. This property adds a possibility to change line graphs’ fill color on any data point to create highlighted sections of the graph. Works only with AmSerialChart.
+	* Name of the fill colors field in your dataProvider. This property adds a possibility to change line graphsï¿½ fill color on any data point to create highlighted sections of the graph. Works only withï¿½AmSerialChart.
 	* Default Value: 
 	*/
 	protected String fillColorsField;
 	/**
-	* XY chart only. If you set this property to id or reference of your X or Y axis, and the fillAlphas is > 0, the area between graph and axis will be filled with color, like in this demo.
+	* XY chart only. If you set this property to id or reference of your X or Y axis, and the fillAlphas is > 0, the area between graph and axis will be filled with color, like inï¿½this demo.
 	* Default Value: 
 	*/
 	protected ValueAxis fillToAxis;
@@ -235,7 +236,7 @@ public class AmGraph {
 	protected String labelAnchor;
 	/**
 	* Name of label color field in data provider.
-	* You can use it to format labels of data items in any way you want. Graph will call this function and pass reference to GraphDataItem and formatted text as attributes. This function should return string which will be displayed as label.
+	* You can use it to format labels of data items in any way you want. Graph will call this function and pass reference toï¿½GraphDataItemï¿½and formatted text as attributes. This function should return string which will be displayed as label.
 	* Default Value: 
 	*/
 	protected String labelColorField;
@@ -290,7 +291,7 @@ public class AmGraph {
 	*/
 	protected Color lineColor;
 	/**
-	* Name of the line color field in your dataProvider. This property adds a possibility to change graphs’ line color on any data point to create highlighted sections of the graph. Works only with AmSerialChart.
+	* Name of the line color field in your dataProvider. This property adds a possibility to change graphsï¿½ line color on any data point to create highlighted sections of the graph. Works only withï¿½AmSerialChart.
 	* Default Value: 
 	*/
 	protected String lineColorField;
@@ -453,7 +454,7 @@ public class AmGraph {
 	* Type of the graph. Possible values are: ""line"", ""column"", ""step"", ""smoothedLine"", ""candlestick"", ""ohlc"". XY and Radar charts can only display ""line"" type graphs.
 	* Default Value: line
 	*/
-	protected ChartTypeAm type;
+	protected GraphType type;
 	/**
 	* Name of the url field in your dataProvider.
 	* Default Value: 
@@ -465,12 +466,12 @@ public class AmGraph {
 	*/
 	protected String urlTarget;
 	/**
-	* If negativeLineColor and/or negativeFillColors are set and useNegativeColorIfDown is set to true (default is false), the line, step and column graphs will use these colors for lines, bullets or columns if previous value is bigger than current value. In case you set openField for the graph, the graph will compare current value with openField value instead of comparing to previous value. Here is a demo.
+	* If negativeLineColor and/or negativeFillColors are set and useNegativeColorIfDown is set to true (default is false), the line, step and column graphs will use these colors for lines, bullets or columns if previous value is bigger than current value. In case you set openField for the graph, the graph will compare current value with openField value instead of comparing to previous value.ï¿½Here is a demo.
 	* Default Value: FALSE
 	*/
 	protected Boolean useNegativeColorIfDown;
 	/**
-	* Specifies which value axis the graph will use. Will use the first value axis if not set. You can use reference to the real ValueAxis object or set value axis id.
+	* Specifies which value axis the graph will use. Will use the first value axis if not set. You can use reference to the realï¿½ValueAxisï¿½object or set value axis id.
 	* Default Value: ValueAxis
 	*/
 	protected ValueAxis valueAxis;
@@ -1043,10 +1044,10 @@ public class AmGraph {
 	public void setTopRadius(Double topRadius) {
 		this.topRadius = topRadius;
 	}
-	public ChartTypeAm getType() {
+	public GraphType getType() {
 		return type;
 	}
-	public void setType(ChartTypeAm type) {
+	public void setType(GraphType type) {
 		this.type = type;
 	}
 	public String getUrlField() {

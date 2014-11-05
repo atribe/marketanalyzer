@@ -1,11 +1,11 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum AmTheme {
-	NONE("none"),
-	PATTERNS("patterns"),
-	CHALK("chalk"),
-	DARK("dark"),
-	LIGHT("light");
+	home("none"),
+	patterns("patterns"),
+	chalk("chalk"),
+	dark("dark"),
+	light("light");
 	
 	private final String amTheme;
 	

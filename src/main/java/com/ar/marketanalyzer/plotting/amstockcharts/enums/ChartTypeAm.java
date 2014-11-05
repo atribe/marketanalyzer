@@ -1,14 +1,14 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum ChartTypeAm {
-	SERIAL("serial"),
-	PIE("pie"),
-	XY("xy"),
-	RADAR("radar"),
-	FUNNEL("funnel"),
-	GAUGE("gauge"),
-	MAP("map"),
-	STOCK("stock");
+	serial("serial"),
+	pie("pie"),
+	xy("xy"),
+	radar("radar"),
+	funnel("funnel"),
+	gauge("gauge"),
+	map("map"),
+	stock("stock");
 	
 	
 	private final String chartTypeAm;

@@ -40,7 +40,7 @@ public class DataSet implements Serializable{
 	*/
 	private List<DataProviderInterface> dataProvider;
 	/**
-	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for the StockGraph. Example: {fromField:""val1"", toField:""value""}.
+	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for theï¿½StockGraph. Example: {fromField:""val1"", toField:""value""}.
 	* Default Value: 
 	*/
 	private List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
@@ -55,7 +55,7 @@ public class DataSet implements Serializable{
 	*/
 	private Boolean showInSelect;
 	/**
-	* Array of StockEvent objects.
+	* Array ofï¿½StockEventï¿½objects.
 	* Default Value: 
 	*/
 	private List<StockEvent> stockEvents;
@@ -82,14 +82,14 @@ public class DataSet implements Serializable{
 	public DataSet(List<DataProviderInterface> dataProviderList) {
 		this();
 		
-		this.title = dataProviderList.get(0).getTitle();
+		this.title = ((DataProviderOHLCV)dataProviderList.get(0)).getSymbol();
 		
 		this.dataProvider = dataProviderList;
 	}
 	public DataSet(Color color, List<DataProviderInterface> dataProviderList) {
 		this();
 		
-		this.title = dataProviderList.get(0).getTitle();
+		this.title = ((DataProviderOHLCV)dataProviderList.get(0)).getSymbol();
 		this.color = color;
 		
 		this.dataProvider = dataProviderList;

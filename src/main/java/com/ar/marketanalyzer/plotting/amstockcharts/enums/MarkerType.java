@@ -1,16 +1,16 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum MarkerType {
-	SQUARE("square"),
-	CIRCLE("circle"),
-	DIAMOND("diamond"),
-	TRIANGLE_UP("triangleUp"),
-	TRIANGLE_DOWN("triangleDown"),
-	TRIANGLE_LEFT("triangleLeft"),
-	TRIANGLE_RIGHT("triangleRight"),
-	BUBBLE("bubble"),
-	LINE("line"),
-	NONE("none");
+	square("square"),
+	circle("circle"),
+	diamond("diamond"),
+	triangleUp("triangleUp"),
+	triangleDown("triangleDown"),
+	triangleLeft("triangleLeft"),
+	triangleRight("triangleRight"),
+	bubble("bubble"),
+	line("line"),
+	none("none");
 	
 	private final String markerType;
 	

@@ -1,10 +1,10 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum CompareGraphType {
-	LINE("line"),
-	COLUMN("column"),
-	STEP("step"),
-	SMOOTHEDLINE("smoothedLine");
+	line("line"),
+	column("column"),
+	step("step"),
+	smoothedline("smoothedLine");
 	
 	private final String graphType;
 	

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class PeriodSelector {
 
 	/**
-	* Date format of date input fields. Check this page for possible codes. Note, only numeric date formats are allowed, so don't use MMM or MMMM month format.
+	* Date format of date input fields. Checkï¿½this pageï¿½for possible codes. Note, only numeric date formats are allowed, so don't use MMM or MMMM month format.
 	Please note that two-digit years (YY) is NOT supported in this setting.
 	* Default Value: DD-MM-YYYY
 	*/
@@ -73,7 +73,7 @@ public class PeriodSelector {
 	 * Constructors
 	 */
 	public PeriodSelector() {
-		position = Position.BOTTOM;
+		position = Position.bottom;
 		
 		periods = new ArrayList<Period>();
 		periods.add( new Period(PeriodEnum.DD, 10, "10 days") );

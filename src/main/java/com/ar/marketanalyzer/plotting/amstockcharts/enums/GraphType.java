@@ -1,12 +1,12 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 public enum GraphType {
-	LINE("line"),
-	COLUMN("column"),
-	STEP("step"),
-	SMOOTHEDLINE("smoothedLine"),
-	CANDLESTICK("candlestick"),
-	OHLC("ohlc");
+	line("line"),
+	column("column"),
+	step("step"),
+	smoothedline("smoothedLine"),
+	candlestick("candlestick"),
+	ohlc("ohlc");
 	
 	private final String graphType;
 	
