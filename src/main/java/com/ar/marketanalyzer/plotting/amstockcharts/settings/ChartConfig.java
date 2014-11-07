@@ -28,16 +28,20 @@ public class ChartConfig {
 	* Default Value: 
 	*/
 	protected String pathToImages;
+	private String dataDateFormat = "YYYY-MM-DD";
 	private List<DataSet> dataSets = new ArrayList<DataSet>();
 	private List<StockPanel> panels = new ArrayList<StockPanel>();
 	private ChartScrollbarSettings chartScrollbarSettings;
 	private ChartCursorSettings chartCursorSettings;
 	private PeriodSelector periodSelector;
 	
+	
 	public ChartConfig() {
 		type = ChartTypeAm.stock;
 		theme = AmTheme.light;
 		this.pathToImages = "js/amcharts/images/";
+		
+		
 		
 		GraphType p1Type = GraphType.candlestick;
 		StockPanel p1 = new StockPanel(p1Type);
@@ -89,6 +93,18 @@ public class ChartConfig {
 		
 		this.dataSets.add(new DataSet(dataProviderList));
 	}
+	public String getPathToImages() {
+		return pathToImages;
+	}
+	public void setPathToImages(String pathToImages) {
+		this.pathToImages = pathToImages;
+	}
+	public String getDataDateFormat() {
+		return dataDateFormat;
+	}
+	public void setDataDateFormat(String dataDateFormat) {
+		this.dataDateFormat = dataDateFormat;
+	}
 	public ChartTypeAm getType() {
 		return type;
 	}
@@ -132,4 +148,5 @@ public class ChartConfig {
 	public void setPeriodSelector(PeriodSelector periodSelector) {
 		this.periodSelector = periodSelector;
 	}
+	
 }
