@@ -38,7 +38,7 @@ public class ChartConfig {
 	
 	public ChartConfig() {
 		type = ChartTypeAm.stock;
-		theme = AmTheme.light;
+		//theme = AmTheme.light;
 		this.pathToImages = "js/amcharts/images/";
 		
 		
