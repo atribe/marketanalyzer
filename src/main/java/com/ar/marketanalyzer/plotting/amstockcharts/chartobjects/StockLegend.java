@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class StockLegend extends AmLegend{
 
-	private static final long serialVersionUID = 4326841233558448131L;
+	//private static final long serialVersionUID = 4326841233558448131L;
 	
 	/*
 	 * http://docs.amcharts.com/3/javascriptstockchart/StockLegend
