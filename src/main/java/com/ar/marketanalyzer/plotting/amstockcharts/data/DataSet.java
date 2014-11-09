@@ -20,6 +20,16 @@ public class DataSet implements Serializable{
 	*/
 	
 	/**
+	* Data provider of the data set.
+	* Default Value: 
+	*/
+	private List<DataProviderInterface> dataProvider;
+	/**
+	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for the�StockGraph. Example: {fromField:""val1"", toField:""value""}.
+	* Default Value: 
+	*/
+	private List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
+	/**
 	* Category field name in your dataProvider.
 	* Default Value: 
 	*/
@@ -34,16 +44,6 @@ public class DataSet implements Serializable{
 	* Default Value: FALSE
 	*/
 	private Boolean compared;
-	/**
-	* Data provider of the data set.
-	* Default Value: 
-	*/
-	private List<DataProviderInterface> dataProvider;
-	/**
-	* Array of field mappings. Field mapping is an object with fromField and toField properties. fromField is a name of your value field in dataProvider. toField might be chosen freely, it will be used to set value/open/close/high/low fields for the�StockGraph. Example: {fromField:""val1"", toField:""value""}.
-	* Default Value: 
-	*/
-	private List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
 	/**
 	* Specifies whether this data set should be visible in ""compare to"" list.
 	* Default Value: TRUE
@@ -77,7 +77,7 @@ public class DataSet implements Serializable{
 		fieldMappings.add(new FieldMapping("high", "high"));
 		fieldMappings.add(new FieldMapping("low", "low"));
 		fieldMappings.add(new FieldMapping("volume", "volume"));
-		fieldMappings.add(new FieldMapping("value", "value"));
+		fieldMappings.add(new FieldMapping("close", "value"));
 	}
 	public DataSet(List<DataProviderInterface> dataProviderList) {
 		this();

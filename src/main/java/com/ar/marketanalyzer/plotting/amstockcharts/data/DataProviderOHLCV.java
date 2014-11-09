@@ -21,7 +21,7 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	private BigDecimal low;
 	private BigDecimal close;
 	private Long volume;
-	private BigDecimal value;
+	//private BigDecimal value;
 	
 	/*
 	 * Constructors
@@ -37,7 +37,7 @@ public class DataProviderOHLCV implements DataProviderInterface{
 		this.low = low;
 		this.close = close;
 		this.volume = volume;
-		this.value = close;
+		//this.value = close;
 	}
 	
 	/*
@@ -94,7 +94,7 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	}
 	public void setClose(BigDecimal close) {
 		this.close = close;
-		this.value = close;
+		//this.value = close;
 	}
 	public Long getVolume() {
 		return volume;
@@ -102,10 +102,12 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
+	/*
 	public BigDecimal getValue() {
 		return value;
 	}
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
+	*/
 }

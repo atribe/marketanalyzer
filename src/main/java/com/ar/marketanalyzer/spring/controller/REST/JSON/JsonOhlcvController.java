@@ -1,6 +1,5 @@
 package com.ar.marketanalyzer.spring.controller.REST.JSON;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,8 +17,8 @@ import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SymbolService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
+import com.ar.marketanalyzer.plotting.amstockcharts.charts.AmStockChart;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderOHLCV;
-import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartConfig;
 
 @RestController
 @RequestMapping("/json")
@@ -35,11 +34,11 @@ public class JsonOhlcvController {
 
 	@RequestMapping(value="amchart/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
-	public ChartConfig getamchartJSON(@PathVariable String symbol) {
+	public AmStockChart getamchartJSON(@PathVariable String symbol) {
 		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
 		
 		//ProCandlestickChart chart = new ProCandlestickChart();
-		ChartConfig chart = null;
+		AmStockChart chart = null;
 		
 		Symbol sym;
 		
@@ -48,14 +47,14 @@ public class JsonOhlcvController {
 			sym = symbolService.findBySymbol("^IXIC");
 			
 			//Looking up the desired range of OHLCV
-			LocalDate backToDate = new LocalDate(2014,1,1);
+			LocalDate backToDate = new LocalDate(2014,10,1);
 			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
 			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfter(sym, new java.sql.Date(backTo.getTime()));
 			
 			logger.debug("Newest Data Point: " + data.get(0));
 			logger.debug("Oldest Data Point: " + data.get(data.size()-1));
 			
-			chart = new ChartConfig(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(data));
+			chart = new AmStockChart(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(data));
 		} catch (SecuritiesNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

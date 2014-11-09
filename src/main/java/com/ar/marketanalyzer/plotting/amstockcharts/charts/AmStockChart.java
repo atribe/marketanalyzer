@@ -1,15 +1,23 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.charts;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.AmExport;
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.MarkerType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartScrollbarSettings;
@@ -186,6 +194,59 @@ public class AmStockChart {
 	public AmStockChart() {
 		type = ChartTypeAm.stock;
 		this.pathToImages = "js/amcharts/images/";
+		dataDateFormat = "YYYY-MM-DD";
+		
+		panels = new ArrayList<StockPanel>();
+		GraphType p1Type = GraphType.candlestick;
+		StockPanel p1 = new StockPanel(p1Type);
+		p1.setPercentHeight(70.0);
+		p1.setShowCategoryAxis(false);
+		p1.setTitle("Value");
+		p1.getValueAxes().add( new ValueAxis("v1"));
+		StockGraph g1 = new StockGraph(p1Type, "plot1");
+		g1.setValueGraphSettings();
+		p1.getStockGraphs().add( g1 );
+		p1.getStockLegend().setValueTextRegular("undefined");
+		p1.getStockLegend().setPeriodValueTextComparing("[[percents.value.close]]%");
+		panels.add(p1);
+		
+		GraphType p2Type = GraphType.column;
+		StockPanel p2 = new StockPanel(GraphType.column);
+		p2.setPercentHeight(30.0);
+		p2.setShowCategoryAxis(true);
+		p2.setMarginTop(1.0);
+		p2.setTitle("Volume");
+		p2.getValueAxes().add( new ValueAxis());
+		StockGraph g2 = new StockGraph(p2Type);
+		g2.setVolumeGraphSettings();
+		p2.getStockGraphs().add( g2 );
+		p2.getStockLegend().setPeriodValueTextComparing("[[value.close]]");
+		p2.getStockLegend().setMarkerSize(0.0);
+		p2.getStockLegend().setLabelText("");
+		p2.getStockLegend().setMarkerType(MarkerType.none);
+		panels.add(p2);
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+		
+		String graphId = panels.get(0).getStockGraphs().get(0).getId();
+		
+		chartScrollbarSettings.setGraph(graphId);
+		chartScrollbarSettings.setGraphType(GraphType.line);
+		chartScrollbarSettings.setUsePeriod(PeriodEnum.WW);
+		
+		chartCursorSettings = new ChartCursorSettings();
+		chartCursorSettings.setValueLineBalloonEnabled(true);
+		chartCursorSettings.setValueLineEnabled(true);
+		
+		
+		periodSelector = new PeriodSelector();
+		periodSelector.setPosition(Position.bottom);
+	}
+	public AmStockChart(List<DataProviderInterface> dataProviderList) {
+		this();
+		
+		dataSets = new ArrayList<DataSet>();
+		this.dataSets.add(new DataSet(dataProviderList));
 	}
 	
 	/*
