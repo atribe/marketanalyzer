@@ -8,6 +8,7 @@ import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
@@ -22,6 +23,27 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class AmStockChart {
 
+	/**
+	* Read-only. Type of the chart.
+	* Default Value: 
+	*/
+	private ChartTypeAm type;
+	/**
+	* Specifies path to the folder where images like resize grips, lens and similar are.
+	* Default Value: 
+	*/
+	private String pathToImages;
+	/**
+	* Data provider of data set can have dates as Date Objects or as Strings. In case you use strings, you need to set data date format and the chart will parse dates to date objects. Check this page for date formatting strings.
+	* Please note that two-digit years (YY) is NOT supported in this setting.
+	* Default Value: 
+	*/
+	private String dataDateFormat;
+	/**
+	* Array of DataSets.
+	* Default Value: 
+	*/
+	private List<DataSet> dataSets;
 	/**
 	* AmExport object.
 	* Default Value: 
@@ -67,17 +89,6 @@ public class AmStockChart {
 	* Default Value: 
 	*/
 	private List<DataSet> comparedDataSets;
-	/**
-	* Data provider of data set can have dates as Date Objects or as Strings. In case you use strings, you need to set data date format and the chart will parse dates to date objects. Check this page for date formatting strings.
-	* Please note that two-digit years (YY) is NOT supported in this setting.
-	* Default Value: 
-	*/
-	private String dataDateFormat;
-	/**
-	* Array of DataSets.
-	* Default Value: 
-	*/
-	private List<DataSet> dataSets;
 	/**
 	* DataSetSelector object. You can add it if you have more than one data set and want users to be able to select/compare them.
 	* Default Value: 
@@ -134,11 +145,6 @@ public class AmStockChart {
 	*/
 	private PanelsSettings panelsSettings;
 	/**
-	* Specifies path to the folder where images like resize grips, lens and similar are.
-	* Default Value: 
-	*/
-	private String pathToImages;
-	/**
 	* Period selector object. You can add it if you want user's to be able to enter date ranges or zoom chart with predefined period buttons.
 	* Default Value: 
 	*/
@@ -159,11 +165,6 @@ public class AmStockChart {
 	*/
 	private StockEventsSettings stockEventsSettings;
 	/**
-	* Read-only. Type of the chart.
-	* Default Value: 
-	*/
-	private String type;
-	/**
 	* Settings for value axes.
 	* Default Value: ValueAxesSettings
 	*/
@@ -183,7 +184,8 @@ public class AmStockChart {
 	 * Constructors
 	 */
 	public AmStockChart() {
-		
+		type = ChartTypeAm.stock;
+		this.pathToImages = "js/amcharts/images/";
 	}
 	
 	/*
@@ -352,10 +354,10 @@ public class AmStockChart {
 	public void setStockEventsSettings(StockEventsSettings stockEventsSettings) {
 		this.stockEventsSettings = stockEventsSettings;
 	}
-	public String getType() {
+	public ChartTypeAm getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(ChartTypeAm type) {
 		this.type = type;
 	}
 	public ValueAxesSettings getValueAxesSettings() {

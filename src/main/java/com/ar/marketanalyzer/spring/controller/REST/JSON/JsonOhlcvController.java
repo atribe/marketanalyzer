@@ -48,7 +48,7 @@ public class JsonOhlcvController {
 			sym = symbolService.findBySymbol("^IXIC");
 			
 			//Looking up the desired range of OHLCV
-			LocalDate backToDate = new LocalDate(2013,1,1);
+			LocalDate backToDate = new LocalDate(2014,1,1);
 			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
 			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfter(sym, new java.sql.Date(backTo.getTime()));
 			
