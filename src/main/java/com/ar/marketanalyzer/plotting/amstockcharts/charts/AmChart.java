@@ -189,10 +189,10 @@ public class AmChart {
 	 * Constructors
 	 */
 	public AmChart() {
-		this.pathToImages = "js/amcharts/images/";
+		//this.pathToImages = "js/amcharts/images/";
 	}
 	public AmChart(ChartTypeAm chartType, AmTheme theme) {
-		this.pathToImages = "js/amcharts/images/";
+		//this.pathToImages = "js/amcharts/images/";
 		
 		this.type = chartType;
 		this.theme = theme;

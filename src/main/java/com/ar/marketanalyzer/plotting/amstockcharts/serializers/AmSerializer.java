@@ -11,12 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class JacksonObjectToListSerializer extends JsonSerializer<Object>{
+public class AmSerializer extends JsonSerializer<Object> {
 
 	@Override
 	public void serialize(Object amObject, JsonGenerator jsonGenerator,SerializerProvider arg2) throws IOException, JsonProcessingException {
 
-		jsonGenerator.writeStartArray();
 		jsonGenerator.writeStartObject();
 		try {
 			for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(amObject.getClass()).getPropertyDescriptors()){
@@ -26,7 +25,9 @@ public class JacksonObjectToListSerializer extends JsonSerializer<Object>{
 			    //System.out.println(propertyDescriptor.getReadMethod());
 				Object value = propertyDescriptor.getReadMethod().invoke(amObject);
 				if(value != null && !propertyDescriptor.getName().equals("class")) {
-					jsonGenerator.writeObjectField(propertyDescriptor.getName(), value);
+					String fieldName = propertyDescriptor.getName();
+					fieldName = fieldName.replace("\"", "");
+					jsonGenerator.writeObjectField(fieldName, value);
 				}
 			}
 		} catch (IntrospectionException e) {
@@ -43,6 +44,7 @@ public class JacksonObjectToListSerializer extends JsonSerializer<Object>{
 			e.printStackTrace();
 		}
 		jsonGenerator.writeEndObject();
-		jsonGenerator.writeEndArray();
 	}
+	
+
 }

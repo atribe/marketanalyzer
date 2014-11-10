@@ -154,7 +154,7 @@ public class PanelsSettings {
 	* Duration of the animation, in seconds.
 	* Default Value: 
 	*/
-	 private Double startDuration;
+	 private Integer startDuration;
 	/**
 	* Possible values are: easeOutSine, easeInSine, elastic, bounce
 	* Default Value: 
@@ -332,10 +332,10 @@ public class PanelsSettings {
 	public void setStartAlpha(Double startAlpha) {
 		this.startAlpha = startAlpha;
 	}
-	public Double getStartDuration() {
+	public Integer getStartDuration() {
 		return startDuration;
 	}
-	public void setStartDuration(Double startDuration) {
+	public void setStartDuration(Integer startDuration) {
 		this.startDuration = startDuration;
 	}
 	public StartEffect getStartEffect() {

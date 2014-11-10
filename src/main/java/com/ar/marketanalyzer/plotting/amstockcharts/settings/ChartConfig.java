@@ -52,8 +52,8 @@ public class ChartConfig {
 		StockGraph g1 = new StockGraph(p1Type, "plot1");
 		g1.setValueGraphSettings();
 		p1.getStockGraphs().add( g1 );
-		p1.getStockLegend().setValueTextRegular("undefined");
-		p1.getStockLegend().setPeriodValueTextComparing("[[percents.value.close]]%");
+		p1.getLegend().setValueTextRegular("undefined");
+		p1.getLegend().setPeriodValueTextComparing("[[percents.value.close]]%");
 		panels.add(p1);
 		
 		GraphType p2Type = GraphType.column;
@@ -66,10 +66,10 @@ public class ChartConfig {
 		StockGraph g2 = new StockGraph(p2Type);
 		g2.setVolumeGraphSettings();
 		p2.getStockGraphs().add( g2 );
-		p2.getStockLegend().setPeriodValueTextComparing("[[value.close]]");
-		p2.getStockLegend().setMarkerSize(0.0);
-		p2.getStockLegend().setLabelText("");
-		p2.getStockLegend().setMarkerType(MarkerType.none);
+		p2.getLegend().setPeriodValueTextComparing("[[value.close]]");
+		p2.getLegend().setMarkerSize(0.0);
+		p2.getLegend().setLabelText("");
+		p2.getLegend().setMarkerType(MarkerType.none);
 		panels.add(p2);
 		
 		chartScrollbarSettings = new ChartScrollbarSettings();

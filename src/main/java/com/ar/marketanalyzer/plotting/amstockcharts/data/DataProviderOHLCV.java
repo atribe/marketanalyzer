@@ -6,10 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.ar.marketanalyzer.plotting.amstockcharts.serializers.AmSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+//@JsonSerialize(using = AmSerializer.class)
 @JsonIgnoreProperties({"symbol"})
 @JsonInclude(Include.NON_NULL)
 public class DataProviderOHLCV implements DataProviderInterface{
@@ -21,7 +24,6 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	private BigDecimal low;
 	private BigDecimal close;
 	private Long volume;
-	//private BigDecimal value;
 	
 	/*
 	 * Constructors
@@ -37,7 +39,6 @@ public class DataProviderOHLCV implements DataProviderInterface{
 		this.low = low;
 		this.close = close;
 		this.volume = volume;
-		//this.value = close;
 	}
 	
 	/*
@@ -94,7 +95,6 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	}
 	public void setClose(BigDecimal close) {
 		this.close = close;
-		//this.value = close;
 	}
 	public Long getVolume() {
 		return volume;
@@ -102,12 +102,4 @@ public class DataProviderOHLCV implements DataProviderInterface{
 	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
-	/*
-	public BigDecimal getValue() {
-		return value;
-	}
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
-	*/
 }

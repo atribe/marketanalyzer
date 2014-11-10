@@ -138,14 +138,18 @@ public class StockGraph extends AmGraph{
 		
 		this.type = graphType;
 		this.id = id;
+	}
+	public StockGraph(String id) {
+		this();
 		
-		
+		this.id = id;
 	}
 	public StockGraph(GraphType graphType) {
 		this();
 		
 		this.type = graphType;
 	}
+	
 	/*
 	 * Helper Functions
 	 */

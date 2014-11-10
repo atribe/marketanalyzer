@@ -8,16 +8,13 @@ import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.AmExport;
 import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
-import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.MarkerType;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.PeriodEnum;
-import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartScrollbarSettings;
@@ -35,12 +32,12 @@ public class AmStockChart {
 	* Read-only. Type of the chart.
 	* Default Value: 
 	*/
-	private ChartTypeAm type;
+	private ChartTypeAm type = ChartTypeAm.stock;
 	/**
 	* Specifies path to the folder where images like resize grips, lens and similar are.
 	* Default Value: 
 	*/
-	private String pathToImages;
+	private String pathToImages = "js/amcharts/images/";
 	/**
 	* Data provider of data set can have dates as Date Objects or as Strings. In case you use strings, you need to set data date format and the chart will parse dates to date objects. Check this page for date formatting strings.
 	* Please note that two-digit years (YY) is NOT supported in this setting.
@@ -51,7 +48,43 @@ public class AmStockChart {
 	* Array of DataSets.
 	* Default Value: 
 	*/
-	private List<DataSet> dataSets;
+	private List<DataSet> dataSets = new ArrayList<DataSet>();
+	/**
+	* Array of StockPanels (charts).
+	* Default Value: 
+	*/
+	private List<StockPanel> panels = new ArrayList<StockPanel>();
+	/**
+	* Settings for stock panels.
+	* Default Value: PanelsSettings
+	*/
+	private PanelsSettings panelsSettings;
+	/**
+	* Settings for category axes.
+	* Default Value: CategoryAxesSettings
+	*/
+	private CategoryAxesSettings categoryAxesSettings;
+	/**
+	* Settings for value axes.
+	* Default Value: ValueAxesSettings
+	*/
+	private ValueAxesSettings valueAxesSettings;
+	/**
+	* Chart scrollbar settings.
+	* Default Value: ChartScrollbarSettings
+	*/
+	private ChartScrollbarSettings chartScrollbarSettings;
+	/**
+	* Chart cursor settings.
+	* Default Value: ChartCursorSettings
+	*/
+	private ChartCursorSettings chartCursorSettings;
+	/**
+	* Period selector object. You can add it if you want user's to be able to enter date ranges or zoom chart with predefined period buttons.
+	* Default Value: 
+	*/
+	private PeriodSelector periodSelector;
+	
 	/**
 	* AmExport object.
 	* Default Value: 
@@ -67,26 +100,12 @@ public class AmStockChart {
 	* Default Value: AmBalloon
 	*/
 	private AmBalloon balloon;
-	/**
-	* Settings for category axes.
-	* Default Value: CategoryAxesSettings
-	*/
-	private CategoryAxesSettings categoryAxesSettings;
+
 	/**
 	* Read-only. Indicates if the chart is created.
 	* Default Value: 
 	*/
 	private Boolean chartCreated;
-	/**
-	* Chart cursor settings.
-	* Default Value: ChartCursorSettings
-	*/
-	private ChartCursorSettings chartCursorSettings;
-	/**
-	* Chart scrollbar settings.
-	* Default Value: ChartScrollbarSettings
-	*/
-	private ChartScrollbarSettings chartScrollbarSettings;
 	/**
 	* Array of colors used by data sets if no color was set explicitly on data set itself.
 	* Default Value: [""#FF6600"", ""#FCD202"", ""#B0DE09"", ""#0D8ECF"", ""#2A0CD0"", ""#CD0D74"", ""#CC0000"", ""#00CC00"", ""#0000CC"", ""#DDDDDD"", ""#999999"", ""#333333"", ""#990000""]
@@ -143,21 +162,6 @@ public class AmStockChart {
 	*/
 	private Boolean mouseWheelScrollEnabled;
 	/**
-	* Array of StockPanels (charts).
-	* Default Value: 
-	*/
-	private List<StockPanel> panels;
-	/**
-	* Settings for stock panels.
-	* Default Value: PanelsSettings
-	*/
-	private PanelsSettings panelsSettings;
-	/**
-	* Period selector object. You can add it if you want user's to be able to enter date ranges or zoom chart with predefined period buttons.
-	* Default Value: 
-	*/
-	private PeriodSelector periodSelector;
-	/**
 	* Read-only. Scrollbar's chart object.
 	* Default Value: 
 	*/
@@ -173,11 +177,6 @@ public class AmStockChart {
 	*/
 	private StockEventsSettings stockEventsSettings;
 	/**
-	* Settings for value axes.
-	* Default Value: ValueAxesSettings
-	*/
-	private ValueAxesSettings valueAxesSettings;
-	/**
 	* Read-only. Indicates current version of a script.
 	* Default Value: 
 	*/
@@ -192,61 +191,41 @@ public class AmStockChart {
 	 * Constructors
 	 */
 	public AmStockChart() {
-		type = ChartTypeAm.stock;
-		this.pathToImages = "js/amcharts/images/";
 		dataDateFormat = "YYYY-MM-DD";
-		
-		panels = new ArrayList<StockPanel>();
-		GraphType p1Type = GraphType.candlestick;
-		StockPanel p1 = new StockPanel(p1Type);
-		p1.setPercentHeight(70.0);
-		p1.setShowCategoryAxis(false);
-		p1.setTitle("Value");
-		p1.getValueAxes().add( new ValueAxis("v1"));
-		StockGraph g1 = new StockGraph(p1Type, "plot1");
-		g1.setValueGraphSettings();
-		p1.getStockGraphs().add( g1 );
-		p1.getStockLegend().setValueTextRegular("undefined");
-		p1.getStockLegend().setPeriodValueTextComparing("[[percents.value.close]]%");
-		panels.add(p1);
-		
-		GraphType p2Type = GraphType.column;
-		StockPanel p2 = new StockPanel(GraphType.column);
-		p2.setPercentHeight(30.0);
-		p2.setShowCategoryAxis(true);
-		p2.setMarginTop(1.0);
-		p2.setTitle("Volume");
-		p2.getValueAxes().add( new ValueAxis());
-		StockGraph g2 = new StockGraph(p2Type);
-		g2.setVolumeGraphSettings();
-		p2.getStockGraphs().add( g2 );
-		p2.getStockLegend().setPeriodValueTextComparing("[[value.close]]");
-		p2.getStockLegend().setMarkerSize(0.0);
-		p2.getStockLegend().setLabelText("");
-		p2.getStockLegend().setMarkerType(MarkerType.none);
-		panels.add(p2);
-		
-		chartScrollbarSettings = new ChartScrollbarSettings();
-		
-		String graphId = panels.get(0).getStockGraphs().get(0).getId();
-		
-		chartScrollbarSettings.setGraph(graphId);
-		chartScrollbarSettings.setGraphType(GraphType.line);
-		chartScrollbarSettings.setUsePeriod(PeriodEnum.WW);
-		
-		chartCursorSettings = new ChartCursorSettings();
-		chartCursorSettings.setValueLineBalloonEnabled(true);
-		chartCursorSettings.setValueLineEnabled(true);
-		
-		
-		periodSelector = new PeriodSelector();
-		periodSelector.setPosition(Position.bottom);
 	}
 	public AmStockChart(List<DataProviderInterface> dataProviderList) {
 		this();
+		DataSet valueDataset = new DataSet(dataProviderList);
+		this.dataSets.add(valueDataset);
 		
-		dataSets = new ArrayList<DataSet>();
-		this.dataSets.add(new DataSet(dataProviderList));
+		StockPanel stockPanel = new StockPanel();
+		panels.add(stockPanel);
+		
+		StockLegend stockLegend = new StockLegend();
+		stockPanel.setLegend(stockLegend);
+		
+		panelsSettings = new PanelsSettings();
+		panelsSettings.setStartDuration(1);
+		
+		StockGraph stockGraph = new StockGraph("graph1");
+		stockGraph.setValueField("value");
+		stockGraph.setType(GraphType.column);
+		stockGraph.setTitle("IXIC");
+		stockGraph.setFillAlphas(1.0);
+		stockPanel.addStockGraph(stockGraph);
+		
+		categoryAxesSettings = new CategoryAxesSettings();
+		
+		valueAxesSettings = new ValueAxesSettings();
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+		chartScrollbarSettings.setGraph(stockGraph.getId());
+		chartScrollbarSettings.setGraphType(GraphType.line);
+		
+		chartCursorSettings = new ChartCursorSettings();
+		chartCursorSettings.setValueBalloonsEnabled(true);
+		
+		periodSelector = new PeriodSelector();
 	}
 	
 	/*

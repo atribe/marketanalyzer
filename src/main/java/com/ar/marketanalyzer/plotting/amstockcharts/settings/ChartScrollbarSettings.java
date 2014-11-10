@@ -166,6 +166,15 @@ public class ChartScrollbarSettings {
 	*/
 	private PeriodEnum usePeriod;
 	
+	/*
+	 * Constructors
+	 */
+	public ChartScrollbarSettings() {
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}

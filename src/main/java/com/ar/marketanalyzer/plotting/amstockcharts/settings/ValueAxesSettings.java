@@ -38,7 +38,7 @@ public class ValueAxesSettings {
 	* Length of a dash. By default, the grid line is not dashed.
 	* Default Value: 
 	*/
-	private Double dashLength;
+	private Integer dashLength;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with color.
 	* Default Value: 
@@ -154,6 +154,17 @@ public class ValueAxesSettings {
 	* Default Value: 
 	*/
 	private PositionHorizontal unitPosition;
+	
+	/*
+	 * Constructors
+	 */
+	public ValueAxesSettings() {
+		dashLength = 5;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
@@ -184,10 +195,10 @@ public class ValueAxesSettings {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public Double getDashLength() {
+	public Integer getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(Double dashLength) {
+	public void setDashLength(Integer dashLength) {
 		this.dashLength = dashLength;
 	}
 	public Double getFillAlpha() {

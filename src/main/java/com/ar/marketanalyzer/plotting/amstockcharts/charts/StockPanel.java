@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.CategoryAxis;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.Label;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
@@ -83,7 +82,7 @@ public class StockPanel extends AmSerialChart{
 	* Stock chart legend.
 	* Default Value: 
 	*/
-	private StockLegend stockLegend;
+	private StockLegend legend;
 	/**
 	* A title of a panel. Note,StockLegend�should be added in order title to be displayed.
 	* Default Value: 
@@ -114,12 +113,13 @@ public class StockPanel extends AmSerialChart{
 	 * Constructors
 	 */
 	public StockPanel() {
-		
+		/*
 		valueAxes = new ArrayList<ValueAxis>();
 		
 		categoryAxis = new CategoryAxis();
 		
 		stockLegend = new StockLegend();
+		*/
 	}
 	public StockPanel(GraphType graphType) {
 		this();
@@ -128,6 +128,16 @@ public class StockPanel extends AmSerialChart{
 		stockGraphs.add(g1);
 	}
 	
+	/*
+	 * Helper Functions
+	 */
+	public void addStockGraph(StockGraph graph) {
+		if(stockGraphs == null) {
+			stockGraphs = new ArrayList<StockGraph>();
+		}
+		
+		stockGraphs.add(graph);
+	}
 	
 	/*
 	 * Getters and Setters
@@ -204,11 +214,11 @@ public class StockPanel extends AmSerialChart{
 	public void setStockGraphs(List<StockGraph> stockGraphs) {
 		this.stockGraphs = stockGraphs;
 	}
-	public StockLegend getStockLegend() {
-		return stockLegend;
+	public StockLegend getLegend() {
+		return legend;
 	}
-	public void setStockLegend(StockLegend stockLegend) {
-		this.stockLegend = stockLegend;
+	public void setLegend(StockLegend legend) {
+		this.legend = legend;
 	}
 	public String getTitle() {
 		return title;

@@ -2,7 +2,7 @@ package com.ar.marketanalyzer.plotting.amstockcharts.enums;
 
 import java.io.Serializable;
 
-import com.ar.marketanalyzer.plotting.amcharts.serializers.ColorSerializer;
+import com.ar.marketanalyzer.plotting.amstockcharts.serializers.ColorSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

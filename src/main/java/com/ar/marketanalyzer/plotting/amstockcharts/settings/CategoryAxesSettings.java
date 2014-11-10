@@ -14,143 +14,154 @@ public class CategoryAxesSettings {
 	* Specifies whether number of gridCount is specified automatically, according to the axis size.
 	* Default Value: TRUE
 	*/
-	 private Boolean autoGridCount;
+	private Boolean autoGridCount;
 	/**
 	* Axis opacity.
 	* Default Value: 0
 	*/
-	 private Double axisAlpha;
+	private Double axisAlpha;
 	/**
 	* Axis color.
 	* Default Value: 
 	*/
-	 private Color axisColor;
+	private Color axisColor;
 	/**
 	* Height of category axes. Set it to 0 if you set inside property to true.
 	* Default Value: 28
 	*/
-	 private Double axisHeight;
+	private Double axisHeight;
 	/**
 	* Thickness of the axis.
 	* Default Value: 
 	*/
-	 private Double axisThickness;
+	private Double axisThickness;
 	/**
 	* Text color.
 	* Default Value: 
 	*/
-	 private Color color;
+	private Color color;
 	/**
 	* Length of a dash.
 	* Default Value: 
 	*/
-	 private Double dashLength;
+	private Integer dashLength;
 	/**
 	* Date formats of different periods. Possible period values: fff - milliseconds, ss - seconds, mm - minutes, hh - hours, DD - days, MM - months, WW - weeks, YYYY - years. Check this page for date formatting strings.
 	* Default Value: 
 	*/
-	 private List<DateFormat> dateFormats;
+	private List<DateFormat> dateFormats;
 	/**
 	* If you want data points to be placed at equal intervals (omiting dates with no data), set equalSpacing to true.
 	* Default Value: FALSE
 	*/
-	 private Boolean equalSpacing;
+	private Boolean equalSpacing;
 	/**
 	* Fill opacity. Every second space between grid lines can be filled with fillColor.
 	* Default Value: 
 	*/
-	 private Double fillAlpha;
+	private Double fillAlpha;
 	/**
 	* Fill color. Every second space between grid lines can be filled with color. Set fillAlpha to a value greater than 0 to see the fills.
 	* Default Value: 
 	*/
-	 private Color fillColor;
+	private Color fillColor;
 	/**
 	* Text size.
 	* Default Value: 
 	*/
-	 private Double fontSize;
+	private Double fontSize;
 	/**
 	* Opacity of grid lines.
 	* Default Value: 
 	*/
-	 private Double gridAlpha;
+	private Double gridAlpha;
 	/**
 	* Color of grid lines.
 	* Default Value: 
 	*/
-	 private Color gridColor;
+	private Color gridColor;
 	/**
 	* Approximate number of grid lines. You should set autoGridCount to false in order this property not to be ignored.
 	* Default Value: 10
 	*/
-	 private Double gridCount;
+	private Double gridCount;
 	/**
 	* Thickness of grid lines.
 	* Default Value: 
 	*/
-	 private Double gridThickness;
+	private Double gridThickness;
 	/**
 	* Periods to which data will be gruoped in case there are more data items in the selected period than specified in maxSeries property.
 	* Default Value: [""ss"", ""10ss"", ""30ss"", ""mm"", ""10mm"", ""30mm"", ""hh"", ""DD"", ""WW"", ""MM"", ""YYYY""]
 	*/
-	 private List<String> groupToPeriods;
+	private List<String> groupToPeriods;
 	/**
 	* Specifies whether values should be placed inside or outside of plot area.
 	* Default Value: FALSE
 	*/
-	 private Boolean inside;
+	private Boolean inside;
 	/**
 	* Rotation angle of a label.
 	* Default Value: 
 	*/
-	 private Double labelRotation;
+	private Double labelRotation;
 	/**
 	* Specifies whether axis displays category axis' labels and value axis' values.
 	* Default Value: TRUE
 	*/
-	 private Boolean labelsEnabled;
+	private Boolean labelsEnabled;
 	/**
 	* Specifies if period period should be marked with a different date format.
 	* Default Value: TRUE
 	*/
-	 private Boolean markPeriodChange;
+	private Boolean markPeriodChange;
 	/**
 	* Maximum series shown at a time. In case there are more data points in the selection than maxSeries, the chart will group data to longer periods, for example - you have 250 days in the selection, and maxSeries is 150 - the chart will group data to weeks.
 	* Default Value: 150
 	*/
-	 private Double maxSeries;
+	private Double maxSeries;
 	/**
 	* This property is used when calculating grid count. It specifies minimum cell width required for one span between grid lines.
 	* Default Value: 75
 	*/
-	 private Double minHorizontalGap;
+	private Double minHorizontalGap;
 	/**
 	* Specifies the shortest period of your data. fff - millisecond, ss - second, mm - minute, hh - hour, DD - day, MM - month, YYYY - year.
 	* It's also possible to supply a number for increments, i.e. ""15mm"" which will instruct the chart that your data is supplied in 15 minute increments.
 	* Default Value: DD
 	*/
-	 private String minPeriod;
+	private String minPeriod;
 	/**
 	* ""top"" or ""bottom"".
 	* Default Value: 
 	*/
-	 private String position;
+	private String position;
 	/**
 	* Specifies whether the graph should start on axis or not. In case you display columns, it is recommended to set this to false. startOnAxis can be set to true only if equalSpacing is set to true.
 	* Default Value: FALSE
 	*/
-	 private Boolean startOnAxis;
+	private Boolean startOnAxis;
 	/**
 	* Tick length.
 	* Default Value: 0
 	*/
-	 private Double tickLength;
+	private Double tickLength;
 	/**
 	* Works only when parseDates is set to true and equalSpacing is false. If you set it to true, at the position where bigger period changes, category axis will display date strings of bot small and big period, in two rows.
 	* Default Value: FALSE
 	*/
-	 private Boolean twoLineMode;
+	private Boolean twoLineMode;
+	
+	/*
+	 * Constructors
+	 */
+	public CategoryAxesSettings() {
+		dashLength = 5;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public Boolean isAutoGridCount() {
 		return autoGridCount;
 	}
@@ -187,10 +198,10 @@ public class CategoryAxesSettings {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public Double getDashLength() {
+	public Integer getDashLength() {
 		return dashLength;
 	}
-	public void setDashLength(Double dashLength) {
+	public void setDashLength(Integer dashLength) {
 		this.dashLength = dashLength;
 	}
 	public List<DateFormat> getDateFormats() {
