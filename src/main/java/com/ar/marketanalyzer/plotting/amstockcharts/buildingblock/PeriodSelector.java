@@ -77,8 +77,8 @@ public class PeriodSelector {
 		
 		periods = new ArrayList<Period>();
 		periods.add( new Period(PeriodEnum.DD, 1, "1 day") );
-		periods.add( new Period(PeriodEnum.DD, true, 5, "5 days") );
-		periods.add( new Period(PeriodEnum.MM, 1, "1 month") );
+		periods.add( new Period(PeriodEnum.DD,  5, "5 days") );
+		periods.add( new Period(PeriodEnum.MM, true, 1, "1 month") );
 		periods.add( new Period(PeriodEnum.YYYY, 1, "1 year") );
 		periods.add( new Period(PeriodEnum.YTD, "YTD") );
 		periods.add( new Period(PeriodEnum.MAX, "MAX") );

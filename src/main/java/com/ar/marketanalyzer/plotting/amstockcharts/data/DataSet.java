@@ -70,13 +70,13 @@ public class DataSet implements Serializable{
 	 */
 	public DataSet() {
 		this.categoryField = "date";
-		//this.color = new Color("7F8DA9");
+		this.color = new Color("7F8DA9");
 		
-		//fieldMappings.add(new FieldMapping("open", "open"));
-		//fieldMappings.add(new FieldMapping("close", "close"));
-		//fieldMappings.add(new FieldMapping("high", "high"));
-		//fieldMappings.add(new FieldMapping("low", "low"));
-		//fieldMappings.add(new FieldMapping("volume", "volume"));
+		fieldMappings.add(new FieldMapping("open", "open"));
+		fieldMappings.add(new FieldMapping("close", "close"));
+		fieldMappings.add(new FieldMapping("high", "high"));
+		fieldMappings.add(new FieldMapping("low", "low"));
+		fieldMappings.add(new FieldMapping("volume", "volume"));
 		fieldMappings.add(new FieldMapping("close", "value"));
 	}
 	public DataSet(List<DataProviderInterface> dataProviderList) {

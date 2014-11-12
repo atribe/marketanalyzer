@@ -16,7 +16,7 @@
 			<div id="content">
 				<div class="OHLCSection">
 					<div class="sectionHeader"><h2>Index OHLC Section</h2></div>
-					<div id="OHLCChart" class="chart" style="width:100%; height:400px;">
+					<div id="OHLCChart" class="chart" style="width:1400px; height:500px;">
 						<!-- <img src="<c:url value="charts/OHLC" />" /> -->
 					</div>
 				</div>

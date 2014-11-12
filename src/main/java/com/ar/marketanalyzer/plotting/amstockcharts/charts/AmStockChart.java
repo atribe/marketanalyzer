@@ -12,6 +12,7 @@ import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.AmTheme;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
@@ -38,6 +39,8 @@ public class AmStockChart {
 	* Default Value: 
 	*/
 	private String pathToImages = "js/amcharts/images/";
+	
+	private AmTheme theme = AmTheme.light;
 	/**
 	* Data provider of data set can have dates as Date Objects or as Strings. In case you use strings, you need to set data date format and the chart will parse dates to date objects. Check this page for date formatting strings.
 	* Please note that two-digit years (YY) is NOT supported in this setting.
@@ -195,6 +198,7 @@ public class AmStockChart {
 	}
 	public AmStockChart(List<DataProviderInterface> dataProviderList) {
 		this();
+		
 		DataSet valueDataset = new DataSet(dataProviderList);
 		this.dataSets.add(valueDataset);
 		
@@ -209,9 +213,10 @@ public class AmStockChart {
 		
 		StockGraph stockGraph = new StockGraph("graph1");
 		stockGraph.setValueField("value");
-		stockGraph.setType(GraphType.column);
+		stockGraph.setType(GraphType.candlestick);
 		stockGraph.setTitle("IXIC");
 		stockGraph.setFillAlphas(1.0);
+		stockGraph.setValueGraphSettings();
 		stockPanel.addStockGraph(stockGraph);
 		
 		categoryAxesSettings = new CategoryAxesSettings();
@@ -224,10 +229,18 @@ public class AmStockChart {
 		
 		chartCursorSettings = new ChartCursorSettings();
 		chartCursorSettings.setValueBalloonsEnabled(true);
+		chartCursorSettings.setValueLineBalloonEnabled(true);
+		chartCursorSettings.setValueLineEnabled(true);
 		
 		periodSelector = new PeriodSelector();
 	}
 	
+	public AmTheme getTheme() {
+		return theme;
+	}
+	public void setTheme(AmTheme theme) {
+		this.theme = theme;
+	}
 	/*
 	 * Getters and Setters
 	 */

@@ -174,7 +174,8 @@ public class StockGraph extends AmGraph{
 		this.comparable = true;
 		this.compareField = "value";
 		
-		this.showBalloon = false;
+		this.showBalloon = true;
+		this.balloonText = "open:<b>[[open]]</b><br>high:<b>[[high]]</b><br>low:<b>[[low]]</b><br>close:<b>[[close]]</b>";
 		
 		this.proCandlesticks = true;
 	}
