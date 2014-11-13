@@ -220,6 +220,7 @@ public class AmStockChart {
 		stockPanel.addStockGraph(stockGraph);
 		
 		categoryAxesSettings = new CategoryAxesSettings();
+		categoryAxesSettings.setMaxSeries(210);
 		
 		valueAxesSettings = new ValueAxesSettings();
 		

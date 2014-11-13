@@ -119,7 +119,7 @@ public class CategoryAxesSettings {
 	* Maximum series shown at a time. In case there are more data points in the selection than maxSeries, the chart will group data to longer periods, for example - you have 250 days in the selection, and maxSeries is 150 - the chart will group data to weeks.
 	* Default Value: 150
 	*/
-	private Double maxSeries;
+	private Integer maxSeries;
 	/**
 	* This property is used when calculating grid count. It specifies minimum cell width required for one span between grid lines.
 	* Default Value: 75
@@ -288,10 +288,10 @@ public class CategoryAxesSettings {
 	public void setMarkPeriodChange(Boolean markPeriodChange) {
 		this.markPeriodChange = markPeriodChange;
 	}
-	public Double getMaxSeries() {
+	public Integer getMaxSeries() {
 		return maxSeries;
 	}
-	public void setMaxSeries(Double maxSeries) {
+	public void setMaxSeries(Integer maxSeries) {
 		this.maxSeries = maxSeries;
 	}
 	public Double getMinHorizontalGap() {

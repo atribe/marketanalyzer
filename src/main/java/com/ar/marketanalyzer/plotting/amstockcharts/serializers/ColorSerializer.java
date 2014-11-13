@@ -12,6 +12,6 @@ public class ColorSerializer extends JsonSerializer<Color>{
 
 	@Override
 	public void serialize(Color amObject, JsonGenerator jsonGenerator,SerializerProvider arg2) throws IOException, JsonProcessingException {
-		jsonGenerator.writeString(amObject.getColorHexVal());
+		jsonGenerator.writeString(amObject.toString());
 	}
 }

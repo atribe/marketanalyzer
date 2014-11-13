@@ -24,6 +24,14 @@ public class Color implements Serializable{
      * #FFFFFF
      */
     public static final Color WHITE = create("FFFFFF");
+    /**
+     * #7F8DA9
+     */
+    public static final Color Slate_Blue = create("7F8DA9");
+    /**
+     * #DB4C3C
+     */
+    public static final Color Slate_Red = create("DB4C3C");
 
     private String colorHexVal;
 

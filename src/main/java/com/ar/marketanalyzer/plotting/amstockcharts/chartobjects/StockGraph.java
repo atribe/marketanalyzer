@@ -160,11 +160,11 @@ public class StockGraph extends AmGraph{
 		this.lowField = "low";
 		this.valueField = "close";
 		
-		Color slateBlue = new Color("7F8DA9");
+		Color slateBlue = Color.Slate_Blue;
 		this.lineColor = slateBlue;
 		this.fillColors = slateBlue;
 		
-		Color slateRed = new Color("DB4C3C");
+		Color slateRed = Color.Slate_Red;
 		this.negativeLineColor = slateRed;
 		this.negativeFillColors = slateRed;
 		
