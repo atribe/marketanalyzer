@@ -113,13 +113,7 @@ public class StockPanel extends AmSerialChart{
 	 * Constructors
 	 */
 	public StockPanel() {
-		/*
-		valueAxes = new ArrayList<ValueAxis>();
-		
-		categoryAxis = new CategoryAxis();
-		
-		stockLegend = new StockLegend();
-		*/
+
 	}
 	public StockPanel(GraphType graphType) {
 		this();

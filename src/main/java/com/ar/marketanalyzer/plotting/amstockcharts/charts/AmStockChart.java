@@ -203,35 +203,54 @@ public class AmStockChart {
 		this.dataSets.add(valueDataset);
 		
 		StockPanel stockPanel = new StockPanel();
+			stockPanel.setPercentHeight(70.0);
+			stockPanel.setShowCategoryAxis(false);
+		
+			StockLegend stockLegend = new StockLegend();
+				stockPanel.setLegend(stockLegend);
+		
+			panelsSettings = new PanelsSettings();
+				panelsSettings.setStartDuration(1);
+		
+			StockGraph stockGraph = new StockGraph("graph1");
+				stockGraph.setTitle("IXIC");
+				stockGraph.setValueField("value");
+				stockGraph.setType(GraphType.candlestick);
+				stockGraph.setFillAlphas(1.0);
+				stockGraph.setValueGraphSettings();
+			stockPanel.addStockGraph(stockGraph);
+		
 		panels.add(stockPanel);
 		
-		StockLegend stockLegend = new StockLegend();
-		stockPanel.setLegend(stockLegend);
+		StockPanel volumePanel = new StockPanel();
+			volumePanel.setTitle("Volume");
+			volumePanel.setPercentHeight(30.0);
+			volumePanel.setMarginTop(1.0);
+			volumePanel.setShowCategoryAxis(true);
 		
-		panelsSettings = new PanelsSettings();
-		panelsSettings.setStartDuration(1);
+			StockGraph volumeGraph = new StockGraph("volume1");
+				volumeGraph.setValueField("volume");
+				volumeGraph.setType(GraphType.column);
+				volumeGraph.setShowBalloon(false);
+				volumeGraph.setFillAlphas(1.0);
+			volumePanel.addStockGraph(volumeGraph);
 		
-		StockGraph stockGraph = new StockGraph("graph1");
-		stockGraph.setValueField("value");
-		stockGraph.setType(GraphType.candlestick);
-		stockGraph.setTitle("IXIC");
-		stockGraph.setFillAlphas(1.0);
-		stockGraph.setValueGraphSettings();
-		stockPanel.addStockGraph(stockGraph);
+		panels.add(volumePanel);
+
 		
 		categoryAxesSettings = new CategoryAxesSettings();
-		categoryAxesSettings.setMaxSeries(210);
+			categoryAxesSettings.setMaxSeries(210);
 		
 		valueAxesSettings = new ValueAxesSettings();
 		
 		chartScrollbarSettings = new ChartScrollbarSettings();
-		chartScrollbarSettings.setGraph(stockGraph.getId());
-		chartScrollbarSettings.setGraphType(GraphType.line);
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			chartScrollbarSettings.setGraphType(GraphType.line);
 		
 		chartCursorSettings = new ChartCursorSettings();
-		chartCursorSettings.setValueBalloonsEnabled(true);
-		chartCursorSettings.setValueLineBalloonEnabled(true);
-		chartCursorSettings.setValueLineEnabled(true);
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			chartCursorSettings.setValueLineBalloonEnabled(true);
+			chartCursorSettings.setValueLineEnabled(true);
 		
 		periodSelector = new PeriodSelector();
 	}
