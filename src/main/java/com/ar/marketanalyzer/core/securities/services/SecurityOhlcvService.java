@@ -150,9 +150,22 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfter(Symbol symbol,
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol,
 			Date date) throws SecuritiesNotFound {
 		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateAfterOrderByDateDesc(symbol, date);
+		
+		if(ohlcvList.isEmpty()) {
+			throw new SecuritiesNotFound("The Ticker '" + symbol.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
+		}
+		
+		return ohlcvList;
+	}
+	
+	@Override
+	@Transactional
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol,
+			Date date) throws SecuritiesNotFound {
+		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateAfterOrderByDateAsc(symbol, date);
 		
 		if(ohlcvList.isEmpty()) {
 			throw new SecuritiesNotFound("The Ticker '" + symbol.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
