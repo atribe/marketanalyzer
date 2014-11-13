@@ -7,8 +7,8 @@ import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
 import com.ar.marketanalyzer.plotting.amstockcharts.charts.StockPanel;
-import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.AmTheme;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;

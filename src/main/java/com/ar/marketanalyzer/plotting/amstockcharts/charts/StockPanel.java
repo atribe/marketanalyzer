@@ -132,7 +132,12 @@ public class StockPanel extends AmSerialChart{
 		
 		stockGraphs.add(graph);
 	}
-	
+	public void addValueAxis(ValueAxis valueAxis) {
+		if(this.valueAxes == null) {
+			this.valueAxes = new ArrayList<ValueAxis>();
+		}
+		valueAxes.add(valueAxis);
+	}
 	/*
 	 * Getters and Setters
 	 */
@@ -244,5 +249,4 @@ public class StockPanel extends AmSerialChart{
 	public void setTrendLineThickness(Double trendLineThickness) {
 		this.trendLineThickness = trendLineThickness;
 	}
-
 }

@@ -9,13 +9,15 @@ import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
-import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
+import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.ValueAxis;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.AmTheme;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartScrollbarSettings;
@@ -200,7 +202,12 @@ public class AmStockChart {
 		this();
 		
 		DataSet valueDataset = new DataSet(dataProviderList);
+		valueDataset.setAsOhlcvStockFieldMappings();
+		valueDataset.setOhlcvTitle();
+		
+		
 		this.dataSets.add(valueDataset);
+		
 		
 		StockPanel stockPanel = new StockPanel();
 			stockPanel.setPercentHeight(70.0);
@@ -253,6 +260,88 @@ public class AmStockChart {
 			chartCursorSettings.setValueLineEnabled(true);
 		
 		periodSelector = new PeriodSelector();
+	}
+	public AmStockChart(List<DataProviderInterface> dataProviderList, List<DataProviderInterface> ddayList) {
+		
+		this();
+
+		DataSet valueDataset = new DataSet(dataProviderList);
+		valueDataset.setAsOhlcvStockFieldMappings();
+		valueDataset.setOhlcvTitle();
+		this.dataSets.add(valueDataset);
+		
+		DataSet dDayDataSet = new DataSet(ddayList);
+		this.dataSets.add(dDayDataSet);
+		
+		
+		StockPanel stockPanel = new StockPanel();
+			stockPanel.setPercentHeight(70.0);
+			stockPanel.setShowCategoryAxis(false);
+			
+			//Vertical axis for the ohlc
+			ValueAxis priceAxis = new ValueAxis();
+			stockPanel.addValueAxis(priceAxis);
+			
+			StockLegend stockLegend = new StockLegend();
+				stockPanel.setLegend(stockLegend);
+		
+			panelsSettings = new PanelsSettings();
+				panelsSettings.setStartDuration(1);
+		
+			StockGraph stockGraph = new StockGraph("graph1");
+				stockGraph.setTitle("IXIC");
+				stockGraph.setValueField("value");
+				stockGraph.setType(GraphType.candlestick);
+				stockGraph.setFillAlphas(1.0);
+				stockGraph.setValueGraphSettings();
+			stockPanel.addStockGraph(stockGraph);
+			
+			
+			//Vertical axis for the ddays
+			ValueAxis dDayAxis = new ValueAxis();
+			dDayAxis.setPosition(Position.right);
+			stockPanel.addValueAxis(dDayAxis);
+			
+			StockGraph ddayGraph = new StockGraph("dday1");
+				ddayGraph.setValueField("ddayInWindow");
+				ddayGraph.setShowBalloon(false);
+				ddayGraph.setType(GraphType.line);
+			stockPanel.addStockGraph(ddayGraph);
+			
+		panels.add(stockPanel);
+		
+		StockPanel volumePanel = new StockPanel();
+			volumePanel.setTitle("Volume");
+			volumePanel.setPercentHeight(30.0);
+			volumePanel.setMarginTop(1.0);
+			volumePanel.setShowCategoryAxis(true);
+		
+			StockGraph volumeGraph = new StockGraph("volume1");
+				volumeGraph.setValueField("volume");
+				volumeGraph.setType(GraphType.column);
+				volumeGraph.setShowBalloon(false);
+				volumeGraph.setFillAlphas(1.0);
+			volumePanel.addStockGraph(volumeGraph);
+		
+		panels.add(volumePanel);
+
+		
+		categoryAxesSettings = new CategoryAxesSettings();
+			categoryAxesSettings.setMaxSeries(210);
+		
+		valueAxesSettings = new ValueAxesSettings();
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			chartScrollbarSettings.setGraphType(GraphType.line);
+		
+		chartCursorSettings = new ChartCursorSettings();
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			chartCursorSettings.setValueLineBalloonEnabled(true);
+			chartCursorSettings.setValueLineEnabled(true);
+		
+		periodSelector = new PeriodSelector();
+		
 	}
 	
 	public AmTheme getTheme() {
