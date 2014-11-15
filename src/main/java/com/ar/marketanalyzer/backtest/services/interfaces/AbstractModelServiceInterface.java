@@ -16,4 +16,5 @@ public interface AbstractModelServiceInterface {
 	public List<AbstractModel> findByModelStatus(ModelStatus modelStatus) throws ModelNotFound;
 	public AbstractModel findById(int id) throws ModelNotFound;
 	public AbstractModel findBySymbolAndModelStatus(Symbol symbol, ModelStatus modelStatus) throws ModelNotFound;
+	public AbstractModel findBySymbolAndModelStatusEager(Symbol sym, ModelStatus current) throws ModelNotFound;
 }

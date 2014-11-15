@@ -50,7 +50,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
 	
-	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@OrderBy("date")
 	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<AbstractRuleResult>();
 	@Transient

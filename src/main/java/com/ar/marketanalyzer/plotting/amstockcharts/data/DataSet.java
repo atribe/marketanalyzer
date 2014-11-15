@@ -113,6 +113,7 @@ public class DataSet implements Serializable{
 		fieldMappings.add(new FieldMapping("dday", "dday"));
 		fieldMappings.add(new FieldMapping("churnDay", "churnday"));
 		fieldMappings.add(new FieldMapping("ddayInWindow", "ddayInWindow"));
+		fieldMappings.add(new FieldMapping("date", "ddayDate"));
 	}
 	
 	/*

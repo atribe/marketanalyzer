@@ -18,6 +18,7 @@ import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
@@ -67,14 +68,11 @@ public class JsonOhlcvController {
 			
 			
 			//Getting the d days
-			AbstractModel model = modelService.findBySymbolAndModelStatus(sym, ModelStatus.CURRENT);
-			List<AbstractRule> ruleList = model.getRuleList();
-			for(AbstractRule rule: ruleList) {
-				if(rule.getClass() == RuleSellDDaysAndChurnDays.class) {
-					RuleSellDDaysAndChurnDays sellRule = (RuleSellDDaysAndChurnDays)rule;
-					SortedSet<RuleResultsDDaysAndChurnDays> resultsSet = (SortedSet<RuleResultsDDaysAndChurnDays>)(SortedSet<?>)sellRule.getRuleResultSet();
-					resultList = new ArrayList<RuleResultsDDaysAndChurnDays>(resultsSet);
-				}
+			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
+			resultList = model.getDdaysForPlotting();
+			
+			while(!resultList.get(0).getDate().equals(ohlcvData.get(0).getDate())) {
+				resultList.remove(0);
 			}
 			
 		} catch (SecuritiesNotFound e) {

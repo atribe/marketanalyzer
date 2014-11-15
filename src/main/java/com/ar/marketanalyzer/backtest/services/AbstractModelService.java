@@ -126,4 +126,16 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 		
 		return foundModel;
 	}
+
+	@Override
+	@Transactional
+	public AbstractModel findBySymbolAndModelStatusEager(Symbol symbol, ModelStatus modelStatus) throws ModelNotFound {
+		AbstractModel foundModel = modelRepo.findBySymbolAndModelStatus(symbol, modelStatus);
+		
+		if( foundModel == null ) {
+			throw new ModelNotFound();
+		}
+		
+		return foundModel;
+	}
 }

@@ -266,11 +266,14 @@ public class AmStockChart {
 		this();
 
 		DataSet valueDataset = new DataSet(dataProviderList);
-		valueDataset.setAsOhlcvStockFieldMappings();
-		valueDataset.setOhlcvTitle();
+			valueDataset.setAsOhlcvStockFieldMappings();
+			valueDataset.setOhlcvTitle();
 		this.dataSets.add(valueDataset);
 		
 		DataSet dDayDataSet = new DataSet(ddayList);
+			dDayDataSet.setColor(Color.BLACK);
+			dDayDataSet.setDdayFieldMappings();
+			dDayDataSet.setCategoryField("ddayDate");
 		this.dataSets.add(dDayDataSet);
 		
 		
@@ -279,7 +282,7 @@ public class AmStockChart {
 			stockPanel.setShowCategoryAxis(false);
 			
 			//Vertical axis for the ohlc
-			ValueAxis priceAxis = new ValueAxis();
+			ValueAxis priceAxis = new ValueAxis("priceAxis");
 			stockPanel.addValueAxis(priceAxis);
 			
 			StockLegend stockLegend = new StockLegend();
@@ -294,18 +297,23 @@ public class AmStockChart {
 				stockGraph.setType(GraphType.candlestick);
 				stockGraph.setFillAlphas(1.0);
 				stockGraph.setValueGraphSettings();
+				stockGraph.setValueAxis(priceAxis);
 			stockPanel.addStockGraph(stockGraph);
 			
 			
 			//Vertical axis for the ddays
-			ValueAxis dDayAxis = new ValueAxis();
+			ValueAxis dDayAxis = new ValueAxis("ddayAxis");
 			dDayAxis.setPosition(Position.right);
 			stockPanel.addValueAxis(dDayAxis);
 			
 			StockGraph ddayGraph = new StockGraph("dday1");
 				ddayGraph.setValueField("ddayInWindow");
-				ddayGraph.setShowBalloon(false);
+				//ddayGraph.setShowBalloon(true);
 				ddayGraph.setType(GraphType.line);
+				ddayGraph.setValueAxis(dDayAxis);
+				//ddayGraph.setBalloonText("DDays:<b>[[ddayInWindow]]</b>");
+				ddayGraph.setLineColor(Color.BLACK);
+				ddayGraph.setLineAlpha(1.0);
 			stockPanel.addStockGraph(ddayGraph);
 			
 		panels.add(stockPanel);
