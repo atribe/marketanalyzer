@@ -1,6 +1,7 @@
 package com.ar.marketanalyzer.plotting.amstockcharts.chartobjects;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -95,7 +96,7 @@ public class ValueAxis extends AxisBase{
 	* Possible values are: ""top"", ""bottom"", ""left"", ""right"". If axis is vertical, default position is ""left"". If axis is horizontal, default position is ""bottom"".
 	* Default Value: left
 	*/
-	private String position;
+	private Position position;
 	/**
 	* Precision (number of decimals) of values.
 	* Default Value: 
@@ -277,10 +278,10 @@ public class ValueAxis extends AxisBase{
 	public void setMinMaxMultiplier(Double minMaxMultiplier) {
 		this.minMaxMultiplier = minMaxMultiplier;
 	}
-	public String getPosition() {
+	public Position getPosition() {
 		return position;
 	}
-	public void setPosition(String position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 	public Double getPrecision() {

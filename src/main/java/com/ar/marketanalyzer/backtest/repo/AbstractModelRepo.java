@@ -8,4 +8,6 @@ import com.ar.marketanalyzer.core.securities.models.Symbol;
 
 public interface AbstractModelRepo extends JpaRepository<AbstractModel, Integer>{
 	public AbstractModel findBySymbolAndModelStatus(Symbol symbol, ModelStatus modelStatus);
+	
+	//public AbstractModel findBySymbolAndModelStatusEager(Symbol symbol, ModelStatus modelStatus);
 }

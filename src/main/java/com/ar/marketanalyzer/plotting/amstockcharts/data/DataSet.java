@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockEvent;
+
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderInterface;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderOHLCV;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.FieldMapping;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -71,18 +74,9 @@ public class DataSet implements Serializable{
 	public DataSet() {
 		this.categoryField = "date";
 		this.color = new Color("7F8DA9");
-		
-		fieldMappings.add(new FieldMapping("open", "open"));
-		fieldMappings.add(new FieldMapping("close", "close"));
-		fieldMappings.add(new FieldMapping("high", "high"));
-		fieldMappings.add(new FieldMapping("low", "low"));
-		fieldMappings.add(new FieldMapping("volume", "volume"));
-		fieldMappings.add(new FieldMapping("close", "value"));
 	}
 	public DataSet(List<DataProviderInterface> dataProviderList) {
 		this();
-		
-		this.title = ((DataProviderOHLCV)dataProviderList.get(0)).getSymbol();
 		
 		this.dataProvider = dataProviderList;
 	}
@@ -98,9 +92,27 @@ public class DataSet implements Serializable{
 	/*
 	 * Helper Methods
 	 */
+	public void setOhlcvTitle() {
+		this.title = ((DataProviderOHLCV)this.dataProvider.get(0)).getSymbol();
+	}
+	public void setAsOhlcvStockFieldMappings() {
+		fieldMappings.clear();
+		fieldMappings.add(new FieldMapping("open", "open"));
+		fieldMappings.add(new FieldMapping("close", "close"));
+		fieldMappings.add(new FieldMapping("high", "high"));
+		fieldMappings.add(new FieldMapping("low", "low"));
+		fieldMappings.add(new FieldMapping("volume", "volume"));
+		fieldMappings.add(new FieldMapping("close", "value"));
+	}
 	public void setAsSecondaryStockFieldMappings() {
 		fieldMappings.clear();
 		fieldMappings.add(new FieldMapping("value", "value"));
+	}
+	public void setDdayFieldMappings() {
+		fieldMappings.clear();
+		fieldMappings.add(new FieldMapping("dday", "dday"));
+		fieldMappings.add(new FieldMapping("churnDay", "churnday"));
+		fieldMappings.add(new FieldMapping("ddayInWindow", "ddayInWindow"));
 	}
 	
 	/*
@@ -177,4 +189,5 @@ public class DataSet implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
 }

@@ -12,13 +12,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
+import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
+import com.ar.marketanalyzer.backtest.services.AbstractModelService;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SymbolService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.charts.AmStockChart;
-import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderOHLCV;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderDday;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderOHLCV;
 
 @RestController
 @RequestMapping("/json")
@@ -31,15 +37,15 @@ public class JsonOhlcvController {
 	private SymbolService symbolService;
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
+	@Autowired
+	private AbstractModelService modelService;
 
-	@RequestMapping(value="amchart/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@RequestMapping(value="amchart/ohlcv/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
-	public AmStockChart getamchartJSON(@PathVariable String symbol) {
+	public AmStockChart getohlcvJSON(@PathVariable String symbol) {
 		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
 		
-		//ProCandlestickChart chart = new ProCandlestickChart();
-		AmStockChart chart = null;
-		
+		List<SecuritiesOhlcv> ohlcvData = null;
 		Symbol sym;
 		
 		try {
@@ -49,17 +55,79 @@ public class JsonOhlcvController {
 			//Looking up the desired range of OHLCV
 			LocalDate backToDate = new LocalDate(2012,1,1);
 			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
-			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
+			ohlcvData = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
 			
-			logger.debug("Newest Data Point: " + data.get(0));
-			logger.debug("Oldest Data Point: " + data.get(data.size()-1));
-			
-			chart = new AmStockChart(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(data));
 		} catch (SecuritiesNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		AmStockChart chart = new AmStockChart();
+		chart.createOhlcvChart(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(ohlcvData));
+		return chart;
+	}
+	
+	@RequestMapping(value="amchart/dday/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@ResponseBody
+	public AmStockChart getddayJSON(@PathVariable String symbol) {
+		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
+		
+		List<RuleResultsDDaysAndChurnDays> resultList = null;
+		Symbol sym;
+		
+		try {
+			//Getting the symbol
+			sym = symbolService.findBySymbol("^IXIC");
+			
+			//Getting the d days
+			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
+			resultList = model.getDdaysForPlotting();
+			
+		} catch (SecuritiesNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		AmStockChart chart = new AmStockChart();
+		chart.createDdayChart(DataProviderDday.convertDdayRuleResultToDataProviderDday(resultList));
+		return chart;
+	}
+	
+	@RequestMapping(value="amchart/combined/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@ResponseBody
+	public AmStockChart getcombinedJSON(@PathVariable String symbol) {
+		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
+		
+		Symbol sym;
+		List<RuleResultsDDaysAndChurnDays> resultList = null;
+		List<SecuritiesOhlcv> ohlcvData = null;
+		
+		try {
+			//Getting the symbol
+			sym = symbolService.findBySymbol("^IXIC");
+			
+			//Looking up the desired range of OHLCV
+			LocalDate backToDate = new LocalDate(2012,1,1);
+			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
+			ohlcvData = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
+			
+			//Getting the d days
+			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
+			resultList = model.getDdaysForPlotting();
+			
+		} catch (SecuritiesNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		AmStockChart chart = new AmStockChart();
+		chart.createCombinedChart(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(ohlcvData), DataProviderDday.convertDdayRuleResultToDataProviderDday(resultList));
 		return chart;
 	}
 	

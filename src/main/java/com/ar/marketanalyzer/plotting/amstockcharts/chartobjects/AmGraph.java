@@ -9,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class AmGraph {
 
 	/**
+	* Unique id of a graph. It is not required to set one, unless you want to use this graph for as your scrollbar's graph and need to indicate which graph should be used.
+	* Default Value: 
+	*/
+	protected String id;
+	/**
 	* Name of the alpha field in your dataProvider.
 	* Default Value: 
 	*/
@@ -218,11 +223,6 @@ public class AmGraph {
 	* Default Value: 
 	*/
 	protected String highField;
-	/**
-	* Unique id of a graph. It is not required to set one, unless you want to use this graph for as your scrollbar's graph and need to indicate which graph should be used.
-	* Default Value: 
-	*/
-	protected String id;
 	/**
 	* Whether to include this graph when calculating min and max value of the axis.
 	* Default Value: TRUE
@@ -473,7 +473,7 @@ public class AmGraph {
 	* Specifies which value axis the graph will use. Will use the first value axis if not set. You can use reference to the real�ValueAxis�object or set value axis id.
 	* Default Value: ValueAxis
 	*/
-	protected ValueAxis valueAxis;
+	protected String valueAxis;
 	/**
 	* Name of the value field in your dataProvider.
 	* Default Value: 
@@ -488,7 +488,7 @@ public class AmGraph {
 	* XY chart only. A horizontal value axis object to attach graph to.
 	* Default Value: ValueAxis
 	*/
-	protected ValueAxis xAxis;
+	protected String xAxis;
 	/**
 	* XY chart only. Name of the x field in your dataProvider.
 	* Default Value: 
@@ -498,7 +498,7 @@ public class AmGraph {
 	* XY chart only. A vertical value axis object to attach graph to.
 	* Default Value: ValueAxis
 	*/
-	protected ValueAxis yAxis;
+	protected String yAxis;
 	/**
 	* XY chart only. Name of the y field in your dataProvider.
 	* Default Value: 
@@ -1067,11 +1067,14 @@ public class AmGraph {
 	public void setUseNegativeColorIfDown(Boolean useNegativeColorIfDown) {
 		this.useNegativeColorIfDown = useNegativeColorIfDown;
 	}
-	public ValueAxis getValueAxis() {
+	public String getValueAxis() {
 		return valueAxis;
 	}
-	public void setValueAxis(ValueAxis valueAxis) {
+	public void setValueAxis(String valueAxis) {
 		this.valueAxis = valueAxis;
+	}
+	public void setValueAxis(ValueAxis valueAxis) {
+		this.valueAxis = valueAxis.getId();
 	}
 	public String getValueField() {
 		return valueField;
@@ -1085,11 +1088,14 @@ public class AmGraph {
 	public void setVisibleInLegend(Boolean visibleInLegend) {
 		this.visibleInLegend = visibleInLegend;
 	}
-	public ValueAxis getxAxis() {
+	public String getxAxis() {
 		return xAxis;
 	}
-	public void setxAxis(ValueAxis xAxis) {
+	public void setxAxis(String xAxis) {
 		this.xAxis = xAxis;
+	}
+	public void setxAxis(ValueAxis xAxis) {
+		this.xAxis = xAxis.getId();
 	}
 	public String getxField() {
 		return xField;
@@ -1097,11 +1103,14 @@ public class AmGraph {
 	public void setxField(String xField) {
 		this.xField = xField;
 	}
-	public ValueAxis getyAxis() {
+	public String getyAxis() {
 		return yAxis;
 	}
-	public void setyAxis(ValueAxis yAxis) {
+	public void setyAxis(String yAxis) {
 		this.yAxis = yAxis;
+	}
+	public void setyAxis(ValueAxis yAxis) {
+		this.yAxis = yAxis.getId();
 	}
 	public String getyField() {
 		return yField;

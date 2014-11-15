@@ -2,13 +2,16 @@ package com.ar.marketanalyzer.backtest.models.models;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.rules.RuleBuyFollowThru;
 import com.ar.marketanalyzer.backtest.models.rules.RuleSellDDaysAndChurnDays;
@@ -83,6 +86,21 @@ public class IndexBacktestingModel extends AbstractModel {
 			}
 			stats.get(keys.get(i)).setPriceTrend35(closePercentChange/loopDays);
 		}
+	}
+
+	
+	public List<RuleResultsDDaysAndChurnDays> getDdaysForPlotting() {
+		List<AbstractRule> ruleList = this.getRuleList();
+		List<RuleResultsDDaysAndChurnDays> resultList = null;
+		
+		for(AbstractRule rule: ruleList) {
+			if(rule.getClass() == RuleSellDDaysAndChurnDays.class) {
+				RuleSellDDaysAndChurnDays sellRule = (RuleSellDDaysAndChurnDays)rule;
+				SortedSet<RuleResultsDDaysAndChurnDays> resultsSet = (SortedSet<RuleResultsDDaysAndChurnDays>)(SortedSet<?>)sellRule.getRuleResultSet();
+				resultList = new ArrayList<RuleResultsDDaysAndChurnDays>(resultsSet);
+			}
+		}
+		return resultList;
 	}
 	
 	@SuppressWarnings("unchecked")

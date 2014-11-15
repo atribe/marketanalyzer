@@ -9,13 +9,14 @@ import com.ar.marketanalyzer.plotting.amstockcharts.buildingblock.PeriodSelector
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.AmBalloon;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockGraph;
 import com.ar.marketanalyzer.plotting.amstockcharts.chartobjects.StockLegend;
-import com.ar.marketanalyzer.plotting.amstockcharts.data.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSet;
 import com.ar.marketanalyzer.plotting.amstockcharts.data.DataSetSelector;
+import com.ar.marketanalyzer.plotting.amstockcharts.data.dataprovider.DataProviderInterface;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.AmTheme;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.ChartTypeAm;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.Color;
 import com.ar.marketanalyzer.plotting.amstockcharts.enums.GraphType;
+import com.ar.marketanalyzer.plotting.amstockcharts.enums.Position;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.CategoryAxesSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartCursorSettings;
 import com.ar.marketanalyzer.plotting.amstockcharts.settings.ChartScrollbarSettings;
@@ -196,18 +197,23 @@ public class AmStockChart {
 	public AmStockChart() {
 		dataDateFormat = "YYYY-MM-DD";
 	}
-	public AmStockChart(List<DataProviderInterface> dataProviderList) {
-		this();
-		
-		DataSet valueDataset = new DataSet(dataProviderList);
+	
+	/*
+	 * Charts
+	 */
+	public void createOhlcvChart(List<DataProviderInterface> convertSecuritiesOhlcvToDataProviderOHLCV) {
+		DataSet valueDataset = new DataSet(convertSecuritiesOhlcvToDataProviderOHLCV);
+			valueDataset.setAsOhlcvStockFieldMappings();
+			valueDataset.setOhlcvTitle();
 		this.dataSets.add(valueDataset);
+		
 		
 		StockPanel stockPanel = new StockPanel();
 			stockPanel.setPercentHeight(70.0);
 			stockPanel.setShowCategoryAxis(false);
 		
 			StockLegend stockLegend = new StockLegend();
-				stockPanel.setLegend(stockLegend);
+				stockPanel.setStockLegend(stockLegend);
 		
 			panelsSettings = new PanelsSettings();
 				panelsSettings.setStartDuration(1);
@@ -236,7 +242,6 @@ public class AmStockChart {
 			volumePanel.addStockGraph(volumeGraph);
 		
 		panels.add(volumePanel);
-
 		
 		categoryAxesSettings = new CategoryAxesSettings();
 			categoryAxesSettings.setMaxSeries(210);
@@ -255,15 +260,117 @@ public class AmStockChart {
 		periodSelector = new PeriodSelector();
 	}
 	
+	public void createDdayChart(List<DataProviderInterface> convertDdayRuleResultToDataProviderDday) {
+		DataSet dDayDataSet = new DataSet(convertDdayRuleResultToDataProviderDday);
+			dDayDataSet.setColor(new Color("b0de09"));
+			dDayDataSet.setDdayFieldMappings();
+			dDayDataSet.setCategoryField("date");
+		this.dataSets.add(dDayDataSet);
+		
+		StockPanel stockPanel = new StockPanel();
+			stockPanel.setShowCategoryAxis(true);
+			stockPanel.setTitle("D Days");
+		
+			StockGraph stockGraph = new StockGraph("dday1");
+				stockGraph.setValueField("ddayInWindow");
+				stockGraph.setUseDataSetColors(false);
+				dDayDataSet.setCategoryField("date");
+			stockPanel.addStockGraph(stockGraph);
+			
+			StockLegend stockLegend = new StockLegend();
+			stockPanel.setStockLegend(stockLegend);
+			
+		panels.add(stockPanel);
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			
+		chartCursorSettings = new ChartCursorSettings();
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			
+		periodSelector = new PeriodSelector();
+	}
+	
+	public void createCombinedChart(List<DataProviderInterface> convertSecuritiesOhlcvToDataProviderOHLCV,
+			List<DataProviderInterface> convertDdayRuleResultToDataProviderDday) {
+		
+		DataSet valueDataset = new DataSet(convertSecuritiesOhlcvToDataProviderOHLCV);
+			valueDataset.setAsOhlcvStockFieldMappings();
+			valueDataset.setOhlcvTitle();
+		this.dataSets.add(valueDataset);
+		
+		DataSet dDayDataSet = new DataSet(convertDdayRuleResultToDataProviderDday);
+			dDayDataSet.setColor(new Color("b0de09"));
+			dDayDataSet.setDdayFieldMappings();
+			dDayDataSet.setCategoryField("date");
+		this.dataSets.add(dDayDataSet);
+		
+		StockPanel stockPanel = new StockPanel();
+			stockPanel.setPercentHeight(70.0);
+			stockPanel.setShowCategoryAxis(false);
+	
+		StockLegend stockLegend = new StockLegend();
+			stockLegend.setPeriodValueTextRegular("[[value.close]]");
+		stockPanel.setStockLegend(stockLegend);
+	
+		StockGraph stockGraph = new StockGraph("graph1");
+			stockGraph.setTitle("IXIC");
+			stockGraph.setValueField("value");
+			stockGraph.setType(GraphType.candlestick);
+			stockGraph.setFillAlphas(1.0);
+			stockGraph.setValueGraphSettings();
+			stockGraph.setComparable(false);
+		stockPanel.addStockGraph(stockGraph);
+	
+		panels.add(stockPanel);
+		
+		StockPanel volumePanel = new StockPanel();
+			volumePanel.setTitle("Volume");
+			volumePanel.setPercentHeight(30.0);
+			volumePanel.setMarginTop(1.0);
+			volumePanel.setShowCategoryAxis(true);
+		
+			StockGraph volumeGraph = new StockGraph("volume1");
+				volumeGraph.setValueField("volume");
+				volumeGraph.setType(GraphType.column);
+				volumeGraph.setShowBalloon(false);
+				volumeGraph.setFillAlphas(1.0);
+			volumePanel.addStockGraph(volumeGraph);
+		
+		panels.add(volumePanel);
+		
+		panelsSettings = new PanelsSettings();
+			panelsSettings.setStartDuration(1);
+		
+		categoryAxesSettings = new CategoryAxesSettings();
+			categoryAxesSettings.setMaxSeries(210);
+		
+		valueAxesSettings = new ValueAxesSettings();
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			chartScrollbarSettings.setGraphType(GraphType.line);
+		
+		chartCursorSettings = new ChartCursorSettings();
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			chartCursorSettings.setValueLineBalloonEnabled(true);
+			chartCursorSettings.setValueLineEnabled(true);
+		
+		periodSelector = new PeriodSelector();
+		
+		dataSetSelector = new DataSetSelector();
+			dataSetSelector.setPosition(Position.left);
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public AmTheme getTheme() {
 		return theme;
 	}
 	public void setTheme(AmTheme theme) {
 		this.theme = theme;
 	}
-	/*
-	 * Getters and Setters
-	 */
 	public AmExport getAmExport() {
 		return amExport;
 	}
@@ -451,5 +558,5 @@ public class AmStockChart {
 	public void setZoomOutOnDataSetChange(Boolean zoomOutOnDataSetChange) {
 		this.zoomOutOnDataSetChange = zoomOutOnDataSetChange;
 	}
-
+	
 }
