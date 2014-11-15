@@ -48,7 +48,22 @@ public class RootController {
         
         mav.addObject("modelList", modelList);
         
-        mav.setViewName("dday");
+        mav.setViewName("index");
+        return mav;
+    }
+    
+    @RequestMapping(value="combined", method = RequestMethod.GET)
+    public ModelAndView combinedView() throws Exception {
+        ModelAndView mav = new ModelAndView();
+        //the view name is the name of the jsp
+        
+        List<AbstractModel> modelList = modelService.getAll();
+        
+        logger.info(modelList);
+        
+        mav.addObject("modelList", modelList);
+        
+        mav.setViewName("index");
         return mav;
     }
 }

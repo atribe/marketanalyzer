@@ -42,7 +42,7 @@ public class JsonOhlcvController {
 
 	@RequestMapping(value="amchart/ohlcv/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
-	public AmStockChart getamchartJSON(@PathVariable String symbol) {
+	public AmStockChart getohlcvJSON(@PathVariable String symbol) {
 		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
 		
 		List<SecuritiesOhlcv> ohlcvData = null;
@@ -93,6 +93,41 @@ public class JsonOhlcvController {
 
 		AmStockChart chart = new AmStockChart();
 		chart.createDdayChart(DataProviderDday.convertDdayRuleResultToDataProviderDday(resultList));
+		return chart;
+	}
+	
+	@RequestMapping(value="amchart/combined/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@ResponseBody
+	public AmStockChart getcombinedJSON(@PathVariable String symbol) {
+		logger.debug("Symbol passed to the amchart JSON controller is: " + symbol);
+		
+		Symbol sym;
+		List<RuleResultsDDaysAndChurnDays> resultList = null;
+		List<SecuritiesOhlcv> ohlcvData = null;
+		
+		try {
+			//Getting the symbol
+			sym = symbolService.findBySymbol("^IXIC");
+			
+			//Looking up the desired range of OHLCV
+			LocalDate backToDate = new LocalDate(2012,1,1);
+			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
+			ohlcvData = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
+			
+			//Getting the d days
+			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
+			resultList = model.getDdaysForPlotting();
+			
+		} catch (SecuritiesNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		AmStockChart chart = new AmStockChart();
+		chart.createCombinedChart(DataProviderOHLCV.convertSecuritiesOhlcvToDataProviderOHLCV(ohlcvData), DataProviderDday.convertDdayRuleResultToDataProviderDday(resultList));
 		return chart;
 	}
 	
