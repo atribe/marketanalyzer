@@ -84,6 +84,11 @@ public class StockPanel extends AmSerialChart{
 	*/
 	private StockLegend legend;
 	/**
+	* Stock chart legend.
+	* Default Value: 
+	*/
+	private StockLegend stockLegend;
+	/**
 	* A title of a panel. Note,StockLegend�should be added in order title to be displayed.
 	* Default Value: 
 	*/
@@ -248,5 +253,11 @@ public class StockPanel extends AmSerialChart{
 	}
 	public void setTrendLineThickness(Double trendLineThickness) {
 		this.trendLineThickness = trendLineThickness;
+	}
+	public StockLegend getStockLegend() {
+		return stockLegend;
+	}
+	public void setStockLegend(StockLegend stockLegend) {
+		this.stockLegend = stockLegend;
 	}
 }

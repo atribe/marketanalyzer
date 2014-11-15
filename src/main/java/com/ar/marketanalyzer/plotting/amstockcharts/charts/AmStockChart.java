@@ -199,82 +199,10 @@ public class AmStockChart {
 		dataDateFormat = "YYYY-MM-DD";
 	}
 	public AmStockChart(List<DataProviderInterface> dataProviderList) {
-		this();
 		
-		DataSet valueDataset = new DataSet(dataProviderList);
-		valueDataset.setAsOhlcvStockFieldMappings();
-		valueDataset.setOhlcvTitle();
-		
-		
-		this.dataSets.add(valueDataset);
-		
-		
-		StockPanel stockPanel = new StockPanel();
-			stockPanel.setPercentHeight(70.0);
-			stockPanel.setShowCategoryAxis(false);
-		
-			StockLegend stockLegend = new StockLegend();
-				stockPanel.setLegend(stockLegend);
-		
-			panelsSettings = new PanelsSettings();
-				panelsSettings.setStartDuration(1);
-		
-			StockGraph stockGraph = new StockGraph("graph1");
-				stockGraph.setTitle("IXIC");
-				stockGraph.setValueField("value");
-				stockGraph.setType(GraphType.candlestick);
-				stockGraph.setFillAlphas(1.0);
-				stockGraph.setValueGraphSettings();
-			stockPanel.addStockGraph(stockGraph);
-		
-		panels.add(stockPanel);
-		
-		StockPanel volumePanel = new StockPanel();
-			volumePanel.setTitle("Volume");
-			volumePanel.setPercentHeight(30.0);
-			volumePanel.setMarginTop(1.0);
-			volumePanel.setShowCategoryAxis(true);
-		
-			StockGraph volumeGraph = new StockGraph("volume1");
-				volumeGraph.setValueField("volume");
-				volumeGraph.setType(GraphType.column);
-				volumeGraph.setShowBalloon(false);
-				volumeGraph.setFillAlphas(1.0);
-			volumePanel.addStockGraph(volumeGraph);
-		
-		panels.add(volumePanel);
-
-		
-		categoryAxesSettings = new CategoryAxesSettings();
-			categoryAxesSettings.setMaxSeries(210);
-		
-		valueAxesSettings = new ValueAxesSettings();
-		
-		chartScrollbarSettings = new ChartScrollbarSettings();
-			chartScrollbarSettings.setGraph(stockGraph.getId());
-			chartScrollbarSettings.setGraphType(GraphType.line);
-		
-		chartCursorSettings = new ChartCursorSettings();
-			chartCursorSettings.setValueBalloonsEnabled(true);
-			chartCursorSettings.setValueLineBalloonEnabled(true);
-			chartCursorSettings.setValueLineEnabled(true);
-		
-		periodSelector = new PeriodSelector();
 	}
 	public AmStockChart(List<DataProviderInterface> dataProviderList, List<DataProviderInterface> ddayList) {
-		
-		this();
-
-		DataSet valueDataset = new DataSet(dataProviderList);
-			valueDataset.setAsOhlcvStockFieldMappings();
-			valueDataset.setOhlcvTitle();
-		this.dataSets.add(valueDataset);
-		
-		DataSet dDayDataSet = new DataSet(ddayList);
-			dDayDataSet.setColor(Color.BLACK);
-			dDayDataSet.setDdayFieldMappings();
-			dDayDataSet.setCategoryField("ddayDate");
-		this.dataSets.add(dDayDataSet);
+			
 		
 		
 		StockPanel stockPanel = new StockPanel();
@@ -352,15 +280,110 @@ public class AmStockChart {
 		
 	}
 	
+	/*
+	 * Charts
+	 */
+	public void createOhlcvChart(List<DataProviderInterface> convertSecuritiesOhlcvToDataProviderOHLCV) {
+		DataSet valueDataset = new DataSet(convertSecuritiesOhlcvToDataProviderOHLCV);
+		valueDataset.setAsOhlcvStockFieldMappings();
+		valueDataset.setOhlcvTitle();
+		
+		
+		this.dataSets.add(valueDataset);
+		
+		
+		StockPanel stockPanel = new StockPanel();
+			stockPanel.setPercentHeight(70.0);
+			stockPanel.setShowCategoryAxis(false);
+		
+			StockLegend stockLegend = new StockLegend();
+				stockPanel.setStockLegend(stockLegend);
+		
+			panelsSettings = new PanelsSettings();
+				panelsSettings.setStartDuration(1);
+		
+			StockGraph stockGraph = new StockGraph("graph1");
+				stockGraph.setTitle("IXIC");
+				stockGraph.setValueField("value");
+				stockGraph.setType(GraphType.candlestick);
+				stockGraph.setFillAlphas(1.0);
+				stockGraph.setValueGraphSettings();
+			stockPanel.addStockGraph(stockGraph);
+		
+		panels.add(stockPanel);
+		
+		StockPanel volumePanel = new StockPanel();
+			volumePanel.setTitle("Volume");
+			volumePanel.setPercentHeight(30.0);
+			volumePanel.setMarginTop(1.0);
+			volumePanel.setShowCategoryAxis(true);
+		
+			StockGraph volumeGraph = new StockGraph("volume1");
+				volumeGraph.setValueField("volume");
+				volumeGraph.setType(GraphType.column);
+				volumeGraph.setShowBalloon(false);
+				volumeGraph.setFillAlphas(1.0);
+			volumePanel.addStockGraph(volumeGraph);
+		
+		panels.add(volumePanel);
+		
+		categoryAxesSettings = new CategoryAxesSettings();
+			categoryAxesSettings.setMaxSeries(210);
+		
+		valueAxesSettings = new ValueAxesSettings();
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			chartScrollbarSettings.setGraphType(GraphType.line);
+		
+		chartCursorSettings = new ChartCursorSettings();
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			chartCursorSettings.setValueLineBalloonEnabled(true);
+			chartCursorSettings.setValueLineEnabled(true);
+		
+		periodSelector = new PeriodSelector();
+	}
+	
+	public void createDdayChart(List<DataProviderInterface> convertDdayRuleResultToDataProviderDday) {
+		DataSet dDayDataSet = new DataSet(convertDdayRuleResultToDataProviderDday);
+			dDayDataSet.setColor(new Color("b0de09"));
+			dDayDataSet.setDdayFieldMappings();
+			dDayDataSet.setCategoryField("date");
+		this.dataSets.add(dDayDataSet);
+		
+		StockPanel stockPanel = new StockPanel();
+			stockPanel.setShowCategoryAxis(true);
+			stockPanel.setTitle("D Days");
+		
+			StockGraph stockGraph = new StockGraph("dday1");
+				stockGraph.setValueField("ddayInWindow");
+				stockGraph.setUseDataSetColors(false);
+			stockPanel.addStockGraph(stockGraph);
+			
+			StockLegend stockLegend = new StockLegend();
+			stockPanel.setStockLegend(stockLegend);
+			
+		panels.add(stockPanel);
+		
+		chartScrollbarSettings = new ChartScrollbarSettings();
+			chartScrollbarSettings.setGraph(stockGraph.getId());
+			
+		chartCursorSettings = new ChartCursorSettings();
+			chartCursorSettings.setValueBalloonsEnabled(true);
+			
+		periodSelector = new PeriodSelector();
+	}
+	
+	
+	/*
+	 * Getters and Setters
+	 */
 	public AmTheme getTheme() {
 		return theme;
 	}
 	public void setTheme(AmTheme theme) {
 		this.theme = theme;
 	}
-	/*
-	 * Getters and Setters
-	 */
 	public AmExport getAmExport() {
 		return amExport;
 	}
@@ -548,5 +571,5 @@ public class AmStockChart {
 	public void setZoomOutOnDataSetChange(Boolean zoomOutOnDataSetChange) {
 		this.zoomOutOnDataSetChange = zoomOutOnDataSetChange;
 	}
-
+	
 }
