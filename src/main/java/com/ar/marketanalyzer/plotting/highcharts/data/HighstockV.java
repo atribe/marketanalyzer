@@ -21,7 +21,7 @@ public class HighstockV implements HighstockData {
 		
 	}
 	public HighstockV(SecuritiesOhlcv ohlcv) {
-		setX(ohlcv.getDate());
+		setX(new Date( ohlcv.getDate().getTime() ));
 		setVolume(ohlcv.getVolume());
 	}
 	

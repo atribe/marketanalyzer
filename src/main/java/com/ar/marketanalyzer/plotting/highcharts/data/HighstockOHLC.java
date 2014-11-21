@@ -25,7 +25,7 @@ public class HighstockOHLC implements HighstockData {
 		
 	}
 	public HighstockOHLC(SecuritiesOhlcv ohlcv) {
-		setX(ohlcv.getDate());
+		setX(new Date( ohlcv.getDate().getTime() ));
 		setOpen(ohlcv.getOpen());
 		setHigh(ohlcv.getHigh());
 		setLow(ohlcv.getLow());
