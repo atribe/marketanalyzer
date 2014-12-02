@@ -23,13 +23,13 @@ public class HighStockOHLCV {
 
 	public HighStockOHLCV() {
 		rangeSelector = new RangeSelector();
-		rangeSelector.setSelected(1);
+		rangeSelector.setSelected(0);
 		
 		title = new Title("Test Highstock Chart");
 				
 		YAxis yaxis1 = new YAxis();
 			yaxis1.setLabels(new Labels());
-			yaxis1.setTitle(new Title("OHLC"));
+			yaxis1.setTitle(new Title("ohlc"));
 			yaxis1.setHeight("65%");
 			yaxis1.setLineWidth(2);	
 		yAxis.add(yaxis1);

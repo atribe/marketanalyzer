@@ -14,6 +14,7 @@ public class Series {
 	private List<HighstockData> data;
 	private Integer yAxis;
 	private List<String> dataGrouping;
+	private Integer turboThreshold;
 
 	public Series() {
 		
@@ -21,9 +22,10 @@ public class Series {
 	
 	
 	public void SetOHLCSeries(List<HighstockData> ohlcData) {
-		setType("OHLC");
+		setType("ohlc");
 		setName("ohlc name");
 		setData(ohlcData);
+		setTurboThreshold(0);
 	}
 
 
@@ -63,5 +65,15 @@ public class Series {
 	}
 	public void setDataGrouping(List<String> dataGrouping) {
 		this.dataGrouping = dataGrouping;
+	}
+
+
+	public Integer getTurboThreshold() {
+		return turboThreshold;
+	}
+
+
+	public void setTurboThreshold(Integer turboThreshold) {
+		this.turboThreshold = turboThreshold;
 	}
 }

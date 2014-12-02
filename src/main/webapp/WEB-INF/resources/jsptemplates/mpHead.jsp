@@ -17,5 +17,4 @@
 		
         <script src="<c:url value="js/highstock/highstock.src.js" />" type="text/javascript"></script>
         <script src="<c:url value="js/stockchart.js" />" type="text/javascript"></script>
-        <link rel="stylesheet" href="<c:url value="js/amcharts/style.css" />" type="text/css">
 	</head>
