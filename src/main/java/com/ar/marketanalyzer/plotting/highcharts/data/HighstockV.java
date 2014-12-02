@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class HighstockV implements HighstockData {
 
 	private Date x;
-	private long volume;
+	private long y;
 	
 	/*
 	 * Constructors
@@ -22,7 +22,7 @@ public class HighstockV implements HighstockData {
 	}
 	public HighstockV(SecuritiesOhlcv ohlcv) {
 		setX(new Date( ohlcv.getDate().getTime() ));
-		setVolume(ohlcv.getVolume());
+		setY(ohlcv.getVolume());
 	}
 	
 	/*
@@ -38,20 +38,25 @@ public class HighstockV implements HighstockData {
 		return ohlcList;
 	}
 	
+	@Override
+	public String toString() {
+		return x.toString() + " V:" + y;
+	}
+	
+	/*
+	 * Getters and Setters
+	 */
 	public Date getX() {
 		return x;
 	}
 	public void setX(Date x) {
 		this.x = x;
 	}
-	/*
-	 * Getters and Setters
-	 */
-	public long getVolume() {
-		return volume;
+	public long getY() {
+		return y;
 	}
 
-	public void setVolume(long volume) {
-		this.volume = volume;
+	public void setY(long volume) {
+		this.y = volume;
 	}
 }

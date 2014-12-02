@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
+import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
+import com.ar.marketanalyzer.backtest.services.AbstractModelService;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -31,6 +36,8 @@ public class HighstockJsonController {
 	private SymbolService symbolService;
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
+	@Autowired
+	private AbstractModelService modelService;
 	
 	@RequestMapping(value="highstockohlcv/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
 	@ResponseBody
@@ -39,7 +46,7 @@ public class HighstockJsonController {
 		
 		//ProCandlestickChart chart = new ProCandlestickChart();
 		HighStockOHLCV chart = null;
-		
+		List<RuleResultsDDaysAndChurnDays> resultList = null;
 		Symbol sym;
 		
 		try {
@@ -52,7 +59,14 @@ public class HighstockJsonController {
 			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
 			
 			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockV.convertSecOHLCVtoOHLC(data));
-		} catch (SecuritiesNotFound e) {
+			
+			//Getting the d days
+			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
+			resultList = model.getDdaysForPlotting();
+			
+			chart.addSeries(resultList);
+			
+		} catch (SecuritiesNotFound | ModelNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

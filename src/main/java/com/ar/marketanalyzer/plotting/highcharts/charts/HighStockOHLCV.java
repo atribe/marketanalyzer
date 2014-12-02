@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ar.marketanalyzer.plotting.highcharts.chartobjects.Labels;
+import com.ar.marketanalyzer.plotting.highcharts.chartobjects.Navigator;
 import com.ar.marketanalyzer.plotting.highcharts.chartobjects.RangeSelector;
 import com.ar.marketanalyzer.plotting.highcharts.chartobjects.Series;
 import com.ar.marketanalyzer.plotting.highcharts.chartobjects.Title;
@@ -19,6 +20,7 @@ public class HighStockOHLCV {
 	private Title title;
 	private List<YAxis> yAxis = new ArrayList<YAxis>();
 	private List<Series> series = new ArrayList<Series>();
+	private Navigator navigator;
 	
 
 	public HighStockOHLCV() {
@@ -42,6 +44,8 @@ public class HighStockOHLCV {
 			yaxis2.setOffset(0);
 			yaxis2.setLineWidth(2);
 		yAxis.add(yaxis2);
+		
+		navigator = new Navigator();
 			
 	}
 	
@@ -85,5 +89,13 @@ public class HighStockOHLCV {
 	}
 	public void setSeries(List<Series> series) {
 		this.series = series;
+	}
+
+	public Navigator getNavigator() {
+		return navigator;
+	}
+
+	public void setNavigator(Navigator navigator) {
+		this.navigator = navigator;
 	}
 }

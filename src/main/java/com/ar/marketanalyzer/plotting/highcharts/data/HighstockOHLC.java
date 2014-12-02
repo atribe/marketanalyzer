@@ -45,6 +45,11 @@ public class HighstockOHLC implements HighstockData {
 		return ohlcList;
 	}
 	
+	@Override
+	public String toString() {
+		return x.toString() + " O:" + open + " H:" + high + " L:" + low + " C:" + close;
+	}
+	
 	/*
 	 * Getters and Setters
 	 */

@@ -33,6 +33,7 @@ public class Series {
 		setType("column");
 		setName("Volume");
 		setData(volumeData);
+		setyAxis(1);
 	}
 
 
