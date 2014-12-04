@@ -24,7 +24,7 @@ import com.ar.marketanalyzer.core.securities.services.SymbolService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.plotting.highcharts.charts.HighStockOHLCV;
 import com.ar.marketanalyzer.plotting.highcharts.data.HighstockOHLC;
-import com.ar.marketanalyzer.plotting.highcharts.data.HighstockV;
+import com.ar.marketanalyzer.plotting.highcharts.data.HighstockSingleValueData;
 
 @RestController
 @RequestMapping("/json")
@@ -58,13 +58,13 @@ public class HighstockJsonController {
 			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
 			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
 			
-			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockV.convertSecOHLCVtoOHLC(data));
+			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockSingleValueData.convertSecOHLCVtoSingleValue(data));
 			
 			//Getting the d days
 			IndexBacktestingModel model = (IndexBacktestingModel)modelService.findBySymbolAndModelStatusEager(sym, ModelStatus.CURRENT);
 			resultList = model.getDdaysForPlotting();
 			
-			chart.addSeries(resultList);
+			chart.addSeries(HighstockSingleValueData.convertDdayToSingleValue(resultList));
 			
 		} catch (SecuritiesNotFound | ModelNotFound e) {
 			// TODO Auto-generated catch block

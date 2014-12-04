@@ -22,7 +22,9 @@ public class HighStockOHLCV {
 	private List<Series> series = new ArrayList<Series>();
 	private Navigator navigator;
 	
-
+	/*
+	 * Constructors
+	 */
 	public HighStockOHLCV() {
 		rangeSelector = new RangeSelector();
 		rangeSelector.setSelected(0);
@@ -52,14 +54,33 @@ public class HighStockOHLCV {
 	public HighStockOHLCV(List<HighstockData> ohlcData, List<HighstockData> volumeData) {
 		this();
 		Series ohlc = new Series();
-		ohlc.SetOHLCSeries(ohlcData);
+		ohlc.setOHLCSeries(ohlcData);
 		series.add(ohlc);
 		Series volume = new Series();
-		volume.SetVolumeSeries(volumeData);
+		volume.setVolumePanelSeries(volumeData);
 		series.add(volume);
 		
 	}
 
+	/*
+	 * Helper Methods
+	 */
+	public void addSeries(List<HighstockData> highstockSingleValueData) {
+		YAxis yaxis3 = new YAxis();
+			Labels newLabels = new Labels();
+				newLabels.setAlign("left");
+				newLabels.setX(0);
+			yaxis3.setLabels(newLabels);
+			yaxis3.setTitle(new Title("Seconday Axis"));
+			yaxis3.setHeight("65%");
+			yaxis3.setLineWidth(2);	
+		yAxis.add(yaxis3);
+		
+		Series newSeries = new Series();
+		newSeries.setStockPanelSeries(highstockSingleValueData);
+		newSeries.setyAxis(2);
+		series.add(newSeries);
+	}
 	/*
 	 * Getters and Setters
 	 */
@@ -94,7 +115,6 @@ public class HighStockOHLCV {
 	public Navigator getNavigator() {
 		return navigator;
 	}
-
 	public void setNavigator(Navigator navigator) {
 		this.navigator = navigator;
 	}

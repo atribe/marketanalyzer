@@ -21,7 +21,7 @@ public class Series {
 	}
 	
 	
-	public void SetOHLCSeries(List<HighstockData> ohlcData) {
+	public void setOHLCSeries(List<HighstockData> ohlcData) {
 		setType("ohlc");
 		setName("ohlc name");
 		setData(ohlcData);
@@ -29,7 +29,13 @@ public class Series {
 	}
 
 
-	public void SetVolumeSeries(List<HighstockData> volumeData) {
+	public void setStockPanelSeries(List<HighstockData> data) {
+		setType("line");
+		setName("SomethingElse");
+		setData(data);
+		setyAxis(0);
+	}
+	public void setVolumePanelSeries(List<HighstockData> volumeData) {
 		setType("column");
 		setName("Volume");
 		setData(volumeData);
