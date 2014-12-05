@@ -15,9 +15,6 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 		<script src="<c:url value="js/headerColorChange.js" />" type="text/javascript"></script>
 		
-		<script src="<c:url value="js/amcharts/amcharts.js" />" type="text/javascript"></script>
-        <script src="<c:url value="js/amcharts/serial.js" />" type="text/javascript"></script>
-        <script src="<c:url value="js/amcharts/amstock.js" />" type="text/javascript"></script>
+        <script src="<c:url value="js/highstock/highstock.src.js" />" type="text/javascript"></script>
         <script src="<c:url value="js/stockchart.js" />" type="text/javascript"></script>
-        <link rel="stylesheet" href="<c:url value="js/amcharts/style.css" />" type="text/css">
 	</head>
