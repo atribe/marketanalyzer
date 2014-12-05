@@ -13,12 +13,21 @@ public class BoneCpConfig {
 
     @Value("${bonecp.url}")
     private String jdbcUrl;
+    
+    @Value("${bonecp.dbname}")
+    private String jdbcDbname;
 
-    @Value("${bonecp.username}")
-    private String jdbcUsername;
+    @Value("${bonecp.dev.username}")
+    private String jdbcDevUsername;
 
-    @Value("${bonecp.password}")
-    private String jdbcPassword;
+    @Value("${bonecp.dev.password}")
+    private String jdbcDevPassword;
+    
+    @Value("${bonecp.prod.username}")
+    private String jdbcProdUsername;
+
+    @Value("${bonecp.prod.password}")
+    private String jdbcProdPassword;
 
     @Value("${bonecp.driverClass}")
     private String driverClass;
@@ -48,9 +57,20 @@ public class BoneCpConfig {
     public DataSource dataSource() {
         BoneCPDataSource dataSource = new BoneCPDataSource();
         dataSource.setDriverClass(driverClass);
-        dataSource.setJdbcUrl(jdbcUrl);
-        dataSource.setUsername(jdbcUsername);
-        dataSource.setPassword(jdbcPassword);
+        // ************For Open Shift Account************	  
+     	if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
+     		String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+     		String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+
+     		String url = "jdbc:mysql://"+host+":"+port+"/"+jdbcDbname;
+     		dataSource.setJdbcUrl(url);
+	        dataSource.setUsername(jdbcProdUsername);
+	        dataSource.setPassword(jdbcProdPassword);
+     	} else {
+     		dataSource.setJdbcUrl(jdbcUrl+jdbcDbname);
+	        dataSource.setUsername(jdbcDevUsername);
+	        dataSource.setPassword(jdbcDevPassword);
+     	}
         dataSource.setIdleConnectionTestPeriodInMinutes(idleConnectionTestPeriodInMinutes);
         dataSource.setIdleMaxAgeInMinutes(idleMaxAgeInMinutes);
         dataSource.setMaxConnectionsPerPartition(maxConnectionsPerPartition);
