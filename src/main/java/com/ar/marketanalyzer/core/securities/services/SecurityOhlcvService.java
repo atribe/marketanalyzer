@@ -135,6 +135,27 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		return ohlcvList;
 	}
 
+	public List<SecuritiesOhlcv> findBySymbolAsc(Symbol symbol) throws SecuritiesNotFound {
+		Symbol foundTickerSymbol = null;
+		if(symbol.getId() == null && symbol.getId() < 0) {
+			foundTickerSymbol = symbolService.findBySymbol(symbol.getSymbol());
+		} else {
+			foundTickerSymbol = symbol;
+		}
+			
+		if( foundTickerSymbol == null ) {
+			throw new SecuritiesNotFound("By Ticker search for " + symbol.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
+		}
+		
+		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolOrderByDateAsc(symbol);
+		
+		if(ohlcvList.isEmpty()) {
+			throw new SecuritiesNotFound("The Ticker '" + symbol.getSymbol() + "' was not found in the stock ohlcv db.");
+		}
+		
+		return ohlcvList;
+	}
+	
 	@Override
 	@Transactional
 	public SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, Date date)
