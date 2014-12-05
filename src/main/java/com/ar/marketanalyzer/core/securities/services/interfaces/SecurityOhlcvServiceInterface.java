@@ -24,6 +24,7 @@ public interface SecurityOhlcvServiceInterface {
 	public List<SecuritiesOhlcv> findAll();
 	public SecuritiesOhlcv findById(long id) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound;
+	public List<SecuritiesOhlcv> findBySymbolAsc(Symbol symbol) throws SecuritiesNotFound;
 	public SecuritiesOhlcv findBySymbolAndDate(Symbol foundSymbol,	Date date) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol, Date date)throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol, Date date)throws SecuritiesNotFound;

@@ -56,8 +56,8 @@ public class HighstockJsonController {
 			//Looking up the desired range of OHLCV
 			LocalDate backToDate = new LocalDate(2013,1,1);
 			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
-			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
-			
+			//List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
+			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAsc(sym);
 			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockSingleValueData.convertSecOHLCVtoSingleValue(data));
 			
 			//Getting the d days

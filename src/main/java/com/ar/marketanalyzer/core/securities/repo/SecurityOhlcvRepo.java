@@ -13,6 +13,7 @@ import com.ar.marketanalyzer.core.securities.models.Symbol;
 public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> {
 
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol);
+	public List<SecuritiesOhlcv> findBySymbolOrderByDateAsc(Symbol symbol);
 	public SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, Date date);
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateDesc(Symbol symbol, Date date);
 	public List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateAsc(Symbol symbol, Date date);
