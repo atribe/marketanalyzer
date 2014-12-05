@@ -8,19 +8,20 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.SessionTrackingMode;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 import com.ar.marketanalyzer.spring.init.PropCache;
-import com.ar.marketanalyzer.threads.marketAnalyzerListener;
 
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */
-	static Logger log = Logger.getLogger(AppInitializer.class.getName());
+	private static final Logger logger = LogManager.getLogger(AppInitializer.class.getName());
 	private static final String CONFIG_LOCATION = "com.ar.marketanalyzer.spring.config";
 	private static final String MAPPING_URL = "/";
     
@@ -30,11 +31,11 @@ public class AppInitializer implements WebApplicationInitializer {
 	
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-    	log.trace("0.0 onStartup method is starting");
+    	logger.trace("0.0 onStartup method is starting");
     	
     	WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));
-        servletContext.addListener(new marketAnalyzerListener());
+        servletContext.addListener(new MarketAnalyzerListener());
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(MAPPING_URL);

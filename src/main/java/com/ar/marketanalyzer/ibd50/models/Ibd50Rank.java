@@ -21,11 +21,12 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import com.ar.marketanalyzer.ibd50.models.parents.PersistableEntity;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "IBD50_RANKING")
-public class Ibd50Rank extends PersistableEntity {
+public class Ibd50Rank extends PersistableEntityInt {
 		
 	private static final long serialVersionUID = 5791875306977524480L;
 
@@ -34,7 +35,7 @@ public class Ibd50Rank extends PersistableEntity {
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
-	private TickerSymbol ticker;
+	private Symbol ticker;
 	
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="tracking_id", referencedColumnName="id")
@@ -106,6 +107,9 @@ public class Ibd50Rank extends PersistableEntity {
 	@Column(name="qtrs_rising_sponsorship")
 	private Integer qtrsRisingSponsorship;
 	
+	@Column(name="current_ranking")
+	private Boolean activeRanking;
+	
 	@OneToMany(mappedBy = "ranking",cascade = CascadeType.ALL)
 	private Collection<Ibd50IndexShares> shareCounts;
 	
@@ -172,7 +176,7 @@ public class Ibd50Rank extends PersistableEntity {
 		
 		LocalDate dateToReturn = null;
 		
-		if(today.dayOfWeek().equals(DateTimeConstants.MONDAY)) {
+		if(today.getDayOfWeek() == (DateTimeConstants.MONDAY)) {
 			dateToReturn = today;
 		} else {
 			dateToReturn = today.withDayOfWeek(1);
@@ -199,10 +203,10 @@ public class Ibd50Rank extends PersistableEntity {
 	public void setTracker(Ibd50Tracking tracker) {
 		this.tracker = tracker;
 	}
-	public TickerSymbol getTicker() {
+	public Symbol getTicker() {
 		return ticker;
 	}
-	public void setTicker(TickerSymbol ticker) {
+	public void setTicker(Symbol ticker) {
 		this.ticker = ticker;
 	}
 	public String getSymbol() {
@@ -399,6 +403,14 @@ public class Ibd50Rank extends PersistableEntity {
 	}
 	public void setQtrsRisingSponsorship(int qtrsRisingSponsorship) {
 		this.qtrsRisingSponsorship = new Integer(qtrsRisingSponsorship);
+	}
+
+	public Boolean getActiveRanking() {
+		return activeRanking;
+	}
+
+	public void setActiveRanking(Boolean activeRanking) {
+		this.activeRanking = activeRanking;
 	}
 	
 }

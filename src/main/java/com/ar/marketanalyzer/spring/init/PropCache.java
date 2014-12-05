@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * From: http://kielczewski.eu/2013/11/setting-active-profile-and-property-sources-in-spring-mvc/
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  * 4. If failed to found one, panicks and returns empty Properties object
  */
 public class PropCache {
-	static Logger log = Logger.getLogger(PropCache.class.getName());
+	private static final Logger logger = LogManager.getLogger(PropCache.class.getName());
 
 	private static Properties cachedProps = null;
 	
@@ -69,18 +69,18 @@ public class PropCache {
     }
 
     private static InputStream findInSourceDirectory(String fileName) throws FileNotFoundException {
-        log.trace("__--++Trying "+ fileName +" in source directory");
+    	logger.trace("__--++Trying "+ fileName +" in source directory");
         return new FileInputStream("src/main/resources/" + fileName);
     }
 
     private static InputStream findInClasspath(String fileName) {
-        log.trace("__--++Trying "+ fileName +" on the classpath");
+    	logger.trace("__--++Trying "+ fileName +" on the classpath");
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
     }
 
     private static InputStream findInWorkingDirectory(String fileName) {
         try {
-            log.trace("__--++Trying "+ fileName +" in current directory");
+        	logger.trace("__--++Trying "+ fileName +" in current directory");
             return new FileInputStream(System.getProperty("user.dir") + fileName);
         } catch (FileNotFoundException e) {
             return null;

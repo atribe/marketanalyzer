@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.ibd50.exceptions.GenericIbd50NotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
-import com.ar.marketanalyzer.ibd50.models.TickerSymbol;
 import com.ar.marketanalyzer.ibd50.repositories.StockOhlcvRepository;
 import com.ar.marketanalyzer.ibd50.services.StockOhlcvService;
-import com.ar.marketanalyzer.ibd50.services.TickerSymbolService;
 
 @Service
 public class StockOhlcvServiceImpl implements StockOhlcvService {
@@ -22,15 +22,15 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	@Resource
 	private StockOhlcvRepository stockOhlcvRepo;
 	@Autowired
-	private TickerSymbolService tickerSymbolService;
+	private SymbolServiceInterface tickerSymbolService;
 	
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public StockOhlcv delete(int id) throws GenericIbd50NotFound {
+	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	public StockOhlcv delete(int id) throws SecuritiesNotFound {
 		StockOhlcv deletedStockOhlcv = stockOhlcvRepo.findOne(id);
 		
 		if(deletedStockOhlcv == null) {
-			throw new GenericIbd50NotFound();
+			throw new SecuritiesNotFound();
 		} 
 
 		stockOhlcvRepo.delete(id);
@@ -43,9 +43,9 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	public StockOhlcv create(StockOhlcv stockOhlcv) {
 		
 		StockOhlcv createdStockOhlcv = stockOhlcv;
-		TickerSymbol ticker = createdStockOhlcv.getTicker();								//Get the ticker from the ohlcvList
+		Symbol ticker = createdStockOhlcv.getTicker();								//Get the ticker from the ohlcvList
 		
-		TickerSymbol foundTickerSymbol = getOrCreateSymbol(ticker);					//create a variable to hold the ticker from the db
+		Symbol foundTickerSymbol = getOrCreateSymbol(ticker);					//create a variable to hold the ticker from the db
 		
 		createdStockOhlcv.setTicker(foundTickerSymbol);
 		
@@ -53,12 +53,12 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
+	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public void batchInsert(List<StockOhlcv> ohlcvList) {
 		
-		TickerSymbol ticker = ohlcvList.get(0).getTicker();								//Get the ticker from the ohlcvList
+		Symbol ticker = ohlcvList.get(0).getTicker();								//Get the ticker from the ohlcvList
 		
-		TickerSymbol foundTickerSymbol = getOrCreateSymbol(ticker);						//create a variable to hold the ticker from the db
+		Symbol foundTickerSymbol = getOrCreateSymbol(ticker);						//create a variable to hold the ticker from the db
 		
 		for(StockOhlcv ohlcv: ohlcvList) {
 			ohlcv.setTicker(foundTickerSymbol);											//cycle through the list of ohlcv and add the ticker from the db
@@ -68,12 +68,12 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public StockOhlcv update(StockOhlcv stockOhlcv) throws GenericIbd50NotFound {
+	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	public StockOhlcv update(StockOhlcv stockOhlcv) throws SecuritiesNotFound {
 		StockOhlcv updatedStockOhlcv = stockOhlcvRepo.findOne(stockOhlcv.getId());
 		
 		if( updatedStockOhlcv == null) {
-			throw new GenericIbd50NotFound();
+			throw new SecuritiesNotFound();
 		}
 		
 		//TODO Filler until I really write this code
@@ -95,42 +95,42 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public List<StockOhlcv> findByTicker(TickerSymbol ticker) throws GenericIbd50NotFound {
-		TickerSymbol foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());
+	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	public List<StockOhlcv> findByTicker(Symbol ticker) throws SecuritiesNotFound {
+		Symbol foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());
 		
 		if( foundTickerSymbol == null ) {
-			throw new GenericIbd50NotFound("By Ticker search for " + ticker.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
+			throw new SecuritiesNotFound("By Ticker search for " + ticker.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
 		}
 		
 		List<StockOhlcv> ohlcvList = stockOhlcvRepo.findByTicker(ticker);
 		
 		if(ohlcvList.isEmpty()) {
-			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found in the stock ohlcv db.");
+			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found in the stock ohlcv db.");
 		}
 		
 		return ohlcvList;
 	}
 
 	@Override
-	@Transactional(rollbackFor=GenericIbd50NotFound.class)
-	public StockOhlcv findByTickerAndDate(TickerSymbol ticker,	Date date) throws GenericIbd50NotFound{
+	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	public StockOhlcv findByTickerAndDate(Symbol ticker,	Date date) throws SecuritiesNotFound{
 		StockOhlcv ohlcv = stockOhlcvRepo.findByTickerAndDate(ticker, date);
 		
 		if( ohlcv == null ) {
-			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found with date " + date.toString() + " in the stock ohlcv db.");
+			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found with date " + date.toString() + " in the stock ohlcv db.");
 		}
 		
 		return ohlcv;
 	}
 	
 	@Override
-	public List<StockOhlcv> findByTickerAndDateAfter(TickerSymbol ticker, Date date) throws GenericIbd50NotFound {
+	public List<StockOhlcv> findByTickerAndDateAfter(Symbol ticker, Date date) throws SecuritiesNotFound {
 		
 		List<StockOhlcv> ohlcvList = stockOhlcvRepo.findByTickerAndDateAfterOrderByDateDesc(ticker, date);
 		
 		if(ohlcvList.isEmpty()) {
-			throw new GenericIbd50NotFound("The Ticker '" + ticker.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
+			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
 		}
 		
 		return ohlcvList;
@@ -139,16 +139,15 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	/*
 	 * Helper Methods
 	 */
-	private TickerSymbol getOrCreateSymbol(TickerSymbol ticker) {
-		TickerSymbol foundTickerSymbol;														//create a variable to hold the ticker from the db
+	private Symbol getOrCreateSymbol(Symbol ticker) {
+		Symbol foundTickerSymbol;														//create a variable to hold the ticker from the db
 		try {
 			foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());		//find the ticker in the db
-		} catch (GenericIbd50NotFound e) {
-			foundTickerSymbol = tickerSymbolService.create(ticker);	
+		} catch (SecuritiesNotFound e) {
+			foundTickerSymbol = tickerSymbolService.createOrFindDuplicate(ticker);	
 		}
 		
 		return foundTickerSymbol;
 	}
 
-	
 }

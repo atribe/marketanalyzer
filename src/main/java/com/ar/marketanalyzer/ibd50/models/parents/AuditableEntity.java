@@ -12,8 +12,10 @@ import javax.persistence.TemporalType;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+
 @MappedSuperclass
-public class AuditableEntity extends PersistableEntity{
+public class AuditableEntity extends PersistableEntityInt{
 	
 	private static final long serialVersionUID = -1206834257175517132L;
 
