@@ -33,7 +33,7 @@ public class HighStockOHLCV {
 				
 		YAxis yaxis1 = new YAxis();
 			yaxis1.setLabels(new Labels());
-			yaxis1.setTitle(new Title("ohlc"));
+			yaxis1.setTitle(new Title("Price"));
 			yaxis1.setHeight("65%");
 			yaxis1.setLineWidth(2);	
 		yAxis.add(yaxis1);
@@ -74,6 +74,7 @@ public class HighStockOHLCV {
 			yaxis3.setTitle(new Title("Seconday Axis"));
 			yaxis3.setHeight("65%");
 			yaxis3.setLineWidth(2);	
+			yaxis3.setOpposite(false);
 		yAxis.add(yaxis3);
 		
 		Series newSeries = new Series();

@@ -30,10 +30,10 @@ public class Series {
 
 
 	public void setStockPanelSeries(List<HighstockData> data) {
-		setType("line");
+		setType("spline");
 		setName("SomethingElse");
 		setData(data);
-		setyAxis(0);
+		setyAxis(2);
 	}
 	public void setVolumePanelSeries(List<HighstockData> volumeData) {
 		setType("column");

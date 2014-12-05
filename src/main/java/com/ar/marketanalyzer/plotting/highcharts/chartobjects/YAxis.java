@@ -12,6 +12,7 @@ public class YAxis {
 	private String height;
 	private Integer offset;
 	private Integer lineWidth;
+	private Boolean opposite;
 	
 	public Labels getLabels() {
 		return labels;
@@ -48,5 +49,11 @@ public class YAxis {
 	}
 	public void setLineWidth(Integer lineWidth) {
 		this.lineWidth = lineWidth;
+	}
+	public Boolean getOpposite() {
+		return opposite;
+	}
+	public void setOpposite(Boolean opposite) {
+		this.opposite = opposite;
 	}
 }

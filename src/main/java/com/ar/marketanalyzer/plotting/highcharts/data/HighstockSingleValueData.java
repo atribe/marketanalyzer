@@ -27,7 +27,7 @@ public class HighstockSingleValueData implements HighstockData {
 	}
 	
 	public HighstockSingleValueData(RuleResultsDDaysAndChurnDays result) {
-		setX(result.getDate());
+		setX(new Date( result.getDate().getTime() ));
 		setY(result.getDdaysInWindow());
 	}
 	/*
