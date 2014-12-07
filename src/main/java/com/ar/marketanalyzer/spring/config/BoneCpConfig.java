@@ -16,6 +16,9 @@ public class BoneCpConfig {
     
     @Value("${bonecp.dbname}")
     private String jdbcDbname;
+    
+    @Value("${bonecp.prod.host}")
+    private String prodHost;
 
     @Value("${bonecp.dev.username}")
     private String jdbcDevUsername;
