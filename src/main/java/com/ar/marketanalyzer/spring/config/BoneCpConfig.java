@@ -62,10 +62,10 @@ public class BoneCpConfig {
         dataSource.setDriverClass(driverClass);
         // ************For Open Shift Account************	  
      	if(System.getenv("OPENSHIFT_APP_NAME")!=null) {	
-     		//String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+     		String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
      		String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
 
-     		String url = "jdbc:mysql://"+prodHost+":"+port+"/"+jdbcDbname;
+     		String url = "jdbc:mysql://"+host+":"+port+"/"+jdbcDbname;
      		dataSource.setJdbcUrl(url);
 	        dataSource.setUsername(jdbcProdUsername);
 	        dataSource.setPassword(jdbcProdPassword);
