@@ -198,7 +198,7 @@
     </dependencies>
   
     <build>
-        <finalName>marketanalyzer</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
