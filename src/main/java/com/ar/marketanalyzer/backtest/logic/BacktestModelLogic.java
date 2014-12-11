@@ -27,20 +27,20 @@ public class BacktestModelLogic {
 		/* Get current model
 		 * 	If no current model, the use the default model
 		 * Check the model needs to be run
-		 * 	model results already calculated?
+		 * 	model results already calculated?----Model still needs to be updated silly!
 		 * If model already ran, do nothing
 		 * If model not yet run,
 		 * 	Run model
 		 */
 
-		if( !findCurrentModel(symbol) ) {	// If the current model isn't found
-											// create a default and run it
-			prepModel();
+		findCurrentModel(symbol);	// If the current model isn't found
+									// create a default and run it
+		prepModel();				//Loads the OHLCV into the model and calcs stats
 
-			runModel();
-			
-			saveModel();
-		}
+		runModel();
+		
+		saveModel();
+		
 	}
 
 	private boolean findCurrentModel(Symbol symbol) {
@@ -69,9 +69,8 @@ public class BacktestModelLogic {
 	
 	private void getModelOhlcv() {
 		try {
-			model.setOhlcvData(ohlcvService.findBySymbolAndDateBetween(model.getSymbol(), model.getStartDate(), model.getEndDate()));
+			model.setOhlcvData(ohlcvService.findBySymbol(model.getSymbol()));
 		} catch (SecuritiesNotFound e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
