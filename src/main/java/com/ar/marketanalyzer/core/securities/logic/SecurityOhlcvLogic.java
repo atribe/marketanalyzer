@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -25,6 +27,8 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceIn
 @PropertySource(value="classpath:common.properties")
 public class SecurityOhlcvLogic {
 	
+	final Logger log = LogManager.getLogger(this.getClass().getName());
+	
 	@Resource
 	private Environment env;
 	@Autowired
@@ -37,12 +41,15 @@ public class SecurityOhlcvLogic {
 	private BacktestLogic backtestLogic;
 
 	public void updateOhlcv(List<Symbol> symbolList) {
+		log.trace("start updateOhlcv on list of symbols");
 		for(Symbol symbol: symbolList) {
 			updateOhlcv(symbol);
 		}
+		log.trace("end updateOhlcv on list of symbols");
 	}
 	
 	public void updateOhlcv(Symbol symbol) {
+		log.trace("start updateOhlcv on symbol " + symbol.getName());
 		//Setting up initial variables
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
 		LocalDate today = new LocalDate();
@@ -61,12 +68,14 @@ public class SecurityOhlcvLogic {
 				/*
 				 * Need to find the first and last date in the DB, then fill in the gaps from Yahoo
 				 */
-				LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
+				LocalDate oldestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 				LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
+				log.trace("Min Oldest Date: " + desiredStartDate + " Database oldest date:" + oldestDate);
+				log.trace("Min Oldest Date: " + desiredStartDate + " Database oldest date:" + oldestDate);
 				
 				List<YahooOHLCV> yahooList = null;
-				if( desiredStartDate.isBefore(earliestDate) && !desiredStartDate.equals(earliestDate) ) {	// If the last date is not before desired months ago
-					yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate.minusDays(1)); //Get from yahoo the gap
+				if( desiredStartDate.isBefore(oldestDate) && !desiredStartDate.equals(oldestDate) ) {	// If the last date is not before desired months ago
+					yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, oldestDate.minusDays(1)); //Get from yahoo the gap
 				} else if( today.isAfter(mostCurrentDate) && !today.equals(mostCurrentDate)) {
 					yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
 				}
@@ -87,6 +96,7 @@ public class SecurityOhlcvLogic {
 		if( yahooOhlcv != null && yahooOhlcv.size() > 0 ) {
 			secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
 		}
+		log.trace("end updateOhlcv on symbol " + symbol.getName());
 	}
 
 	//Scheduled to run every weekday at 5 pm

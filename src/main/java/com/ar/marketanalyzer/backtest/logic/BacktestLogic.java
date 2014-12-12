@@ -32,14 +32,17 @@ public class BacktestLogic {
 	private BacktestModelLogic modelLogic;
 	
 	public void init() {
+		log.trace("Start init()");
 		List<Symbol> defaultSymbols = getDefaultSymbols();
 		
 		ohlcvLogic.updateOhlcv(defaultSymbols);
 		
 		runCurrentModels(defaultSymbols);
+		log.trace("End init()");
 	}
 
 	private List<Symbol> getDefaultSymbols() {
+		log.trace("start getDefaultSymbols()");
 		String[] indexSymbolList = env.getRequiredProperty("index.symbols").split(",");
 		String[] indexNamesList = env.getRequiredProperty("index.names").split(",");	
 		String indexType = env.getRequiredProperty("index.type");
@@ -52,6 +55,7 @@ public class BacktestLogic {
 			defaultSymbols.add(symbol);
 		}
 		
+		log.trace("end getDefaultSymbols()");
 		return defaultSymbols;
 	}
 	
