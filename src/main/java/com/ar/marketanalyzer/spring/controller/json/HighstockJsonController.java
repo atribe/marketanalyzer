@@ -64,7 +64,7 @@ public class HighstockJsonController {
 			
 		} catch (SecuritiesNotFound | ModelNotFound e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Symbol " + symbol + " was not found in the database. The database is probably still loading the data, or you chose a bad symbol to plot.");
 		}
 
 		return chart;

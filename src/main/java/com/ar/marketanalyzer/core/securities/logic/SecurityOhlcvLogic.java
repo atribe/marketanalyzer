@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.core.securities.logic;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,10 +84,15 @@ public class SecurityOhlcvLogic {
 					yahooOhlcv.addAll( yahooList );	
 				}
 				// Need a check to see if it up to date as well
+			} catch(FileNotFoundException e) {
+				//FileNotFoundException is thrown when I'm requesting an older date from yahoo than exists for a particular stock.
+				symbol.setOldestDateInDb(Boolean.TRUE);
+				symbolService.update(symbol);
 			} catch (IllegalArgumentException|SecuritiesNotFound e) {
+			
 				// Catch block if there is no Ohlcv data for the symbol in the DB
 				yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate);
-			}
+			} 
 		}
 		catch (IOException e) {
 			// Catch block if fetching from Yahoo screws up

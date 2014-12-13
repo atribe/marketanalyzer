@@ -1,5 +1,7 @@
 package com.ar.marketanalyzer.backtest.logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +17,10 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvSe
 @Component
 public class BacktestModelLogic {
 
+	final Logger log = LogManager.getLogger(this.getClass().getName());
+	
 	@Autowired
 	private AbstractModelServiceInterface modelService;
-	
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
 	
@@ -33,6 +36,8 @@ public class BacktestModelLogic {
 		 * 	Run model
 		 */
 
+		log.trace("Starting runCurrentModel for" + symbol.getName());
+		
 		findCurrentModel(symbol);	// If the current model isn't found
 									// create a default and run it
 		prepModel();				//Loads the OHLCV into the model and calcs stats
@@ -41,6 +46,7 @@ public class BacktestModelLogic {
 		
 		saveModel();
 		
+		log.trace("Ending runCurrentModel for" + symbol.getName());
 	}
 
 	private boolean findCurrentModel(Symbol symbol) {
