@@ -1,0 +1,12 @@
+#content{
+	margin-left: 190px;
+	padding-left: 16px;
+}
+#leftsidebar {
+	width: 190px;
+    float:left;
+    
+    margin-top:-16px;
+    
+    border-right: 1px black solid;
+}

@@ -11,16 +11,18 @@
 		<jsp:invoke fragment="head"/>
 	</t:head>
 	<body>
-		<div id="container">
-			
-			<t:header/>
-			
-			<div id="content">
-				<jsp:doBody/>
+		<div id="wrapper">
+			<t:header>
+			</t:header>
+			<div id="container">
+				<t:leftsidebar>
+				</t:leftsidebar>
+				<div id="content">
+					<jsp:doBody/>
+				</div>
 			</div>
-			
-			<t:footer/>
-			
+			<t:footer>
+			</t:footer>
 		</div>
 	</body>
 	<t:foot>

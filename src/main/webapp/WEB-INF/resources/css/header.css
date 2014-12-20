@@ -1,0 +1,38 @@
+/*---HEADER css---*/
+#header {
+	height:60px;
+	border-bottom:solid black 1px;
+	margin-bottom:0px;
+}
+	#banner{
+		float:left;
+		height:100%;
+	}
+		#banner h1{
+			font-size:40px;
+			line-height:60px;
+			margin-top:0;
+			margin-bottom:0px;
+			margin-left:20px;
+		}
+	nav {
+		float: right;
+	}
+		nav ul {
+			list-style-type:none;
+			height:40px;
+		}
+		nav ul li {
+			display: inline;
+			padding: 20px 20px;
+			width:60px;
+		}
+		nav ul li a{
+			color:black;
+			font-size: 20px;
+			line-height:60px;
+			text-decoration:none;
+		}
+		nav .currentPage {
+			color:#7CBEC6;
+		}
