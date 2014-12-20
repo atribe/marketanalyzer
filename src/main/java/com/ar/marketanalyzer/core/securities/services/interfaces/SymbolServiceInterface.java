@@ -39,7 +39,7 @@ public interface SymbolServiceInterface {
 	 * 			and now want to put it back. So the ID should be the same as the one
 	 * 			from the DB.
 	 */
-	public Symbol update(Symbol symbol) throws SecuritiesNotFound;
+	public Symbol update(Symbol symbol);
 	/**
 	 * Finds the ticker in the db with the provided ID
 	 * 

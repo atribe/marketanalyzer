@@ -34,12 +34,14 @@ public class Series {
 		setName("SomethingElse");
 		setData(data);
 		setyAxis(2);
+		setTurboThreshold(0);
 	}
 	public void setVolumePanelSeries(List<HighstockData> volumeData) {
 		setType("column");
 		setName("Volume");
 		setData(volumeData);
 		setyAxis(1);
+		setTurboThreshold(0);
 	}
 
 

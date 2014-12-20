@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
@@ -25,6 +24,9 @@ public class Symbol extends PersistableEntityInt {
 
 	@Column(name="type", length=10, nullable=false)
 	private String type; //stock, ETF, Mutual Fund, Index
+	
+	@Column(name="oldest_date_in_db")
+	private Boolean oldestDateInDb;
 	
 	@OneToMany(mappedBy = "symbol",cascade = CascadeType.ALL)
 	private List<SecuritiesOhlcv> ohlcv;
@@ -65,6 +67,22 @@ public class Symbol extends PersistableEntityInt {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Boolean getOldestDateInDb() {
+		return oldestDateInDb;
+	}
+
+	public void setOldestDateInDb(Boolean oldestDateInDb) {
+		this.oldestDateInDb = oldestDateInDb;
+	}
+
+	public List<SecuritiesOhlcv> getOhlcv() {
+		return ohlcv;
+	}
+
+	public void setOhlcv(List<SecuritiesOhlcv> ohlcv) {
+		this.ohlcv = ohlcv;
 	}
 
 }

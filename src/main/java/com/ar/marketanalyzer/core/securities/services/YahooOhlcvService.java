@@ -67,25 +67,25 @@ public class YahooOhlcvService {
 		b_startDay = startDate.getDayOfMonth();					// this gets beginning dates day
 		c_startYear = startDate.getYear();						// this gets beginning dates year
 		
-		logger.debug("Start Month (variable A): " + a_startMonth);
-		logger.debug("Start Day (variable B): " + b_startDay);
-		logger.debug("Start Year (variable C): " + c_startYear);
+		logger.trace("Start Month (variable A): " + a_startMonth);
+		logger.trace("Start Day (variable B): " + b_startDay);
+		logger.trace("Start Year (variable C): " + c_startYear);
 		
 		int d_endMonth, e_endDay, f_endYear;
 		d_endMonth = endDate.getMonthOfYear()-1;				// Yahoo uses zero based month numbering,this gets todays month
 		e_endDay = endDate.getDayOfMonth();						// this gets todays day of month
 		f_endYear = endDate.getYear();							// this gets todays year
 		
-		logger.debug("End Month (variable D): " + d_endMonth);
-		logger.debug("End Day (variable E): " + e_endDay);
-		logger.debug("End Year (variable f): " + f_endYear);
+		logger.trace("End Month (variable D): " + d_endMonth);
+		logger.trace("End Day (variable E): " + e_endDay);
+		logger.trace("End Year (variable f): " + f_endYear);
 
 		String str = "http://ichart.finance.yahoo.com/table.csv?s="	// Generating the yahoo finance URL
 			+ symbol.toUpperCase() + "&a=" + a_startMonth + "&b=" + b_startDay + "&c=" + c_startYear 
 			+ "&g=d&d=" + d_endMonth + "&e=" + e_endDay	+ "&f=" + f_endYear + "&ignore=.csv";
 		
-		logger.info("Using the following Yahoo URL:");
-		logger.info(str);
+		logger.debug("Using the following Yahoo URL:");
+		logger.debug(str);
 		return str;
 	}
 	

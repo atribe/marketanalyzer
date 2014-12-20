@@ -96,6 +96,7 @@ public class IndexBacktestingModel extends AbstractModel {
 		for(AbstractRule rule: ruleList) {
 			if(rule.getClass() == RuleSellDDaysAndChurnDays.class) {
 				RuleSellDDaysAndChurnDays sellRule = (RuleSellDDaysAndChurnDays)rule;
+				@SuppressWarnings("unchecked")
 				SortedSet<RuleResultsDDaysAndChurnDays> resultsSet = (SortedSet<RuleResultsDDaysAndChurnDays>)(SortedSet<?>)sellRule.getRuleResultSet();
 				resultList = new ArrayList<RuleResultsDDaysAndChurnDays>(resultsSet);
 			}

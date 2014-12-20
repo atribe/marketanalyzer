@@ -7,8 +7,8 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Logger name="org.apache.log4j.xml" level="info"/>
-    <Root level="DEBUG">
+    <Logger name="org.apache.log4j.xml" level="TRACE"/>
+    <Root level="TRACE">
       <AppenderRef ref="STDOUT"/>
     </Root>
     	<logger name="org.hibernate" level="INFO" additivity="false">
