@@ -71,8 +71,8 @@ public class SecurityOhlcvLogic {
 				 */
 				LocalDate oldestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
 				LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
-				log.trace("Min Oldest Date: " + desiredStartDate + " Database oldest date:" + oldestDate);
-				log.trace("Min Oldest Date: " + desiredStartDate + " Database oldest date:" + oldestDate);
+				log.trace("Min Oldest Date: " + desiredStartDate + " Database Oldest Date:" + oldestDate);
+				log.trace("Min Newest Date: " + today + " Database Newest Date:" + mostCurrentDate);
 				
 				List<YahooOHLCV> yahooList = null;
 				if( desiredStartDate.isBefore(oldestDate) && !desiredStartDate.equals(oldestDate) ) {	// If the last date is not before desired months ago
