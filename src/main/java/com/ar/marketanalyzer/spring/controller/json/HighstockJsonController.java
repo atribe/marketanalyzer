@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,9 +52,6 @@ public class HighstockJsonController {
 			//Getting the symbol
 			sym = symbolService.findBySymbol("^IXIC");
 			
-			//Looking up the desired range of OHLCV
-			LocalDate backToDate = new LocalDate(1995,1,1);
-			java.util.Date backTo = (java.util.Date)(backToDate.toDate());
 			//List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAndDateAfterAsc(sym, new java.sql.Date(backTo.getTime()));
 			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAsc(sym);
 			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockSingleValueData.convertSecOHLCVtoSingleValue(data));
@@ -68,7 +64,7 @@ public class HighstockJsonController {
 			
 		} catch (SecuritiesNotFound | ModelNotFound e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Symbol " + symbol + " was not found in the database. The database is probably still loading the data, or you chose a bad symbol to plot.");
 		}
 
 		return chart;

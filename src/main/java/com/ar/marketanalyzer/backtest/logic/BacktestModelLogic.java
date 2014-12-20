@@ -1,5 +1,7 @@
 package com.ar.marketanalyzer.backtest.logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +17,10 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvSe
 @Component
 public class BacktestModelLogic {
 
+	final Logger log = LogManager.getLogger(this.getClass().getName());
+	
 	@Autowired
 	private AbstractModelServiceInterface modelService;
-	
 	@Autowired
 	private SecurityOhlcvServiceInterface ohlcvService;
 	
@@ -27,20 +30,23 @@ public class BacktestModelLogic {
 		/* Get current model
 		 * 	If no current model, the use the default model
 		 * Check the model needs to be run
-		 * 	model results already calculated?
+		 * 	model results already calculated?----Model still needs to be updated silly!
 		 * If model already ran, do nothing
 		 * If model not yet run,
 		 * 	Run model
 		 */
 
-		if( !findCurrentModel(symbol) ) {	// If the current model isn't found
-											// create a default and run it
-			prepModel();
+		log.trace("Starting runCurrentModel for" + symbol.getName());
+		
+		findCurrentModel(symbol);	// If the current model isn't found
+									// create a default and run it
+		prepModel();				//Loads the OHLCV into the model and calcs stats
 
-			runModel();
-			
-			saveModel();
-		}
+		runModel();
+		
+		saveModel();
+		
+		log.trace("Ending runCurrentModel for" + symbol.getName());
 	}
 
 	private boolean findCurrentModel(Symbol symbol) {
@@ -69,9 +75,8 @@ public class BacktestModelLogic {
 	
 	private void getModelOhlcv() {
 		try {
-			model.setOhlcvData(ohlcvService.findBySymbolAndDateBetween(model.getSymbol(), model.getStartDate(), model.getEndDate()));
+			model.setOhlcvData(ohlcvService.findBySymbol(model.getSymbol()));
 		} catch (SecuritiesNotFound e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

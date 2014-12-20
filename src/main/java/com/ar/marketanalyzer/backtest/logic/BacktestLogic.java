@@ -1,6 +1,5 @@
 package com.ar.marketanalyzer.backtest.logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +7,13 @@ import javax.annotation.Resource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.logic.SecurityOhlcvLogic;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
-import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
-import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
 @Component
@@ -32,22 +27,22 @@ public class BacktestLogic {
 	@Autowired
 	private SymbolServiceInterface symbolService;
 	@Autowired
-	private SecurityOhlcvServiceInterface secOhlcvService;
-	@Autowired
-	private YahooOhlcvService yahooService;
-
+	private SecurityOhlcvLogic ohlcvLogic;
 	@Autowired
 	private BacktestModelLogic modelLogic;
 	
 	public void init() {
+		log.trace("Start init()");
 		List<Symbol> defaultSymbols = getDefaultSymbols();
 		
-		populateDefaultOhlcv(defaultSymbols);
+		ohlcvLogic.updateOhlcv(defaultSymbols);
 		
-		runCurrentModel(defaultSymbols);
+		runCurrentModels(defaultSymbols);
+		log.trace("End init()");
 	}
 
 	private List<Symbol> getDefaultSymbols() {
+		log.trace("start getDefaultSymbols()");
 		String[] indexSymbolList = env.getRequiredProperty("index.symbols").split(",");
 		String[] indexNamesList = env.getRequiredProperty("index.names").split(",");	
 		String indexType = env.getRequiredProperty("index.type");
@@ -60,60 +55,16 @@ public class BacktestLogic {
 			defaultSymbols.add(symbol);
 		}
 		
+		log.trace("end getDefaultSymbols()");
 		return defaultSymbols;
 	}
 	
-	private void populateDefaultOhlcv(List<Symbol> defaultSymbols) {
-		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
-		LocalDate today = new LocalDate();
-		final int FRIDAY = 5;
-		int offset;
-		
-		if( (offset = today.dayOfWeek().get() - FRIDAY ) > 0 ) { 	// if today is a weekend
-			today = today.minusDays(offset);						// shift today back to Friday
-		}
-		
-		LocalDate desiredStartDate = new LocalDate().minusMonths(DESIRED_MONTHS_OF_DATA);
-		List<YahooOHLCV> yahooOhlcv = new ArrayList<YahooOHLCV>();
-		
-		for(Symbol symbol: defaultSymbols) {
-			try {
-				try {
-					/*
-					 * Need to find the first and last date in the DB, then fill in the gaps from Yahoo
-					 */
-					LocalDate earliestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
-					LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);		// Try to find the last date in the DB
-					
-					List<YahooOHLCV> yahooList = null;
-					if( desiredStartDate.isBefore(earliestDate) && !desiredStartDate.equals(earliestDate) ) {								// If the last date is not before desired months ago
-						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, earliestDate.minusDays(1)); //Get from yahoo the gap
-					} else if( today.isAfter(mostCurrentDate) && !today.equals(mostCurrentDate)) {
-						yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
-					}
-					if( yahooList != null) {
-						yahooOhlcv.addAll( yahooList );	
-					}
-					// Need a check to see if it up to date as well
-				} catch (IllegalArgumentException|SecuritiesNotFound e) {
-					// Catch block if there is no Ohlcv data for the symbol in the DB
-					yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate);
-				}
-			}
-			catch (IOException e) {
-				// Catch block if fetching from Yahoo screws up
-				e.printStackTrace();
-			}
-			
-			if( yahooOhlcv != null && yahooOhlcv.size() > 0 ) {
-				secOhlcvService.batchInsertYahoo(yahooOhlcv, symbol);
-			}
+	public void runCurrentModels(List<Symbol> defaultSymbols) {
+		for( Symbol symbol : defaultSymbols ) {
+			runCurrentModel(symbol);
 		}
 	}
-	
-	private void runCurrentModel(List<Symbol> defaultSymbols) {
-		for( Symbol symbol : defaultSymbols ) {
-			modelLogic.runCurrentModel(symbol);
-		}
+	public void runCurrentModel(Symbol symbol) {
+		modelLogic.runCurrentModel(symbol);
 	}
 }

@@ -1,27 +1,17 @@
 package com.ar.marketanalyzer.spring.controller;
 
-//import java.io.IOException;
-
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-//import org.jfree.chart.ChartUtilities;
-//import org.jfree.chart.JFreeChart;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-//import com.ar.marketanalyzer.plotting.jfree.PlotDDay;
-//import com.ar.marketanalyzer.plotting.jfree.PlotModelResult;
-//import com.ar.marketanalyzer.plotting.jfree.PlotOHLC;
-
 @Controller
 @RequestMapping("/charts")
 public class ChartsController {
 	/* Get actual class name to be printed on */
-	private static final Logger logger = LogManager.getLogger(ChartsController.class.getName());
+	//private static final Logger logger = LogManager.getLogger(ChartsController.class.getName());
 
 	@RequestMapping(value = "/dday", method = RequestMethod.GET)
 	public void drawDDayChart(HttpServletResponse response) {

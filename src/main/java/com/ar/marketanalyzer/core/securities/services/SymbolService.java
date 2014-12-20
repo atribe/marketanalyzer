@@ -65,20 +65,21 @@ public class SymbolService implements SymbolServiceInterface{
 
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Symbol update(Symbol symbol) throws SecuritiesNotFound {
-		Symbol updatedSymbol;							// Creating variable for the ticker to be updated
+	public Symbol update(Symbol symbol) {
+		Symbol updatedSymbol=null;							// Creating variable for the ticker to be updated
 		
 		try {
 			updatedSymbol = findById(symbol.getId());	// Looking up the ticker by the provided ID to make sure that ID exists
 		} catch (SecuritiesNotFound e) {							// If ID is not found exception is caught here
-			throw e;												// Throw the exception caught up to the next level to be dealt with
+			//throw e;												// Throw the exception caught up to the next level to be dealt with
 		}
 		
 		updatedSymbol.setName(symbol.getName());		// Update all fields of the ticker
 		updatedSymbol.setSymbol(symbol.getSymbol());
 		updatedSymbol.setType(symbol.getType());
+		updatedSymbol.setOldestDateInDb(symbol.getOldestDateInDb());
 		
-		return updatedSymbol;									// Return the updated ticker
+		return symbolRepo.save(updatedSymbol);										// Return the updated ticker
 	}
 
 	@Override
