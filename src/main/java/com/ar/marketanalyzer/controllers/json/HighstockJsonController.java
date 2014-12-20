@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.spring.controller.json;
+package com.ar.marketanalyzer.controllers.json;
 
 import java.util.List;
 
