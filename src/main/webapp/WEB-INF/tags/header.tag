@@ -1,4 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ tag description="Generic Header Tag" language="java" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="header">
 	<div id="banner">
 		<h1>Market Predictor</h1>
@@ -11,4 +12,4 @@
 	  </ul>
 	</nav>
 	<div class="clear"></div>
-</div><!-- close div header-->
+</div>
