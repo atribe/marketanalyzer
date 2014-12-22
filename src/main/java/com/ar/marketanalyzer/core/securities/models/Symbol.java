@@ -84,5 +84,4 @@ public class Symbol extends PersistableEntityInt {
 	public void setOhlcv(List<SecuritiesOhlcv> ohlcv) {
 		this.ohlcv = ohlcv;
 	}
-
 }

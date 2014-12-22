@@ -26,11 +26,17 @@ public interface SymbolServiceInterface {
 	 */
 	public Symbol delete(int id) throws SecuritiesNotFound;
 	/**
-	 * Returns all tickers from the DB.
+	 * Returns all symbols from the DB.
 	 * 
 	 * @return All symbols from the DB.
 	 */
 	public List<Symbol> findAll();
+	/**
+	 * Returns all symbols from the DB including ohlcv lists.
+	 * 
+	 * @return All symbols from the DB.
+	 */
+	public List<Symbol> findAllFetchOhlcv();
 	/**
 	 * @param symbol
 	 * @return The updated ticker.

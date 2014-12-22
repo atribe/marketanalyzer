@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.repo.SecurityOhlcvRepo;
 import com.ar.marketanalyzer.core.securities.repo.SymbolRepo;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
@@ -17,6 +18,8 @@ public class SymbolService implements SymbolServiceInterface{
 
 	@Resource
 	private SymbolRepo symbolRepo;
+	@Resource
+	private SecurityOhlcvRepo secRepo;
 	
 	@Override
 	@Transactional
@@ -61,6 +64,16 @@ public class SymbolService implements SymbolServiceInterface{
 	@Transactional
 	public List<Symbol> findAll() {
 		return symbolRepo.findAll();
+	}
+	
+	@Override
+	@Transactional
+	public List<Symbol> findAllFetchOhlcv() {
+		List<Symbol> symbols = symbolRepo.findAll();
+		for(Symbol symbol: symbols) {
+			symbol.setOhlcv(secRepo.findBySymbol(symbol));
+		}
+		return symbols;
 	}
 
 	@Override

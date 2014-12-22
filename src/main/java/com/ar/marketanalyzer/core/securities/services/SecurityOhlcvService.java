@@ -134,7 +134,8 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		
 		return ohlcvList;
 	}
-
+	
+	@Transactional
 	public List<SecuritiesOhlcv> findBySymbolAsc(Symbol symbol) throws SecuritiesNotFound {
 		Symbol foundTickerSymbol = null;
 		if(symbol.getId() == null && symbol.getId() < 0) {

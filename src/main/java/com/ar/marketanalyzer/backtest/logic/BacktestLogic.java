@@ -33,9 +33,9 @@ public class BacktestLogic {
 	
 	public void init() {
 		log.trace("Start init()");
-//		List<Symbol> defaultSymbols = getDefaultSymbols();
-//		
-//		ohlcvLogic.updateOhlcv(defaultSymbols);
+		List<Symbol> defaultSymbols = getDefaultSymbols();
+
+		ohlcvLogic.updateOhlcv(defaultSymbols);
 //		
 //		runCurrentModels(defaultSymbols);
 		log.trace("End init()");
