@@ -4,21 +4,17 @@
 
 <%@attribute name="head" fragment="true" %>
 
-<c:set var="baseURL" value="${fn:replace(request.requestURL, pageContext.request.requestURI, pageContext.request.contextPath)}" />
-<c:set var="url" value="${pageContext.request.requestURL}" />
-<c:set var="uri" value="${pageContext.request.requestURI}" />
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="baseURL" value="${fn:replace(req.requestURL, fn:substring(req.requestURI, 1, fn:length(req.requestURI)), req.contextPath)}" />
 
-<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${contextPath}/" />
 <head>
 	<title>Test MarketAnalyzer</title>
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="shortcut icon" href="<c:url value="img/favicon.ico" />" />
-	<link rel="stylesheet" type="text/css" href="<c:url value="css/style.css" />" />
+	<link rel="shortcut icon" href="<c:url value="${baseURL}/img/favicon.ico" />" />
+	<link rel="stylesheet" type="text/css" href="<c:url value="${baseURL}/css/style.css" />" />
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-	<script src="<c:url value="js/headerColorChange.js" />" type="text/javascript"></script>
+	<script src="<c:url value="${baseURL}/js/headerColorChange.js" />" type="text/javascript"></script>
 	
 	<!--
 	<script src="<c:url value="js/highstock/highstock.src.js" />" type="text/javascript"></script>

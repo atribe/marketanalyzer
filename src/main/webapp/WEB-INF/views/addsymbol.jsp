@@ -7,7 +7,7 @@
 	<jsp:attribute name="head"></jsp:attribute>
 	<jsp:attribute name="foot"></jsp:attribute>
 	<jsp:body>
-		<form:form method="POST" modelAttribute="symbol" action="${pageContext.request.contextPath}/addprocess">
+		<form:form method="POST" modelAttribute="symbol" action="${pageContext.request.contextPath}/stockmanager/addprocess">
 		<table>
 			<tbody>
 				<tr>

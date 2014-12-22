@@ -10,5 +10,8 @@
 			<h2>SELL</h2>
 		</div>
 		<div id="highchart" class="chart"></div>
+		<p>The context path is: ${pageContext.request.contextPath}.</p>
+		<p>The requestURL is: ${pageContext.request.requestURL}.</p>
+		<p>The requestURI is: ${pageContext.request.requestURI}.</p>
 	</jsp:body>
 </t:genericpage>
