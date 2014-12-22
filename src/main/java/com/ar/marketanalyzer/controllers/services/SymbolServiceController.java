@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,26 @@ public class SymbolServiceController {
         log.trace("symbolmanager.jsp has been served");
         return "symbolmanager";
     }
+	
+	@RequestMapping(value = "/add", method=RequestMethod.GET)
+	public String createSymbol(Model model) {
+		
+		model.addAttribute("symbol", new Symbol());
+		
+		return "addsymbol";
+	}
+	
+	@RequestMapping(value = "/addprocess", method=RequestMethod.POST)
+	public String addSymbol(@ModelAttribute Symbol symbol) {
+		
+		log.trace("Attempting to delete symbol id " + symbol.getSymbol());
+		
+		symbolService.createOrFindDuplicate(symbol);
+
+		log.trace("Succeded in deleting symbol id " + symbol.getSymbol());
+		
+		return "redirect:/stockmanager";
+	}
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String deleteSymbol(@PathVariable int id) {

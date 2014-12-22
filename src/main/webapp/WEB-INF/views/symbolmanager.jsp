@@ -42,6 +42,7 @@
 				</c:forEach>
 				</tbody>
 			</table>
+			<div id="addsymbollink"><a href="<c:url value="stockmanager/add" />">Add a symbol</a></div>
 		</div>
 	</jsp:body>
 </t:genericpage>

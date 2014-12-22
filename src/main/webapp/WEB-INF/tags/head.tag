@@ -1,6 +1,15 @@
 <%@ tag description="Generic Head Tag" language="java" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@attribute name="head" fragment="true" %>
+
+<c:set var="baseURL" value="${fn:replace(request.requestURL, pageContext.request.requestURI, pageContext.request.contextPath)}" />
+<c:set var="url" value="${pageContext.request.requestURL}" />
+<c:set var="uri" value="${pageContext.request.requestURI}" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${contextPath}/" />
 <head>
 	<title>Test MarketAnalyzer</title>
 	
