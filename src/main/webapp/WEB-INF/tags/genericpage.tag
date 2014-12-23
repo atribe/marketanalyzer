@@ -18,6 +18,7 @@
 				<t:leftsidebar>
 				</t:leftsidebar>
 				<div id="content">
+					<t:message/>
 					<jsp:doBody/>
 				</div>
 			</div>

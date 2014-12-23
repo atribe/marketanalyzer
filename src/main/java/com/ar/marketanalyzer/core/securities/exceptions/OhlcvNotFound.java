@@ -1,27 +1,27 @@
 package com.ar.marketanalyzer.core.securities.exceptions;
 
-public class SecuritiesNotFound extends Exception{
+public class OhlcvNotFound extends Exception{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1488348114120853324L;
+	private static final long serialVersionUID = -6217166956992463081L;
 
-	public SecuritiesNotFound() {
+	public OhlcvNotFound() {
         // TODO Auto-generated constructor stub
     }
 
-    public SecuritiesNotFound(String message) {
+    public OhlcvNotFound(String message) {
         super(message);
         // TODO Auto-generated constructor stub
     }
 
-    public SecuritiesNotFound(Throwable cause) {
+    public OhlcvNotFound(Throwable cause) {
         super(cause);
         // TODO Auto-generated constructor stub
     }
 
-    public SecuritiesNotFound(String message, Throwable cause) {
+    public OhlcvNotFound(String message, Throwable cause) {
         super(message, cause);
         // TODO Auto-generated constructor stub
     }

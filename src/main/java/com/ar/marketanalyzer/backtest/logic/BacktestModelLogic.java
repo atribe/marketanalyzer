@@ -10,7 +10,7 @@ import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 
@@ -76,7 +76,7 @@ public class BacktestModelLogic {
 	private void getModelOhlcv() {
 		try {
 			model.setOhlcvData(ohlcvService.findBySymbol(model.getSymbol()));
-		} catch (SecuritiesNotFound e) {
+		} catch (SymbolNotFound e) {
 			e.printStackTrace();
 		}
 	}

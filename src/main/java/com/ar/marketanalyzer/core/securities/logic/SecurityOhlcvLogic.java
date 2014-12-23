@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.backtest.logic.BacktestLogic;
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
@@ -88,7 +88,7 @@ public class SecurityOhlcvLogic {
 				//FileNotFoundException is thrown when I'm requesting an older date from yahoo than exists for a particular stock.
 				symbol.setOldestDateInDb(Boolean.TRUE);
 				symbolService.update(symbol);
-			} catch (IllegalArgumentException|SecuritiesNotFound e) {
+			} catch (IllegalArgumentException|SymbolNotFound e) {
 			
 				// Catch block if there is no Ohlcv data for the symbol in the DB
 				yahooOhlcv = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate);

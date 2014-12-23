@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -39,11 +40,14 @@ public class YahooOhlcvService {
 	}
 	
 	public List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate, LocalDate endDate) throws IOException {
+		if(startDate.equals(endDate) || startDate.isAfter(endDate)) {
+			return new ArrayList<YahooOHLCV>();
+		}
 		
 		String url = generateURL(symbol, startDate, endDate);		// Generate URL
 		
 		if(url == null) {
-			return null;
+			return new ArrayList<YahooOHLCV>();
 		}
 		
 		BufferedReader reader = callURL(url);
@@ -108,7 +112,10 @@ public class YahooOhlcvService {
 	
 	    CsvToBean<YahooOHLCV> csv = new CsvToBean<YahooOHLCV>();
 	    List<YahooOHLCV> rowsFromYahooURL = csv.parse(strategy, csvReader);
-	    
-	    return rowsFromYahooURL;
+	    if(rowsFromYahooURL == null) {
+	    	return new ArrayList<YahooOHLCV>();
+	    } else {
+	    	return rowsFromYahooURL;
+	    }
 	}
 }

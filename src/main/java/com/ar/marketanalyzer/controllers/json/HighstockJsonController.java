@@ -16,7 +16,7 @@ import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.IndexBacktestingModel;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.services.AbstractModelService;
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SymbolService;
@@ -62,7 +62,7 @@ public class HighstockJsonController {
 			
 			chart.addSeries(HighstockSingleValueData.convertDdayToSingleValue(resultList));
 			
-		} catch (SecuritiesNotFound | ModelNotFound e) {
+		} catch (SymbolNotFound | ModelNotFound e) {
 			// TODO Auto-generated catch block
 			logger.error("Symbol " + symbol + " was not found in the database. The database is probably still loading the data, or you chose a bad symbol to plot.");
 		}

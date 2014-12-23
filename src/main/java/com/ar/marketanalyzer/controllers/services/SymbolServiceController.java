@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
@@ -64,7 +64,7 @@ public class SymbolServiceController {
 		
 		try {
 			symbolService.delete(id);
-		} catch (SecuritiesNotFound e) {
+		} catch (SymbolNotFound e) {
 			log.trace("Failed to delete symbol id " + id);
 			e.printStackTrace();
 		}

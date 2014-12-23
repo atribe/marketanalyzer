@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.models.StockOhlcv;
@@ -25,12 +25,12 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	private SymbolServiceInterface tickerSymbolService;
 	
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public StockOhlcv delete(int id) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public StockOhlcv delete(int id) throws SymbolNotFound {
 		StockOhlcv deletedStockOhlcv = stockOhlcvRepo.findOne(id);
 		
 		if(deletedStockOhlcv == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		} 
 
 		stockOhlcvRepo.delete(id);
@@ -53,7 +53,7 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	@Transactional(rollbackFor=SymbolNotFound.class)
 	public void batchInsert(List<StockOhlcv> ohlcvList) {
 		
 		Symbol ticker = ohlcvList.get(0).getTicker();								//Get the ticker from the ohlcvList
@@ -68,12 +68,12 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public StockOhlcv update(StockOhlcv stockOhlcv) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public StockOhlcv update(StockOhlcv stockOhlcv) throws SymbolNotFound {
 		StockOhlcv updatedStockOhlcv = stockOhlcvRepo.findOne(stockOhlcv.getId());
 		
 		if( updatedStockOhlcv == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 		
 		//TODO Filler until I really write this code
@@ -95,42 +95,42 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public List<StockOhlcv> findByTicker(Symbol ticker) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public List<StockOhlcv> findByTicker(Symbol ticker) throws SymbolNotFound {
 		Symbol foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());
 		
 		if( foundTickerSymbol == null ) {
-			throw new SecuritiesNotFound("By Ticker search for " + ticker.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
+			throw new SymbolNotFound("By Ticker search for " + ticker.getSymbol() + " failed because the Ticker was not found in the Ticker DB.");
 		}
 		
 		List<StockOhlcv> ohlcvList = stockOhlcvRepo.findByTicker(ticker);
 		
 		if(ohlcvList.isEmpty()) {
-			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found in the stock ohlcv db.");
+			throw new SymbolNotFound("The Ticker '" + ticker.getSymbol() + "' was not found in the stock ohlcv db.");
 		}
 		
 		return ohlcvList;
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public StockOhlcv findByTickerAndDate(Symbol ticker,	Date date) throws SecuritiesNotFound{
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public StockOhlcv findByTickerAndDate(Symbol ticker,	Date date) throws SymbolNotFound{
 		StockOhlcv ohlcv = stockOhlcvRepo.findByTickerAndDate(ticker, date);
 		
 		if( ohlcv == null ) {
-			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found with date " + date.toString() + " in the stock ohlcv db.");
+			throw new SymbolNotFound("The Ticker '" + ticker.getSymbol() + "' was not found with date " + date.toString() + " in the stock ohlcv db.");
 		}
 		
 		return ohlcv;
 	}
 	
 	@Override
-	public List<StockOhlcv> findByTickerAndDateAfter(Symbol ticker, Date date) throws SecuritiesNotFound {
+	public List<StockOhlcv> findByTickerAndDateAfter(Symbol ticker, Date date) throws SymbolNotFound {
 		
 		List<StockOhlcv> ohlcvList = stockOhlcvRepo.findByTickerAndDateAfterOrderByDateDesc(ticker, date);
 		
 		if(ohlcvList.isEmpty()) {
-			throw new SecuritiesNotFound("The Ticker '" + ticker.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
+			throw new SymbolNotFound("The Ticker '" + ticker.getSymbol() + "' was not found after date " + date.toString() + " in the stock ohlcv db.");
 		}
 		
 		return ohlcvList;
@@ -143,7 +143,7 @@ public class StockOhlcvServiceImpl implements StockOhlcvService {
 		Symbol foundTickerSymbol;														//create a variable to hold the ticker from the db
 		try {
 			foundTickerSymbol = tickerSymbolService.findBySymbol(ticker.getSymbol());		//find the ticker in the db
-		} catch (SecuritiesNotFound e) {
+		} catch (SymbolNotFound e) {
 			foundTickerSymbol = tickerSymbolService.createOrFindDuplicate(ticker);	
 		}
 		

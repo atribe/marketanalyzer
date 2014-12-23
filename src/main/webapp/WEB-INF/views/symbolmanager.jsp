@@ -6,6 +6,7 @@
 <t:genericpage>
 	<jsp:attribute name="head"></jsp:attribute>
 	<jsp:attribute name="foot"></jsp:attribute>
+	<jsp:attribute name="message">${message}</jsp:attribute>
 	<jsp:body>
 		<div id="dayStatus">
 			<h3>Today you should:</h3>
@@ -23,7 +24,8 @@
 						<th>OHLC Auto Updating</th>
 						<th>Manual Update OHLCV</th>
 						<th>Plot</th>
-						<th>Remove</th>
+						<th>Edit Entry</th>
+						<th>Remove From DB</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,8 +37,9 @@
 						<td><c:out value="${symbol.type}"/></td>
 						<td><c:out value="${fn:length(symbol.ohlcv)}"/></td>
 						<td></td>
+						<td><a href="<c:url value="ohlcvmanager/update/${symbol.id}" />">Update</a></td>
 						<td></td>
-						<td></td>
+						<td><a href="<c:url value="stockmanager/edit/${symbol.id}" />">Edit</a></td>
 						<td><a href="<c:url value="stockmanager/delete/${symbol.id}" />">Delete</a></td>
 					</tr>
 				</c:forEach>

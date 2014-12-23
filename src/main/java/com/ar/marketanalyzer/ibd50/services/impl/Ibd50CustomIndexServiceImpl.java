@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50CustomIndex;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50CustomIndexRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50CustomIndexService;
@@ -32,11 +32,11 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 
 	@Override
 	@Transactional
-	public Ibd50CustomIndex delete(int id) throws SecuritiesNotFound {
+	public Ibd50CustomIndex delete(int id) throws SymbolNotFound {
 		Ibd50CustomIndex deletedIbd50CustomIndex = ibd50CustomIndexRepo.findOne(id);
 		
 		if(deletedIbd50CustomIndex == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 		
 		ibd50CustomIndexRepo.delete(id);
@@ -51,12 +51,12 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Ibd50CustomIndex update(Ibd50CustomIndex ibd50CustomIndex) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public Ibd50CustomIndex update(Ibd50CustomIndex ibd50CustomIndex) throws SymbolNotFound {
 		Ibd50CustomIndex updatedIbd50CustomIndex = ibd50CustomIndexRepo.findOne(ibd50CustomIndex.getId());
 		
 		if(updatedIbd50CustomIndex == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 
 		updatedIbd50CustomIndex.setIndexName(ibd50CustomIndex.getIndexName());
@@ -68,7 +68,7 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 
 	@Override
 	@Transactional
-	public Ibd50CustomIndex findById(int id) throws SecuritiesNotFound {
+	public Ibd50CustomIndex findById(int id) throws SymbolNotFound {
 		return ibd50CustomIndexRepo.findOne(id);
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
@@ -33,9 +33,9 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	 * 
 	 * @param ticker
 	 * @return the ticker from the DB that matches the provided ticker.
-	 * @throws SecuritiesNotFound This is thrown if the ticker is not found by either ID or symbol.
+	 * @throws SymbolNotFound This is thrown if the ticker is not found by either ID or symbol.
 	 */
-	private Symbol lookUpTicker(Symbol ticker) throws SecuritiesNotFound {
+	private Symbol lookUpTicker(Symbol ticker) throws SymbolNotFound {
 		Symbol foundTicker;
 		
 		try {
@@ -44,7 +44,7 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 			} else {
 				foundTicker = tickerSymbolService.findBySymbol(ticker.getSymbol());
 			}
-		} catch (SecuritiesNotFound e) {
+		} catch (SymbolNotFound e) {
 			throw e;
 		}
 				
@@ -65,12 +65,12 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Ibd50Rank delete(int id) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public Ibd50Rank delete(int id) throws SymbolNotFound {
 		Ibd50Rank deletedIbd50Ranking = ibd50RankingRepo.findOne(id);
 		
 		if(deletedIbd50Ranking == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		} 
 
 		ibd50RankingRepo.delete(id);
@@ -85,12 +85,12 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Ibd50Rank update(Ibd50Rank ibd50Ranking) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public Ibd50Rank update(Ibd50Rank ibd50Ranking) throws SymbolNotFound {
 		Ibd50Rank updatedIbd50Ranking = ibd50RankingRepo.findOne(ibd50Ranking.getId());
 		
 		if( updatedIbd50Ranking == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 		
 		//TODO Filler until I really write this code
@@ -100,19 +100,19 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public List<Ibd50Rank> findByRankAndTicker(int rank, Symbol ticker) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public List<Ibd50Rank> findByRankAndTicker(int rank, Symbol ticker) throws SymbolNotFound {
 		Symbol foundTickerSymbol;
 		try {
 			foundTickerSymbol = lookUpTicker(ticker);								// First check to see if the ticker is valid
-		} catch (SecuritiesNotFound e) {													// Catch if it is not
+		} catch (SymbolNotFound e) {													// Catch if it is not
 			throw e;																// Throw that exception up to the next level to be dealt with.
 		}
 		
 		List<Ibd50Rank> rankingList = ibd50RankingRepo.findByRankAndTickerOrderByRankDateAsc(rank, foundTickerSymbol);	//Using the found ticker look up for the provided rank
 		
 		if(rankingList.isEmpty()) {													// Check if any were found with the desired rank and ticker
-			throw new SecuritiesNotFound("The Ticker '" + foundTickerSymbol.getSymbol()	// If not throw an exception with the problem explained in the message 
+			throw new SymbolNotFound("The Ticker '" + foundTickerSymbol.getSymbol()	// If not throw an exception with the problem explained in the message 
 					+ "' was not found with rank " + rank + " in the Rank DB");
 		}
 		
@@ -120,10 +120,10 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	}
 
 	@Override
-	public List<Ibd50Rank> findByModificationTimeAfter(Date date) throws SecuritiesNotFound {
+	public List<Ibd50Rank> findByModificationTimeAfter(Date date) throws SymbolNotFound {
 		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByModificationTimeAfter(date);
 		if( foundRanking == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 		return foundRanking;
 	}
@@ -131,11 +131,11 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	
 	@Override
 	@Transactional
-	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank,	int endRank) throws SecuritiesNotFound{
+	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank,	int endRank) throws SymbolNotFound{
 		List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankBetweenAndActiveRankingTrue(startRank, endRank);
 		
 		if( foundRanking == null) {
-			throw new SecuritiesNotFound();
+			throw new SymbolNotFound();
 		}
 		
 		return foundRanking;
@@ -143,19 +143,19 @@ public class Ibd50RankServiceImpl implements Ibd50RankService{
 	
 	@Override
 	@Transactional
-	public Ibd50Rank findByTickerAndCurrentRankTrue(Symbol ticker) throws SecuritiesNotFound, Ibd50TooManyFound {
+	public Ibd50Rank findByTickerAndCurrentRankTrue(Symbol ticker) throws SymbolNotFound, Ibd50TooManyFound {
 		
 		Symbol foundTickerSymbol;
 		try {
 			foundTickerSymbol = lookUpTicker(ticker);								// First check to see if the ticker is valid
-		} catch (SecuritiesNotFound e) {													// Catch if it is not
+		} catch (SymbolNotFound e) {													// Catch if it is not
 			throw e;																// Throw that exception up to the next level to be dealt with.
 		}
 		
 		List<Ibd50Rank> rankingList = ibd50RankingRepo.findByTickerAndActiveRankingTrue(foundTickerSymbol);
 		
 		if(rankingList.isEmpty()) {													// Check if any were found with the desired rank and ticker
-			throw new SecuritiesNotFound("The Ticker '" + foundTickerSymbol.getSymbol()	// If not throw an exception with the problem explained in the message 
+			throw new SymbolNotFound("The Ticker '" + foundTickerSymbol.getSymbol()	// If not throw an exception with the problem explained in the message 
 					+ "' was not found with any current ranks.");
 		} else if (rankingList.size() > 1) {
 			throw new Ibd50TooManyFound("To many current=true for ticker " + foundTickerSymbol.getSymbol() 

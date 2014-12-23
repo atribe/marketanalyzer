@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
+import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.repo.SecurityOhlcvRepo;
 import com.ar.marketanalyzer.core.securities.repo.SymbolRepo;
@@ -27,7 +27,7 @@ public class SymbolService implements SymbolServiceInterface{
 		Symbol foundSymbol;
 		try {
 			foundSymbol = findBySymbol(symbol.getSymbol());					// Looks to see if the symbol is already in the db
-		} catch (SecuritiesNotFound e) {													// If there is not exception is caught
+		} catch (SymbolNotFound e) {													// If there is not exception is caught
 			return symbolRepo.save(symbol);								// No duplicate so add this ticker to the db
 		}
 		return foundSymbol;															// Ticker was already in the db, returning the found one.
@@ -35,23 +35,23 @@ public class SymbolService implements SymbolServiceInterface{
 
 	@Override
 	@Transactional
-	public Symbol findById(int id) throws SecuritiesNotFound {
+	public Symbol findById(int id) throws SymbolNotFound {
 		Symbol foundSymbol = symbolRepo.findOne(id);
 		
 		if( foundSymbol == null) {
-			throw new SecuritiesNotFound("Ticker not found with an id of " + id + ". Better luck next time.");
+			throw new SymbolNotFound("Ticker not found with an id of " + id + ". Better luck next time.");
 		}
 		return foundSymbol;
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
-	public Symbol delete(int id) throws SecuritiesNotFound {
+	@Transactional(rollbackFor=SymbolNotFound.class)
+	public Symbol delete(int id) throws SymbolNotFound {
 		Symbol deletedSymbol;				// Creating variable for the deletedTicker
 		
 		try {
 			deletedSymbol = findById(id);			// Looking up the ticker by the provided ID to make sure that ID exists
-		} catch (SecuritiesNotFound e) {						// If ID is not found exception is caught here
+		} catch (SymbolNotFound e) {						// If ID is not found exception is caught here
 			throw e;									// Throw the exception caught up to the next level to be dealt with
 		}
 
@@ -77,13 +77,13 @@ public class SymbolService implements SymbolServiceInterface{
 	}
 
 	@Override
-	@Transactional(rollbackFor=SecuritiesNotFound.class)
+	@Transactional(rollbackFor=SymbolNotFound.class)
 	public Symbol update(Symbol symbol) {
 		Symbol updatedSymbol=null;							// Creating variable for the ticker to be updated
 		
 		try {
 			updatedSymbol = findById(symbol.getId());	// Looking up the ticker by the provided ID to make sure that ID exists
-		} catch (SecuritiesNotFound e) {							// If ID is not found exception is caught here
+		} catch (SymbolNotFound e) {							// If ID is not found exception is caught here
 			//throw e;												// Throw the exception caught up to the next level to be dealt with
 		}
 		
@@ -97,11 +97,11 @@ public class SymbolService implements SymbolServiceInterface{
 
 	@Override
 	@Transactional
-	public Symbol findBySymbol(String symbol) throws SecuritiesNotFound {
+	public Symbol findBySymbol(String symbol) throws SymbolNotFound {
 		Symbol foundSymbolSymbol = symbolRepo.findBySymbol(symbol);
 		
 		if( foundSymbolSymbol == null ) {
-			throw new SecuritiesNotFound("A Ticker with the Symbol '" + symbol + "' was not found in the Ticker DB");
+			throw new SymbolNotFound("A Ticker with the Symbol '" + symbol + "' was not found in the Ticker DB");
 		}
 		
 		return foundSymbolSymbol;
