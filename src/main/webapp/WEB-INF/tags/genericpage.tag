@@ -3,6 +3,8 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="foot" fragment="true" %>
+<%@attribute name="message" fragment="true" %>
+<%@attribute name="messagestatus" fragment="true" %>
 <%//@attribute name="header" fragment="true" %>
 <%//@attribute name="footer" fragment="true" %>
 <!DOCTYPE html>
@@ -18,7 +20,10 @@
 				<t:leftsidebar>
 				</t:leftsidebar>
 				<div id="content">
-					<t:message/>
+					<t:message>
+						<jsp:attribute name="message"><jsp:invoke fragment="message"/></jsp:attribute>
+						<jsp:attribute name="messagestatus"><jsp:invoke fragment="messagestatus"/></jsp:attribute>
+					</t:message>
 					<jsp:doBody/>
 				</div>
 			</div>

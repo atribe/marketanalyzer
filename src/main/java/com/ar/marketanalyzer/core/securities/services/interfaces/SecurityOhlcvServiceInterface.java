@@ -1,5 +1,6 @@
 package com.ar.marketanalyzer.core.securities.services.interfaces;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,4 +33,9 @@ public interface SecurityOhlcvServiceInterface {
 	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate)throws SymbolNotFound;
 	public LocalDate findSymbolsLastDate(Symbol symbol)	throws OhlcvNotFound;
 	public LocalDate findSymbolsFirstDate(Symbol symbol) throws OhlcvNotFound;
+	
+	/*
+	 * Non transactional methods
+	 */
+	public boolean updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException;
 }

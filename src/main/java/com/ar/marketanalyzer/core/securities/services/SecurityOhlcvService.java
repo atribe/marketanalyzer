@@ -268,18 +268,21 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		List<YahooOHLCV> yahooList = new ArrayList<YahooOHLCV>();
 		
 		//Get first and last ohlcv dates from the db
-		LocalDate oldestDate;
+		LocalDate oldestDate=null;
 		LocalDate mostCurrentDate;
 		try {
-			oldestDate = findSymbolsLastDate(symbol);
+			if(symbol.getOldestDateInDb() == null || !symbol.getOldestDateInDb()) {
+				oldestDate = findSymbolsLastDate(symbol);
+				log.trace("Min Oldest Date: " + desiredStartDate + " Database Oldest Date:" + oldestDate);
+			}
 			mostCurrentDate = findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
 		
-			log.trace("Min Oldest Date: " + desiredStartDate + " Database Oldest Date:" + oldestDate);
+			
 			log.trace("Min Newest Date: " + today + " Database Newest Date:" + mostCurrentDate);
 
 			
 			//See if the db needs to be updated and then get the data from Yahoo
-			if( symbol.getOldestDateInDb() && today.isAfter(mostCurrentDate) && !today.equals(mostCurrentDate)) {
+			if( symbol.getOldestDateInDb() != null && symbol.getOldestDateInDb() && today.isAfter(mostCurrentDate) && !today.equals(mostCurrentDate)) {
 				yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
 			} else if( desiredStartDate.isBefore(oldestDate) && !desiredStartDate.equals(oldestDate) ) {	// If the last date is not before desired months ago
 				yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, oldestDate.minusDays(1)); //Get from yahoo the gap
@@ -296,12 +299,12 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		//If there is stuff to be added to the DB, add it
 		if( yahooList != null && yahooList.size() > 0 ) {
 			batchInsertYahoo(yahooList, symbol);
-		}
 		
-		//Did the query cover the oldest data from yahoo, if so set oldest date found field
-		if( new LocalDate(yahooList.get(0).getDate()).isAfter(desiredStartDate) ) {
-			symbol.setOldestDateInDb(Boolean.TRUE);
-			symbolService.update(symbol);
+			//Did the query cover the oldest data from yahoo, if so set oldest date found field
+			if( new LocalDate(yahooList.get(0).getDate()).isAfter(desiredStartDate) ) {
+				symbol.setOldestDateInDb(Boolean.TRUE);
+				symbolService.update(symbol);
+			}
 		}
 		
 		log.trace("Successfuly updated Ohlcv for symbol " + symbol.getSymbol());

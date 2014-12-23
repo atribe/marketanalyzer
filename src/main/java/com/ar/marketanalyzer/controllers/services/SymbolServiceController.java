@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -46,7 +47,7 @@ public class SymbolServiceController {
 	}
 	
 	@RequestMapping(value = "/addprocess", method=RequestMethod.POST)
-	public String addSymbol(@ModelAttribute Symbol symbol) {
+	public String addSymbol(@ModelAttribute Symbol symbol, RedirectAttributes redir) {
 		
 		log.trace("Attempting to delete symbol id " + symbol.getSymbol());
 		
@@ -54,21 +55,46 @@ public class SymbolServiceController {
 
 		log.trace("Succeded in deleting symbol id " + symbol.getSymbol());
 		
+		redir.addFlashAttribute("message", "Symbol " + symbol.getSymbol() + " added successfully.");
+		redir.addFlashAttribute("messagestatus", "success");
+		
 		return "redirect:/stockmanager";
 	}
 	
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public String deleteSymbol(@PathVariable int id) {
+	@RequestMapping(value = "/edit/{id}", method=RequestMethod.POST)
+	public String editSymbol(@PathVariable int id, Model model) {
 		
-		log.trace("Attempting to delete symbol id " + id);
+		log.trace("Attempting to edit symbol id " + id);
 		
 		try {
-			symbolService.delete(id);
+			Symbol symbol = symbolService.findById(id);
+			
+			model.addAttribute(symbol);
+		} catch (SymbolNotFound e) {
+			model.addAttribute("message", "Symbol " + id + " does not exist in the DB.");
+			model.addAttribute("messagestatus", "fail");
+		}
+		
+		log.trace("Succeded in edit symbol id " + id);
+		
+		return "addsymbol";
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	public String deleteSymbol(@PathVariable int id, RedirectAttributes redir) {
+		
+		log.trace("Attempting to delete symbol id " + id);
+		Symbol symbol = null;
+		try {
+			symbol = symbolService.delete(id);
 		} catch (SymbolNotFound e) {
 			log.trace("Failed to delete symbol id " + id);
 			e.printStackTrace();
 		}
 		log.trace("Succeded in deleting symbol id " + id);
+		
+		redir.addFlashAttribute("message", "Symbol " + symbol.getSymbol() + " deleted successfully.");
+		redir.addFlashAttribute("messagestatus", "success");
 		
 		return "redirect:/stockmanager";
 	}
