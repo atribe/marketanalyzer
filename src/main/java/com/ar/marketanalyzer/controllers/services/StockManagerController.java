@@ -19,13 +19,16 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceIn
 
 @Controller
 @RequestMapping("/stockmanager")
-public class SymbolServiceController {
+public class StockManagerController {
 
 	private final Logger log = LogManager.getLogger(this.getClass().getName());
 	
 	@Autowired
 	SymbolServiceInterface symbolService;
     
+	/*
+	 * Stock Manager Controllers
+	 */
 	@RequestMapping(method = RequestMethod.GET)
     public String stockmanager(Model model) {
     	List<Symbol> symbols = symbolService.findAllFetchOhlcv();
@@ -39,7 +42,7 @@ public class SymbolServiceController {
     }
 	
 	@RequestMapping(value = "/add", method=RequestMethod.GET)
-	public String createSymbol(Model model) {
+	public String addSymbol(Model model) {
 		
 		model.addAttribute("symbol", new Symbol());
 		
@@ -47,7 +50,7 @@ public class SymbolServiceController {
 	}
 	
 	@RequestMapping(value = "/addprocess", method=RequestMethod.POST)
-	public String addSymbol(@ModelAttribute Symbol symbol, RedirectAttributes redir) {
+	public String addSymbolProcess(@ModelAttribute Symbol symbol, RedirectAttributes redir) {
 		
 		log.trace("Attempting to delete symbol id " + symbol.getSymbol());
 		
@@ -61,7 +64,7 @@ public class SymbolServiceController {
 		return "redirect:/stockmanager";
 	}
 	
-	@RequestMapping(value = "/edit/{id}", method=RequestMethod.POST)
+	@RequestMapping(value = "/edit/{id}", method=RequestMethod.GET)
 	public String editSymbol(@PathVariable int id, Model model) {
 		
 		log.trace("Attempting to edit symbol id " + id);
@@ -69,7 +72,7 @@ public class SymbolServiceController {
 		try {
 			Symbol symbol = symbolService.findById(id);
 			
-			model.addAttribute(symbol);
+			model.addAttribute("symbol", symbol);
 		} catch (SymbolNotFound e) {
 			model.addAttribute("message", "Symbol " + id + " does not exist in the DB.");
 			model.addAttribute("messagestatus", "fail");
@@ -77,10 +80,25 @@ public class SymbolServiceController {
 		
 		log.trace("Succeded in edit symbol id " + id);
 		
-		return "addsymbol";
+		return "editsymbol";
 	}
 	
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/editprocess", method=RequestMethod.POST)
+	public String editSymbolProcess(@ModelAttribute Symbol symbol, RedirectAttributes redir) {
+		
+		log.trace("Attempting to delete symbol id " + symbol.getSymbol());
+		
+		symbolService.update(symbol);
+
+		log.trace("Succeded in deleting symbol id " + symbol.getSymbol());
+		
+		redir.addFlashAttribute("message", "Symbol " + symbol.getSymbol() + " added successfully.");
+		redir.addFlashAttribute("messagestatus", "success");
+		
+		return "redirect:/stockmanager";
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String deleteSymbol(@PathVariable int id, RedirectAttributes redir) {
 		
 		log.trace("Attempting to delete symbol id " + id);

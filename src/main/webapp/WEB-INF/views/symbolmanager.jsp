@@ -16,7 +16,7 @@
 			<h2>SELL</h2>
 		</div>
 		<div id="symbolmanager">
-			<table class="symbolmanagerTable">
+			<table class="pure-table pure-table-bordered">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -48,7 +48,9 @@
 				</c:forEach>
 				</tbody>
 			</table>
-			<div id="addsymbollink"><a href="<c:url value="stockmanager/add" />">Add a symbol</a></div>
+			<div id="addsymbollink">
+				<a class="pure-button" href="<c:url value="stockmanager/add" />">Add a symbol</a>
+			</div>
 		</div>
 	</jsp:body>
 </t:genericpage>

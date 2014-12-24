@@ -12,6 +12,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="shortcut icon" href="<c:url value="${baseURL}/img/favicon.ico" />" />
 	<link rel="stylesheet" type="text/css" href="<c:url value="${baseURL}/css/style.css" />" />
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 	<script src="<c:url value="${baseURL}/js/headerColorChange.js" />" type="text/javascript"></script>

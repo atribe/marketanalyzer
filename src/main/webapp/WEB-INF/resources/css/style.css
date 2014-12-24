@@ -30,6 +30,11 @@
 	#message.fail{
 		background-color: red;
 	}
+	
+#addsymbollink{
+	text-align: center;
+	margin: 20px 0;
+}
 
 
 #dayStatus{
