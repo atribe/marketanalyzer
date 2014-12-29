@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.core.threads;
+package com.ar.marketanalyzer.core.threads.runnables;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
