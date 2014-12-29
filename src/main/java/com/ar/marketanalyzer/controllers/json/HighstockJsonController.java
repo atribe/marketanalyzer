@@ -69,4 +69,26 @@ public class HighstockJsonController {
 
 		return chart;
 	}
+	
+	@RequestMapping(value="stock/{symbol}", method = RequestMethod.GET, headers="Accept=application/json", produces="application/json")
+	@ResponseBody
+	public HighStockOHLCV getHighchartStockJSON(@PathVariable String symbol) {
+		logger.debug("Symbol passed to the highchart JSON controller is: " + symbol);
+
+		HighStockOHLCV chart = null;
+		Symbol sym;
+		
+		//Getting the symbol
+		try {
+			sym = symbolService.findBySymbol(symbol);
+
+			List<SecuritiesOhlcv> data = ohlcvService.findBySymbolAsc(sym);
+			chart = new HighStockOHLCV(HighstockOHLC.convertSecOHLCVtoOHLC(data), HighstockSingleValueData.convertSecOHLCVtoSingleValue(data));
+		
+		} catch (SymbolNotFound e) {
+			logger.error("Symbol " + symbol + " was not found in the database. The database is probably still loading the data, or you chose a bad symbol to plot.");
+		}
+
+		return chart;
+	}
 }

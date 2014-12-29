@@ -7,10 +7,13 @@
 <%@attribute name="messagestatus" fragment="true" %>
 <%//@attribute name="header" fragment="true" %>
 <%//@attribute name="footer" fragment="true" %>
+
 <!DOCTYPE html>
 <html>
 	<t:head>
-		<jsp:invoke fragment="head"/>
+		<jsp:attribute name="head">
+			<jsp:invoke fragment="head"/>
+		</jsp:attribute>
 	</t:head>
 	<body>
 		<div id="wrapper">

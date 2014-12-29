@@ -5,9 +5,11 @@
 $(function() {
     console.log( "stockchart.js ready!" );
     //alert(document.URL);
-    
-    var url = "/json/highstockohlcv/test";
+    var symbol = $('#highchart').innerHTML;
+    var url = "/json/stock/"+symbol;
     var addtourl = "/marketanalyzer";
+    
+    alert(symbol);
     
     if(document.URL == "http://localhost:8080/marketanalyzer/") {
     	url = addtourl.concat(url);
