@@ -40,10 +40,10 @@
 						<td><c:out value="${symbol.type}"/></td>
 						<td><c:out value="${fn:length(symbol.ohlcv)}"/></td>
 						<td></td>
-						<td><button type="button" onclick="ohlcvUpdate(${symbol.id})">Update</button></td>
+						<td><button class="pure-button update" type="button" value="${symbol.id}">Update</button></td>
 						<td></td>
-						<td><a href="<c:url value="stockmanager/edit/${symbol.id}" />">Edit</a></td>
-						<td><a href="<c:url value="stockmanager/delete/${symbol.id}" />">Delete</a></td>
+						<td><a class="pure-button edit" href="<c:url value="stockmanager/edit/${symbol.id}" />">Edit</a></td>
+						<td><a class="pure-button delete" href="<c:url value="stockmanager/delete/${symbol.id}" />">Delete</a></td>
 					</tr>
 				</c:forEach>
 				</tbody>

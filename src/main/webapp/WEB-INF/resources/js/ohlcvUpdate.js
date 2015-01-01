@@ -2,15 +2,23 @@
  * 
  */
 
-$(function ohlcvUpdate(id) {
-	$.ajax({
-		type: "POST",
-		url: "/ohlcvmanager/update/"+id,
-		data: "{}",
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: function (msg) {
-			$('#myDiv').text(msg.d);
-		}
-	});
+$(document).ready(function() {
+        $('.update').click(function() {
+            var id = $(this).attr("value");
+            
+            var pathname=$(location).attr('pathname');
+            
+            var parts = pathname.split("/");
+            var result = parts[parts.length - 1]; // Or parts.pop();
+            
+            var url = result+"/ohlcvmanager/update/"+id;
+            
+            $.ajax({
+            	url: url,
+            	//data: {id : id},
+            	success: alert( "Success:")
+            	});
+        });
 });
+
+//		url: "/ohlcvmanager/update/"+id,
