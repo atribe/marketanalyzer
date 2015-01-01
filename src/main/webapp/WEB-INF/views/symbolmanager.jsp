@@ -4,7 +4,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:genericpage>
-	<jsp:attribute name="head"></jsp:attribute>
+	<jsp:attribute name="head">
+        <script src="<t:baseurl/><c:url value="/js/ohlcvUpdate.js" />" type="text/javascript"></script>
+	</jsp:attribute>
 	<jsp:attribute name="foot"></jsp:attribute>
 	<jsp:attribute name="message">${message}</jsp:attribute>
 	<jsp:attribute name="messagestatus">${messagestatus}</jsp:attribute>
@@ -38,7 +40,7 @@
 						<td><c:out value="${symbol.type}"/></td>
 						<td><c:out value="${fn:length(symbol.ohlcv)}"/></td>
 						<td></td>
-						<td><a href="<c:url value="ohlcvmanager/update/${symbol.id}" />">Update</a></td>
+						<td><button type="button" onclick="ohlcvUpdate(${symbol.id})">Update</button></td>
 						<td></td>
 						<td><a href="<c:url value="stockmanager/edit/${symbol.id}" />">Edit</a></td>
 						<td><a href="<c:url value="stockmanager/delete/${symbol.id}" />">Delete</a></td>
