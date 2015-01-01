@@ -1,7 +1,6 @@
 package com.ar.marketanalyzer.spring.init;
 
 import java.util.HashSet;
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
