@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -23,13 +24,14 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @PropertySource({ "classpath:common.properties" })
 public class PersistenceConfig {
 
-	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
-	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
-	private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
-	private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
-	
-	@Resource
-	private Environment env;
+	@Value("${hibernate.dialect}")
+	private String PROPERTY_NAME_HIBERNATE_DIALECT;
+	@Value("${hibernate.show_sql}")
+	private String PROPERTY_NAME_HIBERNATE_SHOW_SQL;
+	@Value("${entitymanager.packages.to.scan}")
+	private String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN;
+	@Value("${hibernate.hbm2ddl.auto}")
+	private String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -38,7 +40,7 @@ public class PersistenceConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
-		entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));
+		entityManagerFactoryBean.setPackagesToScan(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN);
 		
 		final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
@@ -49,9 +51,9 @@ public class PersistenceConfig {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,	env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
-		properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
+		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,	PROPERTY_NAME_HIBERNATE_DIALECT);
+		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, PROPERTY_NAME_HIBERNATE_SHOW_SQL);
+		properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO);
 		return properties;
 	}
 

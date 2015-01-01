@@ -77,7 +77,9 @@
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
+			<scope>compile</scope>
 		</dependency>
+
  
  		<!-- Logging -->
         <dependency>
@@ -204,7 +206,7 @@
     </dependencies>
   
     <build>
-        <finalName>ROOT</finalName>
+        <finalName>marketanalyzer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

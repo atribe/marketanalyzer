@@ -7,10 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.ar.marketanalyzer.spring.init.PropCache;
 
 /**
  * 
@@ -30,6 +29,11 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	//@Autowired @Qualifier("IBD50InitRunnable")
 	//private Runnable i50Bean;
 	
+	@Value("${threads.backtest}")
+	private String BACKTEST_THREAD_NAME;
+	@Value("${threads.dbinit")
+	private String DB_INIT_THREAD_NAME;
+	
 	private static final Logger logger = LogManager.getLogger(MarketAnalyzerListener.class.getName());
 	
 	@SuppressWarnings("unused")
@@ -48,7 +52,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
 		
 		
-		t1 = new Thread(indexBacktestBean, PropCache.getCachedProps("threads.backtest"));
+		t1 = new Thread(indexBacktestBean, BACKTEST_THREAD_NAME);
 		t1.start();
 		
 		/*
@@ -69,8 +73,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	
 	public static boolean dbInitThreadIsAlive() {
 		// java.lang.Thread.State can be NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
-		String thread_name = PropCache.getCachedProps("threads.dbinit");
-		logger.debug("Checking thread state. Thread name: " + thread_name + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
+		//logger.debug("Checking thread state. Thread name: " + DB_INIT_THREAD_NAME + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
 		return t1.isAlive();
 	}
 }

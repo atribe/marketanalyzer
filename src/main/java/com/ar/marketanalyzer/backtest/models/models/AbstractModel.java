@@ -11,6 +11,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.annotation.Resource;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -29,6 +30,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
@@ -42,7 +44,6 @@ import com.ar.marketanalyzer.backtest.models.stats.Stats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
-import com.ar.marketanalyzer.spring.init.PropCache;
 
 @Component	//this is so the autowired works for the ohlcv service
 @Entity
@@ -100,7 +101,9 @@ public abstract class AbstractModel extends PersistableEntityInt{
 	@Transient
 	protected SortedMap<Date, Stats> defaultStats = new TreeMap<Date, Stats>();
 
-	protected static final int modelMonthRange = Integer.parseInt(PropCache.getCachedProps("default.ModelMonths"));
+	@Value("${default.ModelMonths}")
+	private static int modelMonths;
+	protected static final int modelMonthRange = modelMonths;
 	protected static final BigDecimal defaultInitialInvestment = new BigDecimal(1000);
 	protected static final Date defaultStartDate = new Date( new LocalDate().minusMonths(modelMonthRange).toDateTimeAtStartOfDay().getMillis() );
 	protected static final Date defaultEndDate = new Date( new LocalDate().toDateTimeAtStartOfDay().getMillis() );

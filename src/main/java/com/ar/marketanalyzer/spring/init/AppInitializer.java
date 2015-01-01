@@ -17,7 +17,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
-import com.ar.marketanalyzer.spring.init.PropCache;
 
 public class AppInitializer implements WebApplicationInitializer {
 	/* Get actual class name to be printed on */
@@ -51,8 +50,7 @@ public class AppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.setConfigLocation(CONFIG_LOCATION);
         
-        Properties prop = PropCache.load(SPRING_PROPERTIES_FILE_NAME);
-        context.getEnvironment().setActiveProfiles(prop.getProperty(ACTIVE_PROFILE_PROPERTY_NAME, DEFAULT_PROFILE));
+        context.getEnvironment().setActiveProfiles("dev");
         return context;
     }
 
