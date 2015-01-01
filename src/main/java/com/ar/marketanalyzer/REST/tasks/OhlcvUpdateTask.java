@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
@@ -13,6 +14,7 @@ import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
+@Component
 public class OhlcvUpdateTask extends TimerTask{
 	
 	private final Logger log = LogManager.getLogger(this.getClass());
@@ -26,7 +28,17 @@ public class OhlcvUpdateTask extends TimerTask{
 	@Autowired
 	SecurityOhlcvService ohlcvService;
 	
+	public OhlcvUpdateTask() {
+		
+	}
+	
 	public OhlcvUpdateTask(int id, int waitBeforeTaskStarts, DeferredResult<ProcessingStatus> deferredResult) {
+		this.deferredResult = deferredResult;
+		this.waitBeforeTaskStarts = waitBeforeTaskStarts;
+		this.id=id;
+	}
+	
+	public void setOhlcvUpdateTask(int id, int waitBeforeTaskStarts, DeferredResult<ProcessingStatus> deferredResult) {
 		this.deferredResult = deferredResult;
 		this.waitBeforeTaskStarts = waitBeforeTaskStarts;
 		this.id=id;
