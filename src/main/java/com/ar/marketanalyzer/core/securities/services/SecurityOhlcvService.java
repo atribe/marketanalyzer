@@ -257,7 +257,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	 * @throws SymbolNotFound
 	 * @throws IOException
 	 */
-	public boolean updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException {
+	public int updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException {
 		log.trace("start updateOhlcv on symbol " + symbol.getName());
 		
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
@@ -309,7 +309,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		
 		log.trace("Successfuly updated Ohlcv for symbol " + symbol.getSymbol());
 		
-		return true;
+		return yahooList.size();
 	}
 	private LocalDate adjustDateToFridayIfNeeded(LocalDate date) {
 		final int FRIDAY = 5;

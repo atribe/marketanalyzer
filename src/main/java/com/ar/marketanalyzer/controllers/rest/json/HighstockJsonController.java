@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.controllers.json;
+package com.ar.marketanalyzer.controllers.rest.json;
 
 import java.util.List;
 

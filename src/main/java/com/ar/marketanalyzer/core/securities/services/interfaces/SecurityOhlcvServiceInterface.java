@@ -37,5 +37,5 @@ public interface SecurityOhlcvServiceInterface {
 	/*
 	 * Non transactional methods
 	 */
-	public boolean updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException;
+	public int updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException;
 }
