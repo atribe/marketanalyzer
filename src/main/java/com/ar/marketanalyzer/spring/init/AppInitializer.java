@@ -52,5 +52,4 @@ public class AppInitializer implements WebApplicationInitializer {
         context.getEnvironment().setActiveProfiles("dev");
         return context;
     }
-
 }
