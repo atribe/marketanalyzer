@@ -33,6 +33,7 @@ public class BacktestLogic {
 	
 	public void init() {
 		log.trace("Start init()");
+		@SuppressWarnings("unused")
 		List<Symbol> defaultSymbols = getDefaultSymbols();
 
 //		ohlcvLogic.updateOhlcv(defaultSymbols);

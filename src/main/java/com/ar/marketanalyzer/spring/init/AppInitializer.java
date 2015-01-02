@@ -23,8 +23,6 @@ public class AppInitializer implements WebApplicationInitializer {
 	private static final String CONFIG_LOCATION = "com.ar.marketanalyzer.spring.config";
 	private static final String MAPPING_URL = "/";
     
-    private static final String SPRING_PROPERTIES_FILE_NAME = "spring.properties";
-    private static final String ACTIVE_PROFILE_PROPERTY_NAME = "spring.profiles.active";
     private static final String DEFAULT_PROFILE = "dev";
 	
     @Override
@@ -49,7 +47,7 @@ public class AppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.setConfigLocation(CONFIG_LOCATION);
         
-        context.getEnvironment().setActiveProfiles("dev");
+        context.getEnvironment().setActiveProfiles(DEFAULT_PROFILE);
         return context;
     }
 }

@@ -12,7 +12,6 @@
         <spring.version>4.1.1.RELEASE</spring.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
 		<mysql.connector.version>5.1.33</mysql.connector.version>
-		<jfreechart.version>1.0.19</jfreechart.version>
 		<jackson.version>2.4.2</jackson.version>
 		<log4j2.version>2.1</log4j2.version>
     </properties>
@@ -92,13 +91,12 @@
 	         <artifactId>log4j-slf4j-impl</artifactId>
 	         <version>${log4j2.version}</version>
 	     </dependency> 
-
-	    <dependency>
-	    <!--HIBERNATE-SPRING - LOGGER (log4j)-->
-	        <groupId>org.slf4j</groupId>
-	        <artifactId>slf4j-log4j12</artifactId>
-	        <version>1.7.6</version>
-	    </dependency>
+			<!--HIBERNATE-SPRING - LOGGER (log4j)-->
+		    <dependency>
+		        <groupId>org.slf4j</groupId>
+		        <artifactId>slf4j-log4j12</artifactId>
+		        <version>1.7.6</version>
+		    </dependency>
         
         <!-- DB related dependencies -->
 		<dependency>
@@ -106,24 +104,14 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.3.2</version>
-		</dependency>
             
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
-			<!-- this is what I'm using instead of Hibernate -->
-		<dependency>
-			<groupId>commons-dbutils</groupId>
-			<artifactId>commons-dbutils</artifactId>
-			<version>1.5</version>
-		</dependency>
-			<!-- Connection Pool -->
+
+		<!-- Connection Pool -->
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
@@ -168,24 +156,6 @@
 		  <groupId>com.fasterxml.jackson.core</groupId>
 		  <artifactId>jackson-annotations</artifactId>
 		  <version>${jackson.version}</version>
-		</dependency>
-
-		<!-- Plotting -->
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jcommon</artifactId>
-			<version>1.0.23</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>${jfreechart.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>${jfreechart.version}</version>
-			<classifier>sources</classifier>
 		</dependency>
 		
 		<!-- httpclient is for logging into webpages, like the IBD50 site -->

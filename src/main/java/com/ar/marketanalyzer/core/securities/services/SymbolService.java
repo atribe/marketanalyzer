@@ -50,14 +50,14 @@ public class SymbolService implements SymbolServiceInterface{
 		Symbol deletedSymbol;				// Creating variable for the deletedTicker
 		
 		try {
-			deletedSymbol = findById(id);			// Looking up the ticker by the provided ID to make sure that ID exists
-		} catch (SymbolNotFound e) {						// If ID is not found exception is caught here
-			throw e;									// Throw the exception caught up to the next level to be dealt with
+			deletedSymbol = findById(id);	// Looking up the ticker by the provided ID to make sure that ID exists
+		} catch (SymbolNotFound e) {		// If ID is not found exception is caught here
+			throw e;						// Throw the exception caught up to the next level to be dealt with
 		}
 
-		symbolRepo.delete(id);					// No exception thrown, so go ahead and delete the ticker with the provided ID
+		symbolRepo.delete(id);				// No exception thrown, so go ahead and delete the ticker with the provided ID
 		
-		return deletedSymbol;						// Return the full ticker that was just deleted...Maybe I'll need it for something.
+		return deletedSymbol;				// Return the full ticker that was just deleted...Maybe I'll need it for something.
 	}
 
 	@Override

@@ -34,16 +34,17 @@
 				<tbody>
 				<c:forEach var="symbol" items="${symbols}" >
 					<tr>
-						<td><c:out value="${symbol.id}"/></td>
-						<td><c:out value="${symbol.symbol}"/></td>
-						<td><c:out value="${symbol.name}"/></td>
-						<td><c:out value="${symbol.type}"/></td>
-						<td><c:out value="${fn:length(symbol.ohlcv)}"/></td>
+					
+						<td id="<c:out value="id_${symbol.id}"/>"><c:out value="${symbol.id}"/></td>
+						<td id="<c:out value="symbol_${symbol.id}"/>"><c:out value="${symbol.symbol}"/></td>
+						<td id="<c:out value="name_${symbol.id}"/>"><c:out value="${symbol.name}"/></td>
+						<td id="<c:out value="type_${symbol.id}"/>"><c:out value="${symbol.type}"/></td>
+						<td id="<c:out value="count_${symbol.id}"/>"><c:out value="${fn:length(symbol.ohlcv)}"/></td>
 						<td></td>
 						<td><button class="pure-button update" type="button" value="${symbol.id}">Update</button></td>
 						<td></td>
-						<td><a class="pure-button edit" href="<c:url value="stockmanager/edit/${symbol.id}" />">Edit</a></td>
-						<td><a class="pure-button delete" href="<c:url value="stockmanager/delete/${symbol.id}" />">Delete</a></td>
+						<td><a class="pure-button edit" href="<t:baseurl/><c:url value="/stockmanager/edit/${symbol.id}" />">Edit</a></td>
+						<td><a class="pure-button delete" href="<t:baseurl/><c:url value="/stockmanager/delete/${symbol.id}" />">Delete</a></td>
 					</tr>
 				</c:forEach>
 				</tbody>

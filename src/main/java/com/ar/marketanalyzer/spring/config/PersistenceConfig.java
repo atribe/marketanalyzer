@@ -2,7 +2,6 @@ package com.ar.marketanalyzer.spring.config;
 
 import java.util.Properties;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -24,12 +22,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @PropertySource({ "classpath:common.properties" })
 public class PersistenceConfig {
 
+	@Value("${entitymanager.packages.to.scan}")
+	private String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN;
 	@Value("${hibernate.dialect}")
 	private String PROPERTY_NAME_HIBERNATE_DIALECT;
 	@Value("${hibernate.show_sql}")
 	private String PROPERTY_NAME_HIBERNATE_SHOW_SQL;
-	@Value("${entitymanager.packages.to.scan}")
-	private String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN;
 	@Value("${hibernate.hbm2ddl.auto}")
 	private String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO;
 	
@@ -51,9 +49,9 @@ public class PersistenceConfig {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,	PROPERTY_NAME_HIBERNATE_DIALECT);
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, PROPERTY_NAME_HIBERNATE_SHOW_SQL);
-		properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO);
+		properties.put("hibernate.dialect",	PROPERTY_NAME_HIBERNATE_DIALECT);
+		properties.put("hibernate.show_sql", PROPERTY_NAME_HIBERNATE_SHOW_SQL);
+		properties.put("hibernate.hbm2ddl.auto", PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO);
 		return properties;
 	}
 
