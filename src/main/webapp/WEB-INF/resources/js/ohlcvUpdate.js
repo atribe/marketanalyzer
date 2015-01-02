@@ -27,10 +27,11 @@ $(document).ready(function() {
     			beforeSend: function(xhr) {
     	            xhr.setRequestHeader("Accept", "application/json");
     	            xhr.setRequestHeader("Content-Type", "application/json");
+    	            message("started", "OHLCV Updatehas Started for Symbol ID: " + id);
     	        },
             	success: function(ohlcvCount) {
             		$("#"+id+"_count").html(ohlcvCount+1);
-            		alert(ohclvCount);
+            		alert(ohlcvCount);
             	},
             	error: function() {
             		alert("error");

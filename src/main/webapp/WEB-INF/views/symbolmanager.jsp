@@ -6,6 +6,7 @@
 <t:genericpage>
 	<jsp:attribute name="head">
         <script src="<t:baseurl/><c:url value="/js/ohlcvUpdate.js" />" type="text/javascript"></script>
+        <script src="<t:baseurl/><c:url value="/js/message.js" />" type="text/javascript"></script>
 	</jsp:attribute>
 	<jsp:attribute name="foot"></jsp:attribute>
 	<jsp:attribute name="message">${message}</jsp:attribute>

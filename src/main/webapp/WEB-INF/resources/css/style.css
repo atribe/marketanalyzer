@@ -30,6 +30,9 @@
 	#message.fail{
 		background-color: red;
 	}
+	#message.started{
+		background-color: yellow;
+	}
 	
 #addsymbollink{
 	text-align: center;
