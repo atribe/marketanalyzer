@@ -26,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @EnableWebMvc
 @Configuration
@@ -88,7 +89,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	public class JsonViewResolver implements ViewResolver {
 		public View resolveViewName(String viewName, Locale locale)
 				throws Exception {
-				MappingJacksonJsonView view = new MappingJacksonJsonView();
+				MappingJackson2JsonView view = new MappingJackson2JsonView();
 				view.setPrettyPrint(true);
 				return view;
 		}

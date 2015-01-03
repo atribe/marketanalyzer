@@ -25,16 +25,16 @@ $(document).ready(function() {
             	url: url,
             	type: "GET",
     			beforeSend: function(xhr) {
-    	            xhr.setRequestHeader("Accept", "application/json");
-    	            xhr.setRequestHeader("Content-Type", "application/json");
-    	            message("started", "OHLCV Updatehas Started for Symbol ID: " + id);
+    	            //xhr.setRequestHeader("Accept", "application/json");
+    	            //xhr.setRequestHeader("Content-Type", "application/json");
+    	            message("started", "OHLCV Update has Started for Symbol ID: " + id);
     	        },
             	success: function(ohlcvCount) {
             		$("#"+id+"_count").html(ohlcvCount+1);
-            		alert(ohlcvCount);
+            		message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + ohlcvCount);
             	},
             	error: function() {
-            		alert("error");
+            		message("fail", "OHLCV Update has Failed for Symbol ID: " + id);
             	}
             	});
         });
