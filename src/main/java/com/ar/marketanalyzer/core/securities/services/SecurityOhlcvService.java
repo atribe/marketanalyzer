@@ -277,14 +277,15 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 			}
 			mostCurrentDate = findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
 		
-			
 			log.trace("Min Newest Date: " + today + " Database Newest Date:" + mostCurrentDate);
 
-			
 			//See if the db needs to be updated and then get the data from Yahoo
-			if( symbol.getOldestDateInDb() != null && symbol.getOldestDateInDb() && today.isAfter(mostCurrentDate) && !today.equals(mostCurrentDate)) {
-				yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);	//Get from yahoo the gap
-			} else if( desiredStartDate.isBefore(oldestDate) && !desiredStartDate.equals(oldestDate) ) {	// If the last date is not before desired months ago
+			//If OldestDateInDB Flag is set AND flag is set to true AND today is after mostCurrentDay 
+			if( symbol.getOldestDateInDb() != null && symbol.getOldestDateInDb() && today.isAfter(mostCurrentDate)) {
+				//Get from yahoo the gap of the newest day in the DB to now.
+				yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), mostCurrentDate.plusDays(1), today);
+			//If 
+			} else if( symbol.getOldestDateInDb() == false && desiredStartDate.isBefore(oldestDate)) {	// If the last date is not before desired months ago
 				yahooList = yahooService.getYahooOhlcvData(symbol.getSymbol(), desiredStartDate, oldestDate.minusDays(1)); //Get from yahoo the gap
 			}
 			/*

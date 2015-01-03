@@ -30,9 +30,7 @@ public class OhlcvRESTController {
 	SecurityOhlcvService ohlcvService;
 
 	
-	@RequestMapping(value="update/{id}", method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE
-			/*consumes = MediaType.APPLICATION_JSON_VALUE*/)
+	@RequestMapping(value="update/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public int getOhlcvFromYahoo(ModelAndView model, @PathVariable int id) {
 		int ohlcvCount = 0;

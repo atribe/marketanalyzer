@@ -25,10 +25,9 @@ $(document).ready(function() {
             	url: url,
             	type: "GET",
     			beforeSend: function(xhr) {
-    	            //xhr.setRequestHeader("Accept", "application/json");
-    	            //xhr.setRequestHeader("Content-Type", "application/json");
     	            message("started", "OHLCV Update has Started for Symbol ID: " + id);
     	        },
+    	        dataType: "plain",
             	success: function(ohlcvCount) {
             		$("#"+id+"_count").html(ohlcvCount+1);
             		message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + ohlcvCount);
