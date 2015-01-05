@@ -14,8 +14,8 @@ $(document).ready(function() {
             
             if(href.indexOf("http://localhost:8080/marketanalyzer/") >= 0) {
             	url = host.concat(addtourl).concat(url);
-            } else if(href.indexOf("http://localhost:100080/ROOT/") >= 0) {
-            	url = host.concat(addtourl).concat("ROOT");
+            } else if(href.indexOf("http://localhost:10080/ROOT/") >= 0) {
+            	url = host.concat("ROOT").concat(url);
             }
             url = httpPrefix.concat(url);
             
