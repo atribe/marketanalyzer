@@ -28,6 +28,12 @@ $(document).ready(function() {
     	            message("started", "OHLCV Update has Started for Symbol ID: " + id);
     	        },
     	        dataType: "plain",
+    	        headers: {
+    	        	Accept : "text/plain; charset=utf-8",         
+                    "Content-Type": "text/plain; charset=utf-8"
+    	        },
+    	        timeout: 10000,
+    	        async: false,
             	success: function(ohlcvCount) {
             		$("#"+id+"_count").html(ohlcvCount+1);
             		message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + ohlcvCount);
