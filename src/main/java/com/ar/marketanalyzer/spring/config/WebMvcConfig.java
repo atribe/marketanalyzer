@@ -9,7 +9,6 @@ import javax.xml.transform.Source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -19,7 +18,6 @@ import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -31,8 +29,6 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @EnableWebMvc
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
-	
-	//private static final Logger logger = LogManager.getLogger(WebMvcConfig.class);
 	
 	@Autowired
 	private JacksonConfig jacksonConfig;
@@ -93,19 +89,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				view.setPrettyPrint(true);
 				return view;
 		}
-	}
-	
-	/*
-	 * From http://fruzenshtein.com/spring-mvc-ajax-jquery/
-	 * For use with REST controller
-	 */
-	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer.favorPathExtension(true)
-			.useJaf(false)
-			.ignoreAcceptHeader(true)
-			.mediaType("html", MediaType.TEXT_HTML)
-			.mediaType("json", MediaType.APPLICATION_JSON)
-			.defaultContentType(MediaType.TEXT_HTML);
 	}
 }

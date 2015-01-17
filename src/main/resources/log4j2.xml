@@ -17,7 +17,7 @@
 		<logger name="com.jolbox" level="ERROR" additivity="false">
 			<AppenderRef ref="STDOUT"/>
 		</logger>
-		 <logger name="org.springframework" level="INFO" additivity="false">
+		 <logger name="org.springframework" level="DEBUG" additivity="false">
 			<AppenderRef ref="STDOUT"/>
 		</logger>
   </Loggers>

@@ -51,4 +51,12 @@ public class OhlcvRESTController {
 		}
 	    return "" + ohlcvCount;
 	}
+	
+	@RequestMapping(value="updatetest/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer updateTestController(ModelAndView model, @PathVariable int id) {
+		int ohlcvCount = 55;
+		
+	    return ohlcvCount;
+	}
 }

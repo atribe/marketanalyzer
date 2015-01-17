@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,24 +8,24 @@
 	<packaging>war</packaging>
 	<name>Market Analyzer</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
-        <spring.version>4.1.1.RELEASE</spring.version>
-        <hibernate.version>4.3.6.Final</hibernate.version>
+		<spring.version>4.1.1.RELEASE</spring.version>
+		<hibernate.version>4.3.6.Final</hibernate.version>
 		<mysql.connector.version>5.1.33</mysql.connector.version>
 		<jackson.version>2.4.2</jackson.version>
 		<log4j2.version>2.1</log4j2.version>
-    </properties>
+	</properties>
 
-    <dependencies>
- 
-    	<!-- Spring -->
+	<dependencies>
+
+		<!-- Spring -->
 		<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.7.0.RELEASE</version>
@@ -36,18 +37,18 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-oxm</artifactId>
-		    <version>${spring.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
-        <!-- Hibernate -->
-        <dependency>
+
+		<!-- Hibernate -->
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
@@ -57,21 +58,21 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-        
-        <!-- JavaEE APIs -->
+
+		<!-- JavaEE APIs -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope> <!-- Required for running with Tomcat -->
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jsp-api</artifactId>
 			<version>2.0</version>
 			<scope>provided</scope>
 		</dependency>
-        
+
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
@@ -79,32 +80,32 @@
 			<scope>compile</scope>
 		</dependency>
 
- 
- 		<!-- Logging -->
-        <dependency>
+
+		<!-- Logging -->
+		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j2.version}</version>
 		</dependency>
-		<dependency> 
-	         <groupId>org.apache.logging.log4j</groupId>
-	         <artifactId>log4j-slf4j-impl</artifactId>
-	         <version>${log4j2.version}</version>
-	     </dependency> 
-			<!--HIBERNATE-SPRING - LOGGER (log4j)-->
-		    <dependency>
-		        <groupId>org.slf4j</groupId>
-		        <artifactId>slf4j-log4j12</artifactId>
-		        <version>1.7.6</version>
-		    </dependency>
-        
-        <!-- DB related dependencies -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<!--HIBERNATE-SPRING - LOGGER (log4j) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.6</version>
+		</dependency>
+
+		<!-- DB related dependencies -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
 		</dependency>
-            
+
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
@@ -121,43 +122,43 @@
 		<!-- Used in toString() for classes -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
+			<artifactId>commons-lang3</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-        
-        <!-- Joda Time -->
-        <dependency>
+
+		<!-- Joda Time -->
+		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.5</version>
 		</dependency>
-		
-		<!-- OpenCSV for Yahoo data processing-->
+
+		<!-- OpenCSV for Yahoo data processing -->
 		<dependency>
-		    <groupId>net.sf.opencsv</groupId>
-		    <artifactId>opencsv</artifactId>
-		    <version>2.3</version>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.3</version>
 		</dependency>
 
 		<!-- Jackson JSON Mapper -->
 		<dependency>
-		  <groupId>com.fasterxml.jackson.core</groupId>
-		  <artifactId>jackson-core</artifactId>
-		  <version>${jackson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
-		 
+
 		<dependency>
-		  <groupId>com.fasterxml.jackson.core</groupId>
-		  <artifactId>jackson-databind</artifactId>
-		  <version>${jackson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
-		 
+
 		<dependency>
-		  <groupId>com.fasterxml.jackson.core</groupId>
-		  <artifactId>jackson-annotations</artifactId>
-		  <version>${jackson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
-		
+
 		<!-- httpclient is for logging into webpages, like the IBD50 site -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -165,46 +166,46 @@
 			<version>4.3.5</version>
 		</dependency>
 
-		
+
 		<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 		<dependency>
-		  <groupId>org.jsoup</groupId>
-		  <artifactId>jsoup</artifactId>
-		  <version>1.8.1</version>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.1</version>
 		</dependency>
 
-    </dependencies>
-  
-    <build>
-        <finalName>marketanalyzer</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-            <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-war-plugin</artifactId>
-		        <version>2.5</version>
-		        <configuration>
-		        	<failOnMissingWebXml>false</failOnMissingWebXml>
-		        </configuration>
-		      </plugin>
-            <plugin>
-		        <groupId>org.apache.tomcat.maven</groupId>
-		        <artifactId>tomcat7-maven-plugin</artifactId>
-		        <version>2.0</version>
-		        <configuration>
-		          <url>http://localhost:8105/mymanager</url>
-		          <failOnMissingWebXml>false</failOnMissingWebXml>
-		        </configuration>
-		      </plugin>
-        </plugins>
-    </build>
+	</dependencies>
+
+	<build>
+		<finalName>marketanalyzer</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<url>http://localhost:8105/mymanager</url>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
