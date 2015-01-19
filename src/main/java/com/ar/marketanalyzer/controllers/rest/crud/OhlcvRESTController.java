@@ -22,26 +22,26 @@ import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceIn
 public class OhlcvRESTController {
 
 	private final Logger log = LogManager.getLogger(this.getClass().getName());
-	
+
 	@Autowired
 	SymbolServiceInterface symbolService;
 	@Autowired
 	SecurityOhlcvService ohlcvService;
 
-	
+
 	@RequestMapping(value="update/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getOhlcvFromYahoo(ModelAndView model, @PathVariable int id) {
 		int ohlcvCount = 0;
 		log.trace("Looking for symbol with id:" + id);
-		
+
 		Symbol symbol;
 		try {
 			log.trace("OHLCV update started for symbol id: " + id);
 			symbol = symbolService.findById(id);
-			
+
 			ohlcvCount = ohlcvService.updateOhlcvFromYahoo(symbol);
-			
+
 		} catch (SymbolNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,14 +49,14 @@ public class OhlcvRESTController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return "" + ohlcvCount;
+		return "" + ohlcvCount;
 	}
-	
+
 	@RequestMapping(value="updatetest/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Integer updateTestController(ModelAndView model, @PathVariable int id) {
 		int ohlcvCount = 55;
-		
-	    return ohlcvCount;
+
+		return ohlcvCount;
 	}
 }
