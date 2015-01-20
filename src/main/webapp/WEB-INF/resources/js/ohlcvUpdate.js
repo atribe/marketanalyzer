@@ -27,16 +27,12 @@ $(document).ready(function() {
     			beforeSend: function(xhr) {
     	            message("started", "OHLCV Update has Started for Symbol ID: " + id);
     	        },
-    	        dataType: "plain",
-    	        headers: {
-    	        	Accept : "text/plain; charset=utf-8",         
-                    "Content-Type": "text/plain; charset=utf-8"
-    	        },
+    	        dataType: "json",
     	        timeout: 10000,
     	        async: false,
-            	success: function(ohlcvCount) {
-            		$("#"+id+"_count").html(ohlcvCount+1);
-            		message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + ohlcvCount);
+            	success: function(response) {
+        			$("#count_"+id).html(response.count);
+        			message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + response.count);
             	},
             	error: function() {
             		message("fail", "OHLCV Update has Failed for Symbol ID: " + id);

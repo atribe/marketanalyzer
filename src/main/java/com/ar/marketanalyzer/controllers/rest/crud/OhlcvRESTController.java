@@ -1,6 +1,8 @@
 package com.ar.marketanalyzer.controllers.rest.crud;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +33,7 @@ public class OhlcvRESTController {
 
 	@RequestMapping(value="update/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public String getOhlcvFromYahoo(ModelAndView model, @PathVariable int id) {
+	public Map<String, Integer> getOhlcvFromYahoo(ModelAndView model, @PathVariable int id) {
 		int ohlcvCount = 0;
 		log.trace("Looking for symbol with id:" + id);
 
@@ -49,14 +51,17 @@ public class OhlcvRESTController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "" + ohlcvCount;
+		
+		Map<String, Integer> outputMap = new HashMap<String, Integer>();
+		outputMap.put("count", ohlcvCount);
+		return outputMap;
 	}
 
 	@RequestMapping(value="updatetest/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Integer updateTestController(ModelAndView model, @PathVariable int id) {
-		int ohlcvCount = 55;
-
-		return ohlcvCount;
+	public Map<String, Integer> updateTestController(ModelAndView model, @PathVariable int id) {
+		Map<String, Integer> outputMap = new HashMap<String, Integer>();
+		
+		return outputMap;
 	}
 }
