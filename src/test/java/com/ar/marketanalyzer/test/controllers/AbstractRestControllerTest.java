@@ -1,10 +1,6 @@
 package com.ar.marketanalyzer.test.controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,38 +10,43 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.spring.config.AppConfig;
 import com.ar.marketanalyzer.spring.config.WebMvcConfig;
+import com.ar.marketanalyzer.test.config.TestRestServiceConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebMvcConfig.class, AppConfig.class})
+@ContextConfiguration(classes = {WebMvcConfig.class, AppConfig.class, TestRestServiceConfig.class})
 @WebAppConfiguration
-public class ControllerTests {
+public class AbstractRestControllerTest {
 
-	private MockMvc mockMvc;
+	protected MockMvc mockMvc;
 
 	@Autowired
-	private WebApplicationContext webApplicationContext;
+	protected WebApplicationContext webApplicationContext;
 
 	@Before
 	public void setUp() {
 		//We have to reset our mock between tests because the mock objects
 		//are managed by the Spring container. If we would not reset them,
 		//stubbing and verified behavior would "leak" from one test to another.
-		//Mockito.reset(todoServiceMock);
 
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
-
-	@Test
-	public void firstTest() throws Exception {
-		mockMvc.perform(get("/stockmanager"))
-		.andExpect(status().isOk());
+	
+	protected static final String SYMBOL_SYMBOL = "AAPL";
+	protected static final String SYMBOL_NAME = "Apple Inc";
+	protected static final String SYMBOL_TYPE = "stock";
+	protected static final int SYMBOL_ID = 333;
+	
+	protected Symbol getTestSymbolwithNoId() {
+		Symbol symbol = new Symbol(SYMBOL_SYMBOL, SYMBOL_NAME, SYMBOL_TYPE);
+		return symbol;
 	}
-
-	@Test
-	public void getOhlcvFromYahooTest() throws Exception {
-		mockMvc.perform(get("/REST/ohlcv/updatetest/1"))
-		.andExpect(status().isOk());
+	
+	protected Symbol getTestSymbolwithId() {
+		Symbol symbol = new Symbol(SYMBOL_SYMBOL, SYMBOL_NAME, SYMBOL_TYPE);
+		symbol.setId(SYMBOL_ID);
+		return symbol;
 	}
 }
