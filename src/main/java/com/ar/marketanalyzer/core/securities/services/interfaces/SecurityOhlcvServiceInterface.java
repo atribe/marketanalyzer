@@ -33,9 +33,11 @@ public interface SecurityOhlcvServiceInterface {
 	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate)throws SymbolNotFound;
 	public LocalDate findSymbolsLastDate(Symbol symbol)	throws OhlcvNotFound;
 	public LocalDate findSymbolsFirstDate(Symbol symbol) throws OhlcvNotFound;
+	public Long countBySymbol(Symbol symbol);
 	
 	/*
 	 * Non transactional methods
 	 */
 	public int updateOhlcvFromYahoo(Symbol symbol) throws SymbolNotFound, IOException;
+	
 }

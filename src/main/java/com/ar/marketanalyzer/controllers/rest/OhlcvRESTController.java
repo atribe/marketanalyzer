@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.controllers.rest.crud;
+package com.ar.marketanalyzer.controllers.rest;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ public class OhlcvRESTController {
 	@ResponseBody
 	public Map<String, Integer> getOhlcvFromYahoo(ModelAndView model, @PathVariable int id) {
 		int ohlcvCount = 0;
+		int ohlcvTotal = 0;
 		log.trace("Looking for symbol with id:" + id);
 
 		Symbol symbol;
@@ -43,6 +44,7 @@ public class OhlcvRESTController {
 			symbol = symbolService.findById(id);
 
 			ohlcvCount = ohlcvService.updateOhlcvFromYahoo(symbol);
+			ohlcvTotal = ohlcvService.countBySymbol(symbol).intValue();
 
 		} catch (SymbolNotFound e) {
 			// TODO Auto-generated catch block
@@ -54,15 +56,7 @@ public class OhlcvRESTController {
 		
 		Map<String, Integer> outputMap = new HashMap<String, Integer>();
 		outputMap.put("count", ohlcvCount);
-		outputMap.put("total", 15);
-		return outputMap;
-	}
-
-	@RequestMapping(value="updatetest/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Integer> updateTestController(ModelAndView model, @PathVariable int id) {
-		Map<String, Integer> outputMap = new HashMap<String, Integer>();
-		
+		outputMap.put("total", ohlcvTotal);
 		return outputMap;
 	}
 }

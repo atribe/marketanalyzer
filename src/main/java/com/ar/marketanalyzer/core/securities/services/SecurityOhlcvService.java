@@ -230,6 +230,13 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		
 		return new LocalDate(date);
 	}
+	
+	@Override
+	@Transactional
+	public Long countBySymbol(Symbol symbol) {
+		
+		return secohlcvRepo.countBySymbol(symbol);
+	}
 	/*
 	 * Helper Methods
 	 */
@@ -322,4 +329,6 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		
 		return date;
 	}
+
+	
 }

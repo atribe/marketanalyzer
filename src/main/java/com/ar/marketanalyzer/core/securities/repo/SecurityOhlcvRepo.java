@@ -25,4 +25,6 @@ public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> 
 	
 	public List<SecuritiesOhlcv> findBySymbolAndDateBetweenOrderByDateAsc(Symbol symbol,
 			Date startDate, Date endDate);
+	
+	public Long countBySymbol(Symbol symbol);
 }

@@ -31,7 +31,7 @@ $(document).ready(function() {
     	        timeout: 10000,
     	        async: false,
             	success: function(response) {
-        			$("#count_"+id).html(response.count);
+        			$("#count_"+id).html(response.total);
         			message("success", "OHLCV Update has Succeeded for Symbol ID: " + id + " with a count of " + response.count);
             	},
             	error: function() {
