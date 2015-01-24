@@ -8,9 +8,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
@@ -19,10 +18,10 @@ import com.ar.marketanalyzer.core.securities.services.SymbolService;
 
 public class OhlcvUpdateControllerTests extends AbstractRestControllerTest{
 
-	@Autowired
+	@Mock
 	SymbolService symbolServiceMock;
 	
-	@Autowired
+	@Mock
 	SecurityOhlcvService ohlcvServiceMock;
 	
 	@Before
