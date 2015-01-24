@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.test.controllers;
+package com.ar.marketanalyzer.test.controllers.controllers;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -11,12 +11,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.spring.config.AppConfig;
-import com.ar.marketanalyzer.spring.config.WebMvcConfig;
-import com.ar.marketanalyzer.test.config.TestRestServiceConfig;
+import com.ar.marketanalyzer.test.controllers.config.TestAppConfig;
+import com.ar.marketanalyzer.test.controllers.config.TestRestServiceConfig;
+import com.ar.marketanalyzer.test.controllers.config.TestWebMvcConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebMvcConfig.class, AppConfig.class, TestRestServiceConfig.class})
+@ContextConfiguration(classes = {TestWebMvcConfig.class, TestAppConfig.class, TestRestServiceConfig.class})
 @WebAppConfiguration
 public class AbstractRestControllerTest {
 

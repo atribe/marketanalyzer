@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.test.config;
+package com.ar.marketanalyzer.test.controllers.config;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
