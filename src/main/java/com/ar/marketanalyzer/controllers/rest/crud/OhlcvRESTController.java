@@ -54,6 +54,7 @@ public class OhlcvRESTController {
 		
 		Map<String, Integer> outputMap = new HashMap<String, Integer>();
 		outputMap.put("count", ohlcvCount);
+		outputMap.put("total", 15);
 		return outputMap;
 	}
 
