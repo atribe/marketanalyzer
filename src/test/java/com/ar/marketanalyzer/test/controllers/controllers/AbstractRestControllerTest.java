@@ -18,7 +18,7 @@ import com.ar.marketanalyzer.test.controllers.config.TestWebMvcConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestWebMvcConfig.class, TestAppConfig.class, TestRestServiceConfig.class})
 @WebAppConfiguration
-public class AbstractRestControllerTest {
+public abstract class AbstractRestControllerTest {
 
 	protected MockMvc mockMvc;
 

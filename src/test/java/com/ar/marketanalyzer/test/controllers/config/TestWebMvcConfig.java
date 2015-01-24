@@ -26,8 +26,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.ar.marketanalyzer.spring.config.JacksonConfig;
-
 @EnableWebMvc
 @Configuration
 public class TestWebMvcConfig extends WebMvcConfigurerAdapter {
