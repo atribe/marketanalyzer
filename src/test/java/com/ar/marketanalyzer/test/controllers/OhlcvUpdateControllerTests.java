@@ -1,4 +1,4 @@
-package com.ar.marketanalyzer.test.controllers.controllers;
+package com.ar.marketanalyzer.test.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
