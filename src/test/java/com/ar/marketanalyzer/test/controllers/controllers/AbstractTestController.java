@@ -1,10 +1,6 @@
-package com.ar.marketanalyzer.test.controllers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+package com.ar.marketanalyzer.test.controllers.controllers;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,12 +16,12 @@ import com.ar.marketanalyzer.spring.config.WebMvcConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebMvcConfig.class, AppConfig.class})
 @WebAppConfiguration
-public class ControllerTests {
+public abstract class AbstractTestController {
 
-	private MockMvc mockMvc;
+	protected MockMvc mockMvc;
 
 	@Autowired
-	private WebApplicationContext webApplicationContext;
+	protected WebApplicationContext webApplicationContext;
 
 	@Before
 	public void setUp() {
@@ -35,17 +31,5 @@ public class ControllerTests {
 		//Mockito.reset(todoServiceMock);
 
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	}
-
-	@Test
-	public void firstTest() throws Exception {
-		mockMvc.perform(get("/stockmanager"))
-		.andExpect(status().isOk());
-	}
-
-	@Test
-	public void getOhlcvFromYahooTest() throws Exception {
-		mockMvc.perform(get("/REST/ohlcv/updatetest/1"))
-		.andExpect(status().isOk());
 	}
 }
