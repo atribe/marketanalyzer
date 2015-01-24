@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ar.marketanalyzer.core.securities.exceptions.SymbolNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.services.SecurityOhlcvService;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 
 @RestController
@@ -28,7 +28,7 @@ public class OhlcvRESTController {
 	@Autowired
 	SymbolServiceInterface symbolService;
 	@Autowired
-	SecurityOhlcvService ohlcvService;
+	SecurityOhlcvServiceInterface ohlcvService;
 
 
 	@RequestMapping(value="update/{id}", method = RequestMethod.GET)
