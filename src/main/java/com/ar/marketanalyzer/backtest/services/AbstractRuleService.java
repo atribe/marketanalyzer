@@ -1,14 +1,13 @@
 package com.ar.marketanalyzer.backtest.services;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.repo.AbstractRuleRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractRuleServiceInterface;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 @Service
 public class AbstractRuleService implements AbstractRuleServiceInterface {

@@ -1,13 +1,10 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import com.ar.marketanalyzer.backtest.models.RuleParameter;
+import com.ar.marketanalyzer.backtest.models.enums.RuleType;
+import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,12 +19,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.ar.marketanalyzer.backtest.models.RuleParameter;
-import com.ar.marketanalyzer.backtest.models.enums.RuleType;
-import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
-import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @Entity
 @Inheritance

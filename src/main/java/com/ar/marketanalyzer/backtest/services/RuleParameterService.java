@@ -1,16 +1,14 @@
 package com.ar.marketanalyzer.backtest.services;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.repo.RuleParameterRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.RuleParameterServiceInterface;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class RuleParameterService implements RuleParameterServiceInterface {

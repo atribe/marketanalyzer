@@ -1,15 +1,14 @@
 package com.ar.marketanalyzer.ibd50.repositories;
 
-import java.util.Date;
-import java.util.List;
-
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
+import java.util.Date;
+import java.util.List;
 
 public interface Ibd50RankRepository extends JpaRepository<Ibd50Rank, Integer>{
 

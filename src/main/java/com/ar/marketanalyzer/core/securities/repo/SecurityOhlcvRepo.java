@@ -1,28 +1,27 @@
 package com.ar.marketanalyzer.core.securities.repo;
 
-import java.util.Date;
-import java.util.List;
-
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
-import com.ar.marketanalyzer.core.securities.models.Symbol;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> {
 
-	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol);
-	public List<SecuritiesOhlcv> findBySymbolOrderByDateAsc(Symbol symbol);
-	public SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, Date date);
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateDesc(Symbol symbol, Date date);
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateAsc(Symbol symbol, Date date);
+	List<SecuritiesOhlcv> findBySymbol(Symbol symbol);
+	List<SecuritiesOhlcv> findBySymbolOrderByDateAsc(Symbol symbol);
+	SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, LocalDate date);
+	List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateDesc(Symbol symbol, LocalDate date);
+	List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateAsc(Symbol symbol, LocalDate date);
 	
 	@Query(	"SELECT MIN(date) FROM SecuritiesOhlcv O WHERE O.symbol = :symbol" )
-	public Date findBySymbolsLastDate( @Param("symbol")Symbol symbol);
+	LocalDate findBySymbolsLastDate( @Param("symbol")Symbol symbol);
 	@Query(	"SELECT MAX(date) FROM SecuritiesOhlcv O WHERE O.symbol = :symbol" )
-	public Date findBySymbolsFirstDate( @Param("symbol")Symbol symbol);
+	LocalDate findBySymbolsFirstDate( @Param("symbol")Symbol symbol);
 	
-	public List<SecuritiesOhlcv> findBySymbolAndDateBetweenOrderByDateAsc(Symbol symbol,
-			Date startDate, Date endDate);
+	List<SecuritiesOhlcv> findBySymbolAndDateBetweenOrderByDateAsc(Symbol symbol, LocalDate startDate, LocalDate endDate);
 }

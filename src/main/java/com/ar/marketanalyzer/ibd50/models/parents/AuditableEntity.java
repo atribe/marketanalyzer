@@ -1,6 +1,8 @@
 package com.ar.marketanalyzer.ibd50.models.parents;
 
-import java.util.Date;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -8,11 +10,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.util.Date;
 
 @MappedSuperclass
 public class AuditableEntity extends PersistableEntityInt{

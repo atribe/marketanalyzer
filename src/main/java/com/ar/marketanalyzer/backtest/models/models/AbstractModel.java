@@ -1,15 +1,19 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
+import com.ar.marketanalyzer.backtest.models.DollarValue;
+import com.ar.marketanalyzer.backtest.models.Trade;
+import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
+import com.ar.marketanalyzer.backtest.models.enums.RuleType;
+import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.backtest.models.stats.Stats;
+import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import com.ar.marketanalyzer.spring.init.PropCache;
+
+import org.springframework.stereotype.Component;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,22 +31,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.joda.time.LocalDate;
-import org.springframework.stereotype.Component;
-
-import com.ar.marketanalyzer.backtest.models.BuySellTrigger;
-import com.ar.marketanalyzer.backtest.models.DollarValue;
-import com.ar.marketanalyzer.backtest.models.Trade;
-import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
-import com.ar.marketanalyzer.backtest.models.enums.RuleType;
-import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
-import com.ar.marketanalyzer.backtest.models.stats.Stats;
-import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
-import com.ar.marketanalyzer.spring.init.PropCache;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @Component	//this is so the autowired works for the ohlcv service
 @Entity

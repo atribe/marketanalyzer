@@ -1,11 +1,11 @@
 package com.ar.marketanalyzer.backtest.services.interfaces;
 
-import java.util.List;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+
+import java.util.List;
 
 public interface AbstractModelServiceInterface {
 	public AbstractModel create(AbstractModel model);

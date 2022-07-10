@@ -1,15 +1,20 @@
 package com.ar.marketanalyzer.core.securities.models;
 
-import java.util.List;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "securities_symbols") 
 public class Symbol extends PersistableEntityInt {
@@ -35,54 +40,10 @@ public class Symbol extends PersistableEntityInt {
 	public String toString() {
 		return "ID:" + id + ", " +symbol + ", " + name + ", " + type;
 	}
-	
-	/*
-	 * =====Constructors=====
-	 */
-	public Symbol() {};
-	
+
 	public Symbol(String symbol, String name, String type) {
 		this.symbol = symbol;
 		this.name = name;
 		this.type = type;
 	}
-	
-	/*
-	 * =====Getters and Setters=======
-	 */
-	public String getSymbol() {
-		return symbol;
-	}
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Boolean getOldestDateInDb() {
-		return oldestDateInDb;
-	}
-
-	public void setOldestDateInDb(Boolean oldestDateInDb) {
-		this.oldestDateInDb = oldestDateInDb;
-	}
-
-	public List<SecuritiesOhlcv> getOhlcv() {
-		return ohlcv;
-	}
-
-	public void setOhlcv(List<SecuritiesOhlcv> ohlcv) {
-		this.ohlcv = ohlcv;
-	}
-
 }

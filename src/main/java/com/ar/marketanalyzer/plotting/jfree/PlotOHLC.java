@@ -31,7 +31,7 @@ package com.ar.marketanalyzer.plotting.jfree;
 //import org.jfree.data.xy.IntervalXYDataset;
 //import org.jfree.data.xy.OHLCDataset;
 //import org.jfree.ui.TextAnchor;
-//import org.joda.time.LocalDate;
+//
 //
 //import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 

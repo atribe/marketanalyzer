@@ -1,21 +1,5 @@
 package com.ar.marketanalyzer.core.securities.logic;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.ar.marketanalyzer.backtest.logic.BacktestLogic;
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -23,6 +7,20 @@ import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.core.securities.services.YahooOhlcvService;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @PropertySource(value="classpath:common.properties")
@@ -53,7 +51,7 @@ public class SecurityOhlcvLogic {
 		log.trace("start updateOhlcv on symbol " + symbol.getName());
 		//Setting up initial variables
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
-		LocalDate today = new LocalDate();
+		LocalDate today = LocalDate.now();
 		final int FRIDAY = 5;
 		int offset;
 		
@@ -61,7 +59,7 @@ public class SecurityOhlcvLogic {
 			today = today.minusDays(offset);						// shift today back to Friday
 		}
 		
-		LocalDate desiredStartDate = new LocalDate().minusMonths(DESIRED_MONTHS_OF_DATA);	//The minimum oldest date that should be in the db
+		LocalDate desiredStartDate = LocalDate.now().minusMonths(DESIRED_MONTHS_OF_DATA);	//The minimum oldest date that should be in the db
 		List<YahooOHLCV> yahooOhlcv = new ArrayList<YahooOHLCV>(); 							//empty list to fill from yahoo
 		
 		try {

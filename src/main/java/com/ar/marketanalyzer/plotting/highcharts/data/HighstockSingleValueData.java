@@ -1,13 +1,13 @@
 package com.ar.marketanalyzer.plotting.highcharts.data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 public class HighstockSingleValueData implements HighstockData {

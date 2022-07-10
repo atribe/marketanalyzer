@@ -1,13 +1,12 @@
 package com.ar.marketanalyzer.ibd50.services;
 
-import java.util.List;
-
-import org.joda.time.LocalDate;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
+
+
+import java.util.List;
 
 public interface Ibd50TrackingService {
 

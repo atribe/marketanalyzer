@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.backtest.services.interfaces;
 
-import java.util.List;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.Trade;
+
+import java.util.List;
 
 public interface TradeServiceInterface {
 

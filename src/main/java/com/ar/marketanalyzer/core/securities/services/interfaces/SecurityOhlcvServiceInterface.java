@@ -1,14 +1,13 @@
 package com.ar.marketanalyzer.core.securities.services.interfaces;
 
-import java.util.Date;
-import java.util.List;
-
-import org.joda.time.LocalDate;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 public interface SecurityOhlcvServiceInterface {
 

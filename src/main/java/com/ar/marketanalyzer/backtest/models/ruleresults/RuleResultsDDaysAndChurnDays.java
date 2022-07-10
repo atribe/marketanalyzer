@@ -1,12 +1,11 @@
 package com.ar.marketanalyzer.backtest.models.ruleresults;
 
-import java.sql.Date;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import java.sql.Date;
 
 @Entity
 @DiscriminatorValue("Sell:D-Days And Churn Days")  // Should match the value from the rule

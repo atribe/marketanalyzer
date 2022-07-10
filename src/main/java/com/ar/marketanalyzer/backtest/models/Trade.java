@@ -1,16 +1,15 @@
 package com.ar.marketanalyzer.backtest.models;
 
-import java.math.BigDecimal;
-import java.sql.Date;
+import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 @Entity
 @Table(name = "backtest_trade")

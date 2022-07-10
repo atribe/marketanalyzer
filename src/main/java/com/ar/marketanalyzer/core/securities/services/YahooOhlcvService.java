@@ -4,24 +4,23 @@
  */
 package com.ar.marketanalyzer.core.securities.services;
 
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
+import au.com.bytecode.opencsv.bean.CsvToBean;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.springframework.stereotype.Component;
-
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
-import au.com.bytecode.opencsv.bean.CsvToBean;
-
-import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 
 /**
  * @author Aaron/Allan
@@ -35,7 +34,7 @@ public class YahooOhlcvService {
 	private static final Logger logger = LogManager.getLogger(YahooOhlcvService.class);
 	
 	public List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate) throws IOException {
-		return getYahooOhlcvData(symbol, startDate, new LocalDate());
+		return getYahooOhlcvData(symbol, startDate, LocalDate.now());
 	}
 	
 	public List<YahooOHLCV> getYahooOhlcvData(String symbol, LocalDate startDate, LocalDate endDate) throws IOException {
@@ -52,9 +51,9 @@ public class YahooOhlcvService {
 	}
 
 	private String generateURL(String symbol, LocalDate startDate, LocalDate endDate) {
-		LocalTime now = new LocalTime(); 						// temporary variable with the current time
+		LocalTime now = LocalTime.now(); 						// temporary variable with the current time
 		if(now.getHourOfDay() == 0) {							// if it is between 12:00 am and 1:00 am
-			endDate = new LocalDate().minusDays(1);				// 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
+			endDate = LocalTime.now().minusDays(1);				// 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
 		}
 		
 		if(startDate.isAfter(endDate)) {

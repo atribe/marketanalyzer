@@ -1,12 +1,12 @@
 package com.ar.marketanalyzer.backtest.models.stats;
 
+
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.joda.time.LocalDate;
 
 public class FollowThruStats extends Stats{
 

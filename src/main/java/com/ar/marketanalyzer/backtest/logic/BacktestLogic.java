@@ -1,10 +1,8 @@
 package com.ar.marketanalyzer.backtest.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.ar.marketanalyzer.core.securities.logic.SecurityOhlcvLogic;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ar.marketanalyzer.core.securities.logic.SecurityOhlcvLogic;
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @PropertySource(value="classpath:common.properties")

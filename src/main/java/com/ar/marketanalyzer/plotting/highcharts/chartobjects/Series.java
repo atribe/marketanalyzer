@@ -1,10 +1,10 @@
 package com.ar.marketanalyzer.plotting.highcharts.chartobjects;
 
-import java.util.List;
-
 import com.ar.marketanalyzer.plotting.highcharts.data.HighstockData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 public class Series {

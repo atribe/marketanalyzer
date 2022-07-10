@@ -1,8 +1,11 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.DateTimeConstants;
+
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,14 +18,9 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "IBD50_RANKING")

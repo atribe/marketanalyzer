@@ -1,6 +1,8 @@
 package com.ar.marketanalyzer.backtest.models.ruleresults;
 
-import java.sql.Date;
+import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -9,10 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.ar.marketanalyzer.backtest.models.comparables.DateCompImp;
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.sql.Date;
 
 @Entity
 @Inheritance

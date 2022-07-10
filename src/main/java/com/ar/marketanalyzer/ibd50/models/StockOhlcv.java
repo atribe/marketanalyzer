@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.LocalDate;
-
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")
@@ -68,7 +66,7 @@ public class StockOhlcv{
 	    java.util.Date parsed=null;
 		try {
 			parsed = format.parse(y.getDate());
-			setDate(new java.sql.Date(parsed.getTime()));
+			setDate(new Date(parsed.getTime()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,12 +1,11 @@
 package com.ar.marketanalyzer.core.threads;
 
+import com.ar.marketanalyzer.backtest.logic.BacktestLogic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.ar.marketanalyzer.backtest.logic.BacktestLogic;
 
 /**
  * @author Allan

@@ -1,14 +1,13 @@
 package com.ar.marketanalyzer.backtest.models;
 
-import java.math.BigDecimal;
+import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "backtest_rule_parameters")

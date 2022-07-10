@@ -1,16 +1,14 @@
 package com.ar.marketanalyzer.backtest.services;
 
-import java.util.SortedSet;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.DollarValue;
 import com.ar.marketanalyzer.backtest.repo.DollarValueRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.DollarValueServiceInterface;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.SortedSet;
 
 @Service
 public class DollarValueService implements DollarValueServiceInterface{

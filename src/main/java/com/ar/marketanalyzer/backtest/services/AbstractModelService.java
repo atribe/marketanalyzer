@@ -1,13 +1,5 @@
 package com.ar.marketanalyzer.backtest.services;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.enums.ModelStatus;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
@@ -15,6 +7,12 @@ import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.repo.AbstractModelRepo;
 import com.ar.marketanalyzer.backtest.services.interfaces.AbstractModelServiceInterface;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class AbstractModelService implements AbstractModelServiceInterface {

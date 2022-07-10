@@ -1,14 +1,5 @@
 package com.ar.marketanalyzer.ibd50.services.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
@@ -16,6 +7,13 @@ import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50TrackingRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50TrackingService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{

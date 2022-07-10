@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.backtest.services.interfaces;
 
-import java.util.SortedSet;
-
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
+
+import java.util.SortedSet;
 
 public interface RuleResultServiceInterface {
 
