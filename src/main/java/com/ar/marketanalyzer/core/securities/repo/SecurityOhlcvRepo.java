@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +20,9 @@ public interface SecurityOhlcvRepo extends JpaRepository<SecuritiesOhlcv, Long> 
 	List<SecuritiesOhlcv> findBySymbolAndDateAfterOrderByDateAsc(Symbol symbol, LocalDate date);
 	
 	@Query(	"SELECT MIN(date) FROM SecuritiesOhlcv O WHERE O.symbol = :symbol" )
-	LocalDate findBySymbolsLastDate( @Param("symbol")Symbol symbol);
+	LocalDateTime findBySymbolsLastDate( @Param("symbol")Symbol symbol);
 	@Query(	"SELECT MAX(date) FROM SecuritiesOhlcv O WHERE O.symbol = :symbol" )
-	LocalDate findBySymbolsFirstDate( @Param("symbol")Symbol symbol);
+	LocalDateTime findBySymbolsFirstDate(@Param("symbol")Symbol symbol);
 	
 	List<SecuritiesOhlcv> findBySymbolAndDateBetweenOrderByDateAsc(Symbol symbol, LocalDate startDate, LocalDate endDate);
 }

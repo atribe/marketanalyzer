@@ -26,7 +26,7 @@ public class RuleParameterService implements RuleParameterServiceInterface {
 	@Override
 	@Transactional
 	public void batchCreate(List<RuleParameter> paramList) {
-		paramRepo.save(paramList);
+		paramRepo.saveAll(paramList);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class RuleParameterService implements RuleParameterServiceInterface {
 		RuleParameter resultToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		paramRepo.delete(id);
+		paramRepo.deleteById(id);
 		
 		return resultToDelete;
 	}
@@ -50,12 +50,12 @@ public class RuleParameterService implements RuleParameterServiceInterface {
 	@Override
 	@Transactional
 	public RuleParameter findById(int id) throws ModelNotFound {
-		RuleParameter foundresult = paramRepo.findOne(id);
+		var foundresult = paramRepo.findById(id);
 		
-		if( foundresult == null ) {
+		if( foundresult.isEmpty() ) {
 			throw new ModelNotFound();
 		}
 		
-		return foundresult;
+		return foundresult.get();
 	}
 }

@@ -31,15 +31,15 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 	@Override
 	@Transactional
 	public Ibd50CustomIndex delete(int id) throws SecuritiesNotFound {
-		Ibd50CustomIndex deletedIbd50CustomIndex = ibd50CustomIndexRepo.findOne(id);
+		var deletedIbd50CustomIndex = ibd50CustomIndexRepo.findById(id);
 		
-		if(deletedIbd50CustomIndex == null) {
+		if(deletedIbd50CustomIndex.isEmpty()) {
 			throw new SecuritiesNotFound();
 		}
 		
-		ibd50CustomIndexRepo.delete(id);
+		ibd50CustomIndexRepo.deleteById(id);
 		
-		return deletedIbd50CustomIndex;
+		return deletedIbd50CustomIndex.get();
 	}
 
 	@Override
@@ -51,11 +51,8 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public Ibd50CustomIndex update(Ibd50CustomIndex ibd50CustomIndex) throws SecuritiesNotFound {
-		Ibd50CustomIndex updatedIbd50CustomIndex = ibd50CustomIndexRepo.findOne(ibd50CustomIndex.getId());
-		
-		if(updatedIbd50CustomIndex == null) {
-			throw new SecuritiesNotFound();
-		}
+		var updatedIbd50CustomIndex = ibd50CustomIndexRepo.findById(ibd50CustomIndex.getId())
+				.orElseThrow(SecuritiesNotFound::new);
 
 		updatedIbd50CustomIndex.setIndexName(ibd50CustomIndex.getIndexName());
 		updatedIbd50CustomIndex.setRankRangeStart(ibd50CustomIndex.getRankRangeStart());
@@ -67,6 +64,6 @@ public class Ibd50CustomIndexServiceImpl implements Ibd50CustomIndexService{
 	@Override
 	@Transactional
 	public Ibd50CustomIndex findById(int id) throws SecuritiesNotFound {
-		return ibd50CustomIndexRepo.findOne(id);
+		return ibd50CustomIndexRepo.findById(id).orElseThrow(SecuritiesNotFound::new);
 	}
 }

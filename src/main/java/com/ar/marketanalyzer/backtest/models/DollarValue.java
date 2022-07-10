@@ -10,81 +10,83 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "backtest_value")
-public class DollarValue extends PersistableEntityInt implements DateCompImp{
+public class DollarValue extends PersistableEntityInt implements DateCompImp {
 
-	private static final long serialVersionUID = -1433482868025063181L;
+    private static final long serialVersionUID = -1433482868025063181L;
 
 
-	@ManyToOne(optional=false)
-	@JoinColumn(name="model_id", referencedColumnName="id")
-	private AbstractModel model;
-	
-	private Date date;
-	
-	@Column(precision=12, scale=2, nullable=false)
-	private BigDecimal dollarValue;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "model_id", referencedColumnName = "id")
+    private AbstractModel model;
 
-	/*
-	 * Constructors
-	 */
-	public DollarValue() {	
-	}
-	public DollarValue(Date date) {
-		this.date = date;
-	}
+    private LocalDateTime date;
 
-	public DollarValue(AbstractModel model, Date date) {
-		this.model = model;
-		this.date = date;
-	}
+    @Column(precision = 12, scale = 2, nullable = false)
+    private BigDecimal dollarValue;
 
-	/*
-	 * Helper Methods
-	 */
-	@Override
-	public String toString() {
-		return "Date:" + date.toString() + " Value:" + dollarValue;
-	}
-	
-	/*
-	 * Getters and Setters
-	 */
-	public AbstractModel getModel() {
-		return model;
-	}
+    /*
+     * Constructors
+     */
+    public DollarValue() {
+    }
 
-	public void setModel(AbstractModel model) {
-		this.model = model;
-	}
+    public DollarValue(LocalDateTime date) {
+        this.date = date;
+    }
 
-	@Override
-	public Date getDate() {
-		return date;
-	}
+    public DollarValue(AbstractModel model, LocalDateTime date) {
+        this.model = model;
+        this.date = date;
+    }
 
-	@Override
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    /*
+     * Helper Methods
+     */
+    @Override
+    public String toString() {
+        return "Date:" + date.toString() + " Value:" + dollarValue;
+    }
 
-	public BigDecimal getDollarValue() {
-		return dollarValue;
-	}
+    /*
+     * Getters and Setters
+     */
+    public AbstractModel getModel() {
+        return model;
+    }
 
-	public void setDollarValue(BigDecimal dollarValue) {
-		this.dollarValue = dollarValue;
-	}
+    public void setModel(AbstractModel model) {
+        this.model = model;
+    }
 
-	@Override
-	public int compareTo(DateCompImp o) {
-		if(o != null) {
-			return this.date.compareTo(o.getDate());
-		} else {
-			return -1;
-		}
-	}
+    @Override
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    @Override
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public BigDecimal getDollarValue() {
+        return dollarValue;
+    }
+
+    public void setDollarValue(BigDecimal dollarValue) {
+        this.dollarValue = dollarValue;
+    }
+
+    @Override
+    public int compareTo(DateCompImp o) {
+        if (o != null) {
+            return this.date.compareTo(o.getDate());
+        } else {
+            return -1;
+        }
+    }
 }

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class SecuritiesOhlcv extends PersistableEntityLong {
     private Symbol symbol;
 
     @Column
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(precision = 12, scale = 2, nullable = false)
     private BigDecimal open;
@@ -62,7 +63,7 @@ public class SecuritiesOhlcv extends PersistableEntityLong {
     }
 
     public SecuritiesOhlcv(String symbol,
-                           LocalDate date,
+                           LocalDateTime date,
                            BigDecimal open,
                            BigDecimal high,
                            BigDecimal low,
@@ -103,10 +104,10 @@ public class SecuritiesOhlcv extends PersistableEntityLong {
     }
 
     public void setDate(String date) {
-        this.date = LocalDate.parse(date);//Not the most elegant way to do it
+        this.date = LocalDateTime.parse(date);//Not the most elegant way to do it
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

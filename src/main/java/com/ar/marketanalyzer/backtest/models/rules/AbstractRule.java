@@ -19,7 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +48,13 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected RuleType ruleType;
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	protected List<RuleParameter> ruleParameters = new ArrayList<RuleParameter>();
+	protected List<RuleParameter> ruleParameters = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "rule", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@OrderBy("date")
-	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<AbstractRuleResult>();
+	protected SortedSet<AbstractRuleResult> ruleResultSet = new TreeSet<>();
 	@Transient
-	protected SortedMap<Date, AbstractRuleResult> ruleResult = new TreeMap<Date, AbstractRuleResult>();
+	protected SortedMap<LocalDateTime, AbstractRuleResult> ruleResult = new TreeMap<>();
 
 	/*
 	 * Constructors
@@ -100,7 +101,7 @@ public abstract class AbstractRule extends PersistableEntityInt{
 	protected abstract void findTriggerDays();
 	
 	public void convertRuleResultMapToSet() {
-		for(Map.Entry<Date, AbstractRuleResult> resultEntry: ruleResult.entrySet()) {
+		for(Map.Entry<LocalDateTime, AbstractRuleResult> resultEntry: ruleResult.entrySet()) {
 			ruleResultSet.add(resultEntry.getValue());
 		}
 	}
@@ -145,10 +146,10 @@ public abstract class AbstractRule extends PersistableEntityInt{
 		this.ruleParameters = ruleParameters;
 	}
 	
-	public SortedMap<Date, AbstractRuleResult> getRuleResult() {
+	public SortedMap<LocalDateTime, AbstractRuleResult> getRuleResult() {
 		return ruleResult;
 	}
-	public void setRuleResult(SortedMap<Date, AbstractRuleResult> ruleResult) {
+	public void setRuleResult(SortedMap<LocalDateTime, AbstractRuleResult> ruleResult) {
 		this.ruleResult = ruleResult;
 	}
 	public SortedSet<AbstractRuleResult> getRuleResultSet() {

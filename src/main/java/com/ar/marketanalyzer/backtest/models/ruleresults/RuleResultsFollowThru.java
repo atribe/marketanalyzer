@@ -5,7 +5,7 @@ import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @DiscriminatorValue("Buy:Follow Thru")
@@ -28,11 +28,11 @@ public class RuleResultsFollowThru extends AbstractRuleResult {
 	public RuleResultsFollowThru(AbstractRule rule) {
 		super(rule);
 	}
-	public RuleResultsFollowThru(AbstractRule rule, Date date ) {
+	public RuleResultsFollowThru(AbstractRule rule, LocalDateTime date) {
 		super(rule, date);
 	}
 	
-	public RuleResultsFollowThru(AbstractRule rule, Date date, Boolean result) {
+	public RuleResultsFollowThru(AbstractRule rule, LocalDateTime date, Boolean result) {
 		super(rule, date, result);
 	}
 	/*

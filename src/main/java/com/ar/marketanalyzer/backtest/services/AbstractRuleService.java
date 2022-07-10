@@ -35,7 +35,7 @@ public class AbstractRuleService implements AbstractRuleServiceInterface {
 		AbstractRule ruleToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		ruleRepo.delete(id);
+		ruleRepo.deleteById(id);
 		
 		return ruleToDelete;
 	}
@@ -43,12 +43,12 @@ public class AbstractRuleService implements AbstractRuleServiceInterface {
 	@Override
 	@Transactional
 	public AbstractRule findById(int id) throws ModelNotFound {
-		AbstractRule foundrule = ruleRepo.findOne(id);
+		var foundrule = ruleRepo.findById(id);
 		
-		if( foundrule == null ) {
+		if( foundrule.isEmpty() ) {
 			throw new ModelNotFound();
 		}
 		
-		return foundrule;
+		return foundrule.get();
 	}
 }

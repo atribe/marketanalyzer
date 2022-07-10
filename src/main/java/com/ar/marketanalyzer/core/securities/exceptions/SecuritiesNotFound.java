@@ -1,6 +1,6 @@
 package com.ar.marketanalyzer.core.securities.exceptions;
 
-public class SecuritiesNotFound extends Exception{
+public class SecuritiesNotFound extends RuntimeException{
 
 	/**
 	 * 

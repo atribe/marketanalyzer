@@ -25,7 +25,7 @@ public class DollarValueService implements DollarValueServiceInterface{
 	@Override
 	@Transactional
 	public void batchCreate(SortedSet<DollarValue> dollarValueList) {
-		DollarValueRepo.save(dollarValueList);
+		DollarValueRepo.saveAll(dollarValueList);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class DollarValueService implements DollarValueServiceInterface{
 		DollarValue resultToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		DollarValueRepo.delete(id);
+		DollarValueRepo.deleteById(id);
 		
 		return resultToDelete;
 	}
@@ -49,12 +49,12 @@ public class DollarValueService implements DollarValueServiceInterface{
 	@Override
 	@Transactional
 	public DollarValue findById(int id) throws ModelNotFound {
-		DollarValue foundDollarValue = DollarValueRepo.findOne(id);
+		var foundDollarValue = DollarValueRepo.findById(id);
 		
-		if( foundDollarValue == null ) {
+		if( foundDollarValue.isEmpty() ) {
 			throw new ModelNotFound();
 		}
 		
-		return foundDollarValue;
+		return foundDollarValue.get();
 	}
 }

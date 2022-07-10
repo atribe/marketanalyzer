@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
@@ -32,21 +34,21 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 	@Override
 	@Transactional
 	public Ibd50Tracking findById(int id) {
-		return ibd50TrackingRepo.findOne(id);
+		return ibd50TrackingRepo.findById(id).orElseThrow();
 	}
 
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public Ibd50Tracking delete(int id) throws SecuritiesNotFound {
-		Ibd50Tracking deletedIbd50Tracking = ibd50TrackingRepo.findOne(id);
+		Optional<Ibd50Tracking> deletedIbd50Tracking = ibd50TrackingRepo.findById(id);
 		
-		if(deletedIbd50Tracking == null) {
+		if(deletedIbd50Tracking.isEmpty()) {
 			throw new SecuritiesNotFound();
 		} 
 
-		ibd50TrackingRepo.delete(id);
+		ibd50TrackingRepo.deleteById(id);
 		
-		return deletedIbd50Tracking;	
+		return deletedIbd50Tracking.get();
 	}
 
 	@Override
@@ -58,15 +60,15 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public Ibd50Tracking update(Ibd50Tracking ibd50Tracking) throws SecuritiesNotFound {
-		Ibd50Tracking updatedIbd50Tracking = ibd50TrackingRepo.findOne(ibd50Tracking.getId());
+		Optional<Ibd50Tracking> updatedIbd50Tracking = ibd50TrackingRepo.findById(ibd50Tracking.getId());
 		
-		if( updatedIbd50Tracking == null) {
+		if( updatedIbd50Tracking.isEmpty()) {
 			throw new SecuritiesNotFound();
 		}
 		
 		//updatedIbd50Tracking.setRank(Ibd50Tracking.getRank());
 		
-		return updatedIbd50Tracking;
+		return updatedIbd50Tracking.get();
 	}
 
 	@Override
@@ -99,7 +101,7 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 	@Override
 	@Transactional
 	public Ibd50Tracking updateActivity(Ibd50Tracking tracker) {
-		Ibd50Tracking updatedTracker = ibd50TrackingRepo.findOne(tracker.getId());
+		Ibd50Tracking updatedTracker = ibd50TrackingRepo.findById(tracker.getId()).orElseThrow();
 		
 		updatedTracker.setActive(tracker.getActive());
 		updatedTracker.setLastPrice(tracker.getLastPrice());
@@ -114,7 +116,7 @@ public class Ibd50TrackingServiceImpl implements Ibd50TrackingService{
 	public List<Ibd50Tracking> findByActiveFalseAndDateAfter(LocalDate date) throws SecuritiesNotFound {
 		List<Ibd50Tracking> deactiveTrackers = null;
 		
-		deactiveTrackers = ibd50TrackingRepo.findByActiveFalseAndLeaveDateGreaterThanEqual(date.toDate());
+		deactiveTrackers = ibd50TrackingRepo.findByActiveFalseAndLeaveDateGreaterThanEqual(date);
 		
 		if( deactiveTrackers == null ) {
 			throw new SecuritiesNotFound();

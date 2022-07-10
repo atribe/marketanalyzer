@@ -1,8 +1,9 @@
 package com.ar.marketanalyzer.backtest.models.comparables;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-public interface DateCompImp extends Comparable<DateCompImp>{
-	public Date getDate();
-	public void setDate(Date date);
+public interface DateCompImp extends Comparable<DateCompImp> {
+    public LocalDateTime getDate();
+
+    public void setDate(LocalDateTime date);
 }

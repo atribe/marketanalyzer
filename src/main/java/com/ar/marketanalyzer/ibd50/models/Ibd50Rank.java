@@ -3,9 +3,6 @@ package com.ar.marketanalyzer.ibd50.models;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTimeConstants;
-
-import org.joda.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collection;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 	private static final long serialVersionUID = 5791875306977524480L;
 
 	@Column(name="rank_date", nullable=false)
-	private Date rankDate;
+	private LocalDate rankDate;
 
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
@@ -113,39 +114,39 @@ public class Ibd50Rank extends PersistableEntityInt {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "creation_time", nullable = false)
-	private Date creationTime;
+	private LocalDateTime creationTime;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modification_time", nullable = false)
-	private Date modificationTime;
+	private LocalDateTime modificationTime;
 	
 	@PreUpdate
     public void preUpdate() {
-        modificationTime = new LocalDateTime().toDate();
+        modificationTime = LocalDateTime.now();
     }
      
     @PrePersist
     public void prePersist() {
-        Date now = new LocalDateTime().toDate();
+        LocalDateTime now = LocalDateTime.now();
         creationTime = now;
         modificationTime = now;
     }
     
-    public Date getCreationTime() {
+    public LocalDateTime getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(Date creationTime) {
+	public void setCreationTime(LocalDateTime creationTime) {
 		this.creationTime = creationTime;
 	}
 
-	public Date getModificationTime() {
+	public LocalDateTime getModificationTime() {
 		return modificationTime;
 	}
-	public LocalDate getLocalDateModificationTime() {
-		return new LocalDate(modificationTime);
+	public LocalDateTime getLocalDateModificationTime() {
+		return modificationTime;
 	}
-	public void setModificationTime(Date modificationTime) {
+	public void setModificationTime(LocalDateTime modificationTime) {
 		this.modificationTime = modificationTime;
 	}
 	
@@ -169,30 +170,26 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.shareCounts = shareCounts;
 	}
 
-	private Date findMondayRankDate() {
-		LocalDate today = new LocalDate();
+	private LocalDate findMondayRankDate() {
+		LocalDate today = LocalDate.now();
 		
-		LocalDate dateToReturn = null;
-		
-		if(today.getDayOfWeek() == (DateTimeConstants.MONDAY)) {
-			dateToReturn = today;
+		if(today.getDayOfWeek() == DayOfWeek.MONDAY) {
+			return today;
 		} else {
-			dateToReturn = today.withDayOfWeek(1);
+			return today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		}
-		
-		return dateToReturn.toDate();
 	}
 	
 	/*
 	 * Getters and Setters
 	 */
-	public Date getRankDate() {
+	public LocalDate getRankDate() {
 		return rankDate;
 	}
 	public LocalDate getLocalDateRankDate() {
-		return new LocalDate(rankDate);
+		return rankDate;
 	}
-	public void setRankDate(Date rankDate) {
+	public void setRankDate(LocalDate rankDate) {
 		this.rankDate = rankDate;
 	}
 	public Ibd50Tracking getTracker() {
@@ -226,7 +223,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.rank = rank;
 	}
 	public void setRank(int rank) {
-		this.rank = new Integer(rank);
+		this.rank = rank;
 	}
 	public BigDecimal getCurrentPrice() {
 		return currentPrice;
@@ -247,7 +244,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.pricePercentChange = pricePercentChange;
 	}
 	public void setPricePercentChange(double pricePercentChange) {
-		this.pricePercentChange = new Double(pricePercentChange);
+		this.pricePercentChange = pricePercentChange;
 	}
 	public Double getPercentOffHigh() {
 		return percentOffHigh;
@@ -256,7 +253,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.percentOffHigh = percentOffHigh;
 	}
 	public void setPercentOffHigh(double percentOffHigh) {
-		this.percentOffHigh = new Double(percentOffHigh);
+		this.percentOffHigh = percentOffHigh;
 	}
 	public Long getVolume() {
 		return volume;
@@ -265,7 +262,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.volume = volume;
 	}
 	public void setVolume(long volume) {
-		this.volume = new Long(volume);
+		this.volume = volume;
 	}
 	public Double getVolumePercentChange() {
 		return volumePercentChange;
@@ -274,7 +271,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.volumePercentChange = volumePercentChange;
 	}
 	public void setVolumePercentChange(double volumePercentChange) {
-		this.volumePercentChange = new Double(volumePercentChange);
+		this.volumePercentChange = volumePercentChange;
 	}
 	public Double getCompositeRating() {
 		return compositeRating;
@@ -283,7 +280,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.compositeRating = compositeRating;
 	}
 	public void setCompositeRating(double compositeRating) {
-		this.compositeRating = new Double(compositeRating);
+		this.compositeRating = compositeRating;
 	}
 	public Double getEpsRating() {
 		return epsRating;
@@ -292,7 +289,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.epsRating = epsRating;
 	}
 	public void setEpsRating(double epsRating) {
-		this.epsRating = new Double(epsRating);
+		this.epsRating = epsRating;
 	}
 	public Double getRsRating() {
 		return rsRating;
@@ -301,7 +298,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.rsRating = rsRating;
 	}
 	public void setRsRating(double rsRating) {
-		this.rsRating = new Double(rsRating);
+		this.rsRating = rsRating;
 	}
 	public String getSmrRating() {
 		return smrRating;
@@ -328,7 +325,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.epsPercentChangeLastQtr = epsPercentChangeLastQtr;
 	}
 	public void setEpsPercentChangeLastQtr(double epsPercentChangeLastQtr) {
-		this.epsPercentChangeLastQtr = new Double(epsPercentChangeLastQtr);
+		this.epsPercentChangeLastQtr = epsPercentChangeLastQtr;
 	}
 	public Double getEpsPercentChangePriorQtr() {
 		return epsPercentChangePriorQtr;
@@ -337,7 +334,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.epsPercentChangePriorQtr = epsPercentChangePriorQtr;
 	}
 	public void setEpsPercentChangePriorQtr(double epsPercentChangePriorQtr) {
-		this.epsPercentChangePriorQtr = new Double(epsPercentChangePriorQtr);
+		this.epsPercentChangePriorQtr = epsPercentChangePriorQtr;
 	}
 	public Double getEpsPercentChangeCurrentQtr() {
 		return epsPercentChangeCurrentQtr;
@@ -346,7 +343,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.epsPercentChangeCurrentQtr = epsPercentChangeCurrentQtr;
 	}
 	public void setEpsPercentChangeCurrentQtr(double epsPercentChangeCurrentQtr) {
-		this.epsPercentChangeCurrentQtr = new Double(epsPercentChangeCurrentQtr);
+		this.epsPercentChangeCurrentQtr = epsPercentChangeCurrentQtr;
 	}
 	public Double getEpsEstPercentChangeCurrentYear() {
 		return epsEstPercentChangeCurrentYear;
@@ -355,7 +352,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.epsEstPercentChangeCurrentYear = epsEstPercentChangeCurrentYear;
 	}
 	public void setEpsEstPercentChangeCurrentYear(double epsEstPercentChangeCurrentYear) {
-		this.epsEstPercentChangeCurrentYear = new Double(epsEstPercentChangeCurrentYear);
+		this.epsEstPercentChangeCurrentYear = epsEstPercentChangeCurrentYear;
 	}
 	public Double getSalesPercentChangeLastQtr() {
 		return salesPercentChangeLastQtr;
@@ -364,7 +361,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.salesPercentChangeLastQtr = salesPercentChangeLastQtr;
 	}
 	public void setSalesPercentChangeLastQtr(double salesPercentChangeLastQtr) {
-		this.salesPercentChangeLastQtr = new Double(salesPercentChangeLastQtr);
+		this.salesPercentChangeLastQtr = salesPercentChangeLastQtr;
 	}
 	public Double getAnnualROELastYear() {
 		return annualROELastYear;
@@ -373,7 +370,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.annualROELastYear = annualROELastYear;
 	}
 	public void setAnnualROELastYear(double annualROELastYear) {
-		this.annualROELastYear = new Double(annualROELastYear);
+		this.annualROELastYear = annualROELastYear;
 	}
 	public Double getAnnualProfitMarginLatestYear() {
 		return annualProfitMarginLatestYear;
@@ -382,7 +379,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.annualProfitMarginLatestYear = annualProfitMarginLatestYear;
 	}
 	public void setAnnualProfitMarginLatestYear(double annualProfitMarginLatestYear) {
-		this.annualProfitMarginLatestYear = new Double(annualProfitMarginLatestYear);
+		this.annualProfitMarginLatestYear = annualProfitMarginLatestYear;
 	}
 	public Double getManagmentOwnPercent() {
 		return managmentOwnPercent;
@@ -391,7 +388,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.managmentOwnPercent = managmentOwnPercent;
 	}
 	public void setManagmentOwnPercent(double managmentOwnPercent) {
-		this.managmentOwnPercent = new Double(managmentOwnPercent);
+		this.managmentOwnPercent = managmentOwnPercent;
 	}
 	public Integer getQtrsRisingSponsorship() {
 		return qtrsRisingSponsorship;
@@ -400,7 +397,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 		this.qtrsRisingSponsorship = qtrsRisingSponsorship;
 	}
 	public void setQtrsRisingSponsorship(int qtrsRisingSponsorship) {
-		this.qtrsRisingSponsorship = new Integer(qtrsRisingSponsorship);
+		this.qtrsRisingSponsorship = qtrsRisingSponsorship;
 	}
 
 	public Boolean getActiveRanking() {

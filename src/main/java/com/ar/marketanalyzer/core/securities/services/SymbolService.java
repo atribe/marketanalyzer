@@ -31,12 +31,12 @@ public class SymbolService implements SymbolServiceInterface{
 	@Override
 	@Transactional
 	public Symbol findById(int id) throws SecuritiesNotFound {
-		Symbol foundSymbol = symbolRepo.findOne(id);
+		var foundSymbol = symbolRepo.findById(id);
 		
-		if( foundSymbol == null) {
+		if( foundSymbol.isEmpty()) {
 			throw new SecuritiesNotFound("Ticker not found with an id of " + id + ". Better luck next time.");
 		}
-		return foundSymbol;
+		return foundSymbol.get();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SymbolService implements SymbolServiceInterface{
 			throw e;									// Throw the exception caught up to the next level to be dealt with
 		}
 
-		symbolRepo.delete(id);					// No exception thrown, so go ahead and delete the ticker with the provided ID
+		symbolRepo.deleteById(id);					// No exception thrown, so go ahead and delete the ticker with the provided ID
 		
 		return deletedSymbol;						// Return the full ticker that was just deleted...Maybe I'll need it for something.
 	}

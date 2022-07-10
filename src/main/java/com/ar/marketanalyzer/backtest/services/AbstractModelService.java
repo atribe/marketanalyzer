@@ -70,7 +70,7 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 		AbstractModel modelToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		modelRepo.delete(id);
+		modelRepo.deleteById(id);
 		
 		return modelToDelete;
 	}
@@ -80,7 +80,7 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	public List<AbstractModel> getAll() throws ModelNotFound {
 		List<AbstractModel> modelList = modelRepo.findAll();
 		
-		if(modelList == null) {
+		if(modelList.isEmpty()) {
 			throw new ModelNotFound();
 		}
 		
@@ -104,13 +104,13 @@ public class AbstractModelService implements AbstractModelServiceInterface {
 	@Override
 	@Transactional
 	public AbstractModel findById(int id) throws ModelNotFound {
-		AbstractModel foundModel = modelRepo.findOne(id);
+		var foundModel = modelRepo.findById(id);
 		
-		if( foundModel == null ) {
+		if( foundModel.isEmpty() ) {
 			throw new ModelNotFound();
 		}
 		
-		return foundModel;
+		return foundModel.get();
 	}
 	
 	@Override

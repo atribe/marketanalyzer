@@ -5,6 +5,7 @@ import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface Ibd50RankService {
 	 * 				rank combo isn't in the db. The message will tell you which it is.
 	 */
 	public List<Ibd50Rank> findByRankAndTicker(int rank, Symbol ticker) throws SecuritiesNotFound;
-	public List<Ibd50Rank> findByModificationTimeAfter(Date date) throws SecuritiesNotFound;
+	public List<Ibd50Rank> findByModificationTimeAfter(LocalDateTime date) throws SecuritiesNotFound;
 	public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank, int endRank) throws SecuritiesNotFound;
 	/**
 	 * Looks for the most current rank for a given ticker.

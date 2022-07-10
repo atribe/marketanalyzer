@@ -18,7 +18,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,24 +54,23 @@ public class SecurityOhlcvLogic {
 		log.trace("start updateOhlcv on symbol " + symbol.getName());
 		//Setting up initial variables
 		final int DESIRED_MONTHS_OF_DATA = Integer.parseInt(env.getProperty("default.ModelMonths"));
-		LocalDate today = LocalDate.now();
-		final int FRIDAY = 5;
-		int offset;
-		
-		if( (offset = today.dayOfWeek().get() - FRIDAY ) > 0 ) { 	// if today is a weekend
-			today = today.minusDays(offset);						// shift today back to Friday
+		LocalDateTime today = LocalDateTime.now();
+		final long FRIDAY = 5;
+
+		if( isWeekend(today) ) { 	// if today is a weekend
+			today = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));						// shift today back to Friday
 		}
-		
-		LocalDate desiredStartDate = LocalDate.now().minusMonths(DESIRED_MONTHS_OF_DATA);	//The minimum oldest date that should be in the db
-		List<YahooOHLCV> yahooOhlcv = new ArrayList<YahooOHLCV>(); 							//empty list to fill from yahoo
+
+		LocalDateTime desiredStartDate = LocalDateTime.now().minusMonths(DESIRED_MONTHS_OF_DATA);	//The minimum oldest date that should be in the db
+		List<YahooOHLCV> yahooOhlcv = new ArrayList<>(); 							//empty list to fill from yahoo
 		
 		try {
 			try {
 				/*
 				 * Need to find the first and last date in the DB, then fill in the gaps from Yahoo
 				 */
-				LocalDate oldestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
-				LocalDate mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
+				LocalDateTime oldestDate = secOhlcvService.findSymbolsLastDate(symbol);		// Try to find the last date in the DB
+				LocalDateTime mostCurrentDate = secOhlcvService.findSymbolsFirstDate(symbol);	// Try to find the last date in the DB
 				log.trace("Min Oldest Date: " + desiredStartDate + " Database Oldest Date:" + oldestDate);
 				log.trace("Min Newest Date: " + today + " Database Newest Date:" + mostCurrentDate);
 				
@@ -113,5 +115,11 @@ public class SecurityOhlcvLogic {
 		//Then update their models
 		backtestLogic.runCurrentModels(symbolList);
 		
+	}
+
+	private boolean isWeekend(final LocalDateTime ld)
+	{
+		DayOfWeek day = DayOfWeek.of(ld.get(ChronoField.DAY_OF_WEEK));
+		return day == DayOfWeek.SUNDAY || day == DayOfWeek.SATURDAY;
 	}
 }

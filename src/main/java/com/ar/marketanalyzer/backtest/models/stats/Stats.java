@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Stats {
 
-	protected LocalDate date;
+	protected LocalDateTime date;
 	protected BigDecimal close50DayAvg;
 	protected BigDecimal close100DayAvg;
 	protected BigDecimal close200DayAvg;

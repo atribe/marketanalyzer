@@ -26,7 +26,7 @@ public class RuleResultService implements RuleResultServiceInterface {
 	@Override
 	@Transactional
 	public void batchCreate(SortedSet<AbstractRuleResult> resultList) {
-		resultRepo.save(resultList);
+		resultRepo.saveAll(resultList);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class RuleResultService implements RuleResultServiceInterface {
 		AbstractRuleResult resultToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		resultRepo.delete(id);
+		resultRepo.deleteById(id);
 		
 		return resultToDelete;
 	}
@@ -50,12 +50,12 @@ public class RuleResultService implements RuleResultServiceInterface {
 	@Override
 	@Transactional
 	public AbstractRuleResult findById(int id) throws ModelNotFound {
-		AbstractRuleResult foundresult = resultRepo.findOne(id);
+		var foundresult = resultRepo.findById(id);
 		
-		if( foundresult == null ) {
+		if( foundresult.isEmpty() ) {
 			throw new ModelNotFound();
 		}
 		
-		return foundresult;
+		return foundresult.get();
 	}
 }

@@ -25,7 +25,7 @@ public class TradeService implements TradeServiceInterface{
 	@Override
 	@Transactional
 	public void batchCreate(List<Trade> resultList) {
-		tradeRepo.save(resultList);
+		tradeRepo.saveAll(resultList);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class TradeService implements TradeServiceInterface{
 		Trade resultToDelete = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		tradeRepo.delete(id);
+		tradeRepo.deleteById(id);
 		
 		return resultToDelete;
 	}
@@ -49,12 +49,12 @@ public class TradeService implements TradeServiceInterface{
 	@Override
 	@Transactional
 	public Trade findById(int id) throws ModelNotFound {
-		Trade foundresult = tradeRepo.findOne(id);
+		var foundresult = tradeRepo.findById(id);
 		
-		if( foundresult == null ) {
+		if( foundresult.isEmpty()) {
 			throw new ModelNotFound();
 		}
 		
-		return foundresult;
+		return foundresult.get();
 	}
 }

@@ -6,6 +6,7 @@ import com.ar.marketanalyzer.ibd50.exceptions.Ibd50TooManyFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50Tracking;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface Ibd50TrackingService {

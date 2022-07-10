@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ public class HighstockOHLC implements HighstockData {
 		
 	}
 	public HighstockOHLC(SecuritiesOhlcv ohlcv) {
-		setX(new Date( ohlcv.getDate().getTime() ));
+		setX(Date.from(ohlcv.getDate().toInstant(ZoneOffset.UTC)));
 		setOpen(ohlcv.getOpen());
 		setHigh(ohlcv.getHigh());
 		setLow(ohlcv.getLow());
@@ -36,7 +37,7 @@ public class HighstockOHLC implements HighstockData {
 	 * Helper Methods
 	 */
 	public static List<HighstockData> convertSecOHLCVtoOHLC(List<SecuritiesOhlcv> secOhlcvList) {
-		List<HighstockData> ohlcList = new ArrayList<HighstockData>();
+		List<HighstockData> ohlcList = new ArrayList<>();
 		
 		for(SecuritiesOhlcv secOhlcv : secOhlcvList) {
 			ohlcList.add(new HighstockOHLC(secOhlcv));

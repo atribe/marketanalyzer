@@ -5,7 +5,7 @@ import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @DiscriminatorValue("Sell:D-Days And Churn Days")  // Should match the value from the rule
@@ -31,10 +31,10 @@ public class RuleResultsDDaysAndChurnDays extends AbstractRuleResult{
 	public RuleResultsDDaysAndChurnDays(AbstractRule rule) {
 		super(rule);
 	}
-	public RuleResultsDDaysAndChurnDays( AbstractRule rule, Date date ) {
+	public RuleResultsDDaysAndChurnDays( AbstractRule rule, LocalDateTime date) {
 		super(rule, date);
 	}
-	public RuleResultsDDaysAndChurnDays( AbstractRule rule, Date date, Boolean result ) {
+	public RuleResultsDDaysAndChurnDays( AbstractRule rule, LocalDateTime date, Boolean result ) {
 		super(rule, date, result);
 	}
 	
