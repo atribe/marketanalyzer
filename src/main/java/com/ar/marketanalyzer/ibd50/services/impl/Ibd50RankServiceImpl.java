@@ -84,7 +84,7 @@ public class Ibd50RankServiceImpl implements Ibd50RankService {
         Ibd50Rank updatedIbd50Ranking = ibd50RankingRepo.findById(ibd50Ranking.getId()).orElseThrow(SecuritiesNotFound::new);
 
         //TODO Filler until I really write this code
-        updatedIbd50Ranking.setRank(ibd50Ranking.getRank());
+        updatedIbd50Ranking.setRanking(ibd50Ranking.getRanking());
 
         return updatedIbd50Ranking;
     }
@@ -99,8 +99,8 @@ public class Ibd50RankServiceImpl implements Ibd50RankService {
             throw e;                                                                // Throw that exception up to the next level to be dealt with.
         }
 
-        List<Ibd50Rank> rankingList = ibd50RankingRepo.findByRankAndTickerOrderByRankDateAsc(rank,
-                                                                                             foundTickerSymbol);    //Using the found ticker look up for the provided rank
+        List<Ibd50Rank> rankingList = ibd50RankingRepo.findByRankingAndTickerOrderByRankDateAsc(rank,
+                                                                                                foundTickerSymbol);    //Using the found ticker look up for the provided rank
 
         if (rankingList.isEmpty()) {                                                    // Check if any were found with the desired rank and ticker
             throw new SecuritiesNotFound("The Ticker '"
@@ -127,7 +127,7 @@ public class Ibd50RankServiceImpl implements Ibd50RankService {
     @Override
     @Transactional
     public List<Ibd50Rank> findByRankBetweenAndActiveTrue(int startRank, int endRank) throws SecuritiesNotFound {
-        List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankBetweenAndActiveRankingTrue(startRank, endRank);
+        List<Ibd50Rank> foundRanking = ibd50RankingRepo.findByRankingBetweenAndActiveRankingTrue(startRank, endRank);
 
         if (foundRanking == null) {
             throw new SecuritiesNotFound();

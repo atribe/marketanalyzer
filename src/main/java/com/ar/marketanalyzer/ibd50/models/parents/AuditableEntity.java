@@ -16,11 +16,9 @@ public class AuditableEntity extends PersistableEntityInt {
 
     private static final long serialVersionUID = -1206834257175517132L;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_time", nullable = false)
     private LocalDateTime creationTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modification_time", nullable = false)
     private LocalDateTime modificationTime;
 

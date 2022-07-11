@@ -13,15 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Table(name = "IBD50_RANKING")
@@ -41,7 +38,7 @@ public class Ibd50Rank extends PersistableEntityInt {
 	private Ibd50Tracking tracker;
 	
 	@Column(nullable=false)
-	private Integer rank;
+	private Integer ranking;
 	
 	@Column(name="current_price", nullable=false, precision=10, scale=2)
 	private BigDecimal currentPrice;
@@ -112,11 +109,9 @@ public class Ibd50Rank extends PersistableEntityInt {
 	@OneToMany(mappedBy = "ranking",cascade = CascadeType.ALL)
 	private Collection<Ibd50IndexShares> shareCounts;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "creation_time", nullable = false)
 	private LocalDateTime creationTime;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modification_time", nullable = false)
 	private LocalDateTime modificationTime;
 	
@@ -216,14 +211,14 @@ public class Ibd50Rank extends PersistableEntityInt {
 	public void setCompanyName(String companyName) {
 		ticker.setName(companyName);
 	}
-	public Integer getRank() {
-		return rank;
+	public Integer getRanking() {
+		return ranking;
 	}
-	public void setRank(Integer rank) {
-		this.rank = rank;
+	public void setRanking(Integer rank) {
+		this.ranking = rank;
 	}
 	public void setRank(int rank) {
-		this.rank = rank;
+		this.ranking = rank;
 	}
 	public BigDecimal getCurrentPrice() {
 		return currentPrice;

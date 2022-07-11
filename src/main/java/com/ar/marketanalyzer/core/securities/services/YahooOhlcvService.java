@@ -52,7 +52,7 @@ public class YahooOhlcvService {
         LocalTime now = LocalTime.now();                        // temporary variable with the current time
         if (now.getHour() == 0) {                            // if it is between 12:00 am and 1:00 am
             // 		then subtract one day from the end date (this is because Yahoo's servers are on pacific time)
-            endDate = LocalDateTime.from(LocalTime.now().minus(1, ChronoUnit.DAYS));
+            endDate = LocalDateTime.from(LocalDateTime.now().minus(1, ChronoUnit.DAYS));
         }
 
         if (startDate.isAfter(endDate)) {

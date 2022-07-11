@@ -197,7 +197,7 @@ public class Ibd50WebDao{
 
 		ibdRow.setTicker(company);
 		ibdRow.setActiveRanking(Boolean.TRUE);
-		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));
+		ibdRow.setRanking(parseIntOrNull(ibd50tokenizedList.get(2)));
 		ibdRow.setCurrentPrice(new BigDecimal(ibd50tokenizedList.get(3)));
 		ibdRow.setPriceChange(new BigDecimal(ibd50tokenizedList.get(4)));
 		ibdRow.setPricePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(5)));
