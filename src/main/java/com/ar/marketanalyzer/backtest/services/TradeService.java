@@ -3,58 +3,45 @@ package com.ar.marketanalyzer.backtest.services;
 import com.ar.marketanalyzer.backtest.exceptions.ModelNotFound;
 import com.ar.marketanalyzer.backtest.models.Trade;
 import com.ar.marketanalyzer.backtest.repo.TradeRepo;
-import com.ar.marketanalyzer.backtest.services.interfaces.TradeServiceInterface;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
-public class TradeService implements TradeServiceInterface{
-	@Resource
-	private TradeRepo tradeRepo;
+public class TradeService {
+    private final TradeRepo tradeRepo;
 
-	@Override
-	@Transactional
-	public Trade create(Trade trade) {
-		
-		return tradeRepo.save(trade);
-	}
-	
-	@Override
-	@Transactional
-	public void batchCreate(List<Trade> resultList) {
-		tradeRepo.saveAll(resultList);
-	}
+    @Transactional
+    public Trade create(Trade trade) {
+        return tradeRepo.save(trade);
+    }
 
-	@Override
-	@Transactional
-	public Trade update(Trade trade) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Transactional
+    public void batchCreate(List<Trade> resultList) {
+        tradeRepo.saveAll(resultList);
+    }
 
-	@Override
-	@Transactional
-	public Trade delete(int id) throws ModelNotFound {
-		Trade resultToDelete = findById(id);
-		
-		// if the findById method fails, then exception thrown and this code not run
-		tradeRepo.deleteById(id);
-		
-		return resultToDelete;
-	}
+    @Transactional
+    public Trade update(Trade trade) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	@Transactional
-	public Trade findById(int id) throws ModelNotFound {
-		var foundresult = tradeRepo.findById(id);
-		
-		if( foundresult.isEmpty()) {
-			throw new ModelNotFound();
-		}
-		
-		return foundresult.get();
-	}
+    @Transactional
+    public Trade delete(int id) throws ModelNotFound {
+        Trade resultToDelete = findById(id);
+
+        // if the findById method fails, then exception thrown and this code not run
+        tradeRepo.deleteById(id);
+
+        return resultToDelete;
+    }
+
+    @Transactional
+    public Trade findById(int id) throws ModelNotFound {
+        return tradeRepo.findById(id).orElseThrow(ModelNotFound::new);
+    }
 }
