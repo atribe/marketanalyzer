@@ -13,8 +13,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
