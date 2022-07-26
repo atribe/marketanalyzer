@@ -1,8 +1,8 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Collection;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,13 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
-
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.ibd50.models.parents.AuditableEntity;
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Collection;
 
 @Entity
 @Table(name = "IBD50_TRACKING")
@@ -28,28 +27,28 @@ public class Ibd50Tracking extends AuditableEntity{
 	@ManyToOne(optional=false)//optional=false makes this an inner join, true would be Outer join
 	@JoinColumn(name="symbol_id", referencedColumnName="id")
 	private Symbol ticker;
-	
+
 	@OneToMany(mappedBy = "tracker",cascade = CascadeType.ALL)
 	private Collection<Ibd50Rank> ranking;
-	
+
 	@Column
 	private Boolean active;
-	
+
 	@Column(name="join_date")
-	private Date joinDate;
-	
+	private LocalDateTime joinDate;
+
 	@Column(name="leave_date")
-	private Date leaveDate;
-	
+	private LocalDateTime leaveDate;
+
 	@Column(name="join_price")
 	private BigDecimal joinPrice;
-	
+
 	@Column(name="leave_price")
 	private BigDecimal lastPrice;
-	
+
 	@Column(name="percent_return")
 	private double percentReturn; //% return while on the list
-	
+
 	/*
 	 * Constructors
 	 */
@@ -64,16 +63,16 @@ public class Ibd50Tracking extends AuditableEntity{
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
-	public LocalDate newMonday() {
-		LocalDate today = new LocalDate();
-		if(today.getDayOfWeek() == DateTimeConstants.MONDAY) {
+
+	public LocalDateTime newMonday() {
+		LocalDateTime today = LocalDateTime.now();
+		if(today.getDayOfWeek() == DayOfWeek.MONDAY) {
 			return today;
 		} else {
-			return today.withDayOfWeek(DateTimeConstants.MONDAY);
+			return today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		}
 	}
-	
+
 	public void deactivate(BigDecimal leavePrice) {
 		setActive(Boolean.FALSE);
 		setLeaveDate(newMonday());
@@ -99,23 +98,18 @@ public class Ibd50Tracking extends AuditableEntity{
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	public Date getJoinDate() {
+	public LocalDateTime getJoinDate() {
 		return joinDate;
 	}
-	public void setJoinDate(Date joinDate) {
-		this.joinDate = joinDate;
+
+	public void setJoinDate(LocalDateTime join_date) {
+		this.joinDate = join_date;
 	}
-	public void setJoinDate(LocalDate join_date) {
-		setJoinDate( join_date.toDate() );
-	}
-	public Date getLeaveDate() {
+	public LocalDateTime getLeaveDate() {
 		return leaveDate;
 	}
-	public void setLeaveDate(Date leaveDate) {
+	public void setLeaveDate(LocalDateTime leaveDate) {
 		this.leaveDate = leaveDate;
-	}
-	public void setLeaveDate(LocalDate leaveDate) {
-		setLeaveDate( leaveDate.toDate() );
 	}
 	public BigDecimal getJoinPrice() {
 		return joinPrice;
@@ -135,5 +129,5 @@ public class Ibd50Tracking extends AuditableEntity{
 	public void setPercentReturn(double percentReturn) {
 		this.percentReturn = percentReturn;
 	}
-	
+
 }

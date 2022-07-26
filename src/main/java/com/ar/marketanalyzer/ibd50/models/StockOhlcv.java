@@ -1,9 +1,8 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.LocalDate;
-
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ibd50_stock_ohlcv")
@@ -34,7 +29,7 @@ public class StockOhlcv{
 	private Symbol ticker;
 	
 	@Column
-	private Date date;
+	private LocalDateTime date;
 	
 	@Column(precision=12, scale=2)
 	private BigDecimal open;
@@ -61,28 +56,19 @@ public class StockOhlcv{
 	public StockOhlcv() {}
 	
 	public StockOhlcv(YahooOHLCV y, Symbol ticker) {
-		
 		this.ticker = ticker;												//Setting the ticker to the passed ticker
-		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-	    java.util.Date parsed=null;
-		try {
-			parsed = format.parse(y.getDate());
-			setDate(new java.sql.Date(parsed.getTime()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-		setOpen(new BigDecimal(y.getOpen()));
-		setHigh(new BigDecimal(y.getHigh()));
-		setLow(new BigDecimal(y.getLow()));
-		setClose(new BigDecimal(y.getClose()));
+
+		setDate(y.getDate());
+
+		setOpen(BigDecimal.valueOf(y.getOpen()));
+		setHigh(BigDecimal.valueOf(y.getHigh()));
+		setLow(BigDecimal.valueOf(y.getLow()));
+		setClose(BigDecimal.valueOf(y.getClose()));
 		setVolume(y.getVolume());
-		setAdjClose(new BigDecimal(y.getAdjClose()));
+		setAdjClose(BigDecimal.valueOf(y.getAdjClose()));
 	}
 	
-	public StockOhlcv(String symbol, Date date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
+	public StockOhlcv(String symbol, LocalDateTime date, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, long volume, BigDecimal adjClose) {
 		//setSymbol(symbol);
 		setDate(date);
 		setOpen(open);
@@ -117,18 +103,18 @@ public class StockOhlcv{
 		this.ticker = ticker;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	public void setDate(String date) {
-		this.date = Date.valueOf(date);//Not the most elegant way to do it
+		this.date = LocalDateTime.parse(date);//Not the most elegant way to do it
 	}
-	public LocalDate getLocalDate() {
-		return new LocalDate(this.date);
+	public LocalDateTime getLocalDate() {
+		return this.date;
 	}
 		
 	public BigDecimal getOpen() {

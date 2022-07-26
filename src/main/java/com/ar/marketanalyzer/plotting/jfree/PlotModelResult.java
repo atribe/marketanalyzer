@@ -24,7 +24,7 @@ package com.ar.marketanalyzer.plotting.jfree;
 //import org.jfree.data.time.TimeSeriesCollection;
 //import org.jfree.data.xy.XYDataset;
 //import org.jfree.ui.TextAnchor;
-//import org.joda.time.LocalDate;
+//
 //
 //import com.ar.marketanalyzer.core.threads.MarketAnalyzerListener;
 

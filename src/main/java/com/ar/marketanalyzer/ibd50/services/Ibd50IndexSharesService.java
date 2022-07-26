@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.ibd50.services;
 
-import java.util.List;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
+
+import java.util.List;
 
 public interface Ibd50IndexSharesService {
 

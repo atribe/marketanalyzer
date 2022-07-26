@@ -1,11 +1,7 @@
 package com.ar.marketanalyzer.ibd50.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ar.marketanalyzer.core.securities.models.Symbol;
+import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,8 +24,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ar.marketanalyzer.core.securities.models.Symbol;
-import com.ar.marketanalyzer.ibd50.models.Ibd50Rank;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ibd50WebDao{
 	private final static String username = "teedit@gmail.com";
@@ -198,7 +197,7 @@ public class Ibd50WebDao{
 
 		ibdRow.setTicker(company);
 		ibdRow.setActiveRanking(Boolean.TRUE);
-		ibdRow.setRank(parseIntOrNull(ibd50tokenizedList.get(2)));
+		ibdRow.setRanking(parseIntOrNull(ibd50tokenizedList.get(2)));
 		ibdRow.setCurrentPrice(new BigDecimal(ibd50tokenizedList.get(3)));
 		ibdRow.setPriceChange(new BigDecimal(ibd50tokenizedList.get(4)));
 		ibdRow.setPricePercentChange(parseDoubleOrNull(ibd50tokenizedList.get(5)));

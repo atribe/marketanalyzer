@@ -1,16 +1,5 @@
 package com.ar.marketanalyzer.backtest.models.models;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
-
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.rules.AbstractRule;
 import com.ar.marketanalyzer.backtest.models.rules.RuleBuyFollowThru;
@@ -18,13 +7,24 @@ import com.ar.marketanalyzer.backtest.models.rules.RuleSellDDaysAndChurnDays;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+
 @Entity
 @DiscriminatorValue("Index Backtesting")
 public class IndexBacktestingModel extends AbstractModel {
 	private static final long serialVersionUID = -5707374797673699670L;
 
 	@Transient
-	protected SortedMap<Date, FollowThruStats> stats;
+	protected SortedMap<LocalDateTime, FollowThruStats> stats;
 	
 	/*
 	 * Constructors
@@ -35,10 +35,10 @@ public class IndexBacktestingModel extends AbstractModel {
 	public IndexBacktestingModel(Symbol symbol) {
 		super(symbol);
 	}
-	public IndexBacktestingModel(Symbol symbol, Date startDate) {
+	public IndexBacktestingModel(Symbol symbol, LocalDateTime startDate) {
 		super(symbol,startDate);
 	}
-	public IndexBacktestingModel(Symbol symbol, Date startDate, Date endDate) {
+	public IndexBacktestingModel(Symbol symbol, LocalDateTime startDate, LocalDateTime endDate) {
 		super(symbol,startDate,endDate);
 	}
 
@@ -66,7 +66,7 @@ public class IndexBacktestingModel extends AbstractModel {
 	@Override
 	public void calcStats() {
 		super.calcStats();
-		stats = (TreeMap<Date, FollowThruStats>)FollowThruStats.convertStatList(defaultStats);
+		stats = FollowThruStats.convertStatList(defaultStats);
 		// calc more stats as needed
 		/*
 		 * Loop for 35 days
@@ -75,7 +75,7 @@ public class IndexBacktestingModel extends AbstractModel {
 		 */
 		int loopDays = 35;
 		
-		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		ArrayList<LocalDateTime> keys = new ArrayList<>(ohlcvData.keySet());
 		
 		for(int i = keys.size() -1; i >= 0; i--) {
 
@@ -106,10 +106,10 @@ public class IndexBacktestingModel extends AbstractModel {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public TreeMap<Date, FollowThruStats> getStats() {
-		return (TreeMap<Date, FollowThruStats>) stats;
+	public TreeMap<LocalDateTime, FollowThruStats> getStats() {
+		return (TreeMap<LocalDateTime, FollowThruStats>) stats;
 	}
-	public void setStats(SortedMap<Date, FollowThruStats> stats) {
+	public void setStats(SortedMap<LocalDateTime, FollowThruStats> stats) {
 		this.stats = stats;
 	}
 }

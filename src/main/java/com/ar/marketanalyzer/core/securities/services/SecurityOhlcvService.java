@@ -1,16 +1,5 @@
 package com.ar.marketanalyzer.core.securities.services;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
@@ -18,6 +7,16 @@ import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
 import com.ar.marketanalyzer.core.securities.repo.SecurityOhlcvRepo;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SecurityOhlcvServiceInterface;
 import com.ar.marketanalyzer.core.securities.services.interfaces.SymbolServiceInterface;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
@@ -54,12 +53,12 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 				}
 			}
 			
-			secRepo.save(ohlcvList);												//batch add
+			secRepo.saveAll(ohlcvList);												//batch add
 		} 
 	}
 	@Override
 	public void batchInsertYahoo(List<YahooOHLCV> ohlcvList, Symbol symbol) {
-		List<SecuritiesOhlcv> secOhlcv = new ArrayList<SecuritiesOhlcv>();
+		List<SecuritiesOhlcv> secOhlcv = new ArrayList<>();
 		
 		for(YahooOHLCV y: ohlcvList) {
 			secOhlcv.add(new SecuritiesOhlcv(y, symbol));
@@ -71,16 +70,16 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public SecuritiesOhlcv update(SecuritiesOhlcv secOhlcv)
 			throws SecuritiesNotFound {
-		SecuritiesOhlcv updatedSecOhlcv = secRepo.findOne(secOhlcv.getId());
+		Optional<SecuritiesOhlcv> updatedSecOhlcv = secRepo.findById(secOhlcv.getId());
 		
-		if( updatedSecOhlcv == null) {
+		if( updatedSecOhlcv.isEmpty()) {
 			throw new SecuritiesNotFound();
 		}
 		
 		//TODO Filler until I really write this code
 		//updatedStockOhlcv.setRank(StockOhlcv.getRank());
 		
-		return updatedSecOhlcv;
+		return updatedSecOhlcv.get();
 	}
 	
 	@Override
@@ -89,7 +88,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 		SecuritiesOhlcv deletedSecOhlcv = findById(id);
 		
 		// if the findById method fails, then exception thrown and this code not run
-		secRepo.delete(id);
+		secRepo.deleteById(id);
 		
 		return deletedSecOhlcv;
 	}
@@ -103,19 +102,19 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	@Override
 	@Transactional
 	public SecuritiesOhlcv findById(long id) throws SecuritiesNotFound  {
-		SecuritiesOhlcv ohlcv = secRepo.findOne(id);
+		var ohlcv = secRepo.findById(id);
 		
-		if( ohlcv == null ) {
+		if( ohlcv.isEmpty()) {
 			throw new SecuritiesNotFound();
 		}
 		
-		return ohlcv; 
+		return ohlcv.get();
 	}
 
 	@Override
 	@Transactional
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound {
-		Symbol foundTickerSymbol = null;
+		Symbol foundTickerSymbol;
 		if(symbol.getId() == null && symbol.getId() < 0) {
 			foundTickerSymbol = symbolService.findBySymbol(symbol.getSymbol());
 		} else {
@@ -136,7 +135,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	}
 
 	public List<SecuritiesOhlcv> findBySymbolAsc(Symbol symbol) throws SecuritiesNotFound {
-		Symbol foundTickerSymbol = null;
+		Symbol foundTickerSymbol;
 		if(symbol.getId() == null && symbol.getId() < 0) {
 			foundTickerSymbol = symbolService.findBySymbol(symbol.getSymbol());
 		} else {
@@ -158,7 +157,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	
 	@Override
 	@Transactional
-	public SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, Date date)
+	public SecuritiesOhlcv findBySymbolAndDate(Symbol symbol, LocalDate date)
 			throws SecuritiesNotFound {
 		SecuritiesOhlcv ohlcv = secRepo.findBySymbolAndDate(symbol, date);
 		
@@ -171,8 +170,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol,
-			Date date) throws SecuritiesNotFound {
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol, LocalDate date) throws SecuritiesNotFound {
 		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateAfterOrderByDateDesc(symbol, date);
 		
 		if(ohlcvList.isEmpty()) {
@@ -184,8 +182,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 	
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol,
-			Date date) throws SecuritiesNotFound {
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol, LocalDate date) throws SecuritiesNotFound {
 		List<SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateAfterOrderByDateAsc(symbol, date);
 		
 		if(ohlcvList.isEmpty()) {
@@ -197,26 +194,26 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public LocalDate findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
-		Date date = secRepo.findBySymbolsLastDate(symbol);
+	public LocalDateTime findSymbolsLastDate(Symbol symbol) throws SecuritiesNotFound {
+		LocalDateTime date = secRepo.findBySymbolsLastDate(symbol);
 
 		if( date == null ) {														// if the list is empty 
 			throw new SecuritiesNotFound( "No Ohlcv data found for the symbol: " + symbol.getName() );	//Throw and exception
 		}
 		
-		return new LocalDate(date);
+		return date;
 	}
 	
 	@Override
 	@Transactional
-	public LocalDate findSymbolsFirstDate(Symbol symbol) throws SecuritiesNotFound {
-		Date date = secRepo.findBySymbolsFirstDate(symbol);
+	public LocalDateTime findSymbolsFirstDate(Symbol symbol) throws SecuritiesNotFound {
+		LocalDateTime date = secRepo.findBySymbolsFirstDate(symbol);
 
 		if( date == null ) {														// if the list is empty 
 			throw new SecuritiesNotFound( "No Ohlcv data found for the symbol: " + symbol.getName() );	//Throw and exception
 		}
 		
-		return new LocalDate(date);
+		return date;
 	}
 	/*
 	 * Helper Methods
@@ -224,7 +221,7 @@ public class SecurityOhlcvService implements SecurityOhlcvServiceInterface {
 
 	@Override
 	@Transactional
-	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate) throws SecuritiesNotFound {
+	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, LocalDate startDate, LocalDate endDate) throws SecuritiesNotFound {
 		List <SecuritiesOhlcv> ohlcvList = secRepo.findBySymbolAndDateBetweenOrderByDateAsc(symbol, startDate, endDate);		// Get a list of ohlcv data from the query
 		
 		if( ohlcvList.isEmpty() ) {														// if the list is empty 

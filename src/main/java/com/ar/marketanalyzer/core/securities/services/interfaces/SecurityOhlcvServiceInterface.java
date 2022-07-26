@@ -1,14 +1,14 @@
 package com.ar.marketanalyzer.core.securities.services.interfaces;
 
-import java.util.Date;
-import java.util.List;
-
-import org.joda.time.LocalDate;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
 import com.ar.marketanalyzer.core.securities.models.YahooOHLCV;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 public interface SecurityOhlcvServiceInterface {
 
@@ -25,10 +25,10 @@ public interface SecurityOhlcvServiceInterface {
 	public SecuritiesOhlcv findById(long id) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbol(Symbol symbol) throws SecuritiesNotFound;
 	public List<SecuritiesOhlcv> findBySymbolAsc(Symbol symbol) throws SecuritiesNotFound;
-	public SecuritiesOhlcv findBySymbolAndDate(Symbol foundSymbol,	Date date) throws SecuritiesNotFound;
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol, Date date)throws SecuritiesNotFound;
-	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol, Date date)throws SecuritiesNotFound;
-	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, Date startDate, Date endDate)throws SecuritiesNotFound;
-	public LocalDate findSymbolsLastDate(Symbol symbol)	throws SecuritiesNotFound;
-	public LocalDate findSymbolsFirstDate(Symbol symbol) throws SecuritiesNotFound;
+	public SecuritiesOhlcv findBySymbolAndDate(Symbol foundSymbol,	LocalDate date) throws SecuritiesNotFound;
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterDesc(Symbol symbol, LocalDate date)throws SecuritiesNotFound;
+	public List<SecuritiesOhlcv> findBySymbolAndDateAfterAsc(Symbol symbol, LocalDate date)throws SecuritiesNotFound;
+	public List<SecuritiesOhlcv> findBySymbolAndDateBetween(Symbol symbol, LocalDate startDate, LocalDate endDate)throws SecuritiesNotFound;
+	public LocalDateTime findSymbolsLastDate(Symbol symbol)	throws SecuritiesNotFound;
+	public LocalDateTime findSymbolsFirstDate(Symbol symbol) throws SecuritiesNotFound;
 }

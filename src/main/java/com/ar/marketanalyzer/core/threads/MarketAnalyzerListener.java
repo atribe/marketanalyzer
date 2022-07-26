@@ -1,16 +1,15 @@
 package com.ar.marketanalyzer.core.threads;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.ar.marketanalyzer.spring.init.PropCache;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 /**
  * 
@@ -24,9 +23,14 @@ import com.ar.marketanalyzer.spring.init.PropCache;
 @Component
 public class MarketAnalyzerListener implements ServletContextListener{
 
+	@Value("threads.backtest")
+	private String backTestThreadName;
+	@Value("threads.dbinit")
+	private static String dbInitThreadName;
+
 	@Autowired @Qualifier("IndexBacktestInit")
 	private Runnable indexBacktestBean;
-	
+
 	//@Autowired @Qualifier("IBD50InitRunnable")
 	//private Runnable i50Bean;
 	
@@ -48,7 +52,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 		//After Tomcat is ready then spawn the Market Indices database initialization thread 
 		
 		
-		t1 = new Thread(indexBacktestBean, PropCache.getCachedProps("threads.backtest"));
+		t1 = new Thread(indexBacktestBean, backTestThreadName);
 		t1.start();
 		
 		/*
@@ -69,8 +73,7 @@ public class MarketAnalyzerListener implements ServletContextListener{
 	
 	public static boolean dbInitThreadIsAlive() {
 		// java.lang.Thread.State can be NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
-		String thread_name = PropCache.getCachedProps("threads.dbinit");
-		logger.debug("Checking thread state. Thread name: " + thread_name + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
+		logger.debug("Checking thread state. Thread name: " + dbInitThreadName + " State:" + t1.getState() + " and currently is alive? " + t1.isAlive());
 		return t1.isAlive();
 	}
 }

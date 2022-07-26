@@ -1,16 +1,5 @@
 package com.ar.marketanalyzer.backtest.models.rules;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
-
 import com.ar.marketanalyzer.backtest.models.RuleParameter;
 import com.ar.marketanalyzer.backtest.models.enums.RuleType;
 import com.ar.marketanalyzer.backtest.models.models.AbstractModel;
@@ -18,6 +7,16 @@ import com.ar.marketanalyzer.backtest.models.ruleresults.AbstractRuleResult;
 import com.ar.marketanalyzer.backtest.models.ruleresults.RuleResultsFollowThru;
 import com.ar.marketanalyzer.backtest.models.stats.FollowThruStats;
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @Entity
 @DiscriminatorValue("Buy:Follow Thru")
@@ -115,16 +114,16 @@ public class RuleBuyFollowThru extends AbstractRule {
 	
 	@Override
 	protected void initializeRuleResultList() {
-		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
+		SortedMap<LocalDateTime, SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
 		
-		for(Map.Entry<Date, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
+		for(Map.Entry<LocalDateTime, SecuritiesOhlcv> ohlcv: ohlcvData.entrySet()) {
 			ruleResult.put(ohlcv.getKey(), new RuleResultsFollowThru(this, ohlcv.getKey(), Boolean.FALSE));
 		}
 	}
 	
 	private void findPivotDays() {
-		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
-		TreeMap<Date, FollowThruStats> stats = currentModel.getStats();
+		SortedMap<LocalDateTime, SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
+		TreeMap<LocalDateTime, FollowThruStats> stats = currentModel.getStats();
 		
 		/*
 		 * Deffinition: PivotDay = first day of a rally
@@ -138,7 +137,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		 */
 
 		try{
-			ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+			ArrayList<LocalDateTime> keys = new ArrayList<>(ohlcvData.keySet());
 			//Loops starts on 2 because the object at i-2 is accessed
 			for(int i = 2; i< keys.size(); i++) {
 				//Initializing variables for this loop run
@@ -202,11 +201,11 @@ public class RuleBuyFollowThru extends AbstractRule {
 	}
 	
 	private void findFollowThruDays() {
-		SortedMap<Date, SecuritiesOhlcv> ohlcvData = (TreeMap<Date, SecuritiesOhlcv>)currentModel.getOhlcvData();
+		SortedMap<LocalDateTime, SecuritiesOhlcv> ohlcvData = currentModel.getOhlcvData();
 
 		//loop starts at 2 because i-2 is accessed
 		//for(int i = 2; i < ohlcvData.size(); i++) { //Starting at i=1 so that i can use i-1 in the first calculation 
-		ArrayList<Date> keys = new ArrayList<Date>(ohlcvData.keySet());
+		ArrayList<LocalDateTime> keys = new ArrayList<>(ohlcvData.keySet());
 		for(int i = 0; i < keys.size(); i++) {	
 			//if the day is a pivot day, as set by the findPivotDay method then...
 			RuleResultsFollowThru result = (RuleResultsFollowThru) ruleResult.get(keys.get(i));
@@ -220,7 +219,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 		}
 	}
 	
-	private void checkPivotDay (SortedMap<Date, SecuritiesOhlcv> ohlcvData, ArrayList<Date> keys, int i) {
+	private void checkPivotDay (SortedMap<LocalDateTime, SecuritiesOhlcv> ohlcvData, ArrayList<LocalDateTime> keys, int i) {
 		BigDecimal rallyHigh = ohlcvData.get(keys.get(i)).getHigh(); 
 		BigDecimal support = ohlcvData.get(keys.get(i)).getLow();
 		
@@ -276,7 +275,7 @@ public class RuleBuyFollowThru extends AbstractRule {
 	
 	@Override
 	protected void findTriggerDays() {
-		for(Map.Entry<Date,AbstractRuleResult> entry : ruleResult.entrySet()) {
+		for(Map.Entry<LocalDateTime,AbstractRuleResult> entry : ruleResult.entrySet()) {
 			RuleResultsFollowThru result = (RuleResultsFollowThru) entry.getValue();
 			if(result.getFollowThruDay()!=null && result.getFollowThruDay()) {
 				result.setRuleResult(Boolean.TRUE);

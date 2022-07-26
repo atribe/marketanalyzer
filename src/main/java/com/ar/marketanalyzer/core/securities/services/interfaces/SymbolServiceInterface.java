@@ -1,9 +1,9 @@
 package com.ar.marketanalyzer.core.securities.services.interfaces;
 
-import java.util.List;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.core.securities.models.Symbol;
+
+import java.util.List;
 
 public interface SymbolServiceInterface {
 

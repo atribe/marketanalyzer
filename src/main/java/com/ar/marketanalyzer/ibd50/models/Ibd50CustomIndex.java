@@ -1,16 +1,14 @@
 package com.ar.marketanalyzer.ibd50.models;
 
-import java.util.Collection;
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import java.util.Collection;
 
 @Entity
 @Table(name = "IBD50_Custom_Index")

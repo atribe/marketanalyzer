@@ -1,13 +1,14 @@
 package com.ar.marketanalyzer.plotting.highcharts.data;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.ar.marketanalyzer.core.securities.models.SecuritiesOhlcv;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import java.math.BigDecimal;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 public class HighstockOHLC implements HighstockData {
@@ -25,7 +26,7 @@ public class HighstockOHLC implements HighstockData {
 		
 	}
 	public HighstockOHLC(SecuritiesOhlcv ohlcv) {
-		setX(new Date( ohlcv.getDate().getTime() ));
+		setX(Date.from(ohlcv.getDate().toInstant(ZoneOffset.UTC)));
 		setOpen(ohlcv.getOpen());
 		setHigh(ohlcv.getHigh());
 		setLow(ohlcv.getLow());
@@ -36,7 +37,7 @@ public class HighstockOHLC implements HighstockData {
 	 * Helper Methods
 	 */
 	public static List<HighstockData> convertSecOHLCVtoOHLC(List<SecuritiesOhlcv> secOhlcvList) {
-		List<HighstockData> ohlcList = new ArrayList<HighstockData>();
+		List<HighstockData> ohlcList = new ArrayList<>();
 		
 		for(SecuritiesOhlcv secOhlcv : secOhlcvList) {
 			ohlcList.add(new HighstockOHLC(secOhlcv));

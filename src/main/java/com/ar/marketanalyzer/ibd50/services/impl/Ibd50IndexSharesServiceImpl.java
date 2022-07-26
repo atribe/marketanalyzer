@@ -1,16 +1,14 @@
 package com.ar.marketanalyzer.ibd50.services.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ar.marketanalyzer.core.securities.exceptions.SecuritiesNotFound;
 import com.ar.marketanalyzer.ibd50.models.Ibd50IndexShares;
 import com.ar.marketanalyzer.ibd50.repositories.Ibd50IndexSharesRepository;
 import com.ar.marketanalyzer.ibd50.services.Ibd50IndexSharesService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
@@ -28,15 +26,15 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 	@Override
 	@Transactional
 	public Ibd50IndexShares delete(int id) throws SecuritiesNotFound {
-		Ibd50IndexShares deletedIbd50IndexShares = ibd50IndexSharesRepo.findOne(id);
+		var deletedIbd50IndexShares = ibd50IndexSharesRepo.findById(id);
 		
-		if(deletedIbd50IndexShares == null) {
+		if(deletedIbd50IndexShares.isEmpty()) {
 			throw new SecuritiesNotFound();
 		}
 		
-		ibd50IndexSharesRepo.delete(id);
+		ibd50IndexSharesRepo.deleteById(id);
 		
-		return deletedIbd50IndexShares;
+		return deletedIbd50IndexShares.get();
 	}
 
 	@Override
@@ -48,11 +46,8 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 	@Override
 	@Transactional(rollbackFor=SecuritiesNotFound.class)
 	public Ibd50IndexShares update(Ibd50IndexShares ibd50IndexShares) throws SecuritiesNotFound {
-		Ibd50IndexShares updatedIbd50IndexShares = ibd50IndexSharesRepo.findOne(ibd50IndexShares.getId());
-		
-		if(updatedIbd50IndexShares == null) {
-			throw new SecuritiesNotFound();
-		}
+		var updatedIbd50IndexShares = ibd50IndexSharesRepo.findById(ibd50IndexShares.getId())
+				.orElseThrow(SecuritiesNotFound::new);
 		
 		updatedIbd50IndexShares.setShareCount(ibd50IndexShares.getShareCount());
 		
@@ -62,7 +57,7 @@ public class Ibd50IndexSharesServiceImpl implements Ibd50IndexSharesService{
 	@Override
 	@Transactional
 	public Ibd50IndexShares findById(int id) throws SecuritiesNotFound {
-		return ibd50IndexSharesRepo.findOne(id);
+		return ibd50IndexSharesRepo.findById(id).orElseThrow(SecuritiesNotFound::new);
 	}
 
 }

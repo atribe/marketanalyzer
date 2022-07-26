@@ -1,14 +1,13 @@
 package com.ar.marketanalyzer.ibd50.models;
 
+import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import com.ar.marketanalyzer.core.securities.models.parents.PersistableEntityInt;
 
 @Entity
 @Table(name = "ibd50_index_shares")
